@@ -1,0 +1,64 @@
+--- Makefile	2019-09-02 00:23:24.000000000 +0800
++++ Makefile	2019-09-02 01:46:24.000000000 +0800
+@@ -71,6 +71,7 @@
+ #
+ TCC += -DSQLITE_THREADSAFE=1
+ 
++LIBS = -L$(TOP)/../../../build_unix/.libs -ldb -L/usr/local/opt/openssl/lib -lcrypto -lssl
+ # Any target libraries which libsqlite must be linked against
+ # 
+ TLIBS =  $(LIBS)
+@@ -158,6 +159,7 @@
+ LIBTOOL = ./libtool
+ ALLOWRELEASE = 
+ 
++LTLINK_EXTRAS += -L$(TOP)/../../../build_unix/.libs -ldb-18
+ # libtool compile/link/install
+ LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(TCC) $(LTCOMPILE_EXTRAS)
+ LTLINK = $(LIBTOOL) --mode=link $(TCC) $(LTCOMPILE_EXTRAS) -L/usr/local/opt/readline/lib $(LTLINK_EXTRAS)
+@@ -678,8 +680,8 @@
+ 	cp fts5.c fts5.h tsrc
+ 	touch .target_source
+ 
+-sqlite3.c:	.target_source $(TOP)/tool/mksqlite3c.tcl
+-	$(TCLSH_CMD) $(TOP)/tool/mksqlite3c.tcl
++sqlite3.c:	.target_source
++	ln -sf ../generated/sqlite3.c sqlite3.c
+ 	cp tsrc/shell.c tsrc/sqlite3ext.h .
+ 	cp $(TOP)/ext/session/sqlite3session.h .
+ 
+@@ -970,31 +972,12 @@
+ 
+ # Rules to build opcodes.c and opcodes.h
+ #
+-opcodes.c:	opcodes.h $(TOP)/tool/mkopcodec.tcl
+-	$(TCLSH_CMD) $(TOP)/tool/mkopcodec.tcl opcodes.h >opcodes.c
+-
+-opcodes.h:	parse.h $(TOP)/src/vdbe.c $(TOP)/tool/mkopcodeh.tcl
+-	cat parse.h $(TOP)/src/vdbe.c | $(TCLSH_CMD) $(TOP)/tool/mkopcodeh.tcl >opcodes.h
+-
+ # Rules to build parse.c and parse.h - the outputs of lemon.
+ #
+-parse.h:	parse.c
+-
+-parse.c:	$(TOP)/src/parse.y lemon$(BEXE) $(TOP)/tool/addopcodes.tcl
+-	cp $(TOP)/src/parse.y .
+-	rm -f parse.h
+-	./lemon$(BEXE) $(OPT_FEATURE_FLAGS) $(OPTS) parse.y
+-	mv parse.h parse.h.temp
+-	$(TCLSH_CMD) $(TOP)/tool/addopcodes.tcl parse.h.temp >parse.h
+-
+-sqlite3.h:	$(TOP)/src/sqlite.h.in $(TOP)/manifest.uuid $(TOP)/VERSION
+-	$(TCLSH_CMD) $(TOP)/tool/mksqlite3h.tcl $(TOP) >sqlite3.h
+-
+-keywordhash.h:	$(TOP)/tool/mkkeywordhash.c
+-	$(BCC) -o mkkeywordhash$(BEXE) $(OPT_FEATURE_FLAGS) $(OPTS) $(TOP)/tool/mkkeywordhash.c
+-	./mkkeywordhash$(BEXE) >keywordhash.h
+-
++GENERATED = keywordhash.h opcodes.c opcodes.h parse.c parse.h sqlite3.h
+ 
++$(GENERATED):
++	ln -sf ../generated/$@ $@
+ 
+ # Rules to build the extension objects.
+ #
