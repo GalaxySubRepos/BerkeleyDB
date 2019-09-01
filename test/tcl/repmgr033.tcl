@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr033
 # TEST	Under quorum policy, if the number of peers in the group is less than a
@@ -48,6 +48,12 @@ proc repmgr033_sub { method tnum largs } {
 	file mkdir $dirC
 	file mkdir $dirD
 	file mkdir $dirE
+
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirD
+	setup_repmgr_ssl $dirE
     
 	puts -nonewline "\tRepmgr$tnum: Set up a group of 5"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \

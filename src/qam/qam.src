@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -42,7 +42,6 @@ ARG	new_cur		db_recno_t	lu
 POINTER	metalsn		DB_LSN *	lu
 ARG	meta_pgno	db_pgno_t	lu
 END
-
 
 /*
  * del

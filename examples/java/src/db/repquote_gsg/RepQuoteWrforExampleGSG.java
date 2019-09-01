@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2015, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db.repquote_gsg;
@@ -12,9 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.Thread;
-import java.lang.InterruptedException;
 
 import com.sleepycat.db.Cursor;
 import com.sleepycat.db.Database;
@@ -31,9 +27,6 @@ import com.sleepycat.db.ReplicationConfig;
 import com.sleepycat.db.ReplicationHandleDeadException;
 import com.sleepycat.db.ReplicationHostAddress;
 import com.sleepycat.db.ReplicationManagerSiteConfig;
-import com.sleepycat.db.ReplicationManagerAckPolicy;
-
-import db.repquote_gsg.RepWrforConfig;
 
 public class RepQuoteWrforExampleGSG
 {
@@ -152,6 +145,8 @@ public class RepQuoteWrforExampleGSG
         EnvironmentConfig envConfig = new EnvironmentConfig();
         envConfig.setErrorStream(System.err);
         envConfig.setErrorPrefix(RepWrforConfig.progname);
+        /* Disable SSL for repmgr */
+        envConfig.setReplicationManagerSSLdisabled(true);        
 
         envConfig.addReplicationManagerSite(repConfig.getThisHost());
         for (ReplicationHostAddress host = repConfig.getFirstOtherHost();

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	rep088
 # TEST  Replication roll-back preserves checkpoint.

@@ -1,6 +1,11 @@
---- Makefile.in	
-+++ Makefile.in	
-@@ -28,9 +28,16 @@
+--- Makefile.in
++++ Makefile.in
+@@ -23,20 +23,26 @@ TOP = @abs_srcdir@
+ BCC = @BUILD_CC@ @BUILD_CFLAGS@
+ 
+ # TCC is the C Compile and options for use in building executables that 
+ # will run on the target platform.  (BCC and TCC are usually the
+ # same unless your are cross-compiling.)  Separate CC and CFLAGS macros
  # are provide so that these aspects of the build process can be changed
  # on the "make" command-line.  Ex:  "make CC=clang CFLAGS=-fsanitize=undefined"
  #
@@ -12,26 +17,45 @@
 +#
  CC = @CC@
  CFLAGS = @CPPFLAGS@ @CFLAGS@
--TCC = $(CC) $(CFLAGS) -I. -I${TOP}/src -I${TOP}/../adapter -I${TOP}/ext/fts3 -I${TOP}/ext/rtree -I${TOP}/ext/fts3
-+TCC = $(CC) $(CFLAGS) -I. -I${TOP}/src -I${TOP}/../adapter -I${TOP}/../../../src \
-+	-I${TOP}/ext/fts3 -I${TOP}/ext/rtree -I${TOP}/ext/fts3 -I${TOP}/ext/userauth
+ TCC = ${CC} ${CFLAGS} -I. -I${TOP}/src -I${TOP}/../adapter -I${TOP}/ext/rtree -I${TOP}/ext/icu
+-TCC += -I${TOP}/ext/fts3 -I${TOP}/ext/async -I${TOP}/ext/session
++TCC += -I${TOP}/ext/fts3 -I${TOP}/ext/async -I${TOP}/ext/session -I${TOP}/../../../src
  
  # Define this for the autoconf-based build, so that the code knows it can
  # include the generated config.h
-@@ -182,7 +189,7 @@
+ # 
+ TCC += -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite
+ 
+ # Define -DNDEBUG to compile without debugging (i.e., for production usage)
+ # Omitting the define will cause extra debugging code to be inserted and
+@@ -178,17 +184,17 @@ LIBOBJS0 = alter.lo analyze.lo attach.lo
+          main.lo malloc.lo mem0.lo mem1.lo mem2.lo mem3.lo mem5.lo \
+          memjournal.lo \
+          mutex.lo mutex_noop.lo mutex_unix.lo mutex_w32.lo \
+          notify.lo opcodes.lo os.lo os_unix.lo os_win.lo \
           pager.lo parse.lo pcache.lo pcache1.lo pragma.lo prepare.lo printf.lo \
-          random.lo resolve.lo rowset.lo rtree.lo select.lo status.lo \
-          table.lo threads.lo tokenize.lo trigger.lo \
+          random.lo resolve.lo rowset.lo rtree.lo \
+          sqlite3session.lo select.lo sqlite3rbu.lo status.lo \
+          table.lo threads.lo tokenize.lo treeview.lo trigger.lo \
 -         update.lo util.lo vacuum.lo \
 +         userauth.lo update.lo util.lo vacuum.lo \
           vdbe.lo vdbeapi.lo vdbeaux.lo vdbeblob.lo vdbemem.lo vdbesort.lo \
-          vdbetrace.lo wal.lo walker.lo where.lo utf.lo vtab.lo
+          vdbetrace.lo wal.lo walker.lo where.lo wherecode.lo whereexpr.lo \
+          utf.lo vtab.lo
  
-@@ -343,7 +350,10 @@
+ # Object files for the amalgamation.
+ #
+ LIBOBJS1 = sqlite3.lo
+ 
+@@ -350,16 +356,20 @@ SRC += \
  SRC += \
-   $(TOP)/ext/rtree/rtree.h \
-   $(TOP)/ext/rtree/rtree.c
--
+   $(TOP)/ext/session/sqlite3session.c \
+   $(TOP)/ext/session/sqlite3session.h
+ SRC += \
+   $(TOP)/ext/rbu/sqlite3rbu.h \
+   $(TOP)/ext/rbu/sqlite3rbu.c
+ SRC += \
+   $(TOP)/ext/misc/json1.c
 +SRC += \
 +  $(TOP)/ext/userauth/sqlite3userauth.h \
 +  $(TOP)/../adapter/userauth.h \
@@ -39,7 +63,17 @@
  
  # Generated source code files
  #
-@@ -513,6 +523,9 @@
+ SRC += \
+   keywordhash.h \
+   opcodes.c \
+   opcodes.h \
+   parse.c \
+@@ -534,16 +544,19 @@ EXTHDR += \
+   $(TOP)/ext/fts3/fts3_hash.h \
+   $(TOP)/ext/fts3/fts3_tokenizer.h
+ EXTHDR += \
+   $(TOP)/ext/rtree/rtree.h
+ EXTHDR += \
    $(TOP)/ext/icu/sqliteicu.h
  EXTHDR += \
    $(TOP)/ext/rtree/sqlite3rtree.h
@@ -47,75 +81,41 @@
 +  $(TOP)/ext/userauth/sqlite3userauth.h \
 +  $(TOP)/../adapter/userauth.h
  
- # This is the default Makefile target.  The objects listed here
- # are what get build when you type just "make" with no arguments.
-@@ -953,6 +966,9 @@
- rtree.lo:	$(TOP)/ext/rtree/rtree.c $(HDR) $(EXTHDR)
+ # executables needed for testing
+ #
+ TESTPROGS = \
+   testfixture$(TEXE) \
+   sqlite3$(TEXE) \
+   sqlite3_analyzer$(TEXE) \
+   sqldiff$(TEXE) \
+@@ -1049,16 +1062,19 @@ rtree.lo:	$(TOP)/ext/rtree/rtree.c $(HDR
  	$(LTCOMPILE) -DSQLITE_CORE -c $(TOP)/ext/rtree/rtree.c
+ 
+ sqlite3session.lo:	$(TOP)/ext/session/sqlite3session.c $(HDR) $(EXTHDR)
+ 	$(LTCOMPILE) -DSQLITE_CORE -c $(TOP)/ext/session/sqlite3session.c
+ 
+ json1.lo:	$(TOP)/ext/misc/json1.c
+ 	$(LTCOMPILE) -DSQLITE_CORE -c $(TOP)/ext/misc/json1.c
  
 +userauth.lo:	$(TOP)/../adapter/userauth.c $(HDR) $(EXTHDR)
 +	$(LTCOMPILE) -DSQLITE_CORE -c $(TOP)/../adapter/userauth.c
 +
- 
- # Rules to build the 'testfixture' application.
+ # FTS5 things
  #
---- tool/mksqlite3c.tcl	
-+++ tool/mksqlite3c.tcl	
-@@ -113,9 +113,11 @@
-    rtree.h
-    sqlite3ext.h
-    sqlite3.h
-+   sqlite3userauth.h
-    sqliteicu.h
-    sqliteInt.h
-    sqliteLimit.h
-+   userauth.h
-    vdbe.h
-    vdbeInt.h
-    vxworks.h
-@@ -373,6 +375,7 @@
-    icu.c
-    fts3_icu.c
-    dbstat.c
-+   userauth.c
- } {
-   copy_file tsrc/$file
- }
---- tool/mksqlite3h.tcl	
-+++ tool/mksqlite3h.tcl	
-@@ -71,6 +71,7 @@
- set filelist [subst {
-   $TOP/src/sqlite.h.in
-   $TOP/ext/rtree/sqlite3rtree.h
-+  $TOP/ext/userauth/sqlite3userauth.h
- }]
- 
- # These are the functions that accept a variable number of arguments.  They
---- src/test1.c	
-+++ src/test1.c	
-@@ -6498,7 +6498,6 @@
- 
- 
- #ifdef SQLITE_USER_AUTHENTICATION
--#include "sqlite3userauth.h"
- /*
- ** tclcmd:  sqlite3_user_authenticate DB USERNAME PASSWORD
- */
---- src/shell.c	
-+++ src/shell.c	
-@@ -61,9 +61,6 @@
- #include <stdio.h>
- #include <assert.h>
- #include "sqlite3.h"
--#if SQLITE_USER_AUTHENTICATION
--# include "sqlite3userauth.h"
--#endif
- #include <ctype.h>
- #include <stdarg.h>
- 
---- ext/userauth/sqlite3userauth.h	
-+++ ext/userauth/sqlite3userauth.h	
-@@ -19,7 +19,30 @@
+ FTS5_SRC = \
+    $(TOP)/ext/fts5/fts5.h \
+    $(TOP)/ext/fts5/fts5Int.h \
+    $(TOP)/ext/fts5/fts5_aux.c \
+    $(TOP)/ext/fts5/fts5_buffer.c \
+    $(TOP)/ext/fts5/fts5_main.c \
+--- ext/userauth/sqlite3userauth.h
++++ ext/userauth/sqlite3userauth.h
+@@ -14,17 +14,37 @@
+ ** user-authentication extension feature.
+ **
+ ** To compile with the user-authentication feature, append this file to
+ ** end of an SQLite amalgamation header file ("sqlite3.h"), then add
+ ** the SQLITE_USER_AUTHENTICATION compile-time option.  See the
  ** user-auth.txt file in the same source directory as this file for
  ** additional information.
  */
@@ -140,33 +140,40 @@
 +#endif
 +
 +#ifdef SQLITE_USER_AUTHENTICATION
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
+ 
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
  
  /*
  ** If a database contains the SQLITE_USER table, then the
-@@ -85,4 +108,10 @@
+ ** sqlite3_user_authenticate() interface must be invoked with an
+@@ -89,8 +109,10 @@
    const char *zUsername  /* Username to remove */
  );
  
-+#ifdef __cplusplus
-+}  /* end of the 'extern "C"' block */
-+#endif
-+
+ #ifdef __cplusplus
+ }  /* end of the 'extern "C"' block */
+ #endif
+ 
  #endif /* SQLITE_USER_AUTHENTICATION */
 +
 +#endif  /* ifndef _SQLITE3USERAUTH_H_ */
---- ext/userauth/userauth.c	
-+++ ext/userauth/userauth.c	
-@@ -148,34 +148,38 @@
+--- ext/userauth/userauth.c
++++ ext/userauth/userauth.c
+@@ -142,44 +142,48 @@ void sqlite3UserAuthInit(sqlite3 *db){
+ }
+ 
+ /*
+ ** Implementation of the sqlite_crypt(X,Y) function.
+ **
  ** If Y is NULL then generate a new hash for password X and return that
  ** hash.  If Y is not null, then generate a hash for password X using the
  ** same salt as the previous hash Y and return the new hash.
 +**
 +** Note: SQLite uses a simple Ceasar-cypher to compute hash value of passwords.
 +** In Berkeley DB we replace this with a stronger password hash function. The 
-+** hashed password was stored as 84 bytes(64 bytes of salt + 20 bytes of HMAC). 
++** hashed password was stored as 84 bytes(64 bytes of salt + 20 bytes of HMAC).
  */
 +#include "dbinc/hmac.h"
  void sqlite3CryptFunc(
@@ -185,7 +192,7 @@
 +  nOut = HMAC_OUTPUT_SIZE+sizeof(zSalt);
    if( sqlite3_value_type(argv[1])==SQLITE_BLOB
 -   && sqlite3_value_bytes(argv[1])==nIn+sizeof(zSalt)
-+   && sqlite3_value_bytes(argv[1])==nOut
++    && sqlite3_value_bytes(argv[1])==nOut
    ){
      memcpy(zSalt, sqlite3_value_blob(argv[1]), sizeof(zSalt));
    }else{
@@ -206,50 +213,36 @@
    }
  }
  
---- src/test_config.c	
-+++ src/test_config.c	
-@@ -621,6 +621,12 @@
-   Tcl_SetVar2(interp, "sqlite_options", "userauth", "0", TCL_GLOBAL_ONLY);
+ /*
+ ** If a database contains the SQLITE_USER table, then the
+ ** sqlite3_user_authenticate() interface must be invoked with an
+ ** appropriate username and password prior to enable read and write
+ ** access to the database.
+--- src/shell.c
++++ src/shell.c
+@@ -56,19 +56,16 @@
+ #include "config.h"
  #endif
+
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
+ #include <assert.h>
+ #include "sqlite3.h"
+-#if SQLITE_USER_AUTHENTICATION
+-# include "sqlite3userauth.h"
+-#endif
+ #include <ctype.h>
+ #include <stdarg.h>
  
-+#ifdef BDBSQL_USER_AUTHENTICATION_KEYSTORE
-+  Tcl_SetVar2(interp, "sqlite_options", "userauth_keystore", "1", TCL_GLOBAL_ONLY);
-+#else
-+  Tcl_SetVar2(interp, "sqlite_options", "userauth_keystore", "0", TCL_GLOBAL_ONLY);
-+#endif
-+
- #ifdef SQLITE_MULTIPLEX_EXT_OVWR
-   Tcl_SetVar2(interp, "sqlite_options", "multiplex_ext_overwrite", "1", TCL_GLOBAL_ONLY);
- #else
---- test/userauth01.test	
-+++ test/userauth01.test	
-@@ -31,10 +31,12 @@
- } {NULL 1 2.5 'three' X'4444' t1}
- 
- # Calling sqlite3_user_authenticate() on a no-authentication-required
--# database connection is a harmless no-op.  
-+# database connection is an error.  
- #
--do_test userauth01-1.1 {
-+do_test userauth01-1.1.1 {
-   sqlite3_user_authenticate db alice pw-4-alice
-+} {SQLITE_AUTH}
-+do_test userauth01-1.1.2 {
-   execsql {
-     SELECT quote(x) FROM t1 ORDER BY x;
-     SELECT name FROM sqlite_master;
-@@ -207,7 +209,7 @@
- # check fails, then the ATTACH command fails with an SQLITE_AUTH error.
- #
- do_test userauth01-1.60 {
--  forcedelete test3.db
-+  forcedelete test3.db test3.db-journal
-   sqlite3 db3 test3.db
-   sqlite3_user_add db3 alice xyzzy-alice 1
- } {SQLITE_OK}
+ #if !defined(_WIN32) && !defined(WIN32)
+ # include <signal.h>
+ # if !defined(__RTP__) && !defined(_WRS_KERNEL)
+ #  include <pwd.h>
+ # endif
 --- src/sqliteInt.h
 +++ src/sqliteInt.h
-@@ -567,20 +567,39 @@
+@@ -703,20 +706,39 @@
  #  define INT8_TYPE signed char
  # endif
  #endif
@@ -289,3 +282,153 @@
  ** is 0x00000000ffffffff.  But because of quirks of some compilers, we
  ** have to specify the value in the less intuitive manner shown:
  */
+--- src/test1.c
++++ src/test1.c
+@@ -7121,17 +7121,16 @@ static int SQLITE_TCLAPI sorter_test_sor
+   return TCL_OK;
+  sql_error:
+   Tcl_AppendResult(interp, "sql error: ", sqlite3_errmsg(db), 0);
+   return TCL_ERROR;
+ }
+ 
+ 
+ #ifdef SQLITE_USER_AUTHENTICATION
+-#include "sqlite3userauth.h"
+ /*
+ ** tclcmd:  sqlite3_user_authenticate DB USERNAME PASSWORD
+ */
+ static int SQLITE_TCLAPI test_user_authenticate(
+   ClientData clientData, /* Unused */
+   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
+   int objc,              /* Number of arguments */
+   Tcl_Obj *CONST objv[]  /* Command arguments */
+--- src/test_config.c
++++ src/test_config.c
+@@ -691,16 +691,22 @@ Tcl_SetVar2(interp, "sqlite_options", "m
+ #endif
+ 
+ #ifdef SQLITE_USER_AUTHENTICATION
+   Tcl_SetVar2(interp, "sqlite_options", "userauth", "1", TCL_GLOBAL_ONLY);
+ #else
+   Tcl_SetVar2(interp, "sqlite_options", "userauth", "0", TCL_GLOBAL_ONLY);
+ #endif
+ 
++#ifdef BDBSQL_USER_AUTHENTICATION_KEYSTORE
++  Tcl_SetVar2(interp, "sqlite_options", "userauth_keystore", "1", TCL_GLOBAL_ONLY);
++#else
++  Tcl_SetVar2(interp, "sqlite_options", "userauth_keystore", "0", TCL_GLOBAL_ONLY);
++#endif
++
+ #ifdef SQLITE_MULTIPLEX_EXT_OVWR
+   Tcl_SetVar2(interp, "sqlite_options", "multiplex_ext_overwrite", "1", TCL_GLOBAL_ONLY);
+ #else
+   Tcl_SetVar2(interp, "sqlite_options", "multiplex_ext_overwrite", "0", TCL_GLOBAL_ONLY);
+ #endif
+ 
+ #ifdef YYTRACKMAXSTACKDEPTH
+   Tcl_SetVar2(interp, "sqlite_options", "yytrackmaxstackdepth", "1", TCL_GLOBAL_ONLY);
+--- test/userauth01.test
++++ test/userauth01.test
+@@ -26,20 +26,22 @@ ifcapable !userauth {
+ do_execsql_test userauth01-1.0 {
+   CREATE TABLE t1(x);
+   INSERT INTO t1 VALUES(1),(2.5),('three'),(x'4444'),(NULL);
+   SELECT quote(x) FROM t1 ORDER BY x;
+   SELECT name FROM sqlite_master;
+ } {NULL 1 2.5 'three' X'4444' t1}
+ 
+ # Calling sqlite3_user_authenticate() on a no-authentication-required
+-# database connection is a harmless no-op.  
++# database connection is an error.
+ #
+-do_test userauth01-1.1 {
++do_test userauth01-1.1.1 {
+   sqlite3_user_authenticate db alice pw-4-alice
++} {SQLITE_AUTH}
++do_test userauth01-1.1.2 {
+   execsql {
+     SELECT quote(x) FROM t1 ORDER BY x;
+     SELECT name FROM sqlite_master;
+   }
+ } {NULL 1 2.5 'three' X'4444' t1}
+ 
+ # If sqlite3_user_add(D,U,P,N,A) is called on a no-authentication-required
+ # database and A is false, then the call fails with an SQLITE_AUTH error.
+@@ -202,17 +204,17 @@ do_test userauth01-1.51 {
+ } {alice 1 cindy 0 david 0}
+ 
+ # When ATTACH-ing new database files to a connection, each newly attached
+ # database that is an authentication-required database is checked using
+ # the same username and password as supplied to the main database.  If that
+ # check fails, then the ATTACH command fails with an SQLITE_AUTH error.
+ #
+ do_test userauth01-1.60 {
+-  forcedelete test3.db
++  forcedelete test3.db test3.db-journal
+   sqlite3 db3 test3.db
+   sqlite3_user_add db3 alice xyzzy-alice 1
+ } {SQLITE_OK}
+ do_test userauth01-1.61 {
+   db3 eval {
+     CREATE TABLE t3(a,b,c); INSERT INTO t3 VALUES(1,2,3);
+     SELECT * FROM t3;
+   }
+--- tool/mksqlite3c.tcl
++++ tool/mksqlite3c.tcl
+@@ -113,19 +113,21 @@ foreach hdr {
+    parse.h
+    pcache.h
+    pragma.h
+    rtree.h
+    sqlite3session.h
+    sqlite3.h
+    sqlite3ext.h
+    sqlite3rbu.h
++   sqlite3userauth.h
+    sqliteicu.h
+    sqliteInt.h
+    sqliteLimit.h
++   userauth.h
+    vdbe.h
+    vdbeInt.h
+    vxworks.h
+    wal.h
+    whereInt.h
+ } {
+   set available_hdr($hdr) 1
+ }
+@@ -388,13 +394,14 @@ foreach file {
+    rtree.c
+    icu.c
+    fts3_icu.c
+    sqlite3rbu.c
+    dbstat.c
+    sqlite3session.c
+    json1.c
+    fts5.c
++   userauth.c
+ } {
+   copy_file tsrc/$file
+ }
+ 
+ close $out
+--- tool/mksqlite3h.tcl
++++ tool/mksqlite3h.tcl
+@@ -84,16 +84,17 @@ set declpattern3 \
+ # Force the output to use unix line endings, even on Windows.
+ fconfigure stdout -translation lf
+ 
+ set filelist [subst {
+   $TOP/src/sqlite.h.in
+   $TOP/ext/rtree/sqlite3rtree.h
+   $TOP/ext/session/sqlite3session.h
+   $TOP/ext/fts5/fts5.h
++  $TOP/ext/userauth/sqlite3userauth.h
+ }]
+ 
+ # These are the functions that accept a variable number of arguments.  They
+ # always need to use the "cdecl" calling convention even when another calling
+ # convention (e.g. "stcall") is being used for the rest of the library.
+ set cdecllist {
+   sqlite3_config
+   sqlite3_db_config

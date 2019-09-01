@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2007 March 29
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -15,14 +21,18 @@
 ** as there is not much point in binding to Tcl.
 */
 #include "sqliteInt.h"
-#include "tcl.h"
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#endif
 #include <stdlib.h>
 #include <string.h>
 
 /*
 ** c_collation_test
 */
-static int c_collation_test(
+static int SQLITE_TCLAPI c_collation_test(
   ClientData clientData, /* Pointer to sqlite3_enable_XXX function */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
@@ -63,7 +73,7 @@ error_out:
 /*
 ** c_realloc_test
 */
-static int c_realloc_test(
+static int SQLITE_TCLAPI c_realloc_test(
   ClientData clientData, /* Pointer to sqlite3_enable_XXX function */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
@@ -104,7 +114,7 @@ error_out:
 /*
 ** c_misuse_test
 */
-static int c_misuse_test(
+static int SQLITE_TCLAPI c_misuse_test(
   ClientData clientData, /* Pointer to sqlite3_enable_XXX function */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */

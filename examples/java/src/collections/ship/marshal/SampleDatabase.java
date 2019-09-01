@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.marshal;
@@ -43,17 +42,20 @@ public class SampleDatabase {
 	"shipment_supplier_index";
     private static final String SUPPLIER_CITY_INDEX = "supplier_city_index";
 
-    private Environment env;
-    private Database partDb;
-    private Database supplierDb;
-    private Database shipmentDb;
-    private SecondaryDatabase supplierByCityDb;
-    private SecondaryDatabase shipmentByPartDb;
-    private SecondaryDatabase shipmentBySupplierDb;
-    private StoredClassCatalog javaCatalog;
+    private final Environment env;
+    private final Database partDb;
+    private final Database supplierDb;
+    private final Database shipmentDb;
+    private final SecondaryDatabase supplierByCityDb;
+    private final SecondaryDatabase shipmentByPartDb;
+    private final SecondaryDatabase shipmentBySupplierDb;
+    private final StoredClassCatalog javaCatalog;
 
     /**
      * Open all storage containers, indices, and catalogs.
+     * @param homeDirectory
+     * @throws com.sleepycat.db.DatabaseException
+     * @throws java.io.FileNotFoundException
      */
     public SampleDatabase(String homeDirectory)
         throws DatabaseException, FileNotFoundException {
@@ -107,7 +109,7 @@ public class SampleDatabase {
         secConfig.setType(DatabaseType.BTREE);
         secConfig.setSortedDuplicates(true);
 
-        secConfig.setKeyCreator(new MarshalledKeyCreator(javaCatalog,
+        secConfig.setKeyCreator(new MarshalledKeyCreator<>(javaCatalog,
                                                          Supplier.class,
                                                          Supplier.CITY_KEY));
         supplierByCityDb = env.openSecondaryDatabase(null, SUPPLIER_CITY_INDEX,
@@ -116,7 +118,7 @@ public class SampleDatabase {
 
         secConfig.setForeignKeyDatabase(partDb);
         secConfig.setForeignKeyDeleteAction(ForeignKeyDeleteAction.CASCADE);
-        secConfig.setKeyCreator(new MarshalledKeyCreator(javaCatalog,
+        secConfig.setKeyCreator(new MarshalledKeyCreator<>(javaCatalog,
                                                          Shipment.class,
                                                          Shipment.PART_KEY));
         shipmentByPartDb = env.openSecondaryDatabase(null, SHIPMENT_PART_INDEX,
@@ -125,7 +127,7 @@ public class SampleDatabase {
 
         secConfig.setForeignKeyDatabase(supplierDb);
         secConfig.setForeignKeyDeleteAction(ForeignKeyDeleteAction.CASCADE);
-        secConfig.setKeyCreator(new MarshalledKeyCreator(javaCatalog,
+        secConfig.setKeyCreator(new MarshalledKeyCreator<>(javaCatalog,
                                                          Shipment.class,
                                                      Shipment.SUPPLIER_KEY));
         shipmentBySupplierDb = env.openSecondaryDatabase(null,
@@ -136,6 +138,7 @@ public class SampleDatabase {
 
     /**
      * Return the storage environment for the database.
+     * @return 
      */
     public final Environment getEnvironment() {
 
@@ -144,6 +147,7 @@ public class SampleDatabase {
 
     /**
      * Return the class catalog.
+     * @return 
      */
     public final StoredClassCatalog getClassCatalog() {
 
@@ -152,6 +156,7 @@ public class SampleDatabase {
 
     /**
      * Return the part storage container.
+     * @return 
      */
     public final Database getPartDatabase() {
 
@@ -160,6 +165,7 @@ public class SampleDatabase {
 
     /**
      * Return the supplier storage container.
+     * @return 
      */
     public final Database getSupplierDatabase() {
 
@@ -168,6 +174,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment storage container.
+     * @return 
      */
     public final Database getShipmentDatabase() {
 
@@ -176,6 +183,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment-by-part index.
+     * @return 
      */
     public final SecondaryDatabase getShipmentByPartDatabase() {
 
@@ -184,6 +192,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment-by-supplier index.
+     * @return 
      */
     public final SecondaryDatabase getShipmentBySupplierDatabase() {
 
@@ -192,6 +201,7 @@ public class SampleDatabase {
 
     /**
      * Return the supplier-by-city index.
+     * @return 
      */
     public final SecondaryDatabase getSupplierByCityDatabase() {
 
@@ -200,6 +210,7 @@ public class SampleDatabase {
 
     /**
      * Close all stores (closing a store automatically closes its indices).
+     * @throws com.sleepycat.db.DatabaseException
      */
     public void close()
         throws DatabaseException {
@@ -222,10 +233,10 @@ public class SampleDatabase {
      * SecondaryKeyCreator for the case where the data keys are of the format
      * TupleFormat and the data values are of the format SerialFormat.
      */
-    private static class MarshalledKeyCreator
-        extends TupleSerialKeyCreator {
+    private static class MarshalledKeyCreator<D>
+        extends TupleSerialKeyCreator<D> {
 
-        private String keyName;
+        private final String keyName;
 
         /**
          * Construct the key creator.
@@ -234,7 +245,7 @@ public class SampleDatabase {
          * @param keyName is the key name passed to the marshalling methods.
          */
         private MarshalledKeyCreator(ClassCatalog catalog,
-                                     Class valueClass,
+                                     Class<D> valueClass,
                                      String keyName) {
 
             super(catalog, valueClass);
@@ -245,6 +256,7 @@ public class SampleDatabase {
          * Extract the city key from a supplier key/value pair.  The city key
          * is stored in the supplier value, so the supplier key is not used.
          */
+        @Override
         public boolean createSecondaryKey(TupleInput primaryKeyInput,
                                           Object valueInput,
                                           TupleOutput indexKeyOutput) {

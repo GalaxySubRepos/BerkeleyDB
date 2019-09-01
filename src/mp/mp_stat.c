@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -677,7 +677,8 @@ __memp_print_all(env, flags)
 		STAT_ULONG("Cache priority", dbmfp->priority);
 		STAT_POINTER("mmap address", dbmfp->addr);
 		STAT_ULONG("mmap length", dbmfp->len);
-		__db_prflags(env, NULL, dbmfp->config_flags, cfn, NULL, "\tFlags");
+		__db_prflags(env, NULL,
+		    dbmfp->config_flags, cfn, NULL, "\tFlags");
 		__db_print_fh(env, "File handle", dbmfp->fhp, flags);
 	}
 
@@ -750,6 +751,8 @@ __memp_print_files(env, mfp, argp, countp, flags)
 	STAT_LONG("Priority", mfp->priority);
 	STAT_LONG("Page's LSN offset", mfp->lsn_off);
 	STAT_LONG("Page's clear length", mfp->clear_len);
+	STAT_ULONG("Multiversion reference count",
+	    atomic_read(&mfp->multiversion));
 
 	__db_print_fileid(env,
 	    R_ADDR(dbmp->reginfo, mfp->fileid_off), "\tID");

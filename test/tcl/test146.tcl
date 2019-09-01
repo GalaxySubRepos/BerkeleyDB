@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -130,7 +130,8 @@ proc test146 { method {tnum "146"} args } {
 		    [$env1 get_blob_threshold] $threshold2
 
 		# Open the db with no blob threshold value.
-		set db2 [eval {berkdb_open_noerr} -env $env1 $oflags $testfile-2]
+		set db2 [eval {berkdb_open_noerr}\
+		     -env $env1 $oflags $testfile-2]
 		error_check_good db_open [is_valid_db $db2] TRUE
 
 		# Verify the db blob threshold value.
@@ -212,5 +213,4 @@ proc test146 { method {tnum "146"} args } {
 		error_check_good env_close [$env close] 0
 	}
 	env_cleanup $testdir
-
 }	

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -119,6 +119,12 @@ extern "C" {
     rectype == REP_LOG_REQ ||			\
     rectype == REP_PAGE_REQ ||			\
     rectype == REP_VERIFY_REQ)
+
+/*
+ * This is the default value for the FD_SET_SIZE.  It is used when client
+ * doesn't provide any value or the client provided value is smaller
+ */
+#define	REPMGR_FD_SET_DEFAULT_SIZE	1024
 
 /*
  * Note that the version information should be at the beginning of the
@@ -296,6 +302,17 @@ typedef struct {
 } VOTE1_CONTENT;
 
 /*
+ * In a 2 node scenario, it is important that the newly joining node wait
+ * for the peer connection to be fully established before proceeding for
+ * election. Otherwise, it might end up electing itself as MASTER with its
+ * own vote (inspite of the fact that a fully functional master exists).
+ * Normally it takes about 5-20ms for the connection to go through. Setting
+ * the timeout to 500ms to account for connection time variations associated
+ * with SSL.
+ */
+#define DB_REP_PEER_WAIT_TIMEOUT 500000
+
+/*
  * REP --
  * Shared replication structure.
  */
@@ -337,6 +354,8 @@ typedef struct __rep { /* SHARED */
 					 * request a missing log record. */
 	db_timespec	max_gap;	/* Maximum time to wait before
 					 * requesting a missing log record. */
+	u_int32_t	initsites;	/* Number of sites for
+					 * set_memory_init(). */
 	/* Status change information */
 	u_int32_t	apply_th;	/* Number of callers in rep_apply. */
 	u_int32_t	arch_th;	/* Number of callers in log_archive. */
@@ -439,6 +458,7 @@ typedef struct __rep { /* SHARED */
 	int		self_eid;	/* Where to find the local site. */
 	u_int		siteinfo_seq;	/* Number of updates to this info. */
 	u_int32_t	min_log_file;	/* Earliest log needed by repgroup. */
+	DB_LSN		last_ckp_lsn;	/* The last checkpoint's ckp_lsn. */
 
 	pid_t		listener;
 	u_int		listener_nthreads; /* # of msg threads in listener. */
@@ -474,14 +494,17 @@ typedef struct __rep { /* SHARED */
 #define	REP_C_AUTOTAKEOVER	0x00008		/* Auto listener take over. */
 #define	REP_C_BULK		0x00010		/* Bulk transfer. */
 #define	REP_C_DELAYCLIENT	0x00020		/* Delay client sync-up. */
-#define	REP_C_ELECT_LOGLENGTH	0x00040		/* Log length wins election. */
-#define	REP_C_ELECTIONS		0x00080		/* Repmgr to use elections. */
-#define	REP_C_FORWARD_WRITES	0x00100		/* Repmgr write forwarding. */
-#define	REP_C_INMEM		0x00200		/* In-memory replication. */
-#define	REP_C_LEASE		0x00400		/* Leases configured. */
-#define	REP_C_NOWAIT		0x00800		/* Immediate error return. */
-#define	REP_C_PREFMAS_CLIENT	0x01000		/* Preferred master client. */
-#define	REP_C_PREFMAS_MASTER	0x02000		/* Preferred master site. */
+#define	REP_C_DISABLE_POLL	0x00040		/* Avoid POLL for network io */
+#define	REP_C_DISABLE_SSL	0x00080		/* Avoid POLL for network io */
+#define	REP_C_ELECT_LOGLENGTH	0x00100		/* Log length wins election. */
+#define	REP_C_ELECTIONS		0x00200		/* Repmgr to use elections. */
+#define	REP_C_ENABLE_EPOLL	0x00400		/* Use EPOLL for network io */
+#define	REP_C_FORWARD_WRITES	0x00800		/* Repmgr write forwarding. */
+#define	REP_C_INMEM		0x01000		/* In-memory replication. */
+#define	REP_C_LEASE		0x02000		/* Leases configured. */
+#define	REP_C_NOWAIT		0x04000		/* Immediate error return. */
+#define	REP_C_PREFMAS_CLIENT	0x08000		/* Preferred master client. */
+#define	REP_C_PREFMAS_MASTER	0x10000		/* Preferred master site. */
 	u_int32_t	config;		/* Configuration flags. */
 
 	/* Election. */
@@ -489,6 +512,7 @@ typedef struct __rep { /* SHARED */
 #define	REP_E_PHASE1		0x00000002	/* In phase 1 of election. */
 #define	REP_E_PHASE2		0x00000004	/* In phase 2 of election. */
 #define	REP_E_TALLY		0x00000008	/* Tallied vote before elect. */
+#define	REP_E_PEER_CONN_WAIT	0x00000010	/* Election waiting for peer. */
 	u_int32_t	elect_flags;	/* Election flags. */
 
 	/* Lockout. */
@@ -751,6 +775,19 @@ do {									\
 		(curinfo)->dir.data = NULL;				\
 } while (0)
 
+#if defined(HAVE_REPMGR_SSL)
+
+typedef struct __repmgr_ssl_config {
+	char	*repmgr_ca_cert_file;
+	char	*repmgr_ca_dir;
+	char	*repmgr_cert_file;
+	char	*repmgr_key_file;
+	char	*repmgr_key_file_passwd;
+	u_int	repmgr_ssl_verify_depth;
+} REPMGR_SSL_CONFIG;
+
+#endif
+
 /*
  * Per-process replication structure.
  *
@@ -912,6 +949,11 @@ struct __db_rep {
 	db_timeout_t	l_listener_wait;/* Timeout to check local listener. */
 	db_timespec	m_listener_chk; /* Time to check master listener. */
 	db_timeout_t	m_listener_wait;/* Timeout to check master listener. */
+
+#if defined(HAVE_REPMGR_SSL)
+	REPMGR_SSL_CONFIG	repmgr_ssl_conf;
+	SSL_CTX		*repmgr_ssl_ctx;
+#endif
 
 	/*
 	 * Status of repmgr.  It is ready when repmgr is not yet started.  It

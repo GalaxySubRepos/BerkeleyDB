@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -92,6 +92,8 @@ __memp_skip_curadj(dbc, pgno)
 	MP_GET_BUCKET(env, mfp, pgno, &infop, hp, bucket, ret);
 	if (ret != 0) {
 		/* Panic: there is no way to return the error. */
+		__db_err(env, ret,
+		    "__memp_skip_curadj: bucket lookup for %ld", (u_long)pgno);
 		(void)__env_panic(env, ret);
 		return (0);
 	}
@@ -281,7 +283,7 @@ __memp_bh_freeze(dbmp, infop, hp, bhp, need_frozenp)
 #else
 	memcpy(frozen_bhp, bhp, SSZA(BH, buf));
 #endif
-	atomic_init(&frozen_bhp->ref, 0);
+	atomic_write(&frozen_bhp->ref, 0);
 	if (mutex != MUTEX_INVALID)
 		frozen_bhp->mtx_buf = mutex;
 	else if ((ret = __mutex_alloc(env, MTX_MPOOL_BH,
@@ -440,7 +442,7 @@ __memp_bh_thaw(dbmp, infop, hp, frozen_bhp, alloc_bhp)
 #endif
 		alloc_bhp->mtx_buf = mutex;
 		MUTEX_LOCK(env, alloc_bhp->mtx_buf);
-		atomic_init(&alloc_bhp->ref, 1);
+		atomic_write(&alloc_bhp->ref, 1);
 		F_CLR(alloc_bhp, BH_FROZEN);
 	}
 

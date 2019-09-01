@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::txn_begin()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::txn_begin()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="txnrecover.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txnbegin"></a>DbEnv::txn_begin()</h2>
+            <h2 class="title" style="clear: both"><a id="txnbegin"></a>
+        
+        <span>DbEnv::txn_begin()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -46,9 +52,18 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
          The <code class="methodname">DbEnv::txn_begin()</code> method creates a new transaction in the
          environment and copies a pointer to a <a class="link" href="txn.html" title="Chapter 13.  The DbTxn Handle">DbTxn</a>  that
          uniquely identifies it into the memory to which <span class="bold"><strong>tid</strong></span>
-         refers.  Calling the <a class="xref" href="txnabort.html" title="DbTxn::abort()">DbTxn::abort()</a>, 
-         <a class="xref" href="txncommit.html" title="DbTxn::commit()">DbTxn::commit()</a>  or 
-         <a class="xref" href="txndiscard.html" title="DbTxn::discard()">DbTxn::discard()</a>  methods will 
+         refers.  Calling the <a class="xref" href="txnabort.html" title="DbTxn::abort()">
+        
+        <span>DbTxn::abort()</span>
+    </a>, 
+         <a class="xref" href="txncommit.html" title="DbTxn::commit()">
+        
+        <span>DbTxn::commit()</span>
+    </a>  or 
+         <a class="xref" href="txndiscard.html" title="DbTxn::discard()">
+        
+        <span>DbTxn::discard()</span>
+    </a>  methods will 
          discard the returned handle.
     </p>
       <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -72,8 +87,14 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
         <p>
             A parent transaction may not issue any Berkeley DB operations — except for
             <code class="methodname">DbEnv::txn_begin()</code>, 
-            <a class="xref" href="txnabort.html" title="DbTxn::abort()">DbTxn::abort()</a>  
-            and <a class="xref" href="txncommit.html" title="DbTxn::commit()">DbTxn::commit()</a>  — while it 
+            <a class="xref" href="txnabort.html" title="DbTxn::abort()">
+        
+        <span>DbTxn::abort()</span>
+    </a>  
+            and <a class="xref" href="txncommit.html" title="DbTxn::commit()">
+        
+        <span>DbTxn::commit()</span>
+    </a>  — while it 
             has active child transactions (child transactions that have not yet
             been committed or aborted).
         </p>
@@ -92,7 +113,7 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806335152"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176763488960"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -100,7 +121,7 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806336400"></a>parent</h4>
+                <h4 class="title"><a id="idm140176763534880"></a>parent</h4>
               </div>
             </div>
           </div>
@@ -111,14 +132,17 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
                           Transactions may be nested to any level. In the presence of
                           distributed transactions and two-phase commit, only the parental
                           transaction, that is a transaction without a <span class="bold"><strong>parent</strong></span> specified, should be passed as an
-                          parameter to <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">DbTxn::prepare()</a>.
+                          parameter to <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">
+        
+        <span>DbTxn::prepare()</span>
+    </a>.
                      </p>
         </div>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806360224"></a>flags</h4>
+                <h4 class="title"><a id="idm140176763533536"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -216,7 +240,10 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">DbEnv::set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">
+        
+        <span>DbEnv::set_flags()</span>
+    </a> 
                  method.  Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -234,7 +261,10 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">DbEnv::set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">
+        
+        <span>DbEnv::set_flags()</span>
+    </a> 
                  method.  Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -252,7 +282,6 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
                  databases with 
                  <a class="link" href="dbopen.html#dbopen_DB_MULTIVERSION">DB_MULTIVERSION</a> 
                  not set on the underlying database (read locks are acquired).
-                 Snapshot isolation is not supported with replication.
             </p>
                 <p>
                  The error <code class="literal">DB_LOCK_DEADLOCK</code> will be
@@ -272,7 +301,10 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
                 <p>
                  This behavior is the default for Berkeley DB environments unless the
                  <code class="literal">DB_TXN_NOSYNC</code> flag was specified to the 
-                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">DbEnv::set_flags()</a>  method.
+                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">
+        
+        <span>DbEnv::set_flags()</span>
+    </a>  method.
                   Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -287,7 +319,10 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
                 <p>
                  This behavior is the default for Berkeley DB environments unless the
                  <code class="literal">DB_TXN_NOWAIT</code> flag was specified to the 
-                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">DbEnv::set_flags()</a>  method.
+                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">
+        
+        <span>DbEnv::set_flags()</span>
+    </a>  method.
                   Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -307,7 +342,10 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">DbEnv::set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DbEnv::set_flags()">
+        
+        <span>DbEnv::set_flags()</span>
+    </a> 
                  method.  Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -319,7 +357,7 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806304816"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176763457024"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -337,7 +375,7 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806310640"></a><span>DbMemoryException or </span> ENOMEM</h4>
+                <h4 class="title"><a id="idm140176763462432"></a><span>DbMemoryException or </span> ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -356,7 +394,7 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806336560"></a>Class</h3>
+              <h3 class="title"><a id="idm140176763460768"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -368,7 +406,7 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806296416"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176763498880"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -388,11 +426,17 @@ DbEnv::txn_begin(DbTxn *parent, DbTxn **tid, u_int32_t flags);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="txncheckpoint.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::txn_recover() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::txn_recover()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::txn_checkpoint()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::txn_checkpoint()</span>
+    </td>
         </tr>
       </table>
     </div>

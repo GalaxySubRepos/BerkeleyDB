@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -34,7 +34,7 @@ static int resolve_limbo_int __P((ENV *, DB_THREAD_INFO *));
 static int resolve_limbo_wrapper __P((ENV *, DB_THREAD_INFO *));
 static int send_permlsn __P((ENV *, u_int32_t, DB_LSN *));
 static int send_permlsn_conn __P((ENV *,
-	REPMGR_CONNECTION *, u_int32_t, DB_LSN *));
+	REPMGR_CONNECTION *, u_int32_t, DB_LSN *, DB_LSN *));
 static int serve_join_request __P((ENV *,
 	DB_THREAD_INFO *, REPMGR_MESSAGE *));
 static int serve_lsnhist_request __P((ENV *, DB_THREAD_INFO *,
@@ -85,7 +85,7 @@ message_loop(env, th)
 	REPMGR_MESSAGE *msg;
 	REPMGR_CONNECTION *conn;
 	REPMGR_SITE *site;
-	__repmgr_permlsn_args permlsn;
+	__repmgr_heartbeat_args heartbeat;
 	int incremented, ret, t_ret;
 	u_int32_t membership;
 
@@ -139,8 +139,8 @@ message_loop(env, th)
 			ret = serve_repmgr_request(env, msg);
 			break;
 		case REPMGR_HEARTBEAT:
-			if ((ret = __repmgr_permlsn_unmarshal(env,
-			    &permlsn, msg->v.repmsg.control.data,
+			if ((ret = __repmgr_heartbeat_unmarshal(env,
+			    &heartbeat, msg->v.repmsg.control.data,
 			    msg->v.repmsg.control.size, NULL)) != 0)
 				ret = DB_REP_UNAVAIL;
 			else if (rep->master_id == db_rep->self_eid) {
@@ -172,7 +172,7 @@ message_loop(env, th)
 				 * processing.
 				 */
 				ret = __rep_check_missing(env,
-				    permlsn.generation, &permlsn.lsn);
+				    heartbeat.generation, &heartbeat.lsn);
 			}
 			break;
 		default:
@@ -275,7 +275,7 @@ dispatch_app_message(env, msg)
 	    DB_REPMGR_NEED_RESPONSE : 0;
 
 	if (db_rep->msg_dispatch == NULL) {
-		__db_errx(env, DB_STR("3670",
+		__db_errx(env, DB_STR("3655",
 	    "No message dispatch call-back function has been configured"));
 		if (F_ISSET(channel.meta, REPMGR_REQUEST_MSG_TYPE))
 			return (__repmgr_send_err_resp(env,
@@ -290,7 +290,7 @@ dispatch_app_message(env, msg)
 
 	if (F_ISSET(channel.meta, REPMGR_REQUEST_MSG_TYPE) &&
 	    !channel.responded) {
-		__db_errx(env, DB_STR("3671",
+		__db_errx(env, DB_STR("3656",
 		    "Application failed to provide a response"));
 		return (__repmgr_send_err_resp(env, &channel, DB_KEYEMPTY));
 	}
@@ -342,15 +342,15 @@ process_message(env, control, rec, eid)
 	int eid;
 {
 	DB_LSN lsn;
-	DB_LSN ckp_lsn;
 	DB_REP *db_rep;
 	REP *rep;
 	int dirty, ret, t_ret;
 	u_int32_t generation;
 
+	/* Any error history from previous messages is not useful; clear it. */
+	DISCARD_HISTORY(env);
 	db_rep = env->rep_handle;
 	rep = db_rep->region;
-	ZERO_LSN(ckp_lsn);
 
 	/*
 	 * Save initial generation number, in case it changes in a close race
@@ -360,7 +360,7 @@ process_message(env, control, rec, eid)
 
 	ret = 0;
 	switch (t_ret =
-	    __rep_process_message_int(env, control, rec, eid, &lsn, &ckp_lsn)) {
+	    __rep_process_message_int(env, control, rec, eid, &lsn)) {
 	case 0:
 		if (db_rep->takeover_pending)
 			ret = __repmgr_claim_victory(env);
@@ -429,35 +429,6 @@ process_message(env, control, rec, eid)
 #endif
 		DB_TEST_SET(env->test_abort, DB_TEST_REPMGR_PERM);
 		ret = send_permlsn(env, generation, &lsn);
-		/*
-		 * If we just applied a checkpoint, send a checkpoint message.
-		 * A checkpoint message is a permlsn message whose offset is
-		 * zero.
-		 *
-		 * The idea of checkpoint message is to keep log files that are
-		 * needed to perform initial sync.  Suppose we become the new
-		 * master, and a client wants to sync with us.  If the common
-		 * sync point found with the client is the permlsn message sent
-		 * above, the client needs to keep the log file indicated by
-		 * ckp_lsn.file to be able to recover to the sync point.  The
-		 * message below tells that client to keep that file.
-		 *
-		 * We need to send this message after the normal permlsn
-		 * message above.  On the receiver site, if the above permlsn
-		 * is lowest among all sites, we know every site must have
-		 * processed the checkpoint so it is safe to use it as a lower
-		 * bound.  If the above message is sent after the checkpoint
-		 * message, this site might be mistakenly treated as having
-		 * the lowest permlsn.  We might use the below message as a
-		 * lower bound even if some other site might not have processed
-		 * the checkpoint.
-		 */
-		if (!IS_ZERO_LSN(ckp_lsn)) {
-			ckp_lsn.offset = 0;
-			if ((ret = send_permlsn(env, generation,
-			    &ckp_lsn)) != 0)
-				return (ret);
-		}
 DB_TEST_RECOVERY_LABEL
 		break;
 
@@ -616,6 +587,7 @@ send_permlsn(env, generation, lsn)
 	u_int32_t generation;
 	DB_LSN *lsn;
 {
+	DB_LSN ckp_lsn;
 	DB_REP *db_rep;
 	REP *rep;
 	REPMGR_CONNECTION *conn;
@@ -626,6 +598,14 @@ send_permlsn(env, generation, lsn)
 	rep = db_rep->region;
 	ret = 0;
 	master = rep->master_id;
+#ifdef HAVE_REPLICATION_THREADS
+	REP_SYSTEM_LOCK(env);
+	ckp_lsn = rep->last_ckp_lsn;
+	REP_SYSTEM_UNLOCK(env);
+#else
+	ZERO_LSN(ckp_lsn);
+#endif
+
 	LOCK_MUTEX(db_rep->mutex);
 
 	/*
@@ -643,11 +623,6 @@ send_permlsn(env, generation, lsn)
 		}
 		db_rep->perm_lsn = *lsn;
 	}
-	/*
-	 * Checkpoint message should be sent to everyone.
-	 */
-	if (lsn->offset == 0)
-		bcast = TRUE;
 	if (IS_KNOWN_REMOTE_SITE(master)) {
 		site = SITE_FROM_EID(master);
 		/*
@@ -676,17 +651,17 @@ send_permlsn(env, generation, lsn)
 			if ((conn = site->ref.conn.in) != NULL &&
 			    conn->state == CONN_READY &&
 			    (ret = send_permlsn_conn(env,
-			    conn, generation, lsn)) != 0)
+			    conn, generation, lsn, &ckp_lsn)) != 0)
 				goto unlock;
 			if ((conn = site->ref.conn.out) != NULL &&
 			    conn->state == CONN_READY &&
 			    (ret = send_permlsn_conn(env,
-			    conn, generation, lsn)) != 0)
+			    conn, generation, lsn, &ckp_lsn)) != 0)
 				goto unlock;
 		}
 		TAILQ_FOREACH(conn, &site->sub_conns, entries) {
 			if ((ret = send_permlsn_conn(env,
-			    conn, generation, lsn)) != 0)
+			    conn, generation, lsn, &ckp_lsn)) != 0)
 				goto unlock;
 		}
 	}
@@ -706,12 +681,12 @@ send_permlsn(env, generation, lsn)
 				if ((conn = site->ref.conn.in) != NULL &&
 				    conn->state == CONN_READY &&
 				    (ret = send_permlsn_conn(env,
-				    conn, generation, lsn)) != 0)
+				    conn, generation, lsn, &ckp_lsn)) != 0)
 					goto unlock;
 				if ((conn = site->ref.conn.out) != NULL &&
 				    conn->state == CONN_READY &&
 				    (ret = send_permlsn_conn(env,
-				    conn, generation, lsn)) != 0)
+				    conn, generation, lsn, &ckp_lsn)) != 0)
 					goto unlock;
 			}
 		}
@@ -728,14 +703,17 @@ unlock:
  * !!! Called with mutex held.
  */
 static int
-send_permlsn_conn(env, conn, generation, lsn)
+send_permlsn_conn(env, conn, generation, lsn, ckp_lsn)
 	ENV *env;
 	REPMGR_CONNECTION *conn;
 	u_int32_t generation;
 	DB_LSN *lsn;
+	DB_LSN *ckp_lsn;
 {
 	DBT control2, rec2;
+	__repmgr_v6permlsn_args v6permlsn;
 	__repmgr_permlsn_args permlsn;
+	u_int8_t v6buf[__REPMGR_V6PERMLSN_SIZE];
 	u_int8_t buf[__REPMGR_PERMLSN_SIZE];
 	int ret;
 
@@ -743,12 +721,16 @@ send_permlsn_conn(env, conn, generation, lsn)
 
 	if (conn->state == CONN_READY) {
 		DB_ASSERT(env, conn->version > 0);
-		permlsn.generation = generation;
-		memcpy(&permlsn.lsn, lsn, sizeof(DB_LSN));
-		if (conn->version == 1) {
-			control2.data = &permlsn;
-			control2.size = sizeof(permlsn);
+		if (conn->version < 7) {
+			v6permlsn.generation = generation;
+			memcpy(&v6permlsn.lsn, lsn, sizeof(DB_LSN));
+			__repmgr_v6permlsn_marshal(env, &v6permlsn, v6buf);
+			control2.data = v6buf;
+			control2.size = __REPMGR_V6PERMLSN_SIZE;
 		} else {
+			permlsn.generation = generation;
+			memcpy(&permlsn.lsn, lsn, sizeof(DB_LSN));
+			memcpy(&permlsn.last_ckp_lsn, ckp_lsn, sizeof(DB_LSN));
 			__repmgr_permlsn_marshal(env, &permlsn, buf);
 			control2.data = buf;
 			control2.size = __REPMGR_PERMLSN_SIZE;
@@ -1225,8 +1207,8 @@ serve_readonly_master_request(env, msg)
 	REPMGR_MESSAGE *msg;
 {
 	REPMGR_CONNECTION *conn;
-	__repmgr_permlsn_args permlsn;
-	u_int8_t buf[__REPMGR_PERMLSN_SIZE];
+	__repmgr_readonly_response_args response;
+	u_int8_t buf[__REPMGR_READONLY_RESPONSE_SIZE];
 	int ret, t_ret;
 
 	ret = 0;
@@ -1239,11 +1221,12 @@ serve_readonly_master_request(env, msg)
 
 	if (IS_PREFMAS_MODE(env))
 		ret = __rep_become_readonly_master(env,
-		    &permlsn.generation, &permlsn.lsn);
+		    &response.generation, &response.lsn);
 
-	__repmgr_permlsn_marshal(env, &permlsn, buf);
+	__repmgr_readonly_response_marshal(env, &response, buf);
 	if ((t_ret = __repmgr_send_sync_msg(env, conn,
-	    REPMGR_READONLY_RESPONSE, buf, __REPMGR_PERMLSN_SIZE)) != 0)
+	    REPMGR_READONLY_RESPONSE, buf,
+	    __REPMGR_READONLY_RESPONSE_SIZE)) != 0)
 		RPRINT(env, (env, DB_VERB_REPMGR_MISC,
 		    "Problem sending readonly response message %d", ret));
 	if (ret == 0 && t_ret != 0)

@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File: ItemNameKeyCreator.java
@@ -16,16 +15,17 @@ import com.sleepycat.db.DatabaseEntry;
 import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.SecondaryDatabase;
 
-public class ItemNameKeyCreator implements SecondaryKeyCreator {
+public class ItemNameKeyCreator<E> implements SecondaryKeyCreator {
 
-    private TupleBinding theBinding;
+    private final TupleBinding<E> theBinding;
 
     // Use the constructor to set the tuple binding
-    ItemNameKeyCreator(TupleBinding binding) {
+    ItemNameKeyCreator(TupleBinding<E> binding) {
         theBinding = binding;
     }
 
     // Abstract method that we must implement
+    @Override
     public boolean createSecondaryKey(SecondaryDatabase secDb,
              DatabaseEntry keyEntry,    // From the primary
              DatabaseEntry dataEntry,   // From the primary

@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -75,10 +75,14 @@
         on its existing value).
     </p>
       <p>
-        <span class="emphasis"><em>Snapshot isolation</em></span> also guarantees
-        repeatable reads, but avoids read locks by using multiversion
-        concurrency control (MVCC). This makes update operations more
-        expensive, because they have to allocate space for new
+        <span class="emphasis"><em>Snapshot isolation</em></span> is a second mechanism 
+        for providing serializability, favoring reader over updaters. 
+        With multiversion concurrency control (MVCC), rather than 
+        requiring readers to get a read lock when looking 
+        at a page,  it is the updaters which do most of the work 
+        to support <span class="emphasis"><em>degree 3 isolation</em></span>. This 
+        makes update operations more expensive, because 
+        they have to allocate space for new
         versions of pages in cache and make copies, but avoiding read
         locks can significantly increase throughput for many
         applications. Snapshot isolation is discussed in detail
@@ -119,11 +123,23 @@
           </div>
         </div>
         <p>
-            To make use of snapshot isolation, databases must first
-            be configured for multiversion access by calling <a href="../api_reference/C/dbopen.html" class="olink">DB-&gt;open()</a>
-            with the <a href="../api_reference/C/dbopen.html#dbopen_DB_MULTIVERSION" class="olink">DB_MULTIVERSION</a> flag. Then transactions or
-            cursors must be configured with the <a href="../api_reference/C/txnbegin.html#txnbegin_DB_TXN_SNAPSHOT" class="olink">DB_TXN_SNAPSHOT</a>
-            flag.
+          <span class="emphasis"><em>Snapshot isolation</em></span> occurs when MVCC-enabled databases 
+          are accessed by <a href="../api_reference/C/txnbegin.html#txnbegin_DB_TXN_SNAPSHOT" class="olink">DB_TXN_SNAPSHOT</a> transactions. An application first includes 
+          <a href="../api_reference/C/dbopen.html#dbopen_DB_MULTIVERSION" class="olink">DB_MULTIVERSION</a> when opening databases for which snapshot 
+          isolation is desired. The application completes the configuration 
+          of snapshot isolation by including <a href="../api_reference/C/txnbegin.html#txnbegin_DB_TXN_SNAPSHOT" class="olink">DB_TXN_SNAPSHOT</a> when beginning 
+          a transaction or cursor. 
+        </p>
+        <p>
+         Usually snapshot isolation is configured on each 
+         database and transaction where it is desired. Occasionally it is 
+         useful to set snapshot isolation for the entire environment handle:
+</p>
+        <pre class="programlisting">dbenv-&gt;set_flags(dbenv, DB_MULTIVERSION, 1);
+dbenv-&gt;set_flags(dbenv, DB_TXN_SNAPSHOT, 1);</pre>
+        <p>
+         This can be valuable for replication clients which offload read 
+         requests from the master site.
         </p>
         <p>
             When configuring an environment for snapshot isolation,
@@ -173,9 +189,7 @@
                 of the application; or
             </li>
             <li>
-                The application is all or mostly read-only, and
-                contention for the lock manager mutex is limiting
-                throughput.
+                The application is all or mostly read-only.
             </li>
           </ul>
         </div>

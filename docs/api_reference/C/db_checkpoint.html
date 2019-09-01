@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -43,7 +43,10 @@
       <p>
          The <span class="command"><strong>db_checkpoint</strong></span> utility is a daemon process that monitors the
          database log, and periodically calls 
-            <a class="xref" href="txncheckpoint.html" title="DB_ENV-&gt;txn_checkpoint()">DB_ENV-&gt;txn_checkpoint()</a>
+            <a class="xref" href="txncheckpoint.html" title="DB_ENV-&gt;txn_checkpoint()">
+        <span>DB_ENV-&gt;txn_checkpoint()</span>
+        
+    </a>
          to checkpoint it.
     </p>
       <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -168,7 +171,10 @@
          is created, the <span class="command"><strong>db_checkpoint</strong></span> utility should be started.
     </p>
       <p>
-         The <a class="xref" href="txncheckpoint.html" title="DB_ENV-&gt;txn_checkpoint()">DB_ENV-&gt;txn_checkpoint()</a>
+         The <a class="xref" href="txncheckpoint.html" title="DB_ENV-&gt;txn_checkpoint()">
+        <span>DB_ENV-&gt;txn_checkpoint()</span>
+        
+    </a>
          method is the underlying method used by the <span class="command"><strong>db_checkpoint</strong></span> utility. See
          the <span class="command"><strong>db_checkpoint</strong></span> utility source code for an example of using 
          <code class="methodname">DB_ENV-&gt;txn_checkpoint()</code> in a IEEE/ANSI Std 1003.1 (POSIX) environment.
@@ -181,7 +187,7 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227168336"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113479390784"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -189,7 +195,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227162000"></a>DB_HOME</h4>
+                <h4 class="title"><a id="idm140113479385200"></a>DB_HOME</h4>
               </div>
             </div>
           </div>
@@ -197,7 +203,10 @@
                           If the <span class="bold"><strong>-h</strong></span> option is not specified and
                           the environment variable DB_HOME is set, it is used as the path of the
                           database home, as described in the 
-                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method.
+                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method.
                      </p>
         </div>
       </div>

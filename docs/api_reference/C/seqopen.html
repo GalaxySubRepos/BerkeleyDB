@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_SEQUENCE-&gt;open()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_SEQUENCE-&gt;open()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="seqinitial_value.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="seqopen"></a>DB_SEQUENCE-&gt;open()</h2>
+            <h2 class="title" style="clear: both"><a id="seqopen"></a>
+        <span>DB_SEQUENCE-&gt;open()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -48,7 +54,10 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
          sequence represented by the <span class="bold"><strong>key</strong></span>.
          The key must be compatible with the underlying database specified
          in the corresponding call to 
-         <a class="xref" href="seqcreate.html" title="db_sequence_create">db_sequence_create</a>.
+         <a class="xref" href="seqcreate.html" title="db_sequence_create">
+        <span>db_sequence_create</span>
+        
+    </a>.
     </p>
       <p>
          The <code class="methodname">DB_SEQUENCE-&gt;open()</code> <span>
@@ -62,7 +71,7 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228211216"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113480452304"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -70,7 +79,7 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228210400"></a>key</h4>
+                <h4 class="title"><a id="idm140113480451488"></a>key</h4>
               </div>
             </div>
           </div>
@@ -84,7 +93,7 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228282288"></a>flags</h4>
+                <h4 class="title"><a id="idm140113480485296"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -147,17 +156,23 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228196864"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113480431872"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; if the
+                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; if the
                           operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected. Transactionally protected operations
@@ -172,7 +187,7 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228225616"></a>Class</h3>
+              <h3 class="title"><a id="idm140113480436000"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -184,7 +199,7 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228208656"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113480449328"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -204,11 +219,17 @@ DB_SEQUENCE-&gt;open(DB_SEQUENCE *seq, DB_TXN *txnid, DBT *key,
           <td width="40%" align="right"> <a accesskey="n" href="seqremove.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_SEQUENCE-&gt;initial_value() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_SEQUENCE-&gt;initial_value()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_SEQUENCE-&gt;remove()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_SEQUENCE-&gt;remove()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

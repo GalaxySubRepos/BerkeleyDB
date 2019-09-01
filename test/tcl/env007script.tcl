@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # env007script - for use with env007.
 # Usage: configarg configval getter getval

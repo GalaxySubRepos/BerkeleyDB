@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;txn_recover()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;txn_recover()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_tx_timestamp.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txnrecover"></a>DB_ENV-&gt;txn_recover()</h2>
+            <h2 class="title" style="clear: both"><a id="txnrecover"></a>
+        <span>DB_ENV-&gt;txn_recover()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -57,10 +63,19 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
       <p>
          Multiple threads of control may call <code class="methodname">DB_ENV-&gt;txn_recover()</code>, but only
          one thread of control may resolve each returned transaction, that is,
-         only one thread of control may call <a class="xref" href="txncommit.html" title="DB_TXN-&gt;commit()">DB_TXN-&gt;commit()</a>  
-         or <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">DB_TXN-&gt;abort()</a>  on each
+         only one thread of control may call <a class="xref" href="txncommit.html" title="DB_TXN-&gt;commit()">
+        <span>DB_TXN-&gt;commit()</span>
+        
+    </a>  
+         or <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">
+        <span>DB_TXN-&gt;abort()</span>
+        
+    </a>  on each
          returned transaction.  Callers of <code class="methodname">DB_ENV-&gt;txn_recover()</code> must call
-         <a class="xref" href="txndiscard.html" title="DB_TXN-&gt;discard()">DB_TXN-&gt;discard()</a>  to
+         <a class="xref" href="txndiscard.html" title="DB_TXN-&gt;discard()">
+        <span>DB_TXN-&gt;discard()</span>
+        
+    </a>  to
          discard each transaction they do not resolve.
     </p>
       <p>
@@ -104,7 +119,7 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228012192"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113480173072"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -112,7 +127,7 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227954432"></a>preplist</h4>
+                <h4 class="title"><a id="idm140113480216768"></a>preplist</h4>
               </div>
             </div>
           </div>
@@ -126,7 +141,7 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228058752"></a>count</h4>
+                <h4 class="title"><a id="idm140113480153552"></a>count</h4>
               </div>
             </div>
           </div>
@@ -140,7 +155,7 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227915648"></a>flags</h4>
+                <h4 class="title"><a id="idm140113480150656"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -182,7 +197,7 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227905152"></a>Class</h3>
+              <h3 class="title"><a id="idm140113480140352"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -194,7 +209,7 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227959216"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113480152528"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -214,11 +229,17 @@ DB_ENV-&gt;txn_recover(DB_ENV *dbenv, DB_PREPLIST preplist[],
           <td width="40%" align="right"> <a accesskey="n" href="txnbegin.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_tx_timestamp() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_tx_timestamp()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;txn_begin()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

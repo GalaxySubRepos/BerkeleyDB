@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2008, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File TxnGuideDPL.java
@@ -27,7 +26,7 @@ import java.io.FileNotFoundException;
 public class TxnGuideDPL {
 
     private static String myEnvPath = "./";
-    private static String storeName = "exampleStore";
+    private static final String storeName = "exampleStore";
 
     // Handles
     private static EntityStore myStore = null;
@@ -58,7 +57,7 @@ public class TxnGuideDPL {
             for (int i = 0; i < NUMTHREADS; i++) {
                 threadArray[i].join();
             }
-        } catch (Exception e) {
+        } catch (DatabaseException | InterruptedException e) {
             System.err.println("TxnGuideDPL: " + e.toString());
             e.printStackTrace();
         } finally {
@@ -150,7 +149,7 @@ public class TxnGuideDPL {
                 switch(args[i].charAt(1)) {
                     case 'h':
                         if (i < nArgs - 1) {
-                            myEnvPath = new String(args[++i]);
+                            myEnvPath = args[++i];
                         }
                     break;
                     default:

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -54,6 +54,10 @@ proc repmgr011_sub { method niter tnum largs } {
 
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+
 	puts "\tRepmgr$tnum.a: 2site_strict=on (default) test."
 	puts "\tRepmgr$tnum.a1: Start first site as master."
 	set cl_envcmd "berkdb_env_noerr -create $verbargs \
@@ -174,10 +178,12 @@ proc repmgr011_sub { method niter tnum largs } {
 	# Allow time for rejoin group membership database updates and
 	# deferred election.
 	#
-	tclsleep 2
+	tclsleep 5
 
 	puts "\tRepmgr$tnum.b9: Run another set of transactions at master."
+
 	eval rep_test $method $clientenv2 NULL $niter $start 0 0 $largs
+
 	incr start $niter
 
 	puts "\tRepmgr$tnum.b10: Verify client database contents."

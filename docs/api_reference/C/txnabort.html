@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_TXN-&gt;abort()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_TXN-&gt;abort()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="txnstat_print.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txnabort"></a>DB_TXN-&gt;abort()</h2>
+            <h2 class="title" style="clear: both"><a id="txnabort"></a>
+        <span>DB_TXN-&gt;abort()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -46,7 +52,10 @@ DB_TXN-&gt;abort(DB_TXN *tid);  </pre>
          The <code class="methodname">DB_TXN-&gt;abort()</code> method causes an abnormal termination of the
          transaction. The log is played backward, and any necessary undo
          operations are done through the <span class="bold"><strong>tx_recover</strong></span> 
-         function specified to <a class="xref" href="envset_app_dispatch.html" title="DB_ENV-&gt;set_app_dispatch()">DB_ENV-&gt;set_app_dispatch()</a>.
+         function specified to <a class="xref" href="envset_app_dispatch.html" title="DB_ENV-&gt;set_app_dispatch()">
+        <span>DB_ENV-&gt;set_app_dispatch()</span>
+        
+    </a>.
           Before <code class="methodname">DB_TXN-&gt;abort()</code> returns, any locks held by the transaction
          will have been released.
     </p>
@@ -79,7 +88,7 @@ DB_TXN-&gt;abort(DB_TXN *tid);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227713488"></a>Class</h3>
+              <h3 class="title"><a id="idm140113479922992"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -91,7 +100,7 @@ DB_TXN-&gt;abort(DB_TXN *tid);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227776400"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113479918544"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -111,11 +120,17 @@ DB_TXN-&gt;abort(DB_TXN *tid);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="txncommit.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;txn_stat_print() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;txn_stat_print()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_TXN-&gt;commit()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_TXN-&gt;commit()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

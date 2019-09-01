@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_append_recno()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_append_recno()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_alloc.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_append_recno"></a>Db::set_append_recno()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_append_recno"></a>
+        
+        <span>Db::set_append_recno()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -45,7 +51,10 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
                                                 db_recno_t recno));</pre>
       <p>
          When using the <a class="link" href="dbput.html#dbput_DB_APPEND">DB_APPEND</a>  
-         option of the <a class="xref" href="dbput.html" title="Db::put()">Db::put()</a>  method, it may be
+         option of the <a class="xref" href="dbput.html" title="Db::put()">
+        
+        <span>Db::put()</span>
+    </a>  method, it may be
          useful to modify the stored data based on the generated key. If a
          callback function is specified using the 
          <code class="methodname">Db::set_append_recno()</code>         
@@ -59,7 +68,10 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
     </p>
       <p>
              The <code class="methodname">Db::set_append_recno()</code> method may not be called after the 
-             <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called.
+             <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">Db::set_append_recno()</code> <span>
@@ -83,7 +95,7 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703821200400"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176779883808"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -91,7 +103,7 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703821224928"></a>db_append_recno_fcn</h4>
+                <h4 class="title"><a id="idm140176779886128"></a>db_append_recno_fcn</h4>
               </div>
             </div>
           </div>
@@ -152,7 +164,7 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818237872"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176781546400"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -170,12 +182,15 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703822889984"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176781903824"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -184,7 +199,7 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703822335584"></a>Class</h3>
+              <h3 class="title"><a id="idm140176781319824"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -196,7 +211,7 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703823126608"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176782081888"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -216,11 +231,17 @@ Db::set_append_recno(int (*db_append_recno_fcn)(DB *dbp, Dbt *data,
           <td width="40%" align="right"> <a accesskey="n" href="dbset_bt_compare.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_alloc() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_alloc()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_bt_compare()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_bt_compare()</span>
+    </td>
         </tr>
       </table>
     </div>

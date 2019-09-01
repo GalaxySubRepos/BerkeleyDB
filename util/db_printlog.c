@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -102,8 +102,8 @@ main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'r':
 			rflag = 1;
@@ -211,7 +211,7 @@ main(argc, argv)
 	/* Initialize print callbacks if repflag. */
 	if (repflag &&
 	    (ret = env_init_print(env, version, &dtab)) != 0) {
-		dbenv->err(dbenv, ret, DB_STR("5011",
+		dbenv->err(dbenv, ret, DB_STR("2503",
 		    "callback: initialization"));
 		goto err;
 	}
@@ -252,7 +252,7 @@ main(argc, argv)
 				version = newversion;
 				if ((ret = env_init_print(env, version,
 				    &dtab)) != 0) {
-					dbenv->err(dbenv, ret, DB_STR("5012",
+					dbenv->err(dbenv, ret, DB_STR("2503",
 					    "callback: initialization"));
 					goto err;
 				}
@@ -404,7 +404,7 @@ env_init_print(env, version, dtabp)
 	if (version == DB_LOGVERSION_43)
 		goto done;
 	if (version != DB_LOGVERSION_42) {
-		__db_errx(env, DB_STR_A("5014",
+		__db_errx(env, DB_STR_A("1523",
 		    "Unknown version %lu", "%lu"), (u_long)version);
 		ret = EINVAL;
 		goto err;

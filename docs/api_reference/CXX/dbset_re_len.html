@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_re_len()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_re_len()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_re_delim.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_re_len"></a>Db::set_re_len()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_re_len"></a>
+        
+        <span>Db::set_re_len()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -55,7 +61,10 @@ Db::set_re_len(u_int32_t re_len); </pre>
     </p>
       <p>
          Any records added to the database that are less than <span class="bold"><strong>re_len</strong></span> bytes long are automatically padded (see
-         <a class="xref" href="dbset_re_pad.html" title="Db::set_re_pad()">Db::set_re_pad()</a>  for
+         <a class="xref" href="dbset_re_pad.html" title="Db::set_re_pad()">
+        
+        <span>Db::set_re_pad()</span>
+    </a>  for
          more information).
     </p>
       <p>
@@ -70,9 +79,15 @@ Db::set_re_len(u_int32_t re_len); </pre>
     </p>
       <p>
          The <code class="methodname">Db::set_re_len()</code> method may not be called after the 
-         <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called. If
+         <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called. If
          the database already exists when 
-         <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  is called, the
+         <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  is called, the
          information specified to <code class="methodname">Db::set_re_len()</code> will be ignored.
     </p>
       <p>
@@ -89,7 +104,7 @@ Db::set_re_len(u_int32_t re_len); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814782480"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176772147408"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -97,7 +112,7 @@ Db::set_re_len(u_int32_t re_len); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814782160"></a>re_len</h4>
+                <h4 class="title"><a id="idm140176772147696"></a>re_len</h4>
               </div>
             </div>
           </div>
@@ -111,7 +126,7 @@ Db::set_re_len(u_int32_t re_len); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814871296"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176772218560"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -129,12 +144,15 @@ Db::set_re_len(u_int32_t re_len); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814766688"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176772132480"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -143,7 +161,7 @@ Db::set_re_len(u_int32_t re_len); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814805632"></a>Class</h3>
+              <h3 class="title"><a id="idm140176772129920"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -155,7 +173,7 @@ Db::set_re_len(u_int32_t re_len); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814784368"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176772219200"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -175,11 +193,17 @@ Db::set_re_len(u_int32_t re_len); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_re_pad.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_re_delim() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_re_delim()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_re_pad()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_re_pad()</span>
+    </td>
         </tr>
       </table>
     </div>

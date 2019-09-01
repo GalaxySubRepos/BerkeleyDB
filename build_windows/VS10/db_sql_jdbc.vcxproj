@@ -61,11 +61,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;UNICODE;HAVE_SQLITE3;HAVE_SQLITE3_MALLOC=1;HAVE_SQLITE3_PREPARE_V2=1;HAVE_SQLITE3_PREPARE16_V2=1;HAVE_SQLITE3_BIND_ZEROBLOB=1;HAVE_SQLITE3_CLEAR_BINDINGS=1;HAVE_SQLITE3_BIND_PARAMETER_COUNT=1;HAVE_SQLITE3_BIND_PARAMETER_NAME=1;HAVE_SQLITE3_BIND_PARAMETER_INDEX=1;HAVE_SQLITE3_RESULT_ZEROBLOB=1;HAVE_SQLITE3_INCRBLOBIO=1;HAVE_SQLITE3_SHARED_CACHE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb_sql62d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb_sql181d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -83,11 +83,11 @@ echo JDBC build finished</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;UNICODE;HAVE_SQLITE3;HAVE_SQLITE3_MALLOC=1;HAVE_SQLITE3_PREPARE_V2=1;HAVE_SQLITE3_PREPARE16_V2=1;HAVE_SQLITE3_BIND_ZEROBLOB=1;HAVE_SQLITE3_CLEAR_BINDINGS=1;HAVE_SQLITE3_BIND_PARAMETER_COUNT=1;HAVE_SQLITE3_BIND_PARAMETER_NAME=1;HAVE_SQLITE3_BIND_PARAMETER_INDEX=1;HAVE_SQLITE3_RESULT_ZEROBLOB=1;HAVE_SQLITE3_INCRBLOBIO=1;HAVE_SQLITE3_SHARED_CACHE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb_sql62.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb_sql181.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -105,11 +105,11 @@ echo JDBC build finished</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;UNICODE;HAVE_SQLITE3;HAVE_SQLITE3_MALLOC=1;HAVE_SQLITE3_PREPARE_V2=1;HAVE_SQLITE3_PREPARE16_V2=1;HAVE_SQLITE3_BIND_ZEROBLOB=1;HAVE_SQLITE3_CLEAR_BINDINGS=1;HAVE_SQLITE3_BIND_PARAMETER_COUNT=1;HAVE_SQLITE3_BIND_PARAMETER_NAME=1;HAVE_SQLITE3_BIND_PARAMETER_INDEX=1;HAVE_SQLITE3_RESULT_ZEROBLOB=1;HAVE_SQLITE3_INCRBLOBIO=1;HAVE_SQLITE3_SHARED_CACHE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb_sql62d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb_sql181d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>
@@ -127,11 +127,11 @@ echo JDBC build finished</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;../../lang/sql/jdbc/native;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;UNICODE;HAVE_SQLITE3;HAVE_SQLITE3_MALLOC=1;HAVE_SQLITE3_PREPARE_V2=1;HAVE_SQLITE3_PREPARE16_V2=1;HAVE_SQLITE3_BIND_ZEROBLOB=1;HAVE_SQLITE3_CLEAR_BINDINGS=1;HAVE_SQLITE3_BIND_PARAMETER_COUNT=1;HAVE_SQLITE3_BIND_PARAMETER_NAME=1;HAVE_SQLITE3_BIND_PARAMETER_INDEX=1;HAVE_SQLITE3_RESULT_ZEROBLOB=1;HAVE_SQLITE3_INCRBLOBIO=1;HAVE_SQLITE3_SHARED_CACHE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb_sql62.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb_sql181.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>

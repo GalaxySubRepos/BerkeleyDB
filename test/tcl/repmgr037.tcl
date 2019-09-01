@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -88,6 +88,8 @@ proc repmgr037_sub { method niter tnum cid nelects nunelects nviews largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -99,7 +101,7 @@ proc repmgr037_sub { method niter tnum cid nelects nunelects nviews largs } {
 		} else {
 			set dirs($i) $testdir/VIEW$i
 		}
-		file mkdir $dirs($i)
+		file mkdir $dirs($i)		
 	}
 
 	puts -nonewline "Repmgr$tnum Config.$cid sites: electable $nelects, "
@@ -108,13 +110,13 @@ proc repmgr037_sub { method niter tnum cid nelects nunelects nviews largs } {
 	# This test depends on using the default callback so that each view
 	# is a fully-replicated copy of the data.
 	set viewcb ""
-	for { set i 1 } { $i <= $nsites } { incr i } {
+	for { set i 1 } { $i <= $nsites } { incr i } {		
 		if { $i < $vi } {
 			set envargs "-errpfx SITE$i"
 		} else {
 			set envargs "-errpfx VIEW$i -rep_view \[list $viewcb \]"
 		}
-		set envcmds($i) "berkdb_env_noerr -create $verbargs \
+		set envcmds($i) "berkdb_env_noerr -create $verbargs $sslargs \
 		    $envargs -home $dirs($i) -txn -rep -thread"
 		set envs($i) [eval $envcmds($i)]
 		# Turn off 2SITE_STRICT to make sure we accurately test that

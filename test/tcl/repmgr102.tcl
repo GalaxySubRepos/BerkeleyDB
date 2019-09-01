@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr102
 # TEST Ensuring exactly one listener process.
@@ -46,6 +46,7 @@ proc repmgr102 {  } {
 	make_dbconfig $masterdir \
 	    [list [list repmgr_site $hoststr $master_port db_local_site on] \
 	    "rep_set_config db_repmgr_conf_2site_strict off"]
+	setup_repmgr_ssl $masterdir
 	set masterenv [berkdb_env -rep -txn -thread -home $masterdir \
 	    -isalive my_isalive -create]
 	$masterenv close

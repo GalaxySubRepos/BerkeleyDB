@@ -40,7 +40,7 @@ void __os_set_errno __P((int));
 char *__os_strerror __P((int, char *, size_t));
 int __os_posix_err __P((int));
 int __os_fileid __P((ENV *, const char *, int, u_int8_t *));
-int __os_fdlock __P((ENV *, DB_FH *, off_t, int, int));
+int __os_fdlock __P((ENV *, DB_FH *, off_t, db_lockmode_t, int));
 int __os_fsync __P((ENV *, DB_FH *));
 int __os_getenv __P((ENV *, const char *, char **, size_t));
 int __os_openhandle __P((ENV *, const char *, int, int, DB_FH **));

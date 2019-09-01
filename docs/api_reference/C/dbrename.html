@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;rename()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;rename()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbremove.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbrename"></a>DB-&gt;rename()</h2>
+            <h2 class="title" style="clear: both"><a id="dbrename"></a>
+        <span>DB-&gt;rename()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -61,20 +67,32 @@ DB-&gt;rename(DB *db, const char *file,
       <p>
          The <code class="methodname">DB-&gt;rename()</code> method should not be called if the rename is
          intended to be transactionally safe; the 
-         <a class="xref" href="envdbrename.html" title="DB_ENV-&gt;dbrename()">DB_ENV-&gt;dbrename()</a>  method
+         <a class="xref" href="envdbrename.html" title="DB_ENV-&gt;dbrename()">
+        <span>DB_ENV-&gt;dbrename()</span>
+        
+    </a>  method
          should be used instead.
     </p>
       <p>
          The <code class="methodname">DB-&gt;rename()</code> method can not be used
          for sliced databases; the
-         <a class="xref" href="envdbrename.html" title="DB_ENV-&gt;dbrename()">DB_ENV-&gt;dbrename()</a>  
+         <a class="xref" href="envdbrename.html" title="DB_ENV-&gt;dbrename()">
+        <span>DB_ENV-&gt;dbrename()</span>
+        
+    </a>  
          method should be used instead.
     </p>
       <p>
          The <code class="methodname">DB-&gt;rename()</code> method may not be called after calling the 
-         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method on any 
+         <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method on any 
          <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a>  handle.  If the 
-         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method has already
+         <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method has already
          been called on a <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a> 
          handle, close the existing handle and create a new one before calling
          <code class="methodname">DB-&gt;rename()</code>.
@@ -96,7 +114,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236945968"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113489579920"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -104,7 +122,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236946576"></a>file</h4>
+                <h4 class="title"><a id="idm140113489412672"></a>file</h4>
               </div>
             </div>
           </div>
@@ -123,7 +141,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236960784"></a>database</h4>
+                <h4 class="title"><a id="idm140113489406704"></a>database</h4>
               </div>
             </div>
           </div>
@@ -136,7 +154,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236988576"></a>newname</h4>
+                <h4 class="title"><a id="idm140113489411552"></a>newname</h4>
               </div>
             </div>
           </div>
@@ -149,7 +167,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236930144"></a>flags</h4>
+                <h4 class="title"><a id="idm140113489396448"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -163,7 +181,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236927168"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113489393472"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -174,7 +192,10 @@ DB-&gt;rename(DB *db, const char *file,
                     </p>
         <p>
                             <code class="methodname">DB-&gt;rename()</code> is affected by any database directory specified using the
-                            <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">DB_ENV-&gt;add_data_dir()</a>
+                            <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">
+        <span>DB_ENV-&gt;add_data_dir()</span>
+        
+    </a>
                             method, or by setting the "add_data_dir" string
                             in the environment's <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file.
                     </p>
@@ -183,7 +204,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236925088"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113489391392"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -199,12 +220,15 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236916640"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113489383072"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                            If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>
+                            If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>
                             was called; if this method was called on a sliced database;
                             or if an invalid flag value or parameter was specified.
                         </p>
@@ -213,7 +237,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236939840"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140113489380144"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -225,7 +249,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236913728"></a>DB_META_CHKSUM_FAIL</h4>
+                <h4 class="title"><a id="idm140113489367088"></a>DB_META_CHKSUM_FAIL</h4>
               </div>
             </div>
           </div>
@@ -240,7 +264,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236918384"></a>Class</h3>
+              <h3 class="title"><a id="idm140113489384816"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -252,7 +276,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236912272"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113489378320"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -272,11 +296,17 @@ DB-&gt;rename(DB *db, const char *file,
           <td width="40%" align="right"> <a accesskey="n" href="dbset_alloc.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;remove() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;remove()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_alloc()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_alloc()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

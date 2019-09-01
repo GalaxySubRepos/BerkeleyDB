@@ -58,7 +58,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CONSOL;STATIC_BUILD;SQLITE_TEST;TCLSH;SQLITE_NO_SYNC;SQLITE_CRASH_TEST;SQLITE_SERVER;SQLITE_PRIVATE;SQLITE_CORE;SQLITE_THREADSAFE=1;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE_UNICODE;UNICODE;SQLITE_MEMDEBUG;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -67,7 +67,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CONSOL;STATIC_BUILD;SQLITE_TEST;TCLSH;SQLITE_NO_SYNC;SQLITE_CRASH_TEST;SQLITE_SERVER;SQLITE_PRIVATE;SQLITE_CORE;SQLITE_THREADSAFE=1;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -76,7 +76,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CONSOL;STATIC_BUILD;SQLITE_TEST;TCLSH;SQLITE_NO_SYNC;SQLITE_CRASH_TEST;SQLITE_SERVER;SQLITE_PRIVATE;SQLITE_CORE;SQLITE_THREADSAFE=1;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE_UNICODE;UNICODE;SQLITE_MEMDEBUG;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -85,7 +85,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CONSOL;STATIC_BUILD;SQLITE_TEST;TCLSH;SQLITE_NO_SYNC;SQLITE_CRASH_TEST;SQLITE_SERVER;SQLITE_PRIVATE;SQLITE_CORE;SQLITE_THREADSAFE=1;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -103,14 +103,15 @@
     <ClCompile Include="..\..\lang\sql\adapter\btree.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\build.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\callback.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\ctime.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\complete.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\ctime.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\date.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\dbstat.c"/>
+    <ClCompile Include="..\..\lang\sql\adapter\db_encrypt.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\db_pragma.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\db_sequence.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\dbstat.c"/>
+    <ClCompile Include="..\..\lang\sql\adapter\db_shell.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\delete.c"/>
-    <ClCompile Include="..\..\lang\sql\adapter\db_encrypt.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\expr.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\fault.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\fkey.c"/>
@@ -121,34 +122,18 @@
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_icu.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_porter.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_snippet.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_term.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_test.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenizer1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenizer.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenizer1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenize_vtab.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_unicode.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_unicode2.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_write.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\amatch.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\closure.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\eval.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\fileio.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\fuzzer.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\ieee754.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\nextchar.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\percentile.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\regexp.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\rot13.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\spellfix.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\totype.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\vfslog.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\vtshim.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\wholenumber.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\func.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\global.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\hash.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\icu\icu.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\insert.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\journal.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\json1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\legacy.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\loadext.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\main.c"/>
@@ -177,11 +162,14 @@
     <ClCompile Include="..\..\lang\sql\sqlite\src\resolve.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\rowset.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\rtree\rtree.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\session\sqlite3session.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\select.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\rbu\sqlite3rbu.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\status.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\table.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\threads.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\tokenize.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\treeview.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\trigger.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\update.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\userauth.c"/>
@@ -199,8 +187,9 @@
     <ClCompile Include="..\..\lang\sql\adapter\wal.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\walker.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\where.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\wherecode.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\whereexpr.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\tclsqlite.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\test_init.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test2.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test3.c"/>
@@ -213,14 +202,17 @@
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_async.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_autoext.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_backup.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\test_bestindex.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_blob.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_btree.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_config.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\test_delete.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_demovfs.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_devsym.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_fs.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_func.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_hexio.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\test_init.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_intarray.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_journal.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_loadext.c"/>
@@ -234,13 +226,36 @@
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_rtree.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_schema.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_server.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\test_syscall.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_superlock.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\test_syscall.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_tclvar.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_thread.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_vfs.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\test_vfstrace.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\test_windirent.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\test_wsd.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_term.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_test.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\session\test_session.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\rbu\test_rbu.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\amatch.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\carray.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\closure.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\csv.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\eval.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\fileio.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\fuzzer.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts5\fts5_tcl.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts5\fts5_test_mi.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts5\fts5_test_tok.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\ieee754.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\nextchar.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\percentile.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\regexp.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\remember.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\series.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\spellfix.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\totype.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\wholenumber.c"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets">

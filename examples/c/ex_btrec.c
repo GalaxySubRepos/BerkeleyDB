@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file EXAMPLES-LICENSE for license information.
  *
  * ex_btrec-- A basic example of using record numbers in a btree.
  *  

@@ -9,12 +9,12 @@
     <link rel="start" href="index.html" title="Getting Started with the Oracle Berkeley DB SQL APIs" />
     <link rel="up" href="dbsqlbasics.html" title="Chapter 1. Berkeley DB SQL: The Absolute Basics" />
     <link rel="prev" href="dbsqlbasics.html" title="Chapter 1. Berkeley DB SQL: The Absolute Basics" />
-    <link rel="next" href="accessing_bdb_sql_databases.title.html" title="Accessing BDB SQL Databases" />
+    <link rel="next" href="accessing_bdb_sql_databases.html" title="Accessing BDB SQL Databases" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -23,7 +23,7 @@
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbsqlbasics.html">Prev</a> </td>
           <th width="60%" align="center">Chapter 1. Berkeley DB SQL: The Absolute Basics</th>
-          <td width="20%" align="right"> <a accesskey="n" href="accessing_bdb_sql_databases.title.html">Next</a></td>
+          <td width="20%" align="right"> <a accesskey="n" href="accessing_bdb_sql_databases.html">Next</a></td>
         </tr>
       </table>
       <hr />
@@ -40,7 +40,10 @@
         <dl>
           <dt>
             <span class="sect2">
-              <a href="buildinstall.html#onwin">On Windows Systems</a>
+              <a href="buildinstall.html#onwin">
+                    <span>On Windows Systems</span>
+                    
+                </a>
             </span>
           </dt>
           <dt>
@@ -64,7 +67,10 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="onwin"></a>On Windows Systems</h3>
+              <h3 class="title"><a id="onwin"></a>
+                    <span>On Windows Systems</span>
+                    
+                </h3>
             </div>
           </div>
         </div>
@@ -198,23 +204,24 @@
           </div>
         </div>
         <p>
-					You will create the Berkeley DB ADO.NET package. First download
-					<code class="literal">sqlite-dotnetsrc-1097000.zip</code> 
-					from the SQLite download page 
-					<a class="ulink" href="https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki" target="_top">https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki</a>.
+		You will create the Berkeley DB ADO.NET package. First download
+		<code class="literal">sqlite-netFx-full-source-1.0.106.0.zip</code> 
+		from the SQLite download page 
+		<a class="ulink" href="https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki" target="_top">https://system.data.sqlite.org/index.html/doc/trunk/www/downloads.wiki</a>.
                 </p>
         <p>
-					Then, in the directory <code class="literal">&lt;db&gt;/dist</code> run this command:
-					</p>
+		Then, in the directory <code class="literal">&lt;db&gt;/dist</code> run this command:
+            </p>
         <pre class="programlisting">./s_sql_drivers -adodotnet \
-					-ado_package /path/to/sqlite-dotnetsrc-1097000.zip 
-				</pre>
+		-ado_package /path/to/sqlite-netFx-full-source-1.0.106.0.zip 
+	    </pre>
         <p>
-				</p>
+		</p>
         <p>
-				This will create the package dbsql-adodotnet-12.1.6.2.zip in the
-				directory <code class="literal">&lt;db&gt;/release</code>.
-				</p>
+			This will create the package dbsql-adodotnet-18.1.32.zip in the
+		directory <code class="literal">&lt;db&gt;/release</code>.
+
+		</p>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
@@ -232,14 +239,6 @@
               <li>
                         To build SQLite.Designer, you will need to install the
                         <code class="literal">Microsoft Visual Studio SDK</code>.
-                    </li>
-              <li>
-                        To build on Windows Mobile you will need to install the
-                        <code class="literal">Microsoft Windows Mobile 6.5.3 Developer Tool Kit (DTK)</code>.
-                    </li>
-              <li>
-                        To build on Windows Mobile you will need to use Visual
-                        Studio 2008.
                     </li>
             </ul>
           </div>
@@ -262,22 +261,30 @@
                   <ul type="circle">
                     <li>
                       <p>
-                                        <code class="literal">SQLite.NET.2008.sln</code>
-                                        and
                                         <code class="literal">SQLite.NET.2010.sln</code>
+                                        and
+                                        <code class="literal">SQLite.NET.2012.sln</code>
+                                        and
+                                        <code class="literal">SQLite.NET.2013.sln</code>
+                                        and
+                                        <code class="literal">SQLite.NET.2015.sln</code>
                                     </p>
                       <p>
-                                        For use by with Visual Studio 2008
-                                        or 2010.  Note that these solution
+                                        For use by with Visual Studio 2010
+                                        or 2012 or 2015.  Note that these solution
                                         files do not build support for Linq
                                         or SQLite Designer.
                                     </p>
                     </li>
                     <li>
                       <p>
-                                        <code class="literal">SQLite.NET.2008.MSBuild.sln</code>
-                                        and 
                                         <code class="literal">SQLite.NET.2010.MSBuild.sln</code>
+                                        and 
+                                        <code class="literal">SQLite.NET.2012.MSBuild.sln</code>
+                                        and
+                                        <code class="literal">SQLite.NET.2013.MSBuild.sln</code>
+                                        and
+                                        <code class="literal">SQLite.NET.2015.MSBuild.sln</code>
                                     </p>
                       <p>
                                         For use with MSBuild (Microsoft
@@ -304,73 +311,6 @@
             </ul>
           </div>
         </div>
-        <div class="sect3" lang="en" xml:lang="en">
-          <div class="titlepage">
-            <div>
-              <div>
-                <h4 class="title"><a id="ado_build_steps_ce"></a>
-                        Building BDB SQL ADO.NET Interface For Windows Mobile
-                    </h4>
-              </div>
-            </div>
-          </div>
-          <p>
-                        Building BDB SQL ADO.NET for Windows Mobile
-                        requires Windows Mobile 6.5.3 Professional DTK.
-                        Typical requirements for installing this toolkit
-                        are:
-                    </p>
-          <div class="itemizedlist">
-            <ul type="disc">
-              <li>
-                <p>
-                                Visual Studio 2005 SP1 or Later
-                            </p>
-              </li>
-              <li>
-                <p>
-                                ActiveSync 4.5
-                            </p>
-              </li>
-              <li>
-                <p>
-                                .NET CompactFramework 2.0 SP1
-                            </p>
-              </li>
-              <li>
-                <p>
-                                Windows Mobile 6 SDK
-                            </p>
-              </li>
-            </ul>
-          </div>
-          <p>
-                        To build BDB SQL ADO.NET for Windows Mobile, do
-                        the following:
-                    </p>
-          <div class="itemizedlist">
-            <ul type="disc">
-              <li>
-                            Open the <code class="literal">SQLite.NET.2008.WinCE.sln</code>
-                            solution file in Visual Studio 2008.
-                        </li>
-              <li>
-                            Select <code class="literal">Load Project Normally</code></li>
-              <li>
-                            Change the current platform to <code class="literal">ReleaseNativeOnly</code>.
-                        </li>
-              <li>
-                            Select <code class="literal">Configuration Manager</code>-&gt;<code class="literal">new</code>,
-                            then type or select the platform
-                            <code class="literal">Windows Mobile 6.5.3 Professional DTK (ARMV4I)</code>. 
-                            Choose to copy settings from
-                            <code class="literal">Pocket PC 2003 (ARMV4I)</code></li>
-              <li>
-                            Build the solution.
-                        </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
     <div class="navfooter">
@@ -381,7 +321,7 @@
           <td width="20%" align="center">
             <a accesskey="u" href="dbsqlbasics.html">Up</a>
           </td>
-          <td width="40%" align="right"> <a accesskey="n" href="accessing_bdb_sql_databases.title.html">Next</a></td>
+          <td width="40%" align="right"> <a accesskey="n" href="accessing_bdb_sql_databases.html">Next</a></td>
         </tr>
         <tr>
           <td width="40%" align="left" valign="top">Chapter 1. Berkeley DB SQL: The Absolute Basics </td>

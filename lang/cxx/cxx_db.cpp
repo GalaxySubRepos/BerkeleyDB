@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -271,6 +271,9 @@ DB_DESTRUCTOR(close, (u_int32_t flags), (db, flags), DB_RETOK_STD)
 DB_METHOD(compact, (DbTxn *txnid, Dbt *start, Dbt *stop,
     DB_COMPACT *c_data, u_int32_t flags, Dbt *end),
     (db, unwrap(txnid), start, stop, c_data, flags, end), DB_RETOK_STD)
+
+DB_METHOD(convert, (const char *name, u_int32_t lorder),
+    (db, name, lorder), DB_RETOK_STD)
 
 // The following cast implies that Dbc can be no larger than DBC
 DB_METHOD(cursor, (DbTxn *txnid, Dbc **cursorp, u_int32_t flags),

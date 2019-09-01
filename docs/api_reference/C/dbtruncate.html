@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;truncate()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;truncate()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbsync.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbtruncate"></a>DB-&gt;truncate()</h2>
+            <h2 class="title" style="clear: both"><a id="dbtruncate"></a>
+        <span>DB-&gt;truncate()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -50,7 +56,10 @@ DB-&gt;truncate(DB *db,
     </p>
       <p>
          When called on a database configured with secondary indices using the
-         <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">DB-&gt;associate()</a> 
+         <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">
+        <span>DB-&gt;associate()</span>
+        
+    </a> 
          method, the <code class="methodname">DB-&gt;truncate()</code> method truncates the primary database and
          all secondary indices.  A count of the records discarded from the
          primary database is returned.
@@ -76,7 +85,7 @@ DB-&gt;truncate(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235615648"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488065120"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -84,17 +93,23 @@ DB-&gt;truncate(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235609632"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113488057808"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; if the
+                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; if the
                           operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected.
@@ -104,7 +119,7 @@ DB-&gt;truncate(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235628976"></a>countp</h4>
+                <h4 class="title"><a id="idm140113488078672"></a>countp</h4>
               </div>
             </div>
           </div>
@@ -118,7 +133,7 @@ DB-&gt;truncate(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235655888"></a>flags</h4>
+                <h4 class="title"><a id="idm140113488197648"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -132,7 +147,7 @@ DB-&gt;truncate(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235654864"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113488086128"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -148,7 +163,7 @@ DB-&gt;truncate(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235596672"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140113488043712"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -161,7 +176,7 @@ DB-&gt;truncate(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235582880"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140113488030416"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -173,7 +188,10 @@ DB-&gt;truncate(DB *db,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -181,7 +199,7 @@ DB-&gt;truncate(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235594192"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113488056592"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -195,7 +213,7 @@ DB-&gt;truncate(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235600848"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488047888"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -207,7 +225,7 @@ DB-&gt;truncate(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235592448"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113488039488"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -227,11 +245,17 @@ DB-&gt;truncate(DB *db,
           <td width="40%" align="right"> <a accesskey="n" href="dbupgrade.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;sync() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;sync()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;upgrade()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;upgrade()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

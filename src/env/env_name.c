@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -258,12 +258,12 @@ repeat:	if ((ret = __db_appname(env, DB_APP_TMP, DB_TRAIL, NULL, &path)) != 0)
 		ipid = -ipid;
 	for (; *--trv == 'X'; ipid /= 10)
 		*trv = '0' + (u_char)(ipid % 10);
-	
+
 	if ((ret = __os_open(env, path, 0,
 		oflags | DB_OSO_CREATE | DB_OSO_EXCL | DB_OSO_TEMP,
 		DB_MODE_600, fhpp)) != 0) {
 
-		// If there is a collision, get a new time stamp and repeat.
+		/* If there is a collision, get a new time stamp and repeat.*/
 		if (ret == EEXIST) {
 			__os_free(env, path);
 			path = NULL;

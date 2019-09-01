@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File: InventoryBinding.java
@@ -14,11 +13,12 @@ import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.bind.tuple.TupleInput;
 import com.sleepycat.bind.tuple.TupleOutput;
 
-public class InventoryBinding extends TupleBinding {
+public class InventoryBinding extends TupleBinding<Inventory> {
 
     // Implement this abstract method. Used to convert
     // a DatabaseEntry to an Inventory object.
-    public Object entryToObject(TupleInput ti) {
+    @Override
+    public Inventory entryToObject(TupleInput ti) {
 
         String sku = ti.readString();
         String itemName = ti.readString();
@@ -40,7 +40,8 @@ public class InventoryBinding extends TupleBinding {
 
     // Implement this abstract method. Used to convert a
     // Inventory object to a DatabaseEntry object.
-    public void objectToEntry(Object object, TupleOutput to) {
+    @Override
+    public void objectToEntry(Inventory object, TupleOutput to) {
 
         Inventory inventory = (Inventory)object;
 

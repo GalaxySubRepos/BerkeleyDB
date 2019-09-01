@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2014, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -46,6 +46,8 @@ proc repmgr041_sub { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -63,7 +65,7 @@ proc repmgr041_sub { method niter tnum largs } {
 	# control this.  So on primordial start, the code internally makes
 	# the preferred master site take the master/group creator path.
 	puts "\tRepmgr$tnum.a: Preferred master site primordial startup."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrprefmasmaster on}
@@ -72,7 +74,7 @@ proc repmgr041_sub { method niter tnum largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.b: Client site primordial startup."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}

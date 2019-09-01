@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -14,7 +14,7 @@ import java.util.function.Function;
 /**
  * TxnHelper implements a few helper methods for working with transactions.
  */
-interface TxnHelper {
+public interface TxnHelper {
     /**
      * Return the environment used to create transactions.
      *
@@ -84,7 +84,7 @@ interface TxnHelper {
     }
 
     @FunctionalInterface
-    interface TransactionOperations<V> {
+    public interface TransactionOperations<V> {
         V call(STransaction txn) throws IOException, SDatabaseException;
     }
 }

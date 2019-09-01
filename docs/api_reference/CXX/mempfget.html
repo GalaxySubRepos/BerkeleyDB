@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbMpoolFile::get()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbMpoolFile::get()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mempfclose.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mempfget"></a>DbMpoolFile::get()</h2>
+            <h2 class="title" style="clear: both"><a id="mempfget"></a>
+        
+        <span>DbMpoolFile::get()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -49,7 +55,10 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
       <p>
          All pages returned by <code class="methodname">DbMpoolFile::get()</code> will be retained (that is,
          <span class="emphasis"><em>latched</em></span>) in the cache until a subsequent call to
-         <a class="xref" href="mempput.html" title="DbMpoolFile::put()">DbMpoolFile::put()</a>.
+         <a class="xref" href="mempput.html" title="DbMpoolFile::put()">
+        
+        <span>DbMpoolFile::put()</span>
+    </a>.
         There is no deadlock detection among latches so care must be taken
         in the application if the DB_MPOOL_DIRTY or DB_MPOOL_EDIT flags are
         used as these get exclusive latches on the pages.
@@ -61,7 +70,10 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
       <p>
          Fully or partially created pages have all their bytes set to a nul
          byte, unless the 
-         <a class="xref" href="mempset_clear_len.html" title="DbMpoolFile::set_clear_len()">DbMpoolFile::set_clear_len()</a> 
+         <a class="xref" href="mempset_clear_len.html" title="DbMpoolFile::set_clear_len()">
+        
+        <span>DbMpoolFile::set_clear_len()</span>
+    </a> 
          method was called to specify other behavior before the file was
          opened.
     </p>
@@ -82,7 +94,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809103808"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176766360512"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -90,7 +102,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809105056"></a>flags</h4>
+                <h4 class="title"><a id="idm140176766359360"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -125,7 +137,10 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
                         flag will be 
                         <span class="bold"><strong>exclusively latched</strong></span> 
                         until a subsequent call to 
-                        <a class="xref" href="mempput.html" title="DbMpoolFile::put()">DbMpoolFile::put()</a>.
+                        <a class="xref" href="mempput.html" title="DbMpoolFile::put()">
+        
+        <span>DbMpoolFile::put()</span>
+    </a>.
                     </p>
               </li>
               <li>
@@ -142,7 +157,10 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
                         recovery.
                         A page fetched with the <code class="literal">DB_MPOOL_EDIT</code> flag will be
                         <span class="bold"><strong>exclusively latched</strong></span> until 
-                        a subsequent call to <a class="xref" href="mempput.html" title="DbMpoolFile::put()">DbMpoolFile::put()</a>.
+                        a subsequent call to <a class="xref" href="mempput.html" title="DbMpoolFile::put()">
+        
+        <span>DbMpoolFile::put()</span>
+    </a>.
                     </p>
               </li>
               <li>
@@ -163,7 +181,10 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
                         Create a new page in the file, and copy its page number into the
                         memory location to which <span class="bold"><strong>pgnoaddr</strong></span>
                         refers.  In this case, the <code class="literal">pgin_fcn</code> callback, if specified on
-                        <a class="xref" href="mempregister.html" title="DbEnv::memp_register()">DbEnv::memp_register()</a>, is
+                        <a class="xref" href="mempregister.html" title="DbEnv::memp_register()">
+        
+        <span>DbEnv::memp_register()</span>
+    </a>, is
                         <span class="bold"><strong>not</strong></span> called.
                     </p>
               </li>
@@ -178,7 +199,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809093840"></a>pagep</h4>
+                <h4 class="title"><a id="idm140176766348048"></a>pagep</h4>
               </div>
             </div>
           </div>
@@ -191,7 +212,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809075808"></a>pgnoaddr</h4>
+                <h4 class="title"><a id="idm140176766319536"></a>pgnoaddr</h4>
               </div>
             </div>
           </div>
@@ -215,19 +236,25 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809087472"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176766338256"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                   If the operation is part of an application-specified transaction, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                  handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; 
+                  handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; 
                   otherwise NULL.  A transaction is required if the file is open for multiversion
                   concurrency control by passing 
                   <a class="link" href="dbopen.html#dbopen_DB_MULTIVERSION">DB_MULTIVERSION</a>  
                   to
-                  <a class="xref" href="mempfopen.html" title="DbMpoolFile::open()">DbMpoolFile::open()</a> 
+                  <a class="xref" href="mempfopen.html" title="DbMpoolFile::open()">
+        
+        <span>DbMpoolFile::open()</span>
+    </a> 
                   and the DB_MPOOL_DIRTY, DB_MPOOL_CREATE or DB_MPOOL_NEW flags were
                   specified.  Otherwise it is ignored.
              </p>
@@ -237,7 +264,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809069488"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176766323600"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -255,7 +282,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809084736"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140176766339264"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -269,7 +296,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809098160"></a>EAGAIN</h4>
+                <h4 class="title"><a id="idm140176766313040"></a>EAGAIN</h4>
               </div>
             </div>
           </div>
@@ -282,7 +309,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809050816"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176766304272"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -298,7 +325,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809099584"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176766355456"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -312,7 +339,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809076448"></a>ENOMEM</h4>
+                <h4 class="title"><a id="idm140176766330560"></a>ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -325,7 +352,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809102112"></a>Class</h3>
+              <h3 class="title"><a id="idm140176766413792"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -337,7 +364,7 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809101328"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176766296688"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -357,11 +384,17 @@ DbMpoolFile::get(db_pgno_t *pgnoaddr,
           <td width="40%" align="right"> <a accesskey="n" href="mempfopen.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbMpoolFile::close() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbMpoolFile::close()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbMpoolFile::open()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbMpoolFile::open()</span>
+    </td>
         </tr>
       </table>
     </div>

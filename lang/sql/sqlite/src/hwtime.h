@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2008 May 27
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -13,8 +19,8 @@
 ** This file contains inline asm code for retrieving "high-performance"
 ** counters for x86 class CPUs.
 */
-#ifndef _HWTIME_H_
-#define _HWTIME_H_
+#ifndef SQLITE_HWTIME_H
+#define SQLITE_HWTIME_H
 
 /*
 ** The following routine only works on pentium-class (or newer) processors.
@@ -82,4 +88,4 @@
 
 #endif
 
-#endif /* !defined(_HWTIME_H_) */
+#endif /* !defined(SQLITE_HWTIME_H) */

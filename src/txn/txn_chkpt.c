@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1995, 1996
@@ -249,7 +249,7 @@ do_ckp:
 	if (MPOOL_ON(env) &&
 	    (ret = __memp_sync_int(
 		env, NULL, 0, DB_SYNC_CHECKPOINT, NULL, NULL)) != 0) {
-		__db_err(env, ret, DB_STR("4519",
+		__db_err(env, ret, DB_STR("4518",
 		    "txn_checkpoint: failed to flush the buffer cache"));
 		goto err;
 	}

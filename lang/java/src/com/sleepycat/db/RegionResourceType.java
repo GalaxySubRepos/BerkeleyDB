@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -46,6 +46,26 @@ public final class RegionResourceType {
     */
     public static final RegionResourceType THREAD =
         new RegionResourceType("THREAD", DbConstants.DB_MEM_THREAD);
+    /**
+    The database number.
+    */
+    public static final RegionResourceType DATABASE =
+        new RegionResourceType("DATABASE", DbConstants.DB_MEM_DATABASE);
+    /**
+    The maximum database name length.
+    */
+    public static final RegionResourceType DATABASE_LENGTH =
+        new RegionResourceType("DATABASE_LENGTH", DbConstants.DB_MEM_DATABASE_LENGTH);
+    /**
+    The external file database.
+    */
+    public static final RegionResourceType EXTFILE_DATABASE =
+        new RegionResourceType("EXTFILE_DATABASE", DbConstants.DB_MEM_EXTFILE_DATABASE);
+    /**
+    The maximum replication sites number.
+    */
+    public static final RegionResourceType REP_SITE =
+        new RegionResourceType("REP_SITE", DbConstants.DB_MEM_REP_SITE);
 
     /* package */
     static RegionResourceType fromFlag(int flag) {
@@ -63,6 +83,14 @@ public final class RegionResourceType {
             return TRANSACTION;
         case DbConstants.DB_MEM_THREAD:
             return THREAD;
+        case DbConstants.DB_MEM_DATABASE:
+            return DATABASE;
+        case DbConstants.DB_MEM_DATABASE_LENGTH:
+            return DATABASE_LENGTH;
+        case DbConstants.DB_MEM_EXTFILE_DATABASE:
+            return EXTFILE_DATABASE;
+        case DbConstants.DB_MEM_REP_SITE:
+            return REP_SITE;
         default:
             throw new IllegalArgumentException(
                 "Unknown region memory type: " + flag);

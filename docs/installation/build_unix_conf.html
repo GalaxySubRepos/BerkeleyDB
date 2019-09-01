@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="gettingStarted.css" type="text/css" />
     <meta name="generator" content="DocBook XSL Stylesheets V1.73.2" />
     <link rel="start" href="index.html" title="Berkeley DB Installation and Build Guide" />
-    <link rel="up" href="build_unix.html" title="Chapter 7.  Building Berkeley DB for UNIX/POSIX" />
-    <link rel="prev" href="build_unix.html" title="Chapter 7.  Building Berkeley DB for UNIX/POSIX" />
+    <link rel="up" href="build_unix.html" title="Chapter 6.  Building Berkeley DB for UNIX/POSIX" />
+    <link rel="prev" href="build_unix.html" title="Chapter 6.  Building Berkeley DB for UNIX/POSIX" />
     <link rel="next" href="build_unix_sql.html" title="Configuring the SQL Interface" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -22,7 +22,7 @@
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="build_unix.html">Prev</a> </td>
-          <th width="60%" align="center">Chapter 7.  Building Berkeley DB for UNIX/POSIX
+          <th width="60%" align="center">Chapter 6.  Building Berkeley DB for UNIX/POSIX
     </th>
           <td width="20%" align="right"> <a accesskey="n" href="build_unix_sql.html">Next</a></td>
         </tr>
@@ -379,19 +379,6 @@
           </li>
           <li>
             <p>
-                <span class="bold"><strong>--enable-sql_codegen</strong></span>
-            </p>
-            <p> 
-                To build the command line tool db_sql_codegen,
-                enter --enable-sql_codegen as an argument to
-                configure. The db_sql_codegen utility translates a
-                schema description written in a SQL Data Definition
-                Language dialect into C code that implements the
-                schema using Berkeley DB. 
-            </p>
-          </li>
-          <li>
-            <p>
                 <span class="bold"><strong>--enable-smallbuild</strong></span>
             </p>
             <p>
@@ -667,6 +654,56 @@
             </p>
           </li>
           <li>
+            <p><a id="build_unix_conf.--with-repmgr-ssl"></a>
+                <span class="bold"><strong>--with-repmgr-ssl</strong></span>
+            </p>
+            <p>
+                Enter <code class="literal">--with-repmgr-ssl=yes|no|default</code> to build 
+                Berkeley DB libraries with or without Secure Sockets Layer (SSL) support. 
+                If <code class="literal">–-with-repmgr-ssl</code> is not specified, then SSL support 
+                for replication manager is built by default depending on the availability 
+                of suitable SSL libraries and headers. If SSL libraries and headers 
+                are not present then appropriate warning will be generated.
+                Note that to ensure that SSL support is built or blocking issues are reported as errors 
+                during configuration, you must specify 
+                <code class="literal">--with-repmgr-ssl=yes</code> to configure script as an argument. 
+                Entering <code class="literal">--with-repmgr-ssl=no</code> disables 
+                build of SSL support for the Replication Manager.
+            </p>
+            <p>
+              To build Berkeley DB Replication Manager with support for SSL library installed in 
+              a custom location, enter <code class="literal">--with-repmgr-ssl=yes</code> as an 
+              argument to configure. Additionally, set the following arguments 
+              when you run the configuration command:
+           </p>
+            <div class="itemizedlist">
+              <ul type="circle">
+                <li>
+                  <p>
+                        <code class="literal">-L/path/to/ssl/sharedlib</code> to <code class="literal">LDFLAGS</code>
+                    </p>
+                </li>
+                <li>
+                  <p>
+                        <code class="literal">-I/path/to/ssl/include</code> to <code class="literal">CPPFLAGS</code>
+                    </p>
+                </li>
+                <li>
+                  <p>
+                        <code class="literal">-lssl -lcrypto -lpthread</code> to <code class="literal">LIBS</code>
+                    </p>
+                </li>
+              </ul>
+            </div>
+            <p>
+                A sample configuration command for custom SSL location is as follows:
+            </p>
+            <pre class="programlisting"> ../dist/configure -with-repmgr-ssl=yes
+CPPFLAGS="-I/home/ssluser/Downloads/openssl-1.1.0g/include"
+LDFLAGS="-L/home/ssluser/Downloads/openssl-1.1.0g/"
+LIBS="-lssl -lcrypto -lpthread"</pre>
+          </li>
+          <li>
             <p>
                 <span class="bold"><strong>--with-tcl=DIR</strong></span>
             </p>
@@ -710,7 +747,7 @@
           <td width="40%" align="right"> <a accesskey="n" href="build_unix_sql.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Chapter 7.  Building Berkeley DB for UNIX/POSIX
+          <td width="40%" align="left" valign="top">Chapter 6.  Building Berkeley DB for UNIX/POSIX
      </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>

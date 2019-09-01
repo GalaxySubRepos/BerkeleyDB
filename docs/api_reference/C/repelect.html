@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;rep_elect()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;rep_elect()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbsite_set_config.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repelect"></a>DB_ENV-&gt;rep_elect()</h2>
+            <h2 class="title" style="clear: both"><a id="repelect"></a>
+        <span>DB_ENV-&gt;rep_elect()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -59,7 +65,10 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
          of the results of the election by means of either the 
          <a class="link" href="envevent_notify.html#event_notify_DB_EVENT_REP_ELECTED">DB_EVENT_REP_ELECTED</a> 
          or <a class="link" href="envevent_notify.html#event_notify_DB_EVENT_REP_NEWMASTER">DB_EVENT_REP_NEWMASTER</a> 
-         events (see <a class="xref" href="envevent_notify.html" title="DB_ENV-&gt;set_event_notify()">DB_ENV-&gt;set_event_notify()</a> 
+         events (see <a class="xref" href="envevent_notify.html" title="DB_ENV-&gt;set_event_notify()">
+        <span>DB_ENV-&gt;set_event_notify()</span>
+        
+    </a> 
          method for more information).  The application is responsible for
          adjusting its relationship to the other database environments in the
          replication group, including directing all database updates to the
@@ -79,19 +88,28 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <li>
             <p>
                     open the database environment by calling the 
-                    <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method.
+                    <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method.
               </p>
           </li>
           <li>
             <p>
                   configure the database environment to send replication messages by calling the 
-                  <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">DB_ENV-&gt;rep_set_transport()</a> method.
+                  <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">
+        <span>DB_ENV-&gt;rep_set_transport()</span>
+        
+    </a> method.
               </p>
           </li>
           <li>
             <p>
               configure the database environment as a client or a master
-              by calling the <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a> method.
+              by calling the <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a> method.
             </p>
           </li>
         </ul>
@@ -100,7 +118,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229656288"></a>How Elections are Held</h3>
+              <h3 class="title"><a id="idm140113481927920"></a>How Elections are Held</h3>
             </div>
           </div>
         </div>
@@ -158,7 +176,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229706560"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113481918016"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -166,7 +184,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229654272"></a>nsites</h4>
+                <h4 class="title"><a id="idm140113481925248"></a>nsites</h4>
               </div>
             </div>
           </div>
@@ -178,10 +196,16 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
                   new master. The <span class="bold"><strong>nsites</strong></span> parameter must
                   be no less than <span class="bold"><strong>nvotes</strong></span>, or 0 if the
                   election should use the value previously set using the 
-                  <a class="xref" href="repnsites.html" title="DB_ENV-&gt;rep_set_nsites()">DB_ENV-&gt;rep_set_nsites()</a> 
+                  <a class="xref" href="repnsites.html" title="DB_ENV-&gt;rep_set_nsites()">
+        <span>DB_ENV-&gt;rep_set_nsites()</span>
+        
+    </a> 
                   method.  If an application is using master leases, then the value
                   <span class="bold"><strong>must</strong></span> be 0 and the value from 
-                  <a class="xref" href="repnsites.html" title="DB_ENV-&gt;rep_set_nsites()">DB_ENV-&gt;rep_set_nsites()</a> 
+                  <a class="xref" href="repnsites.html" title="DB_ENV-&gt;rep_set_nsites()">
+        <span>DB_ENV-&gt;rep_set_nsites()</span>
+        
+    </a> 
                   method must be used.  The value should exclude any replication
 		  views.
              </p>
@@ -190,7 +214,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229576448"></a>nvotes</h4>
+                <h4 class="title"><a id="idm140113481891184"></a>nvotes</h4>
               </div>
             </div>
           </div>
@@ -208,7 +232,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229593136"></a>flags</h4>
+                <h4 class="title"><a id="idm140113481959648"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -222,7 +246,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229614752"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113481928112"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -238,14 +262,17 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229574368"></a>DB_REP_UNAVAIL</h4>
+                <h4 class="title"><a id="idm140113481889104"></a>DB_REP_UNAVAIL</h4>
               </div>
             </div>
           </div>
           <p>
                   The replication group was unable to elect a master, or was unable to
                   complete the election in the election timeout period (see 
-                  <a class="xref" href="repset_timeout.html" title="DB_ENV-&gt;rep_set_timeout()">DB_ENV-&gt;rep_set_timeout()</a> 
+                  <a class="xref" href="repset_timeout.html" title="DB_ENV-&gt;rep_set_timeout()">
+        <span>DB_ENV-&gt;rep_set_timeout()</span>
+        
+    </a> 
                   method for more information).
              </p>
         </div>
@@ -253,14 +280,17 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229571888"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113481886624"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
                 If the database environment was not already configured to
                 communicate with a replication group by a call to 
-                <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">DB_ENV-&gt;rep_set_transport()</a>;
+                <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">
+        <span>DB_ENV-&gt;rep_set_transport()</span>
+        
+    </a>;
                 if the database environment was not already opened; if this
                 method is called from a Replication Manager application; or if
                 an invalid flag value or parameter was specified.
@@ -271,7 +301,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229570144"></a>Class</h3>
+              <h3 class="title"><a id="idm140113481884880"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -283,7 +313,7 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229613664"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113481906368"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -303,11 +333,17 @@ DB_ENV-&gt;rep_elect(DB_ENV *env,
           <td width="40%" align="right"> <a accesskey="n" href="repget_clockskew.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_SITE-&gt;set_config() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_SITE-&gt;set_config()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;rep_get_clockskew()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;rep_get_clockskew()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

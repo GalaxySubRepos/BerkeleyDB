@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -137,6 +137,13 @@ public class EnvironmentConfig implements Cloneable {
         ReplicationManagerAckPolicy.QUORUM;
     private long repmgrIncomingQueueMax = 0;
     private java.util.Vector repmgrSitesConfig = new java.util.Vector();
+    private boolean repmgrDisableSSL = false;
+    private String repmgrCACert = null;
+    private String repmgrCADir = null;
+    private String repmgrNodeCert = null;
+    private String repmgrNodePKey = null;
+    private String repmgrPKeyPassword = null;
+    private int repmgrSSLVerifyDepth = 9;
 
     /* Initial region resource allocation. */
     private int initResourceLocks = 0;
@@ -145,6 +152,10 @@ public class EnvironmentConfig implements Cloneable {
     private int initResourceLogIds = 0;
     private int initResourceTransactions = 0;
     private int initResourceThreads = 0;
+    private int initResourceDatabases = 0;
+    private int initResourceDatabaseLength = 0;
+    private int initResourceExtFileDatabases = 0;
+    private int initResourceRepSites = 0;
 
     /* Open flags */
     private boolean allowCreate = false;
@@ -207,6 +218,9 @@ public class EnvironmentConfig implements Cloneable {
     private boolean verboseReplicationTest = false;
     private boolean verboseRepmgrConnfail = false;
     private boolean verboseRepmgrMisc = false;
+    private boolean verboseRepmgrSSLAll = false;
+    private boolean verboseRepmgrSSLConn = false;
+    private boolean verboseRepmgrSSLIO = false;
     private boolean verboseSlice = false;
     private boolean verboseWaitsFor = false;
 
@@ -260,6 +274,7 @@ True if the database environment is configured to create any
     @param dir
     The path of a directory where external files are stored.
     */
+	@Deprecated
     public void setBlobDir(java.io.File dir) {
         setExternalFileDir(dir);
     }
@@ -270,6 +285,7 @@ True if the database environment is configured to create any
     @return
     The path of a directory where external files are stored.
     */
+	@Deprecated
     public java.io.File getBlobDir() {
         return getExternalFileDir();
     }
@@ -281,6 +297,7 @@ True if the database environment is configured to create any
     be stored as an external file. If 0, databases opened in the environment
     will default to never using external files.
     */
+	@Deprecated
     public void setBlobThreshold(int value) {
         setExternalFileThreshold(value);
     }
@@ -292,6 +309,7 @@ True if the database environment is configured to create any
     be stored as an external file. If 0, databases opened in the environment
     will default to never using external files.
     */
+	@Deprecated
     public int getBlobThreshold() {
         return getExternalFileThreshold();
     }
@@ -526,6 +544,7 @@ True if the Concurrent Data Store applications are configured to
     /** @deprecated replaced by {@link #addDataDir(java.io.File)}
     @param dataDir the data directory
     */
+	@Deprecated
     public void addDataDir(final String dataDir) {
         this.addDataDir(new java.io.File(dataDir));
     }
@@ -1587,6 +1606,7 @@ True if the system has been configured to to automatically remove log
     @param logExternalFileContent
     If true, enable full logging of external file data.
     */
+	@Deprecated
     public void setLogBlobContent(final boolean logExternalFileContent) {
         setLogExternalFileContent(logExternalFileContent);
     }
@@ -1597,6 +1617,7 @@ True if the system has been configured to to automatically remove log
     @return
     True if full logging of external file data is enabled.
     */
+	@Deprecated
     public boolean getLogBlobContent() {
         return getLogExternalFileContent();
     }
@@ -1787,6 +1808,14 @@ The handler for application-specific log records.
                 return initResourceTransactions;
             case DbConstants.DB_MEM_THREAD:
                 return initResourceThreads;
+            case DbConstants.DB_MEM_DATABASE:
+                return initResourceDatabases;
+            case DbConstants.DB_MEM_DATABASE_LENGTH:
+                return initResourceDatabaseLength;
+            case DbConstants.DB_MEM_EXTFILE_DATABASE:
+                return initResourceExtFileDatabases;
+            case DbConstants.DB_MEM_REP_SITE:
+                return initResourceRepSites;
         }
         return (0);
     }
@@ -1822,6 +1851,18 @@ The handler for application-specific log records.
                 break;
             case DbConstants.DB_MEM_THREAD:
                 initResourceThreads = count;
+                break;
+             case DbConstants.DB_MEM_DATABASE:
+                initResourceDatabases = count;
+                break;
+            case DbConstants.DB_MEM_DATABASE_LENGTH:
+                initResourceDatabaseLength = count;
+                break;
+            case DbConstants.DB_MEM_EXTFILE_DATABASE:
+                initResourceExtFileDatabases = count;
+                break;
+            case DbConstants.DB_MEM_REP_SITE:
+                initResourceRepSites = count;
                 break;
         }
     }
@@ -1902,6 +1943,51 @@ The handler for application-specific log records.
         final ReplicationManagerAckPolicy repmgrAckPolicy)
     {
         this.repmgrAckPolicy = repmgrAckPolicy;
+    }
+
+    /**
+    Enable or disable the SSL for Replication Manager.
+    <p>
+    @param repmgrDisableSSL
+    True if SSL is to be disabled for replication manager.
+    */
+    public void setReplicationManagerSSLdisabled(boolean repmgrDisableSSL)
+    {
+        this.repmgrDisableSSL = repmgrDisableSSL;        
+    }
+
+    /** 
+    Set the ssl configuration used by the replication manager.
+    <p>    
+    @param repmgrCACert
+    The path to CA certificate used by replication manager.
+    @param repmgrCADir
+    The path to directory containing all CA certificates.
+    (root/intermedicate CA)
+    @param repmgrNodeCert
+    The path to SSL certificate used for autheticating this node.
+    @param repmgrNodePKey
+    The path to private key file for this node.
+    @param repmgrPKeyPassword
+    The password for the private key file. 
+    @param repmgrVerifyDepth
+    The depth of ssl verification in case of intermediary CA's.
+    */
+    public void setReplicationManagerSSLconfiguration(        
+        String repmgrCACert,
+        String repmgrCADir,
+        String repmgrNodeCert,
+        String repmgrNodePKey,
+        String repmgrPKeyPassword,
+        int repmgrVerifyDepth)
+    {
+        this.repmgrCACert = repmgrCACert;
+        this.repmgrCADir = repmgrCADir;
+        this.repmgrNodeCert = repmgrNodeCert;
+        this.repmgrNodePKey = repmgrNodePKey;
+        this.repmgrPKeyPassword = repmgrPKeyPassword;
+        if (repmgrVerifyDepth > 0)
+            this.repmgrSSLVerifyDepth = repmgrVerifyDepth;                    
     }
 
     /**
@@ -3508,6 +3594,7 @@ string, which is equivalent to ASCII for Latin characters.
     /** @deprecated replaced by {@link #setTemporaryDirectory(java.io.File)}
     @param temporaryDirectory the temporary directory
     */
+	@Deprecated
     public void setTemporaryDirectory(final String temporaryDirectory) {
         this.setTemporaryDirectory(new java.io.File(temporaryDirectory));
     }
@@ -3804,6 +3891,7 @@ The test-and-set spin count.
     <p>
     @deprecated replaced by {@link #setMutexTestAndSetSpins}
     */
+	@Deprecated
     public void setTestAndSetSpins(final int mutexTestAndSetSpins) {
         setMutexTestAndSetSpins(mutexTestAndSetSpins);
     }
@@ -3820,6 +3908,7 @@ The number of times test-and-set mutexes should spin before
     <p>
     @deprecated replaced by {@link #getMutexTestAndSetSpins}
     */
+	@Deprecated
     public int getTestAndSetSpins() {
         return getMutexTestAndSetSpins();
     }
@@ -4261,6 +4350,15 @@ True if the database environment is configured to accept information
         case DbConstants.DB_VERB_REPMGR_MISC:
             verboseRepmgrMisc = enable;
             break;
+        case DbConstants.DB_VERB_REPMGR_SSL_ALL:
+            verboseRepmgrSSLAll = enable;
+            break;
+        case DbConstants.DB_VERB_REPMGR_SSL_CONN:
+            verboseRepmgrSSLConn = enable;
+            break;
+        case DbConstants.DB_VERB_REPMGR_SSL_IO:
+            verboseRepmgrSSLIO = enable;
+            break;
         case DbConstants.DB_VERB_REP_ELECT:
             verboseReplicationElection = enable;
             break;
@@ -4328,6 +4426,12 @@ True if the database environment is configured to accept information
             return verboseRepmgrConnfail;
         case DbConstants.DB_VERB_REPMGR_MISC:
             return verboseRepmgrMisc;
+        case DbConstants.DB_VERB_REPMGR_SSL_ALL:
+            return verboseRepmgrSSLAll;
+        case DbConstants.DB_VERB_REPMGR_SSL_CONN:
+            return verboseRepmgrSSLConn;
+        case DbConstants.DB_VERB_REPMGR_SSL_IO:
+            return verboseRepmgrSSLIO;
         case DbConstants.DB_VERB_REP_ELECT:
             return verboseReplicationElection;
         case DbConstants.DB_VERB_REP_LEASE:
@@ -4363,6 +4467,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #setVerbose}
     */
+	@Deprecated
     public void setVerboseDeadlock(final boolean verboseDeadlock) {
         this.verboseDeadlock = verboseDeadlock;
     }
@@ -4379,6 +4484,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #getVerbose}
     */
+	@Deprecated
     public boolean getVerboseDeadlock() {
         return verboseDeadlock;
     }
@@ -4393,6 +4499,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #setVerbose}
     */
+	@Deprecated
     public void setVerboseRecovery(final boolean verboseRecovery) {
         this.verboseRecovery = verboseRecovery;
     }
@@ -4409,6 +4516,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #getVerbose}
     */
+	@Deprecated
     public boolean getVerboseRecovery() {
         return verboseRecovery;
     }
@@ -4425,6 +4533,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #setVerbose}
     */
+	@Deprecated
     public void setVerboseRegister(final boolean verboseRegister) {
         this.verboseRegister = verboseRegister;
     }
@@ -4443,6 +4552,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #getVerbose}
     */
+	@Deprecated
     public boolean getVerboseRegister() {
         return verboseRegister;
     }
@@ -4463,6 +4573,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #setVerbose}
     */
+	@Deprecated
     public void setVerboseReplication(final boolean verboseReplication) {
         this.verboseReplication = verboseReplication;
     }
@@ -4479,6 +4590,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #getVerbose}
     */
+	@Deprecated
     public boolean getVerboseReplication() {
         return verboseReplication;
     }
@@ -4493,6 +4605,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #setVerbose}
     */
+	@Deprecated
     public void setVerboseWaitsFor(final boolean verboseWaitsFor) {
         this.verboseWaitsFor = verboseWaitsFor;
     }
@@ -4509,6 +4622,7 @@ True if the database environment is configured to accept information
     <p>
     @deprecated replaced by {@link #getVerbose}
     */
+	@Deprecated
     public boolean getVerboseWaitsFor() {
         return verboseWaitsFor;
     }
@@ -4616,7 +4730,44 @@ True if the system has been configured to yield the processor
 
         final DbEnv dbenv = new DbEnv(createFlags);
         configureEnvironment(dbenv, DEFAULT);
+        
+        configureRepmgrSSL(dbenv);
+                
         return dbenv;
+    }
+
+    void configureRepmgrSSL(final DbEnv dbenv) 
+        throws DatabaseException {
+        if (repmgrDisableSSL == true)
+            dbenv.rep_set_config(DbConstants.DB_REPMGR_CONF_DISABLE_SSL, true);
+        else {
+            if (this.repmgrCACert != null)
+                dbenv.repmgr_set_ssl_config(
+                    DbConstants.DB_REPMGR_SSL_CA_CERT, this.repmgrCACert);
+
+            if (this.repmgrCADir != null)
+                dbenv.repmgr_set_ssl_config(
+                    DbConstants.DB_REPMGR_SSL_CA_DIR, this.repmgrCADir);
+
+            if (this.repmgrNodeCert != null)
+                dbenv.repmgr_set_ssl_config(
+                    DbConstants.DB_REPMGR_SSL_REPNODE_CERT, this.repmgrNodeCert);
+
+            if (this.repmgrPKeyPassword != null)
+                dbenv.repmgr_set_ssl_config(
+                    DbConstants.DB_REPMGR_SSL_REPNODE_KEY_PASSWD,
+                    this.repmgrPKeyPassword);
+
+            if (this.repmgrNodePKey != null)
+                dbenv.repmgr_set_ssl_config(
+                    DbConstants.DB_REPMGR_SSL_REPNODE_PRIVATE_KEY,
+                    this.repmgrNodePKey);
+
+            if (this.repmgrSSLVerifyDepth != 0) 
+                dbenv.repmgr_set_ssl_config(
+                    DbConstants.DB_REPMGR_SSL_VERIFY_DEPTH,
+                    new Integer(this.repmgrSSLVerifyDepth).toString());
+        }
     }
 
     /* package */
@@ -4789,6 +4940,15 @@ True if the system has been configured to yield the processor
         if (verboseRepmgrMisc != oldConfig.verboseRepmgrMisc)
             dbenv.set_verbose(DbConstants.DB_VERB_REPMGR_MISC,
                 verboseRepmgrMisc);
+        if (verboseRepmgrSSLAll != oldConfig.verboseRepmgrSSLAll)
+            dbenv.set_verbose(DbConstants.DB_VERB_REPMGR_SSL_ALL,
+                verboseRepmgrSSLAll);
+        if (verboseRepmgrSSLConn != oldConfig.verboseRepmgrSSLConn)
+            dbenv.set_verbose(DbConstants.DB_VERB_REPMGR_SSL_CONN,
+                verboseRepmgrSSLConn);
+        if (verboseRepmgrSSLIO != oldConfig.verboseRepmgrSSLIO)
+            dbenv.set_verbose(DbConstants.DB_VERB_REPMGR_SSL_IO,
+                verboseRepmgrSSLIO);
         if (verboseSlice != oldConfig.verboseSlice)
             dbenv.set_verbose(DbConstants.DB_VERB_SLICE,
                 verboseSlice);
@@ -4964,6 +5124,19 @@ True if the system has been configured to yield the processor
         if (initResourceThreads != oldConfig.initResourceThreads)
             dbenv.set_memory_init(
                 DbConstants.DB_MEM_THREAD, initResourceThreads);
+        if (initResourceDatabases != oldConfig.initResourceDatabases)
+            dbenv.set_memory_init(
+                DbConstants.DB_MEM_DATABASE, initResourceDatabases);
+        if (initResourceDatabaseLength != oldConfig.initResourceDatabaseLength)
+            dbenv.set_memory_init(
+                DbConstants.DB_MEM_DATABASE_LENGTH, initResourceDatabaseLength);
+        if (initResourceExtFileDatabases != oldConfig.initResourceExtFileDatabases)
+            dbenv.set_memory_init(
+                DbConstants.DB_MEM_EXTFILE_DATABASE, initResourceExtFileDatabases);
+        if (initResourceRepSites != oldConfig.initResourceRepSites)
+            dbenv.set_memory_init(
+                DbConstants.DB_MEM_REP_SITE, initResourceRepSites);
+
         if (regionMemoryMax != oldConfig.regionMemoryMax)
             dbenv.set_memory_max(regionMemoryMax);
         if (replicationInMemory != oldConfig.replicationInMemory)
@@ -5081,6 +5254,9 @@ True if the system has been configured to yield the processor
         verboseReplicationTest = dbenv.get_verbose(DbConstants.DB_VERB_REP_TEST);
         verboseRepmgrConnfail = dbenv.get_verbose(DbConstants.DB_VERB_REPMGR_CONNFAIL);
         verboseRepmgrMisc = dbenv.get_verbose(DbConstants.DB_VERB_REPMGR_MISC);
+        verboseRepmgrSSLAll = dbenv.get_verbose(DbConstants.DB_VERB_REPMGR_SSL_ALL);
+        verboseRepmgrSSLConn = dbenv.get_verbose(DbConstants.DB_VERB_REPMGR_SSL_CONN);
+        verboseRepmgrSSLIO = dbenv.get_verbose(DbConstants.DB_VERB_REPMGR_SSL_IO);
         verboseSlice = dbenv.get_verbose(DbConstants.DB_VERB_SLICE);
         verboseWaitsFor = dbenv.get_verbose(DbConstants.DB_VERB_WAITSFOR);
 
@@ -5197,6 +5373,14 @@ True if the system has been configured to yield the processor
             initResourceTransactions =
                 dbenv.get_memory_init(DbConstants.DB_MEM_TRANSACTION);
         initResourceThreads = dbenv.get_memory_init(DbConstants.DB_MEM_THREAD);
+        initResourceDatabases = 
+            dbenv.get_memory_init(DbConstants.DB_MEM_DATABASE);
+        initResourceDatabaseLength = 
+            dbenv.get_memory_init(DbConstants.DB_MEM_DATABASE_LENGTH);
+        initResourceExtFileDatabases =
+            dbenv.get_memory_init(DbConstants.DB_MEM_EXTFILE_DATABASE);
+        if (initializeReplication)
+            initResourceRepSites = dbenv.get_memory_init(DbConstants.DB_MEM_REP_SITE);
 
         regionMemoryMax = dbenv.get_memory_max();
 

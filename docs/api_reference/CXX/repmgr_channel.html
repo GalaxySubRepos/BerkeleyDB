@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::repmgr_channel()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::repmgr_channel()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repsync.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repmgr_channel"></a>DbEnv::repmgr_channel()</h2>
+            <h2 class="title" style="clear: both"><a id="repmgr_channel"></a>
+        
+        <span>DbEnv::repmgr_channel()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -52,13 +58,19 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
         the structure in the memory to which 
         <span class="bold"><strong>channelp</strong></span> refers. To release the
         allocated memory and discard the handle, call the
-        <a class="xref" href="dbchannel_close.html" title="DbChannel::close()">DbChannel::close()</a>
+        <a class="xref" href="dbchannel_close.html" title="DbChannel::close()">
+        
+        <span>DbChannel::close()</span>
+    </a>
         method.
     </p>
       <p>
          The <code class="methodname">DbEnv::repmgr_channel()</code> method may be
          called at any time after 
-         <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a> has
+         <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a> has
          been called with a <code class="literal">0</code> return code.
     </p>
       <p>
@@ -75,7 +87,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807298608"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176764518400"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -83,7 +95,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807299856"></a>eid</h4>
+                <h4 class="title"><a id="idm140176764519648"></a>eid</h4>
               </div>
             </div>
           </div>
@@ -124,7 +136,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807288672"></a>channelp</h4>
+                <h4 class="title"><a id="idm140176764507408"></a>channelp</h4>
               </div>
             </div>
           </div>
@@ -137,7 +149,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807293136"></a>flags</h4>
+                <h4 class="title"><a id="idm140176764511872"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -151,7 +163,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807519472"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176764514368"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -170,7 +182,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807273360"></a>DB_REP_UNAVAIL</h4>
+                <h4 class="title"><a id="idm140176764492096"></a>DB_REP_UNAVAIL</h4>
               </div>
             </div>
           </div>
@@ -184,7 +196,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807270864"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176764489600"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -198,7 +210,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807312544"></a>Class</h3>
+              <h3 class="title"><a id="idm140176764502704"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -210,7 +222,7 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807342608"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176764562976"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -231,11 +243,17 @@ DbEnv::repmgr_channel(int eid, DB_CHANNEL **channelp, u_int32_t flags);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="repmgr_local_site.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::rep_sync() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::rep_sync()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::repmgr_local_site()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::repmgr_local_site()</span>
+    </td>
         </tr>
       </table>
     </div>

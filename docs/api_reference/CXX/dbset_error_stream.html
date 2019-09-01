@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -62,7 +62,10 @@ void Db::set_error_stream(class ostream*); </pre>
              The error message will consist of the prefix string and a colon 
              ("<span class="bold"><strong>:</strong></span>") (if a prefix string was 
              previously specified using 
-             <a class="xref" href="dbset_errpfx.html" title="Db::set_errpfx()">Db::set_errpfx()</a>, 
+             <a class="xref" href="dbset_errpfx.html" title="Db::set_errpfx()">
+        
+        <span>Db::set_errpfx()</span>
+    </a>, 
              an error string, and a trailing &lt;newline&gt; character.
     </p>
       <p>
@@ -70,11 +73,23 @@ void Db::set_error_stream(class ostream*); </pre>
     </p>
       <p>
             Alternatively, you can use the
-            <a class="xref" href="envset_errfile.html" title="DbEnv::set_errfile()">DbEnv::set_errfile()</a> or
-            <a class="xref" href="dbset_errfile.html" title="Db::set_errfile()">Db::set_errfile()</a> methods
+            <a class="xref" href="envset_errfile.html" title="DbEnv::set_errfile()">
+        
+        <span>DbEnv::set_errfile()</span>
+    </a> or
+            <a class="xref" href="dbset_errfile.html" title="Db::set_errfile()">
+        
+        <span>Db::set_errfile()</span>
+    </a> methods
             to display the additional information via a C Library <code class="literal">FILE *</code>,
-            or the <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">DbEnv::set_errcall()</a> 
-            and <a class="xref" href="dbset_errcall.html" title="Db::set_errcall()">Db::set_errcall()</a>
+            or the <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">
+        
+        <span>DbEnv::set_errcall()</span>
+    </a> 
+            and <a class="xref" href="dbset_errcall.html" title="Db::set_errcall()">
+        
+        <span>Db::set_errcall()</span>
+    </a>
             methods to capture the additional error information in a way that does not use either
             output streams or C Library <code class="literal">FILE *</code>'s.
             You should not mix these approaches.
@@ -98,7 +113,7 @@ void Db::set_error_stream(class ostream*); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818079360"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176777212368"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -106,7 +121,7 @@ void Db::set_error_stream(class ostream*); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818087616"></a>stream</h4>
+                <h4 class="title"><a id="idm140176777232656"></a>stream</h4>
               </div>
             </div>
           </div>
@@ -121,7 +136,7 @@ void Db::set_error_stream(class ostream*); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818145792"></a>Class</h3>
+              <h3 class="title"><a id="idm140176783726032"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -133,7 +148,7 @@ void Db::set_error_stream(class ostream*); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818233408"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176777352928"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -153,11 +168,17 @@ void Db::set_error_stream(class ostream*); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_errpfx.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_errfile() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_errfile()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_errpfx()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_errpfx()</span>
+    </td>
         </tr>
       </table>
     </div>

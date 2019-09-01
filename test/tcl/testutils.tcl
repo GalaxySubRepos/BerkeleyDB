@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -416,6 +416,21 @@ proc release_list { l } {
 		catch { $el put } ret
 		error_check_good lock_put $ret 0
 	}
+}
+
+proc ssl_on { } {
+	global ssl_test_enabled
+	
+	if { [have_repmgr_ssl] } {
+		set ssl_test_enabled 1
+	} else {
+		puts "SSL for repmgr is not available."
+	}
+}
+
+proc ssl_off { } {
+	global ssl_test_enabled
+	set ssl_test_enabled 0
 }
 
 proc debug { {stop 0} } {
@@ -4285,6 +4300,18 @@ proc is_debug { } {
 	return 0
 }
 
+# Check if SSL is available for repmgr.
+proc have_repmgr_ssl { } {
+
+	set conf [berkdb getconfig]
+	foreach item $conf {
+		if { [string equal $item "repmgr_ssl"] } {
+			return 1
+		}
+	}
+	return 0
+}
+
 proc adjust_logargs { logtype {lbufsize 0} } {
 	if { $logtype == "in-memory" } {
 		if { $lbufsize == 0 } {
@@ -4520,7 +4547,7 @@ proc diskfree-k {{dir .}} {
 		Darwin { lindex [lindex [split [exec df -k $dir] \n] end] 3}
 		{Windows NT} {
 			expr [lindex [lindex [split [exec\
-			    cmd /c dir /-c $dir] \n] end] 0]/1024
+			    cmd /c dir /-c .] \n] end] 2]/1024
 		}
 		default {error "don't know how to diskfree-k\
 		    on $::tcl_platform(os)"}

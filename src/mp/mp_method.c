@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -29,12 +29,9 @@ __memp_env_create(dbenv)
 	 * state or turn off mutex locking, and so we can neither check
 	 * the panic state or acquire a mutex in the DB_ENV create path.
 	 *
-	 * We default to 32 8K pages.  We don't default to a flat 256K, because
-	 * we want to include the size of the buffer header which can vary
-	 * from system to system.
+	 * We default to 32 8K pages plus the overhead of the hash buckets.
 	 */
-	dbenv->mp_bytes =
-	    32 * ((8 * 1024) + sizeof(BH)) + 37 * sizeof(DB_MPOOL_HASH);
+	dbenv->mp_bytes = MEMP_SMALLCACHE_ADJUST(32 * 8 * 1024);
 	dbenv->mp_ncache = 1;
 
 	return (0);
@@ -171,7 +168,7 @@ __memp_set_cachesize(dbenv, gbytes, bytes, arg_ncache)
 	 */
 	if (gbytes == 0) {
 		if (bytes < 500 * MEGABYTE)
-			bytes += (bytes / 4) + 37 * sizeof(DB_MPOOL_HASH);
+			bytes = MEMP_SMALLCACHE_ADJUST(bytes);
 		if (bytes / ncache < DB_CACHESIZE_MIN)
 			bytes = ncache * DB_CACHESIZE_MIN;
 	}
@@ -860,7 +857,7 @@ err:	if (p != NULL) {
 		if (nhp != NULL && nhp != hp)
 			MUTEX_UNLOCK(env, nhp->mtx_hash);
 	}
-	/* 
+	/*
 	 * __memp_purge_dead_files() must be called when the hash bucket is
 	 * unlocked.
 	 */

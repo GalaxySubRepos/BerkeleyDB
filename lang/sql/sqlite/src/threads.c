@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2012 July 21
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -63,10 +69,14 @@ int sqlite3ThreadCreate(
 
   *ppThread = 0;
   p = sqlite3Malloc(sizeof(*p));
-  if( p==0 ) return SQLITE_NOMEM;
+  if( p==0 ) return SQLITE_NOMEM_BKPT;
   memset(p, 0, sizeof(*p));
   p->xTask = xTask;
   p->pIn = pIn;
+  /* If the SQLITE_TESTCTRL_FAULT_INSTALL callback is registered to a 
+  ** function that returns SQLITE_ERROR when passed the argument 200, that
+  ** forces worker threads to run sequentially and deterministically 
+  ** for testing purposes. */
   if( sqlite3FaultSim(200) ){
     rc = 1;
   }else{    
@@ -85,7 +95,7 @@ int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
   int rc;
 
   assert( ppOut!=0 );
-  if( NEVER(p==0) ) return SQLITE_NOMEM;
+  if( NEVER(p==0) ) return SQLITE_NOMEM_BKPT;
   if( p->done ){
     *ppOut = p->pOut;
     rc = SQLITE_OK;
@@ -150,8 +160,13 @@ int sqlite3ThreadCreate(
   assert( xTask!=0 );
   *ppThread = 0;
   p = sqlite3Malloc(sizeof(*p));
-  if( p==0 ) return SQLITE_NOMEM;
-  if( sqlite3GlobalConfig.bCoreMutex==0 ){
+  if( p==0 ) return SQLITE_NOMEM_BKPT;
+  /* If the SQLITE_TESTCTRL_FAULT_INSTALL callback is registered to a 
+  ** function that returns SQLITE_ERROR when passed the argument 200, that
+  ** forces worker threads to run sequentially and deterministically 
+  ** (via the sqlite3FaultSim() term of the conditional) for testing
+  ** purposes. */
+  if( sqlite3GlobalConfig.bCoreMutex==0 || sqlite3FaultSim(200) ){
     memset(p, 0, sizeof(*p));
   }else{
     p->xTask = xTask;
@@ -177,9 +192,9 @@ int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
   BOOL bRc;
 
   assert( ppOut!=0 );
-  if( NEVER(p==0) ) return SQLITE_NOMEM;
+  if( NEVER(p==0) ) return SQLITE_NOMEM_BKPT;
   if( p->xTask==0 ){
-    assert( p->id==GetCurrentThreadId() );
+    /* assert( p->id==GetCurrentThreadId() ); */
     rc = WAIT_OBJECT_0;
     assert( p->tid==0 );
   }else{
@@ -225,7 +240,7 @@ int sqlite3ThreadCreate(
   assert( xTask!=0 );
   *ppThread = 0;
   p = sqlite3Malloc(sizeof(*p));
-  if( p==0 ) return SQLITE_NOMEM;
+  if( p==0 ) return SQLITE_NOMEM_BKPT;
   if( (SQLITE_PTR_TO_INT(p)/17)&1 ){
     p->xTask = xTask;
     p->pIn = pIn;
@@ -241,7 +256,7 @@ int sqlite3ThreadCreate(
 int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
 
   assert( ppOut!=0 );
-  if( NEVER(p==0) ) return SQLITE_NOMEM;
+  if( NEVER(p==0) ) return SQLITE_NOMEM_BKPT;
   if( p->xTask ){
     *ppOut = p->xTask(p->pIn);
   }else{
@@ -252,7 +267,7 @@ int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
 #if defined(SQLITE_TEST)
   {
     void *pTstAlloc = sqlite3Malloc(10);
-    if (!pTstAlloc) return SQLITE_NOMEM;
+    if (!pTstAlloc) return SQLITE_NOMEM_BKPT;
     sqlite3_free(pTstAlloc);
   }
 #endif

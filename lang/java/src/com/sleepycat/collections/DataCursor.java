@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -231,52 +231,91 @@ final class DataCursor implements Cloneable {
      *
      * @return REPOS_EXACT, REPOS_NEXT or REPOS_EOF.
      */
-    int repositionRange(byte[] keyBytes,
-                        byte[] priKeyBytes,
-                        byte[] valueBytes,
+    int repositionRange(byte[] lastKeyBytes,
+                        byte[] lastPriKeyBytes,
+                        byte[] lastValueBytes,
                         boolean lockForWrite)
         throws DatabaseException {
 
         OpReadOptions options = OpReadOptions.make(getLockMode(lockForWrite));
-        OpResult result = null;
+        OpResult result;
 
         /* Use the given key/data byte arrays. */
-        setThangs(keyBytes, priKeyBytes, valueBytes);
+        setThangs(lastKeyBytes, lastPriKeyBytes, lastValueBytes);
 
         /* Position on or after the given key/data pair. */
-        if (view.dupsAllowed) {
-            result = cursor.getSearchBothRange(keyThang, primaryKeyThang,
-                                               valueThang, options);
-        }
-        if (result == null || !result.isSuccess()) {
-            result = cursor.getSearchKeyRange(keyThang, primaryKeyThang,
-                                              valueThang, options);
+
+        if (!view.dupsAllowed) {
+            /*
+             * No-dups is the simple case. Search for key >= lastKey, and then
+             * compare to see if we found lastKey again.
+             */
+            result = cursor.getSearchKeyRange(
+                keyThang, primaryKeyThang, valueThang, options);
+
+            if (!result.isSuccess()) {
+                return REPOS_EOF;
+            }
+
+            return KeyRange.equalBytes(
+                lastKeyBytes, 0, lastKeyBytes.length,
+                keyThang.getData(), keyThang.getOffset(), keyThang.getSize()) ?
+                REPOS_EXACT : REPOS_NEXT;
         }
 
-        /* Return the result of the operation. */
+        /*
+         * Duplicates are more complex.
+         *
+         * Search for key == lastKey && data >= lastData, and then compare to
+         * see if we found lastData again.
+         */
+        result = cursor.getSearchBothRange(
+            keyThang, primaryKeyThang, valueThang, options);
+
         if (result.isSuccess()) {
-            if (!KeyRange.equalBytes(keyBytes, 0, keyBytes.length,
-                                     keyThang.getData(),
-                                     keyThang.getOffset(),
-                                     keyThang.getSize())) {
-                return REPOS_NEXT;
-            }
-            if (view.dupsAllowed) {
-                DatabaseEntry thang = view.isSecondary() ? primaryKeyThang
-                                                         : valueThang;
-                byte[] bytes = view.isSecondary() ? priKeyBytes
-                                                  : valueBytes;
-                if (!KeyRange.equalBytes(bytes, 0, bytes.length,
-                                         thang.getData(),
-                                         thang.getOffset(),
-                                         thang.getSize())) {
-                    return REPOS_NEXT;
-                }
-            }
-            return REPOS_EXACT;
-        } else {
+
+            DatabaseEntry thang =
+                view.isSecondary() ? primaryKeyThang : valueThang;
+
+            byte[] bytes =
+                view.isSecondary() ? lastPriKeyBytes : lastValueBytes;
+
+            return KeyRange.equalBytes(
+                bytes, 0, bytes.length,
+                thang.getData(), thang.getOffset(), thang.getSize()) ?
+                REPOS_EXACT : REPOS_NEXT;
+        }
+
+        /*
+         * The record with lastKey/lastData must have been deleted and there
+         * are no records with key == lastkey && data > lastData.
+         *
+         * Search for key >= lastKey, but keep in mind that we will probably
+         * land on the first record with lastKey.
+         */
+        result = cursor.getSearchKeyRange(
+            keyThang, primaryKeyThang, valueThang, options);
+
+        if (!result.isSuccess()) {
             return REPOS_EOF;
         }
+
+        /*
+         * If we are positioned on the first dup of lastKey, skip over its
+         * records to the first record with the next key.
+         */
+        if (KeyRange.equalBytes(lastKeyBytes, 0, lastKeyBytes.length,
+            keyThang.getData(), keyThang.getOffset(), keyThang.getSize())) {
+
+            result = cursor.getNextNoDup(keyThang, primaryKeyThang,
+                valueThang, options);
+
+            if (!result.isSuccess()) {
+                return REPOS_EOF;
+            }
+        }
+
+        return REPOS_NEXT;
     }
 
     /**

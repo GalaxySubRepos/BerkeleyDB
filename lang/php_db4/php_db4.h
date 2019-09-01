@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
+ * See the file LICENSE for license information.
+ *
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  * 
  * authors: George Schlossnagle <george@omniti.com>

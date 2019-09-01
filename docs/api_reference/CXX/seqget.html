@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbSequence::get()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbSequence::get()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="seqclose.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="seqget"></a>DbSequence::get()</h2>
+            <h2 class="title" style="clear: both"><a id="seqget"></a>
+        
+        <span>DbSequence::get()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -60,7 +66,10 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
          By default, sequence ranges do not wrap; to cause the sequence to wrap
          around the beginning or end of its range, specify the 
          <a class="link" href="seqset_flags.html#seqset_flags_DB_SEQ_WRAP">DB_SEQ_WRAP</a>  
-         flag to the <a class="xref" href="seqset_flags.html" title="DbSequence::set_flags()">DbSequence::set_flags()</a> 
+         flag to the <a class="xref" href="seqset_flags.html" title="DbSequence::set_flags()">
+        
+        <span>DbSequence::set_flags()</span>
+    </a> 
          method.
     </p>
       <p>
@@ -72,7 +81,7 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806795216"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176763957568"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -80,17 +89,23 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806794096"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176763957024"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; if the
+                          handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; if the
                           operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected. No <span class="bold"><strong>txnid</strong></span> handle may be specified if the sequence
@@ -113,7 +128,7 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806828208"></a>delta</h4>
+                <h4 class="title"><a id="idm140176764050480"></a>delta</h4>
               </div>
             </div>
           </div>
@@ -125,7 +140,7 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806758048"></a>retp</h4>
+                <h4 class="title"><a id="idm140176763919904"></a>retp</h4>
               </div>
             </div>
           </div>
@@ -138,7 +153,7 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806785104"></a>flags</h4>
+                <h4 class="title"><a id="idm140176763977824"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -167,7 +182,7 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806764672"></a>Class</h3>
+              <h3 class="title"><a id="idm140176763926640"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -179,7 +194,7 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806772224"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176763934192"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -199,11 +214,17 @@ DbSequence::get(DbTxn *txnid, u_int32_t delta, db_seq_t *retp,
           <td width="40%" align="right"> <a accesskey="n" href="seqget_cachesize.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbSequence::close() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbSequence::close()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbSequence::get_cachesize()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbSequence::get_cachesize()</span>
+    </td>
         </tr>
       </table>
     </div>

@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2013-03-14
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -625,10 +631,10 @@ static int amatchLoadOneRule(
     }else{
       memset(pRule, 0, sizeof(*pRule));
       pRule->zFrom = &pRule->zTo[nTo+1];
-      pRule->nFrom = nFrom;
+      pRule->nFrom = (amatch_len)nFrom;
       memcpy(pRule->zFrom, zFrom, nFrom+1);
       memcpy(pRule->zTo, zTo, nTo+1);
-      pRule->nTo = nTo;
+      pRule->nTo = (amatch_len)nTo;
       pRule->rCost = rCost;
       pRule->iLang = (int)iLang;
     }
@@ -816,10 +822,10 @@ static const char *amatchValueOfKey(const char *zKey, const char *zStr){
   int i;
   if( nStr<nKey+1 ) return 0;
   if( memcmp(zStr, zKey, nKey)!=0 ) return 0;
-  for(i=nKey; isspace(zStr[i]); i++){}
+  for(i=nKey; isspace((unsigned char)zStr[i]); i++){}
   if( zStr[i]!='=' ) return 0;
   i++;
-  while( isspace(zStr[i]) ){ i++; }
+  while( isspace((unsigned char)zStr[i]) ){ i++; }
   return zStr+i;
 }
 
@@ -1081,7 +1087,7 @@ static void amatchAddWord(
   pWord->rCost = rCost;
   pWord->iSeq = pCur->nWord++;
   amatchWriteCost(pWord);
-  pWord->nMatch = nMatch;
+  pWord->nMatch = (short)nMatch;
   pWord->pNext = pCur->pAllWords;
   pCur->pAllWords = pWord;
   pWord->sCost.zKey = pWord->zCost;
@@ -1162,7 +1168,7 @@ static int amatchNext(sqlite3_vtab_cursor *cur){
 #endif
     nWord = (int)strlen(pWord->zWord+2);
     if( nWord+20>nBuf ){
-      nBuf = nWord+100;
+      nBuf = (char)(nWord+100);
       zBuf = sqlite3_realloc(zBuf, nBuf);
       if( zBuf==0 ) return SQLITE_NOMEM;
     }

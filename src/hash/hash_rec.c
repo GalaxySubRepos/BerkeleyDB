@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1995, 1996
@@ -49,9 +49,10 @@
 #include "dbinc/hash.h"
 #include "dbinc/mp.h"
 
-static int __ham_alloc_pages __P((DBC *, __ham_groupalloc_args *, DB_LSN *));
+static int __ham_alloc_pages
+    __P((DBC *, __ham_groupalloc_args *, DB_LSN *, DB_TXNHEAD *));
 static int __ham_alloc_pages_42
-    __P((DBC *, __ham_groupalloc_42_args *, DB_LSN *));
+    __P((DBC *, __ham_groupalloc_42_args *, DB_LSN *, void *));
 static int __ham_chgpg_recover_func
     __P((DBC *, DBC *, u_int32_t *, db_pgno_t, u_int32_t, void *));
 
@@ -74,14 +75,16 @@ __ham_insdel_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	db_indx_t dindx;
 	int cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_insdel_print);
-	REC_INTRO(__ham_insdel_read, ip, 1);
+	REC_INTRO(__ham_insdel_read, txnhead, 1);
 
 	if ((ret = __memp_fget(mpf, &argp->pgno, ip, NULL,
 	    0, &pagep)) != 0) {
@@ -127,7 +130,7 @@ __ham_insdel_recover(env, dbtp, lsnp, op, info)
 		/*
 		 * Need to redo a PUT or undo a delete.
 		 */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		dindx = (db_indx_t)argp->ndx;
 		if ((ret = __ham_insertpair(dbc, pagep, &dindx, &argp->key,
 		    &argp->data, OP_MODE_GET(argp->keytype),
@@ -137,7 +140,7 @@ __ham_insdel_recover(env, dbtp, lsnp, op, info)
 	} else if ((argp->opcode == DELPAIR && cmp_p == 0 && DB_REDO(op)) ||
 	    (argp->opcode == PUTPAIR && cmp_n == 0 && DB_UNDO(op))) {
 		/* Need to undo a put or redo a delete. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		__ham_dpair(file_dbp, pagep, argp->ndx);
 		LSN(pagep) = DB_REDO(op) ? *lsnp : argp->pagelsn;
 	}
@@ -174,15 +177,17 @@ __ham_insdel_42_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	db_indx_t dindx;
 	u_int32_t dtype, ktype, opcode;
 	int cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_insdel_print);
-	REC_INTRO(__ham_insdel_42_read, ip, 1);
+	REC_INTRO(__ham_insdel_42_read, txnhead, 1);
 
 	if ((ret = __memp_fget(mpf, &argp->pgno, ip, NULL,
 	    0, &pagep)) != 0) {
@@ -229,7 +234,7 @@ __ham_insdel_42_recover(env, dbtp, lsnp, op, info)
 		/*
 		 * Need to redo a PUT or undo a delete.
 		 */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		ktype = DB_UNDO(op) || PAIR_ISKEYBIG(argp->opcode) ?
 		    H_OFFPAGE : H_KEYDATA;
 		/* TODO: May need a PAIR_ISDATABLOB here. */
@@ -247,7 +252,7 @@ __ham_insdel_42_recover(env, dbtp, lsnp, op, info)
 	} else if ((opcode == DELPAIR && cmp_p == 0 && DB_REDO(op)) ||
 	    (opcode == PUTPAIR && cmp_n == 0 && DB_UNDO(op))) {
 		/* Need to undo a put or redo a delete. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		__ham_dpair(file_dbp, pagep, argp->ndx);
 		LSN(pagep) = DB_REDO(op) ? *lsnp : argp->pagelsn;
 	}
@@ -286,15 +291,17 @@ __ham_newpage_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	int change, cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_newpage_print);
-	REC_INTRO(__ham_newpage_read, ip, 0);
+	REC_INTRO(__ham_newpage_read, txnhead, 0);
 
-	REC_FGET(mpf, ip, argp->new_pgno, &pagep, ppage);
+	REC_FGET(mpf, txnhead, argp->new_pgno, &pagep, ppage);
 	change = 0;
 
 	/*
@@ -311,7 +318,7 @@ __ham_newpage_recover(env, dbtp, lsnp, op, info)
 	if ((cmp_p == 0 && DB_REDO(op) && argp->opcode == PUTOVFL) ||
 	    (cmp_n == 0 && DB_UNDO(op) && argp->opcode == DELOVFL)) {
 		/* Redo a create new page or undo a delete new page. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		P_INIT(pagep, file_dbp->pgsize, argp->new_pgno,
 		    argp->prev_pgno, argp->next_pgno, 0, P_HASH);
 		change = 1;
@@ -321,7 +328,7 @@ __ham_newpage_recover(env, dbtp, lsnp, op, info)
 		 * Redo a delete or undo a create new page.  All we
 		 * really need to do is change the LSN.
 		 */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		change = 1;
 	}
 
@@ -334,7 +341,7 @@ __ham_newpage_recover(env, dbtp, lsnp, op, info)
 
 	/* Now do the prev page. */
 ppage:	if (argp->prev_pgno != PGNO_INVALID) {
-		REC_FGET(mpf, ip, argp->prev_pgno, &pagep, npage);
+		REC_FGET(mpf, txnhead, argp->prev_pgno, &pagep, npage);
 
 		cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
 		cmp_p = LOG_COMPARE(&LSN(pagep), &argp->prevlsn);
@@ -345,14 +352,14 @@ ppage:	if (argp->prev_pgno != PGNO_INVALID) {
 		if ((cmp_p == 0 && DB_REDO(op) && argp->opcode == PUTOVFL) ||
 		    (cmp_n == 0 && DB_UNDO(op) && argp->opcode == DELOVFL)) {
 			/* Redo a create new page or undo a delete new page. */
-			REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 			pagep->next_pgno = argp->new_pgno;
 			change = 1;
 		} else if ((cmp_p == 0 &&
 		    DB_REDO(op) && argp->opcode == DELOVFL) ||
 		    (cmp_n == 0 && DB_UNDO(op) && argp->opcode == PUTOVFL)) {
 			/* Redo a delete or undo a create new page. */
-			REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 			pagep->next_pgno = argp->next_pgno;
 			change = 1;
 		}
@@ -368,7 +375,7 @@ ppage:	if (argp->prev_pgno != PGNO_INVALID) {
 
 	/* Now time to do the next page */
 npage:	if (argp->next_pgno != PGNO_INVALID) {
-		REC_FGET(mpf, ip, argp->next_pgno, &pagep, done);
+		REC_FGET(mpf, txnhead, argp->next_pgno, &pagep, done);
 
 		cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
 		cmp_p = LOG_COMPARE(&LSN(pagep), &argp->nextlsn);
@@ -379,14 +386,14 @@ npage:	if (argp->next_pgno != PGNO_INVALID) {
 		if ((cmp_p == 0 && DB_REDO(op) && argp->opcode == PUTOVFL) ||
 		    (cmp_n == 0 && DB_UNDO(op) && argp->opcode == DELOVFL)) {
 			/* Redo a create new page or undo a delete new page. */
-			REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 			pagep->prev_pgno = argp->new_pgno;
 			change = 1;
 		} else if ((cmp_p == 0 &&
 		    DB_REDO(op) && argp->opcode == DELOVFL) ||
 		    (cmp_n == 0 && DB_UNDO(op) && argp->opcode == PUTOVFL)) {
 			/* Redo a delete or undo a create new page. */
-			REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 			pagep->prev_pgno = argp->prev_pgno;
 			change = 1;
 		}
@@ -429,18 +436,20 @@ __ham_replace_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	DBT dbt;
 	PAGE *pagep;
 	u_int32_t change;
 	int cmp_n, cmp_p, is_plus, modified, off, ret;
 	u_int8_t *hk;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_replace_print);
-	REC_INTRO(__ham_replace_read, ip, 0);
+	REC_INTRO(__ham_replace_read, txnhead, 0);
 
-	REC_FGET(mpf, ip, argp->pgno, &pagep, done);
+	REC_FGET(mpf, txnhead, argp->pgno, &pagep, done);
 
 	cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
 	cmp_p = LOG_COMPARE(&LSN(pagep), &argp->pagelsn);
@@ -482,7 +491,7 @@ __ham_replace_recover(env, dbtp, lsnp, op, info)
 		/* Reapply the change as specified. */
 		dbt.data = argp->newitem.data;
 		dbt.size = argp->newitem.size;
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		LSN(pagep) = *lsnp;
 		/*
 		 * The is_plus flag is set properly to reflect
@@ -498,7 +507,7 @@ __ham_replace_recover(env, dbtp, lsnp, op, info)
 		 * olditem.size - newitem.size.
 		 */
 		is_plus = !is_plus;
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		LSN(pagep) = argp->pagelsn;
 		modified = 1;
 	}
@@ -549,18 +558,20 @@ __ham_replace_42_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	DBT dbt;
 	PAGE *pagep;
 	u_int32_t change;
 	int cmp_n, cmp_p, is_plus, modified, ret;
 	u_int8_t *hk;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_replace_print);
-	REC_INTRO(__ham_replace_42_read, ip, 0);
+	REC_INTRO(__ham_replace_42_read, txnhead, 0);
 
-	REC_FGET(mpf, ip, argp->pgno, &pagep, done);
+	REC_FGET(mpf, txnhead, argp->pgno, &pagep, done);
 
 	cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
 	cmp_p = LOG_COMPARE(&LSN(pagep), &argp->pagelsn);
@@ -586,7 +597,7 @@ __ham_replace_42_recover(env, dbtp, lsnp, op, info)
 		/* Reapply the change as specified. */
 		dbt.data = argp->newitem.data;
 		dbt.size = argp->newitem.size;
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		LSN(pagep) = *lsnp;
 		/*
 		 * The is_plus flag is set properly to reflect
@@ -602,7 +613,7 @@ __ham_replace_42_recover(env, dbtp, lsnp, op, info)
 		 * olditem.size - newitem.size.
 		 */
 		is_plus = !is_plus;
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		LSN(pagep) = argp->pagelsn;
 		modified = 1;
 	}
@@ -650,13 +661,15 @@ __ham_splitdata_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	int cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_splitdata_print);
-	REC_INTRO(__ham_splitdata_read, ip, 1);
+	REC_INTRO(__ham_splitdata_read, txnhead, 1);
 
 	if ((ret = __memp_fget(mpf, &argp->pgno, ip, NULL, 0, &pagep)) != 0) {
 		if (DB_UNDO(op)) {
@@ -703,7 +716,7 @@ __ham_splitdata_recover(env, dbtp, lsnp, op, info)
 	 * recreate the sort operation by calling __ham_sort_page.
 	 */
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		if (argp->opcode == SPLITNEW)
 			/* Need to redo the split described. */
 			memcpy(pagep, argp->pageimage.data,
@@ -714,7 +727,7 @@ __ham_splitdata_recover(env, dbtp, lsnp, op, info)
 		}
 		LSN(pagep) = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		if (argp->opcode == SPLITOLD || argp->opcode == SORTPAGE) {
 			/* Put back the old image. */
 			memcpy(pagep, argp->pageimage.data,
@@ -756,16 +769,18 @@ __ham_copypage_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	int cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	pagep = NULL;
 	REC_PRINT(__ham_copypage_print);
-	REC_INTRO(__ham_copypage_read, ip, 0);
+	REC_INTRO(__ham_copypage_read, txnhead, 0);
 
 	/* This is the bucket page. */
-	REC_FGET(mpf, ip, argp->pgno, &pagep, donext);
+	REC_FGET(mpf, txnhead, argp->pgno, &pagep, donext);
 
 	cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
 	cmp_p = LOG_COMPARE(&LSN(pagep), &argp->pagelsn);
@@ -773,14 +788,14 @@ __ham_copypage_recover(env, dbtp, lsnp, op, info)
 
 	if (cmp_p == 0 && DB_REDO(op)) {
 		/* Need to redo update described. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		memcpy(pagep, argp->page.data, argp->page.size);
 		PGNO(pagep) = argp->pgno;
 		PREV_PGNO(pagep) = PGNO_INVALID;
 		LSN(pagep) = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/* Need to undo update described. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		P_INIT(pagep, file_dbp->pgsize, argp->pgno, PGNO_INVALID,
 		    argp->next_pgno, 0, P_HASH);
 		LSN(pagep) = argp->pagelsn;
@@ -790,7 +805,7 @@ __ham_copypage_recover(env, dbtp, lsnp, op, info)
 	pagep = NULL;
 
 donext:	/* Now fix up the "next" page. */
-	REC_FGET(mpf, ip, argp->next_pgno, &pagep, do_nn);
+	REC_FGET(mpf, txnhead, argp->next_pgno, &pagep, do_nn);
 
 	/* For REDO just update the LSN. For UNDO copy page back. */
 	cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
@@ -798,11 +813,11 @@ donext:	/* Now fix up the "next" page. */
 	CHECK_LSN(env, op, cmp_p, &LSN(pagep), &argp->nextlsn);
 	CHECK_ABORT(env, op, cmp_n, &LSN(pagep), lsnp);
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		LSN(pagep) = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/* Need to undo update described. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		memcpy(pagep, argp->page.data, argp->page.size);
 	}
 	if ((ret = __memp_fput(mpf, ip, pagep, file_dbp->priority)) != 0)
@@ -813,7 +828,7 @@ donext:	/* Now fix up the "next" page. */
 do_nn:	if (argp->nnext_pgno == PGNO_INVALID)
 		goto done;
 
-	REC_FGET(mpf, ip, argp->nnext_pgno, &pagep, done);
+	REC_FGET(mpf, txnhead, argp->nnext_pgno, &pagep, done);
 
 	cmp_n = LOG_COMPARE(lsnp, &LSN(pagep));
 	cmp_p = LOG_COMPARE(&LSN(pagep), &argp->nnextlsn);
@@ -822,12 +837,12 @@ do_nn:	if (argp->nnext_pgno == PGNO_INVALID)
 
 	if (cmp_p == 0 && DB_REDO(op)) {
 		/* Need to redo update described. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		PREV_PGNO(pagep) = argp->pgno;
 		LSN(pagep) = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/* Need to undo update described. */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		PREV_PGNO(pagep) = argp->next_pgno;
 		LSN(pagep) = argp->nnextlsn;
 	}
@@ -865,15 +880,17 @@ __ham_metagroup_recover(env, dbtp, lsnp, op, info)
 	DBMETA *mmeta;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	db_pgno_t pgno;
 	int cmp_n, cmp_p, did_alloc, groupgrow, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	mmeta = NULL;
 	did_alloc = 0;
 	REC_PRINT(__ham_metagroup_print);
-	REC_INTRO(__ham_metagroup_read, ip, 1);
+	REC_INTRO(__ham_metagroup_read, txnhead, 1);
 
 	/*
 	 * This logs the virtual create of pages pgno to pgno + bucket.
@@ -919,7 +936,7 @@ __ham_metagroup_recover(env, dbtp, lsnp, op, info)
 	CHECK_LSN(env, op, cmp_p, &LSN(pagep), &argp->pagelsn);
 
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &pagep);
 		pagep->lsn = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/* If this record allocated the pages give them back. */
@@ -936,7 +953,7 @@ __ham_metagroup_recover(env, dbtp, lsnp, op, info)
 			 * Otherwise just roll the page back to its
 			 * previous state.
 			 */
-			REC_DIRTY(mpf, ip, dbc->priority, &pagep);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &pagep);
 			pagep->lsn = argp->pagelsn;
 		}
 	}
@@ -957,7 +974,7 @@ __ham_metagroup_recover(env, dbtp, lsnp, op, info)
 				goto out;
 
 			if (IS_ZERO_LSN(LSN(pagep))) {
-				REC_DIRTY(mpf, ip, dbc->priority, &pagep);
+				REC_DIRTY(mpf, txnhead, dbc->priority, &pagep);
 				P_INIT(pagep, file_dbp->pgsize, pgno,
 				    PGNO_INVALID, PGNO_INVALID, 0, P_HASH);
 			}
@@ -978,7 +995,7 @@ do_meta:
 	CHECK_ABORT(env, op, cmp_n, &hcp->hdr->dbmeta.lsn, lsnp);
 	if (cmp_p == 0 && DB_REDO(op)) {
 		/* Redo the actual updating of bucket counts. */
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		++hcp->hdr->max_bucket;
 		if (groupgrow) {
 			hcp->hdr->low_mask = hcp->hdr->high_mask;
@@ -988,7 +1005,7 @@ do_meta:
 		hcp->hdr->dbmeta.lsn = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/* Undo the actual updating of bucket counts. */
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		hcp->hdr->max_bucket = argp->bucket;
 		if (groupgrow) {
 			hcp->hdr->high_mask = argp->bucket;
@@ -1003,12 +1020,12 @@ do_meta:
 	 * indicated doubling.
 	 */
 	if (cmp_p == 0 && did_alloc && !DB_UNDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		hcp->hdr->spares[__db_log2(argp->bucket + 1) + 1] =
 		    (argp->pgno - argp->bucket) - 1;
 	}
 	if (cmp_n == 0 && groupgrow && DB_UNDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		hcp->hdr->spares[
 		    __db_log2(argp->bucket + 1) + 1] = PGNO_INVALID;
 	}
@@ -1028,15 +1045,15 @@ do_meta:
 		cmp_n = LOG_COMPARE(lsnp, &mmeta->lsn);
 		cmp_p = LOG_COMPARE(&mmeta->lsn, &argp->mmetalsn);
 		if (cmp_p == 0 && DB_REDO(op)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 			mmeta->lsn = *lsnp;
 		} else if (cmp_n == 0 && DB_UNDO(op)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 			mmeta->lsn = argp->mmetalsn;
 		}
 	} else {
 		mmeta = (DBMETA *)hcp->hdr;
-		REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 	}
 
 	if (cmp_n == 0 && DB_UNDO(op))
@@ -1076,17 +1093,17 @@ __ham_contract_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__ham_contract_args *argp;
-	DB_THREAD_INFO *ip;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	DB *file_dbp;
 	DBC *dbc;
 	HASH_CURSOR *hcp;
 	HMETA *meta;
 	int cmp_n, cmp_p, ret, t_ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
 	REC_PRINT(__ham_contract_print);
-	REC_INTRO(__ham_contract_read, ip, 1);
+	REC_INTRO(__ham_contract_read, txnhead, 1);
 
 	hcp = (HASH_CURSOR *)dbc->internal;
 	if ((ret = __ham_get_meta(dbc)) != 0)
@@ -1096,7 +1113,7 @@ __ham_contract_recover(env, dbtp, lsnp, op, info)
 	cmp_p = LOG_COMPARE(&meta->dbmeta.lsn, &argp->meta_lsn);
 	CHECK_LSN(env, op, cmp_p, &meta->dbmeta.lsn, &argp->meta_lsn);
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		meta = hcp->hdr;
 		meta->max_bucket = argp->bucket - 1;
 		if (argp->bucket == meta->low_mask + 1) {
@@ -1107,7 +1124,7 @@ __ham_contract_recover(env, dbtp, lsnp, op, info)
 		}
 		meta->dbmeta.lsn = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		meta = hcp->hdr;
 		meta->max_bucket = argp->bucket;
 		if (argp->bucket == meta->high_mask + 1) {
@@ -1144,16 +1161,18 @@ __ham_groupalloc_recover(env, dbtp, lsnp, op, info)
 	DB_THREAD_INFO *ip;
 	DBMETA *mmeta;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	DB *file_dbp;
 	DBC *dbc;
 	PAGE *pagep;
 	db_pgno_t pgno;
 	int cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	mmeta = NULL;
 	REC_PRINT(__ham_groupalloc_print);
-	REC_INTRO(__ham_groupalloc_read, ip, 1);
+	REC_INTRO(__ham_groupalloc_read, txnhead, 1);
 
 	pgno = PGNO_BASE_MD;
 	if ((ret = __memp_fget(mpf, &pgno, ip, NULL, 0, &mmeta)) != 0) {
@@ -1180,10 +1199,10 @@ __ham_groupalloc_recover(env, dbtp, lsnp, op, info)
 	 */
 	pgno = argp->start_pgno + argp->num - 1;
 	if (DB_REDO(op)) {
-		if ((ret = __ham_alloc_pages(dbc, argp, lsnp)) != 0)
+		if ((ret = __ham_alloc_pages(dbc, argp, lsnp, txnhead)) != 0)
 			goto out;
 		if (cmp_p == 0) {
-			REC_DIRTY(mpf, ip, file_dbp->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &mmeta);
 			LSN(mmeta) = *lsnp;
 		}
 	} else if (DB_UNDO(op)) {
@@ -1220,12 +1239,12 @@ __ham_groupalloc_recover(env, dbtp, lsnp, op, info)
 		 * sure it reflects the the correct last_pgno.
 		 */
 		if (cmp_n == 0) {
-			REC_DIRTY(mpf, ip, file_dbp->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &mmeta);
 			mmeta->last_pgno = argp->last_pgno;
 		}
 		pgno = 0;
 		if (cmp_n == 0) {
-			REC_DIRTY(mpf, ip, file_dbp->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, file_dbp->priority, &mmeta);
 			LSN(mmeta) = argp->meta_lsn;
 		}
 	}
@@ -1234,7 +1253,7 @@ __ham_groupalloc_recover(env, dbtp, lsnp, op, info)
 	 * Set the last page number to the current value.
 	 */
 	if (pgno > mmeta->last_pgno) {
-		REC_DIRTY(mpf, ip, file_dbp->priority, &mmeta);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &mmeta);
 		mmeta->last_pgno = pgno;
 	}
 
@@ -1259,14 +1278,16 @@ out:	if (mmeta != NULL)
  * Hash normally has holes in its files and handles them appropriately.
  */
 static int
-__ham_alloc_pages(dbc, argp, lsnp)
+__ham_alloc_pages(dbc, argp, lsnp, txnhead)
 	DBC *dbc;
 	__ham_groupalloc_args *argp;
 	DB_LSN *lsnp;
+	DB_TXNHEAD *txnhead;
 {
 	DB *file_dbp;
 	DB_MPOOLFILE *mpf;
 	DB_THREAD_INFO *ip;
+	DB_TXN *txn;
 	PAGE *pagep;
 	db_pgno_t pgno;
 	int ret;
@@ -1274,13 +1295,13 @@ __ham_alloc_pages(dbc, argp, lsnp)
 	file_dbp = dbc->dbp;
 	mpf = file_dbp->mpf;
 	ip = dbc->thread_info;
+	txn = txnhead->txn;
 
 	/* Read the last page of the allocation. */
 	pgno = argp->start_pgno + argp->num - 1;
 
 	/* If the page exists, and it has been initialized, then we're done. */
-	if ((ret =
-	    __memp_fget(mpf, &pgno, ip, NULL, 0, &pagep)) == 0) {
+	if ((ret = __memp_fget(mpf, &pgno, ip, txn, 0, &pagep)) == 0) {
 		if (NUM_ENT(pagep) == 0 && IS_ZERO_LSN(pagep->lsn))
 			goto reinit_page;
 		return (__memp_fput(mpf, ip, pagep, dbc->priority));
@@ -1288,12 +1309,12 @@ __ham_alloc_pages(dbc, argp, lsnp)
 
 	/* Had to create the page. */
 	if ((ret = __memp_fget(mpf, &pgno,
-	    ip, NULL, DB_MPOOL_CREATE, &pagep)) != 0)
+	    ip, txn, DB_MPOOL_CREATE, &pagep)) != 0)
 		return (__db_pgerr(dbc->dbp, pgno, ret));
 
 reinit_page:
 	/* Initialize the newly allocated page. */
-	REC_DIRTY(mpf, ip, dbc->priority, &pagep);
+	REC_DIRTY(mpf, txnhead, dbc->priority, &pagep);
 	P_INIT(pagep, dbc->dbp->pgsize,
 	    pgno, PGNO_INVALID, PGNO_INVALID, 0, P_HASH);
 	pagep->lsn = *lsnp;
@@ -1322,16 +1343,16 @@ __ham_changeslot_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
-	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
 	HASH_CURSOR *hcp;
 	HMETA *meta;
 	u_int32_t bucket;
 	int cmp_n, cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
 
 	REC_PRINT(__ham_changeslot_print);
-	REC_INTRO(__ham_changeslot_read, ip, 1);
+	REC_INTRO(__ham_changeslot_read, txnhead, 1);
 
 	hcp = (HASH_CURSOR *)dbc->internal;
 	if ((ret = __ham_get_meta(dbc)) != 0)
@@ -1342,12 +1363,12 @@ __ham_changeslot_recover(env, dbtp, lsnp, op, info)
 
 	bucket = argp->slot == 0 ? 0 : 1 << (argp->slot - 1);
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		meta = hcp->hdr;
 		meta->spares[argp->slot] = argp->new - bucket;
 		LSN(meta) = *lsnp;
 	} else if (cmp_n == 0 && !DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		meta = hcp->hdr;
 		meta->spares[argp->slot] = argp->old - bucket;
 		LSN(meta) = argp->meta_lsn;
@@ -1376,16 +1397,16 @@ __ham_curadj_recover(env, dbtp, lsnp, op, info)
 {
 	__ham_curadj_args *argp;
 	db_ham_curadj mode, hamc_mode;
-	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
 	DB_MPOOLFILE *mpf;
 	DB *file_dbp;
 	DBC *dbc;
 	HASH_CURSOR *hcp;
 	int ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
 	REC_PRINT(__ham_curadj_print);
-	REC_INTRO(__ham_curadj_read, ip, 1);
+	REC_INTRO(__ham_curadj_read, txnhead, 1);
 
 	if (op != DB_TXN_ABORT)
 		goto done;
@@ -1547,16 +1568,16 @@ __ham_chgpg_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__ham_chgpg_args *argp;
-	DB_THREAD_INFO *ip;
-	DB_MPOOLFILE *mpf;
 	DB *file_dbp;
+	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	DBC *dbc;
 	int ret;
 	u_int32_t count;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
 	REC_PRINT(__ham_chgpg_print);
-	REC_INTRO(__ham_chgpg_read, ip, 0);
+	REC_INTRO(__ham_chgpg_read, txnhead, 0);
 
 	if (op != DB_TXN_ABORT)
 		goto done;
@@ -1584,22 +1605,26 @@ __ham_metagroup_42_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__ham_metagroup_42_args *argp;
-	DB_THREAD_INFO *ip;
-	HASH_CURSOR *hcp;
 	DB *file_dbp;
-	DBMETA *mmeta;
 	DBC *dbc;
+	DBMETA *mmeta;
 	DB_MPOOLFILE *mpf;
+	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
+	DB_TXN *txn;
+	HASH_CURSOR *hcp;
 	PAGE *pagep;
 	db_pgno_t pgno;
 	u_int32_t flags;
 	int cmp_n, cmp_p, did_alloc, groupgrow, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
+	txn = txnhead->txn;
 	mmeta = NULL;
 	did_alloc = 0;
 	REC_PRINT(__ham_metagroup_42_print);
-	REC_INTRO(__ham_metagroup_42_read, ip, 1);
+	REC_INTRO(__ham_metagroup_42_read, txnhead, 1);
 
 	/*
 	 * This logs the virtual create of pages pgno to pgno + bucket
@@ -1627,7 +1652,7 @@ __ham_metagroup_42_recover(env, dbtp, lsnp, op, info)
 	flags = 0;
 	pagep = NULL;
 	LF_SET(DB_MPOOL_CREATE);
-	ret = __memp_fget(mpf, &pgno, ip,  NULL, flags, &pagep);
+	ret = __memp_fget(mpf, &pgno, ip, txn, flags, &pagep);
 
 	if (ret != 0) {
 		if (ret != ENOSPC)
@@ -1648,14 +1673,14 @@ __ham_metagroup_42_recover(env, dbtp, lsnp, op, info)
 	CHECK_LSN(env, op, cmp_p, &LSN(pagep), &argp->pagelsn);
 
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, dbc->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &pagep);
 		pagep->lsn = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/*
 		 * Otherwise just roll the page back to its
 		 * previous state.
 		 */
-		REC_DIRTY(mpf, ip, dbc->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &pagep);
 		pagep->lsn = argp->pagelsn;
 	}
 	if (pagep != NULL &&
@@ -1672,7 +1697,7 @@ do_meta:
 	CHECK_LSN(env, op, cmp_p, &hcp->hdr->dbmeta.lsn, &argp->metalsn);
 	if (cmp_p == 0 && DB_REDO(op)) {
 		/* Redo the actual updating of bucket counts. */
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		++hcp->hdr->max_bucket;
 		if (groupgrow) {
 			hcp->hdr->low_mask = hcp->hdr->high_mask;
@@ -1682,7 +1707,7 @@ do_meta:
 		hcp->hdr->dbmeta.lsn = *lsnp;
 	} else if (cmp_n == 0 && DB_UNDO(op)) {
 		/* Undo the actual updating of bucket counts. */
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		hcp->hdr->max_bucket = argp->bucket;
 		if (groupgrow) {
 			hcp->hdr->high_mask = argp->bucket;
@@ -1701,7 +1726,7 @@ do_meta:
 	 */
 	if (did_alloc &&
 	    hcp->hdr->spares[__db_log2(argp->bucket + 1) + 1] == PGNO_INVALID) {
-		REC_DIRTY(mpf, ip, dbc->priority, &hcp->hdr);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &hcp->hdr);
 		hcp->hdr->spares[__db_log2(argp->bucket + 1) + 1] =
 		    (argp->pgno - argp->bucket) - 1;
 	}
@@ -1712,7 +1737,7 @@ do_meta:
 	 * same as the hash header page).
 	 */
 	if (argp->mmpgno != argp->mpgno) {
-		if ((ret = __memp_fget(mpf, &argp->mmpgno, ip, NULL,
+		if ((ret = __memp_fget(mpf, &argp->mmpgno, ip, txn,
 		    DB_MPOOL_EDIT, &mmeta)) != 0) {
 			if (DB_UNDO(op) && ret == DB_PAGE_NOTFOUND)
 				ret = 0;
@@ -1721,15 +1746,15 @@ do_meta:
 		cmp_n = LOG_COMPARE(lsnp, &mmeta->lsn);
 		cmp_p = LOG_COMPARE(&mmeta->lsn, &argp->mmetalsn);
 		if (cmp_p == 0 && DB_REDO(op)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 			mmeta->lsn = *lsnp;
 		} else if (cmp_n == 0 && DB_UNDO(op)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 			mmeta->lsn = argp->mmetalsn;
 		}
 	} else {
 		mmeta = (DBMETA *)hcp->hdr;
-		REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 	}
 
 	if (mmeta->last_pgno < pgno)
@@ -1767,21 +1792,24 @@ __ham_groupalloc_42_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__ham_groupalloc_42_args *argp;
-	DB_THREAD_INFO *ip;
 	DBMETA *mmeta;
 	DB_MPOOLFILE *mpf;
+	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
 	DB *file_dbp;
 	DBC *dbc;
 	db_pgno_t pgno;
 	int cmp_p, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	mmeta = NULL;
 	REC_PRINT(__ham_groupalloc_42_print);
-	REC_INTRO(__ham_groupalloc_42_read, ip, 1);
+	REC_INTRO(__ham_groupalloc_42_read, txnhead, 1);
 
 	pgno = PGNO_BASE_MD;
-	if ((ret = __memp_fget(mpf, &pgno, ip, NULL, 0, &mmeta)) != 0) {
+	/* XXX Use REC_FGET()? */
+	if ((ret = __memp_fget(mpf, &pgno, ip, txnhead->txn, 0, &mmeta)) != 0) {
 		if (DB_REDO(op)) {
 			ret = __db_pgerr(file_dbp, pgno, ret);
 			goto out;
@@ -1803,10 +1831,10 @@ __ham_groupalloc_42_recover(env, dbtp, lsnp, op, info)
 	 */
 	pgno = argp->start_pgno + argp->num - 1;
 	if (DB_REDO(op)) {
-		if ((ret = __ham_alloc_pages_42(dbc, argp, lsnp)) != 0)
+		if ((ret = __ham_alloc_pages_42(dbc, argp, lsnp, txnhead)) != 0)
 			goto out;
 		if (cmp_p == 0) {
-			REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 			LSN(mmeta) = *lsnp;
 		}
 	} else if (DB_UNDO(op)) {
@@ -1825,7 +1853,7 @@ __ham_groupalloc_42_recover(env, dbtp, lsnp, op, info)
 	 * will only be valid on REDO.
 	 */
 	if (pgno > mmeta->last_pgno) {
-		REC_DIRTY(mpf, ip, dbc->priority, &mmeta);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &mmeta);
 		mmeta->last_pgno = pgno;
 	}
 
@@ -1850,26 +1878,30 @@ out:	if (mmeta != NULL)
  * Hash normally has holes in its files and handles them appropriately.
  */
 static int
-__ham_alloc_pages_42(dbc, argp, lsnp)
+__ham_alloc_pages_42(dbc, argp, lsnp, info)
 	DBC *dbc;
 	__ham_groupalloc_42_args *argp;
 	DB_LSN *lsnp;
+	void *info;
 {
 	DB_MPOOLFILE *mpf;
 	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
+	DB_TXN *txn;
 	PAGE *pagep;
 	db_pgno_t pgno;
 	int ret;
 
 	mpf = dbc->dbp->mpf;
 	ip = dbc->thread_info;
+	txnhead = info;
+	txn = txnhead->txn;
 
 	/* Read the last page of the allocation. */
 	pgno = argp->start_pgno + argp->num - 1;
 
 	/* If the page exists, and it has been initialized, then we're done. */
-	if ((ret = __memp_fget(mpf,
-	    &pgno, ip, NULL, 0, &pagep)) == 0) {
+	if ((ret = __memp_fget(mpf, &pgno, ip, txn, 0, &pagep)) == 0) {
 		if (NUM_ENT(pagep) == 0 && IS_ZERO_LSN(pagep->lsn))
 			goto reinit_page;
 		if ((ret = __memp_fput(mpf,
@@ -1879,7 +1911,7 @@ __ham_alloc_pages_42(dbc, argp, lsnp)
 	}
 
 	/* Had to create the page. */
-	if ((ret = __memp_fget(mpf, &pgno, ip, NULL,
+	if ((ret = __memp_fget(mpf, &pgno, ip, txn,
 	    DB_MPOOL_CREATE | DB_MPOOL_DIRTY, &pagep)) != 0)
 		return (__db_pgerr(dbc->dbp, pgno, ret));
 

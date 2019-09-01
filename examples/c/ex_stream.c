@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file EXAMPLES-LICENSE for license information.
  *
  * ex_stream -- A basic example with blob handling:
  *	Insert and retrieve key/data pairs with the partial key/value API.

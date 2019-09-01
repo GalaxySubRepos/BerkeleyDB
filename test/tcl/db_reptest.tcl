@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -23,14 +23,19 @@ set os_tbase 1
 # 1. db_reptest - Runs randomized configurations in a loop.
 # 2. basic_db_reptest - Runs a simple set configuration once,
 #	as a smoke test.
-# 3. restore_db_reptest 'dir' - Runs the configuration given in 'dir'
+# 3. master_switch_db_reptest - Runs db_reptest using a two-site
+#	replication group which periodically shuts down the master site,
+#	pauses, and restarts it as a client.
+# 4. restore_db_reptest 'dir' - Runs the configuration given in 'dir'
 #	in a loop.  The purpose is either to reproduce a problem
 #	that some configuration encountered, or test a fix.
-# 4. db_reptest_prof - Runs a single randomized configuration
+# 5. db_reptest_prof - Runs a single randomized configuration
 #	and generates gprof profiling information for that run.
-# 5. basic_db_reptest_prof - Runs a simple set configuration and
+# 6. basic_db_reptest_prof - Runs a simple set configuration and
 #	generates gprof profiling information for that run.
-# 6. restore_db_reptest_prof - Runs the configuration given in 'dir' and
+# 7. master_switch_db_reptest_prof - Runs the master switch configuration
+#	and generates gprof profiling information for that run.
+# 8. restore_db_reptest_prof - Runs the configuration given in 'dir' and
 #	generates gprof profiling information for one run.
 #
 
@@ -69,6 +74,47 @@ proc basic_db_reptest { { basic 0 } } {
 
 proc basic_db_reptest_prof { { basic 0 } } {
 	basic_db_reptest $basic
+	generate_profiles
+}
+
+#
+# Run db_reptest in master switch mode.  This mode creates a two-site
+# replication group with 2SITE_STRICT=off and bulk, then periodically
+# switches the master site.  The steps for a master switch are:
+# 1. Shut down the current master site
+# 2. Allow remaining client to elect itself master
+# 3. Allow the new master to run by itself for a while
+# 4. Restart previous master site as a client
+#
+# The input parameters are:
+#   switches: number of times to switch the master site
+#   databases: number of separate databases to create
+#   ops_per_txn: number of operations per transaction
+#   master_time: seconds a site should run as master
+#   down_time: seconds to wait before restarting previous master as client
+#
+proc master_switch_db_reptest { { switches 1 } { databases 1 } \
+    {ops_per_txn 100 } { master_time 180 } { down_time 60 } } {
+	global use
+	global util_path
+
+	if { [file exists $util_path/db_reptest] == 0 } {
+		puts "Skipping db_reptest.  Is it built?"
+		return
+	}
+
+	set use(ms_switches) $switches
+	set use(ms_databases) $databases
+	set use(ms_ops_per_txn) $ops_per_txn
+	set use(ms_master_time) $master_time
+	set use(ms_down_time) $down_time
+	db_reptest_int master_switch
+}
+
+proc master_switch_db_reptest_prof { { switches 1 } { databases 1 } \
+    {ops_per_txn 100 } { master_time 180 } { down_time 60 } } {
+	master_switch_db_reptest $switches $databases \
+	    $ops_per_txn $master_time $down_time
 	generate_profiles
 }
 
@@ -285,14 +331,15 @@ proc db_reptest_int { cfgtype { restoredir NULL } } {
 				set site_remove 0
 			}
 		}
-		set master_site [get_mastersite $cfgtype $use(master) $use(nsites)]
-		set noelect [get_noelect $use(master)]
+		set master_site [get_mastersite $cfgtype $use(master) \
+		    $use(nsites)]
+		set noelect [get_noelect $cfgtype $use(master)]
 		set master2_site [get_secondary_master \
 		    $noelect $master_site $kill_site $use(nsites)]
 		set use(view) [get_view $cfgtype NULL $master_site \
 		    $master2_site $use(nsites) $kill_self]
 		set use(view_site) [expr {abs($use(view))}]
-		set autotakeover_site [get_autotakeover $use(kill) \
+		set autotakeover_site [get_autotakeover $cfgtype $use(kill) \
 		    $site_remove $use(view) $use(view_site) $use(nsites) \
 		    $use(pmkill)]
 		set dbtype [get_dbtype $cfgtype]
@@ -334,6 +381,11 @@ proc db_reptest_int { cfgtype { restoredir NULL } } {
 		}
 		if { $use(lease) } {
 			puts "with leases."
+		} elseif { $cfgtype == "master_switch" } {
+			puts "master switches $use(ms_switches)\
+			    databases $use(ms_databases)\
+			    master time $use(ms_master_time)\
+			    down time $use(ms_down_time)."
 		} elseif { $use(master) } {
 			set master_text "master site $master_site"
 			if { $noelect } {
@@ -442,6 +494,24 @@ proc db_reptest_int { cfgtype { restoredir NULL } } {
 					set prog_args($i) \
 					    [concat $prog_args($i) "-k"]
 				}
+			} elseif { $cfgtype == "master_switch" } {
+				# Establish site's role.
+				if { $i == $master_site } {
+					set state($i) MASTER
+					set prog_args($i) \
+					    [concat $prog_args($i) "-M"]
+				} else {
+					set state($i) CLIENT
+					set prog_args($i) \
+					    [concat $prog_args($i) "-C"]
+				}
+				# Add master-switch-specific flags.
+				set prog_args($i) \
+				    [concat $prog_args($i) \
+"-W -S $use(ms_switches) -D $use(ms_databases) -O $use(ms_ops_per_txn)"]
+				set prog_args($i) \
+				    [concat $prog_args($i) \
+"-Y $use(ms_master_time) -y $use(ms_down_time)"]
 			} elseif { $i == $master_site } {
 				set state($i) MASTER
 				set prog_args($i) [concat $prog_args($i) "-M"]
@@ -518,7 +588,7 @@ proc db_reptest_int { cfgtype { restoredir NULL } } {
 	puts "Test run complete.  Verify."
 
 	# Verify the test run.
-	verify_db_reptest $use(nsites) dirs use $kill_site $site_remove
+	verify_db_reptest $cfgtype $use(nsites) dirs use $kill_site $site_remove
 
 	# Show the summary files
 	print_summary
@@ -605,6 +675,8 @@ proc reptest_make_config { cfgtype dirsarr starr usearr \
 				set done 1
 			}
 		}
+	} elseif { $cfgtype == "master_switch" } {
+		set ackpolicy db_repmgr_acks_quorum
 	} else {
 		set ackpolicy db_repmgr_acks_one
 	}
@@ -687,9 +759,22 @@ proc reptest_make_config { cfgtype dirsarr starr usearr \
 		# Add heartbeat_monitor.  Calculate value based on number of
 		# sites to reduce spurious heartbeat expirations.
 		#
-		lappend cfglist { "rep_set_timeout" \
-		    "db_rep_heartbeat_monitor \
-		    [expr $use(nsites) * 500000 * $os_tbase]" }
+		if { $cfgtype == "master_switch" } {
+			#
+			# Larger numbers of databases can cause more
+			# rerequests and longer waits.  Calculate this
+			# into the heartbeat monitor to avoid dupmasters
+			# and unexpected changes of master.
+			#
+			lappend cfglist { "rep_set_timeout" \
+			    "db_rep_heartbeat_monitor \
+			    [expr ($use(ms_databases) + $use(nsites)) \
+			    * 500000 * $os_tbase]" }
+		} else {
+			lappend cfglist { "rep_set_timeout" \
+			    "db_rep_heartbeat_monitor \
+			    [expr $use(nsites) * 500000 * $os_tbase]" }
+		}
 
 		#
 		# Add datadirs and the metadir, if needed.  If we are using
@@ -771,6 +856,14 @@ proc reptest_make_config { cfgtype dirsarr starr usearr \
 				lappend cfglist { "rep_set_config" \
 				"db_rep_conf_elect_loglength" }
 			}
+		} elseif { $cfgtype == "master_switch" } {
+			set limit_sz [berkdb random_int 15000 1000000]
+			# Always turn on bulk for master switch.
+			lappend cfglist \
+			    { "rep_set_config" "db_rep_conf_bulk" }
+			# Always turn off 2site_strict for master switch.
+			lappend cfglist { "rep_set_config" \
+			    "db_repmgr_conf_2site_strict off" }
 		} else {
 			set limit_sz 100000
 		}
@@ -839,6 +932,9 @@ proc reptest_make_config { cfgtype dirsarr starr usearr \
 			puts $cid "$carg $cval"
 		}
 		close $cid
+
+		setup_repmgr_ssl $dirs(env.$i)
+
 		set cid [open $dirs(env.$i)/DB_CONFIG r]
 		set cfg [read $cid]
 		close $cid
@@ -919,7 +1015,7 @@ proc db_reptest_blob_cmp_func { a b } {
 	return [expr $a - $b]
 }
 
-proc verify_db_reptest { num_sites dirsarr usearr kill site_rem } {
+proc verify_db_reptest { cfgtype num_sites dirsarr usearr kill site_rem } {
 	upvar $dirsarr dirs
 	upvar $usearr use
 
@@ -988,13 +1084,24 @@ proc verify_db_reptest { num_sites dirsarr usearr kill site_rem } {
 		puts "Compare $dirs(env.$startenv) with $dirs(env.$i)"
 		#
 		# Compare 2 envs.  We assume the name of the database that
-		# db_reptest creates and know it is 'am1.db'.
+		# db_reptest creates and know it is 'am1.db' or 'amarr#.db'.
 		# We want as other args:
 		# 0 - compare_shared_portion
 		# 1 - match databases
 		# 0 - don't compare logs (for now)
-		rep_verify $dirs(env.$startenv) $envbase $dirs(env.$i) $cmpenv \
-		    0 1 0 am1.db $datadir $bt_cmp $ham_cmp
+		if { $cfgtype == "master_switch" } {
+			# Compare multiple databases for master_switch.
+			for { set j 0 } { $j < $use(ms_databases) } { incr j } {
+				rep_verify $dirs(env.$startenv) $envbase \
+				    $dirs(env.$i) $cmpenv 0 1 0 amarr$j.db \
+				    $datadir $bt_cmp $ham_cmp
+			}	
+		} else {
+			# Compare single database for all other cases.
+			rep_verify $dirs(env.$startenv) $envbase \
+			    $dirs(env.$i) $cmpenv 0 1 0 am1.db $datadir \
+			    $bt_cmp $ham_cmp
+		}
 		$cmpenv close
 	}
 	$envbase close
@@ -1047,6 +1154,9 @@ puts "Getting random nsites between 2 and $maxsites.  Got $n, last_nsites $last_
 	if { $cfgtype == "basic1" } {
 		return 3
 	}
+	if { $cfgtype == "master_switch" } {
+		return 2
+	}
 	return -1
 }
 
@@ -1092,6 +1202,9 @@ proc get_lease { cfgtype twosite restoredir } {
 		return 0
 	}
 	if { $cfgtype == "basic1" } {
+		return 0
+	}
+	if { $cfgtype == "master_switch" } {
 		return 0
 	}
 }
@@ -1222,7 +1335,8 @@ proc get_kill { cfgtype restoredir num_sites basept } {
 		}
 		return [list $ktype $ksite $rsite]
 	}
-	if { $cfgtype == "basic0" || $cfgtype == "basic1" } {
+	if { $cfgtype == "basic0" || $cfgtype == "basic1" || \
+	    $cfgtype == "master_switch" } {
 		return $nokill
 	} else {
 		error "Get_kill: Invalid config type $cfgtype"
@@ -1309,6 +1423,9 @@ proc get_usemaster { cfgtype twosite } {
 	if { $cfgtype == "basic1" } {
 		return 0
 	}
+	if { $cfgtype == "master_switch" } {
+		return 1
+	}
 }
 
 #
@@ -1330,13 +1447,16 @@ proc get_mastersite { cfgtype usemaster nsites } {
 	if { $cfgtype == "basic1" } {
 		return 0
 	}
+	if { $cfgtype == "master_switch" } {
+		return 1
+	}
 }
 
 #
 # If we are using a master, use no elections 20% of the time.
 #
-proc get_noelect { usemaster } {
-	if { $usemaster } {
+proc get_noelect { cfgtype usemaster } {
+	if { $cfgtype != "master_switch" && $usemaster } {
 		set noelect { 0 0 1 0 0 }
 		set len [expr [llength $noelect] - 1]
 		set i [berkdb random_int 0 $len]
@@ -1419,7 +1539,8 @@ proc get_hosts { cfgtype nsites ipconfig } {
 		set hoststr $v4str
 	}
 
-	if { $cfgtype == "random" || $cfgtype == "restore" } {
+	if { $cfgtype == "random" || $cfgtype == "restore" || \
+	    $cfgtype == "master_switch" } {
 		# Fill in the initial array.
 		for { set i 1 } { $i <= $nsites } { incr i } {
 			lappend hosts $hoststr
@@ -1529,6 +1650,9 @@ proc get_view { cfgtype restoredir master_site second_master nsites kill_self} {
 	if { $cfgtype == "basic1" } {
 		return 3
 	}
+	if { $cfgtype == "master_switch" } {
+		return 0
+	}
 	if { $cfgtype == "random" } {
 		if { $nsites == 2 } {
 			return 0
@@ -1566,7 +1690,10 @@ proc get_view { cfgtype restoredir master_site second_master nsites kill_self} {
 #
 # Return a site number for autotakeover or 0 for no autotakeover.
 #
-proc get_autotakeover { kill remove view viewsite nsites pmkill } {
+proc get_autotakeover { cfgtype kill remove view viewsite nsites pmkill } {
+	if { $cfgtype == "master_switch" } {
+		return 0
+	}
 	set autotakeover 0
 	#
 	# Do not combine autotakeover with a kill or remove test because that
@@ -1618,10 +1745,13 @@ proc get_workers { cfgtype lease twosite blobs} {
 	if { $cfgtype == "basic0" || $cfgtype == "basic1" } {
 		return 5
 	}
+	if { $cfgtype == "master_switch" } {
+		return [berkdb random_int 2 8]
+	}
 }
 
 proc get_dbtype { cfgtype } {
-	if { $cfgtype == "random" } {
+	if { $cfgtype == "random" || $cfgtype == "master_switch" } {
 		#
 		# 50% btree, 25% queue 12.5% hash 12.5% recno
 		# We favor queue only because there is special handling
@@ -1656,6 +1786,7 @@ proc get_blobs { cfgtype dbtype } {
 
 proc get_runtime { cfgtype nsites useleases useblobs } {
 	global os_tbase
+	global use
 
 	if { $cfgtype == "random" } {
 		set min 100
@@ -1684,6 +1815,10 @@ proc get_runtime { cfgtype nsites useleases useblobs } {
 	if { $cfgtype == "basic1" } {
 		return [expr 150 * $os_tbase]
 	}
+	if { $cfgtype == "master_switch" } {
+		return [expr \
+		    ($use(ms_switches) + 1) * $use(ms_master_time) + 30]
+	}
 }
 
 #
@@ -1701,7 +1836,7 @@ proc get_rsites { i num_sites known_master cfgtype} {
 		set rindex [berkdb random_int 0 $len]
 		set rporttype [lindex $types $rindex]
 	}
-	if { $cfgtype == "basic0" } {
+	if { $cfgtype == "basic0" || $cfgtype == "master_switch" } {
 		set rporttype onesite
 	}
 	if { $cfgtype == "basic1" } {

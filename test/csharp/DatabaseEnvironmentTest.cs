@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -1589,6 +1589,7 @@ namespace CsharpAPITest
 			  "Txn version",
 			  "Creation time",
 			  "Environment ID",
+			  "Local Environment ID",
 			  "Primary region allocation and reference count mutex [0/4 0% !Own], env region (alloc)",
 			  "References",
 			  "Current region size",
@@ -1666,6 +1667,7 @@ namespace CsharpAPITest
 			  "Txn version",
 			  "Creation time",
 			  "Environment ID",
+			  "Local Environment ID",
 			  "Primary region allocation and reference count mutex [0/4 0% !Own], env region (alloc)",
 			  "References",
 			  "Current region size",

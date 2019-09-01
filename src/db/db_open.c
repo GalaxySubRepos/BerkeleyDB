@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -608,7 +608,7 @@ __db_meta_setup(env, dbp, name, meta, oflags, flags)
 	if (!LF_ISSET(DB_SKIP_CHK) &&
 	    (ret = __db_chk_meta(env, dbp, meta, flags)) != 0) {
 		if (ret == DB_META_CHKSUM_FAIL)
-			__db_errx(env, DB_STR_A("0640",
+			__db_errx(env, DB_STR_A("0210",
 			    "%s: metadata page checksum error", "%s"), name);
 		goto bad_format;
 	}
@@ -741,7 +741,7 @@ __db_get_metaflags(env, name, metaflagsp)
 	if (FLD_ISSET(*metaflagsp, DBMETA_SLICED))
 		ret = __env_no_slices(env);
 #endif
-		
+
 	return (ret);
 }
 

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1005,7 +1005,7 @@ __env_rep_enter(env, checklock)
 		 * the timestamp.
 		 */
 		if (F_ISSET(renv, DB_REGENV_REPLOCKED))
-			return (EINVAL);
+			return (DB_REP_LOCKOUT);
 	}
 
 	REP_SYSTEM_LOCK(env);
@@ -1178,7 +1178,7 @@ __db_rep_enter(dbp, checkgen, checklock, return_now)
 		 * the timestamp.
 		 */
 		if (F_ISSET(renv, DB_REGENV_REPLOCKED))
-			return (EINVAL);
+			return (DB_REP_LOCKOUT);
 	}
 
 	/*
@@ -1283,7 +1283,7 @@ __op_rep_enter(env, local_nowait, obey_user)
 		if (local_nowait)
 			return (DB_REP_LOCKOUT);
 		if (FLD_ISSET(rep->config, REP_C_NOWAIT) && obey_user) {
-			__db_errx(env, DB_STR("3509",
+			__db_errx(env, DB_STR("3504",
     "Operation locked out.  Waiting for replication lockout to complete"));
 			return (DB_REP_LOCKOUT);
 		}

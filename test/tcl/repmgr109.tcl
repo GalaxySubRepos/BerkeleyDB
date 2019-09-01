@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr109
 # TEST Test repmgr's internal juggling of peer EID's.
@@ -55,6 +55,11 @@ proc repmgr109_sub { {a_too false} {while_active true} } {
 	make_dbconfig $dira $dbc
 	make_dbconfig $dirb $dbc
 	make_dbconfig $dirc $dbc
+
+	setup_repmgr_ssl $dirm
+	setup_repmgr_ssl $dira
+	setup_repmgr_ssl $dirb
+	setup_repmgr_ssl $dirc
 
 	puts "\tRepmgr$tnum.a: Create a master and first two clients."
 	set cmds {

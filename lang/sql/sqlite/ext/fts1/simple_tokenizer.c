@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** The author disclaims copyright to this source code.
 **
 *************************************************************************
@@ -138,7 +144,7 @@ static int simpleNext(
         ** case-insensitivity.
         */
         char ch = c->pCurrent[ii];
-        c->zToken[ii] = (unsigned char)ch<0x80 ? tolower(ch) : ch;
+        c->zToken[ii] = (unsigned char)ch<0x80 ? tolower((unsigned char)ch):ch;
       }
       c->zToken[n] = '\0';
       *ppToken = c->zToken;

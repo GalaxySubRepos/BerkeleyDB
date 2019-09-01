@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1520,6 +1520,9 @@ int DbEnv::repmgr_set_socket(int (*approval_func)(DbEnv *,
 
 	return (ret);
 }
+
+DBENV_METHOD(repmgr_set_ssl_config,
+    (int which, char *value), (dbenv, which, value))
 
 int DbEnv::repmgr_channel(int eid, DbChannel **dbchannel, u_int32_t flags)
 {

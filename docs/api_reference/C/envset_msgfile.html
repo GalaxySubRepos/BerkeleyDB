@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_msgfile()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_msgfile()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_msgcall.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_msgfile"></a>DB_ENV-&gt;set_msgfile()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_msgfile"></a>
+        <span>DB_ENV-&gt;set_msgfile()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -46,12 +52,21 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
          There are interfaces in the Berkeley DB library which either directly
          output informational messages or statistical information, or configure
          the library to output such messages when performing other operations,
-         for example, <a class="xref" href="envset_verbose.html" title="DB_ENV-&gt;set_verbose()">DB_ENV-&gt;set_verbose()</a>  and
-         <a class="xref" href="envstat.html" title="DB_ENV-&gt;stat_print()">DB_ENV-&gt;stat_print()</a>.
+         for example, <a class="xref" href="envset_verbose.html" title="DB_ENV-&gt;set_verbose()">
+        <span>DB_ENV-&gt;set_verbose()</span>
+        
+    </a>  and
+         <a class="xref" href="envstat.html" title="DB_ENV-&gt;stat_print()">
+        <span>DB_ENV-&gt;stat_print()</span>
+        
+    </a>.
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_msgfile()</code> and 
-         <a class="xref" href="dbset_msgfile.html" title="DB-&gt;set_msgfile()">DB-&gt;set_msgfile()</a>  methods
+         <a class="xref" href="dbset_msgfile.html" title="DB-&gt;set_msgfile()">
+        <span>DB-&gt;set_msgfile()</span>
+        
+    </a>  methods
          are used to display these messages for the application. In this case
          the message will include a trailing &lt;newline&gt; character.
     </p>
@@ -63,8 +78,14 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
          Alternatively, you can use the
             
 
-         <a class="xref" href="envset_msgcall.html" title="DB_ENV-&gt;set_msgcall()">DB_ENV-&gt;set_msgcall()</a>  or
-         <a class="xref" href="dbset_msgcall.html" title="DB-&gt;set_msgcall()">DB-&gt;set_msgcall()</a>
+         <a class="xref" href="envset_msgcall.html" title="DB_ENV-&gt;set_msgcall()">
+        <span>DB_ENV-&gt;set_msgcall()</span>
+        
+    </a>  or
+         <a class="xref" href="dbset_msgcall.html" title="DB-&gt;set_msgcall()">
+        <span>DB-&gt;set_msgcall()</span>
+        
+    </a>
          methods to capture the additional error information in a way that does
          not use C library FILE *'s.
          
@@ -82,7 +103,7 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232868048"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113485234304"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -90,7 +111,7 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815232867344"></a>msgfile</h4>
+                <h4 class="title"><a id="idm140113485245824"></a>msgfile</h4>
               </div>
             </div>
           </div>
@@ -104,7 +125,7 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232864560"></a>Class</h3>
+              <h3 class="title"><a id="idm140113485242208"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -116,7 +137,7 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232881728"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113485273056"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -136,11 +157,17 @@ DB_ENV-&gt;set_msgfile(DB_ENV *dbenv, FILE *msgfile);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_msgpfx.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_msgcall() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_msgcall()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_msgpfx()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_msgpfx()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

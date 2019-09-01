@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include <errno.h>
@@ -18,6 +18,7 @@ extern int __env_encrypt_adj_size(DB_ENV *, size_t, size_t *);
 extern int __env_decrypt(DB_ENV *, u_int8_t *, u_int8_t *, size_t);
 extern int __env_ref_get(DB_ENV *, u_int32_t *);
 extern int __os_closehandle(ENV *, DB_FH *);
+extern int __os_cpu_count(void);
 extern int __os_dirlist(ENV *, const char *, int, char ***, int *);
 extern void __os_dirfree(ENV *, char **, int);
 extern int __os_exists(ENV *, const char *, int *);
@@ -31,6 +32,7 @@ extern int __os_open(ENV *, const char *, u_int32_t, u_int32_t, int, DB_FH **);
 extern int __os_read(ENV *, DB_FH *, void *, size_t, size_t *);
 extern int __os_rename(ENV *, const char *, const char *, u_int32_t);
 extern int __os_seek(ENV *, DB_FH *, db_pgno_t, u_int32_t, off_t);
+extern void __os_stack_text(const ENV *, char *, size_t, unsigned, unsigned);
 extern int __os_unlink(ENV *, const char *, int);
 extern int __os_write(ENV *, DB_FH *, void *, size_t, size_t *);
 extern void __os_yield(ENV *, u_long, u_long);
@@ -49,6 +51,17 @@ extern void __os_yield(ENV *, u_long, u_long);
 #define	CURSOR_BUFSIZE	32 /* For holding index keys. */
 /* This should match SQLite VFS.mxPathname */
 #define	BT_MAX_PATH 512
+
+/*
+ * Sizes for save error information:
+ *	ERR_SAVE_SIZE is the fixed size of the save error message buffer in
+ *	BtShared.err_msg.  Allocating it just once eliminates the problems which
+ *	occur in the sqlite do_malloc_tests; which use faultsimConfig to test
+ *	every malloc failure error path (for a few test scripts).
+ *	ERRFILE_SAVE_SIZE is used for BtShared.err_file.
+ */
+#define ERR_SAVE_SIZE		1024
+#define ERRFILE_SAVE_SIZE	BT_MAX_PATH
 
 #define BT_MAX_SEQ_NAME 128
 
@@ -199,16 +212,16 @@ typedef enum { BDBSQL_REP_CLIENT, BDBSQL_REP_MASTER, BDBSQL_REP_UNKNOWN } rep_si
 /* Declarations for functions that are shared by adapter source files. */
 int btreeBeginTransInternal(Btree *p, int wrflag);
 void *btreeCreateIndexKey(BtCursor *pCur);
-void btreeGetErrorFile(const BtShared *pBt, char *fname);
+int btreeSetErrorFile(BtShared *pBt, const char *fname);
+void btreeGetErrorFile(BtShared *pBt, char *errname);
 Index *btreeGetIndex(Btree *p, int iTable);
-int btreeGetPageCount(Btree *p, int **tables, u32 *pageCount, DB_TXN *txn);
+int btreeGetPageCount(Btree *p, int **tables, u32 *pageCount, u32 *free, DB_TXN *txn);
 int btreeGetUserTable(Btree *p, DB_TXN *pTxn, DB **pDb, int iTable);
 int btreeGetTables(Btree *, int **, DB_TXN *);
 int btreeLockSchema(Btree *p, lock_mode_t lockMode);
 int btreeOpenEnvironment(Btree *p, int needLock);
 int btreeOpenMetaTables(Btree *p, int *pCreating);
 int btreeReopenEnvironment(Btree *p, int removingRep);
-int btreeUpdateBtShared(Btree *p, int needLock);
 #ifndef SQLITE_OMIT_VACUUM
 int btreeIncrVacuum(Btree *p, u_int32_t *truncatedPages);
 int btreeVacuum(Btree *p, char **pzErrMsg);
@@ -271,15 +284,46 @@ void btreeHandleDbError(
 int getMetaDataFileName(const char *full_name, char **filename);
 #endif
 
+/*
+ * BtShared --
+ *	This is the BDBSQL shared data struct that 'controls' a BDB environment.
+ *	Every Btree that refers to a sqlite table in an environment shares a
+ *	pointer to this struct.
+ *	
+ *	Many of its fields are useful only for DB_STORE_NAMED databases.
+ *
+ *	The full_name field is the unique key for this struct. (At one time, the
+ *	unique 20 byte fileid of the BDB SQL master DB was used as the key.
+ *	Unfortunately, there is no fileid until the DB exists, so that had a
+ *	race condition with simultaneous opens of a not-yet-existing db. #26708)
+ *
+ *	Most of its character strings are allocated from sqlite3 malloc memory,
+ *	as from sqlite3_strdup().
+ */
 struct BtShared {
-	char *dir_name;
-	char *full_name;
-	char *short_name; /* A pointer into orig_name memory. */
-	char *orig_name;
+	/* These four fields are null unless dbStorage == DB_STORE_NAMED. */
+	char *full_name;	/* Full path to the container DB file. */
+	char *dir_name;		/* Environment home: full_name + "-journal". */
+	char *orig_name;	/* 'User' name, e.g. from dbsql command line */
+	char *short_name;	/* Points after last path-sep. of orig_name. */
+
+	/*
+	 * BDBSQL installs btreeHandleDbError to write messages to either:
+	 *	- the filename mentioned in the bdbsql_error_file pragma, or
+	 *	- sql-errors.txt in the %s-journal.db if DB_STORE_NAMED, or
+	 *	- sql-errors.txt in the current directory, for other stores, or
+	 *	- stderr if nowhere else can be written.
+	 * Any changes to err_file and err_fp should be protected by err_mutex.
+	 * The BtShared 'constructor' allocates err_msg.  This avoids needing to
+	 * allocate memory for the message body while handling an error -- that
+	 * would be problematic for failures during memory allocation.
+	 */
 	char *err_file;
+	FILE *err_fp;
+	sqlite3_mutex *err_mutex;
 	char *err_msg;
-	char *master_address; /* Address of the replication master. */
-	u_int8_t fileid[DB_FILE_ID_LEN];
+
+	char *master_address;	/* Address of the replication master. */
 	char *encrypt_pwd;
 	lsn_reset_t lsn_reset;
 	storage_mode_t dbStorage;
@@ -300,7 +344,6 @@ struct BtShared {
 	Hash db_cache;
 #ifdef BDBSQL_SHARE_PRIVATE
 	LockFileInfo lockfile;
-	u_int32_t mp_mutex_count;
 #endif
 	/*
 	 * A unique name is assigned to each in memory table. This value is
@@ -332,9 +375,9 @@ struct BtShared {
 	sqlite3_mutex *mutex;
 	BtCursor *first_cursor;
 
-	/* Fields used to maintain the linked list of shared objects. */
-	BtShared *pNextDb;
-	BtShared *pPrevDb;
+	/* These store the linked list of shared DB_STORE_NAMED objects. */
+	BtShared *pNextBtS;
+	BtShared *pPrevBtS;
 	Btree *btrees; /* A linked list of btrees that have been opened in this BtShared. */
 	int nRef;
 	int readonly;
@@ -358,7 +401,7 @@ struct BtCursor {
 	DB_TXN *txn;
 	struct KeyInfo *keyInfo;
 	enum {
-		CURSOR_INVALID, CURSOR_VALID, CURSOR_REQUIRESEEK, CURSOR_FAULT
+		CURSOR_INVALID, CURSOR_VALID, CURSOR_REQUIRESEEK, CURSOR_FAULT, CURSOR_SKIPNEXT
 	} eState;
 	int error, lastRes;
 	i64 cachedRowid, savedIntKey, lastKey;
@@ -433,7 +476,7 @@ typedef enum {
 #endif
 
 #ifdef NDEBUG
-#define	log_msg(...)
+#define	log_msg(...)	do { } while (0)
 #else
 /* Utility functions. */
 void log_msg(loglevel_t level, const char *fmt, ...);

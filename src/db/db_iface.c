@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -2145,7 +2145,7 @@ __db_associate_foreign_arg(fdbp, dbp, callback, flags)
 	}
 	if (FLD_ISSET(dbp->open_flags, DB_SLICED) ||
 	    FLD_ISSET(fdbp->open_flags, DB_SLICED)) {
-	    	__db_errx(env,
+		__db_errx(env,
 		    "DB->associate_foreign does not support sliced databases.");
 		return (EINVAL);
 	}
@@ -2232,6 +2232,7 @@ __dbc_close_pp(dbc)
 	}
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 
 	/* Check for replication block. */
 	handle_check = !IS_REAL_TXN(dbc->txn) && IS_ENV_REPLICATED(env);
@@ -2300,6 +2301,7 @@ __dbc_cmp_pp(dbc, other_cursor, result, flags)
 	}
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 	ret = __dbc_cmp(dbc, other_cursor, result);
 	ENV_LEAVE(env, ip);
 	return (ret);
@@ -2339,6 +2341,7 @@ __dbc_count_pp(dbc, recnop, flags)
 		return (__db_curinval(env));
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 	ret = __dbc_count(dbc, recnop);
 	ENV_LEAVE(env, ip);
 	return (ret);
@@ -2367,6 +2370,7 @@ __dbc_del_pp(dbc, flags)
 		return (ret);
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 
 	/* Check for consistent transaction usage. */
 	if ((ret = __db_check_txn(dbp, dbc->txn, dbc->locker, 0)) != 0)
@@ -2451,6 +2455,7 @@ __dbc_dup_pp(dbc, dbcp, flags)
 		return (__db_ferr(env, "DBcursor->dup", 0));
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 	rep_blocked = 0;
 	if (dbc->txn == NULL && IS_ENV_REPLICATED(env)) {
 		if ((ret = __op_rep_enter(env, 1, 1)) != 0)
@@ -2501,6 +2506,7 @@ __dbc_get_pp(dbc, key, data, flags)
 	}
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 
 	DEBUG_LREAD(dbc, dbc->txn, "DBcursor->get",
 	    flags == DB_SET || flags == DB_SET_RANGE ? key : NULL, NULL, flags);
@@ -2634,7 +2640,7 @@ err:		__dbt_userfree(env, key, NULL, data);
 	if ((ret = __dbt_ferr(dbp, "key", key, 0)) != 0)
 		return (ret);
 	if (F_ISSET(data, DB_DBT_READONLY)) {
-		__db_errx(env, DB_STR("0620",
+		__db_errx(env, DB_STR("0584",
 		    "DB_DBT_READONLY should not be set on data DBT."));
 			return (EINVAL);
 	}
@@ -2665,7 +2671,7 @@ err:		__dbt_userfree(env, key, NULL, data);
 	/* Check compatible flags for partial key. */
 	if (F_ISSET(key, DB_DBT_PARTIAL) && (flags == DB_GET_BOTH ||
 	    flags == DB_GET_BOTH_RANGE || flags == DB_SET)) {
-		__db_errx(env, DB_STR("0710",
+		__db_errx(env, DB_STR("0708",
 		    "Invalid positioning flag combined with DB_DBT_PARTIAL"));
 		return (EINVAL);
 	}
@@ -2766,6 +2772,7 @@ __dbc_pget_pp(dbc, skey, pkey, data, flags)
 	}
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 	DEBUG_LREAD(dbc, dbc->txn, "DBcursor->pget",
 	    flags == DB_SET ||
 	    flags == DB_SET_RANGE ? skey : NULL, NULL, flags);
@@ -2807,7 +2814,7 @@ __dbc_pget_arg(dbc, pkey, flags)
 	}
 
 	if (LF_ISSET(DB_MULTIPLE | DB_MULTIPLE_KEY)) {
-		__db_errx(env, DB_STR("0625",
+		__db_errx(env, DB_STR("0602",
     "DB_MULTIPLE and DB_MULTIPLE_KEY may not be used on secondary indices"));
 		return (EINVAL);
 	}
@@ -2852,7 +2859,7 @@ __dbc_pget_arg(dbc, pkey, flags)
 
 	/* But the pkey field can't be NULL if we're doing a DB_GET_BOTH. */
 	if (pkey == NULL && (flags & DB_OPFLAGS_MASK) == DB_GET_BOTH) {
-		__db_errx(env, DB_STR("0627",
+		__db_errx(env, DB_STR("0603",
 		    "DB_GET_BOTH on a secondary index requires a primary key"));
 		return (EINVAL);
 	}
@@ -2886,6 +2893,7 @@ __dbc_put_pp(dbc, key, data, flags)
 	}
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 
 	/* Check for consistent transaction usage. */
 	if ((ret = __db_check_txn(dbp, dbc->txn, dbc->locker, 0)) != 0)

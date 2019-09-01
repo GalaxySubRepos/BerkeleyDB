@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- * 
  * Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+ * 
+ * See the file LICENSE for license information.
  *
  */
 
@@ -63,6 +63,10 @@ public class EnvRegionSizeTest {
         envc.setRegionMemoryInitialSize(RegionResourceType.LOG_ID, 1024);
         envc.setRegionMemoryInitialSize(RegionResourceType.TRANSACTION, 1024);
         envc.setRegionMemoryInitialSize(RegionResourceType.THREAD, 1024);
+        envc.setRegionMemoryInitialSize(RegionResourceType.DATABASE, 8);
+        envc.setRegionMemoryInitialSize(RegionResourceType.DATABASE_LENGTH, 150);
+        envc.setRegionMemoryInitialSize(RegionResourceType.EXTFILE_DATABASE, 20);
+        envc.setRegionMemoryInitialSize(RegionResourceType.REP_SITE, 3);
         
         /* Check to see that they "stuck" before opening env. */
         assertEquals(
@@ -77,6 +81,14 @@ public class EnvRegionSizeTest {
         envc.getRegionMemoryInitialSize(RegionResourceType.TRANSACTION), 1024);
         assertEquals(
         envc.getRegionMemoryInitialSize(RegionResourceType.THREAD), 1024);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.DATABASE), 8);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.DATABASE_LENGTH), 150);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.EXTFILE_DATABASE), 20);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.REP_SITE), 3);
 
         Environment dbEnv = new Environment(TestUtils.BASETEST_DBFILE, envc);
 
@@ -93,6 +105,14 @@ public class EnvRegionSizeTest {
         envc.getRegionMemoryInitialSize(RegionResourceType.TRANSACTION), 1024);
         assertEquals(
         envc.getRegionMemoryInitialSize(RegionResourceType.THREAD), 1024);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.DATABASE), 8);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.DATABASE_LENGTH), 150);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.EXTFILE_DATABASE), 20);
+        assertEquals(
+        envc.getRegionMemoryInitialSize(RegionResourceType.REP_SITE), 3);
     }
 
     @Test public void testLockTableSize()

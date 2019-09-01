@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -213,7 +213,9 @@ namespace CsharpAPITest
 			rsite = mEnv.RepMgrRemoteSites;
 			Assert.AreEqual(2, rsite.Length);
 			Assert.AreEqual(true, rsite[0].isView);
+			Assert.AreEqual(false, rsite[0].isElectable);
 			Assert.AreEqual(true, rsite[1].isView);
+			Assert.AreEqual(false, rsite[1].isElectable);
 			repstats = cEnv1.ReplicationSystemStats();
 			Assert.AreEqual(true, repstats.View);
 			repstats = cEnv2.ReplicationSystemStats();
@@ -699,6 +701,9 @@ namespace CsharpAPITest
 		{
 			switch (eventCode)
 			{
+				case NotificationEvent.REP_AUTOTAKEOVER:
+				Console.WriteLine("Event: REP_AUTOTAKEOVER");
+					break;
 				case NotificationEvent.REP_AUTOTAKEOVER_FAILED:
 				Console.WriteLine("Event: REP_AUTOTAKEOVER_FAILED");
 					break;

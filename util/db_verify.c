@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -27,11 +27,11 @@ main(argc, argv)
 {
 	extern char *optarg;
 	extern int optind;
-	DB *dbp, *dbp1;
+	DB *dbp;
 	DB_ENV *dbenv;
 	u_int32_t flags, cache;
 	int ch, exitval, mflag, nflag, private;
-	int quiet, resize, ret;
+	int quiet, ret;
 	char *blob_dir, *dname, *fname, *home, *passwd;
 
 	progname = __db_util_arg_progname(argv[0]);
@@ -41,7 +41,11 @@ main(argc, argv)
 
 	dbenv = NULL;
 	dbp = NULL;
-	cache = MEGABYTE;
+	/*
+	 * If db_verify creates a private environment, use a 10MB cache
+	 * so that we don't fail when verifying large databases.
+	 */
+	cache = 10 * MEGABYTE;
 	mflag = nflag = quiet = 0;
 	flags = 0;
 	exitval = EXIT_SUCCESS;
@@ -62,8 +66,8 @@ main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'o':
 			LF_SET(DB_NOORDERCHK);
@@ -94,7 +98,7 @@ main(argc, argv)
 	 * Create an environment object and initialize it for error
 	 * reporting.
 	 */
-retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
+	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 		fprintf(stderr,
 		    "%s: db_env_create: %s\n", progname, db_strerror(ret));
 		goto err;
@@ -128,12 +132,12 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 		goto err;
 	}
 	/*
-	 * Attach to an mpool if it exists, but if that fails, attach to a
-	 * private region.  In the latter case, declare a reasonably large
-	 * cache so that we don't fail when verifying large databases.
+	 * Try to attach to an existing environment -- and its associated
+	 * mpool. This lets db_verify access the most up-to-date version of
+	 * the database's pages.
 	 */
-	if (__db_util_env_open(dbenv, home, DB_INIT_MPOOL,
-	    1, DB_INIT_MPOOL, cache, &private) != 0)
+	if (__db_util_env_open(dbenv,
+	    home, DB_INIT_MPOOL, 1, DB_INIT_MPOOL, cache, &private) != 0)
 		goto err;
 
 	/*
@@ -162,54 +166,6 @@ retry:	if ((ret = db_env_create(&dbenv, 0)) != 0) {
 			goto err;
 		}
 
-		/*
-		 * We create a 2nd dbp to this database to get its pagesize
-		 * because the dbp we're using for verify cannot be opened.
-		 *
-		 * If the database is corrupted, we may not be able to open
-		 * it, of course.  In that case, just continue, using the
-		 * cache size we have.
-		 */
-		if (private) {
-			if ((ret = db_create(&dbp1, dbenv, 0)) != 0) {
-				dbenv->err(
-				    dbenv, ret, "%s: db_create", progname);
-				goto err;
-			}
-
-			if (TXN_ON(dbenv->env) && (ret =
-			    dbp1->set_flags(dbp1, DB_TXN_NOT_DURABLE)) != 0) {
-				dbenv->err(
-				    dbenv, ret, "%s: db_set_flags", progname);
-				goto err;
-			}
-
-			ret = dbp1->open(dbp1,
-			    NULL, fname, dname, DB_UNKNOWN, DB_RDONLY, 0);
-
-			/*
-			 * If we get here, we can check the cache/page.
-			 * !!!
-			 * If we have to retry with an env with a larger
-			 * cache, we jump out of this loop.  However, we
-			 * will still be working on the same argv when we
-			 * get back into the for-loop.
-			 */
-			if (ret == 0) {
-				if (__db_util_cache(
-				    dbp1, &cache, &resize) == 0 && resize) {
-					(void)dbp1->close(dbp1, 0);
-					(void)dbp->close(dbp, 0);
-					dbp = NULL;
-
-					(void)dbenv->close(dbenv, 0);
-					dbenv = NULL;
-					goto retry;
-				}
-			}
-			(void)dbp1->close(dbp1, 0);
-		}
-
 		/* The verify method is a destructor. */
 		ret = dbp->verify(dbp, fname, dname, NULL, flags);
 		dbp = NULL;
@@ -228,7 +184,7 @@ err:		exitval = EXIT_FAILURE;
 done:
 	if (dbp != NULL && (ret = dbp->close(dbp, 0)) != 0) {
 		exitval = EXIT_FAILURE;
-		dbenv->err(dbenv, ret, DB_STR("5106", "close"));
+		dbenv->err(dbenv, ret, DB_STR("0164", "close"));
 	}
 	if (dbenv != NULL && (ret = dbenv->close(dbenv, 0)) != 0) {
 		exitval = EXIT_FAILURE;

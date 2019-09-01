@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2001 September 15
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -14,7 +20,11 @@
 ** testing of the SQLite library.
 */
 #include "sqliteInt.h"
-#include "tcl.h"
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -37,7 +47,7 @@ static int test_pagesize = 1024;
 ** new pages after N.  If N is 2096 or bigger, this will test the
 ** ability of SQLite to write to large files.
 */
-static int fake_big_file(
+static int SQLITE_TCLAPI fake_big_file(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -56,12 +66,6 @@ static int fake_big_file(
     return TCL_ERROR;
   }
   if( Tcl_GetInt(interp, argv[1], &n) ) return TCL_ERROR;
-
-  /*
-   * This does not work with Berkeley DB. Making a large file does not cause
-   * DB to skip the existing pages.
-   */
-  return TCL_ERROR;
 
   pVfs = sqlite3_vfs_find(0);
   nFile = (int)strlen(argv[2]);
@@ -90,6 +94,30 @@ static int fake_big_file(
 }
 #endif
 
+
+/*
+** test_control_pending_byte  PENDING_BYTE
+**
+** Set the PENDING_BYTE using the sqlite3_test_control() interface.
+*/
+static int SQLITE_TCLAPI testPendingByte(
+  void *NotUsed,
+  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
+  int argc,              /* Number of arguments */
+  const char **argv      /* Text of each argument */
+){
+  int pbyte;
+  int rc;
+  if( argc!=2 ){
+    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
+                     " PENDING-BYTE\"", (void*)0);
+    return TCL_ERROR;
+  }
+  if( Tcl_GetInt(interp, argv[1], &pbyte) ) return TCL_ERROR;
+  rc = sqlite3_test_control(SQLITE_TESTCTRL_PENDING_BYTE, pbyte);
+  Tcl_SetObjResult(interp, Tcl_NewIntObj(rc));
+  return TCL_OK;
+}
 
 /*
 ** The sqlite3FaultSim() callback:
@@ -137,7 +165,7 @@ static int faultSimCallback(int x){
 ** appended, whenever sqlite3FaultSim() is called.  Or, if SCRIPT is the
 ** empty string, cancel the sqlite3FaultSim() callback.
 */
-static int faultInstallCmd(
+static int SQLITE_TCLAPI faultInstallCmd(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -180,7 +208,7 @@ static int faultInstallCmd(
 ** Invoke the SQLITE_TESTCTRL_BITVEC_TEST operator on test_control.
 ** See comments on sqlite3BitvecBuiltinTest() for additional information.
 */
-static int testBitvecBuiltinTest(
+static int SQLITE_TCLAPI testBitvecBuiltinTest(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -206,7 +234,7 @@ static int testBitvecBuiltinTest(
   rc = sqlite3_test_control(SQLITE_TESTCTRL_BITVEC_TEST, sz, aProg);
   Tcl_SetObjResult(interp, Tcl_NewIntObj(rc));
   return TCL_OK;
-}  
+}
 
 static int t2_tcl_function_stub(
   void *NotUsed,
@@ -245,7 +273,7 @@ int Sqlitetest2_Init(Tcl_Interp *interp){
     { "fake_big_file",           (Tcl_CmdProc*)fake_big_file       },
 #endif
     { "sqlite3BitvecBuiltinTest",(Tcl_CmdProc*)testBitvecBuiltinTest     },
-    { "sqlite3_test_control_pending_byte", (Tcl_CmdProc*)t2_tcl_function_stub },
+    { "sqlite3_test_control_pending_byte",  (Tcl_CmdProc*)t2_tcl_function_stub },
     { "sqlite3_test_control_fault_install", (Tcl_CmdProc*)faultInstallCmd },
   };
   int i;

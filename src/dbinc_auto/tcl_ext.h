@@ -99,6 +99,7 @@ int tcl_MutStat __P((Tcl_Interp *, int, Tcl_Obj * CONST*, DB_ENV *));
 int tcl_MutStatPrint __P((Tcl_Interp *, int, Tcl_Obj * CONST*, DB_ENV *));
 int tcl_MutUnlock __P((Tcl_Interp *, int, Tcl_Obj * CONST*, DB_ENV *));
 int tcl_RepConfig __P((Tcl_Interp *, DB_ENV *, Tcl_Obj *));
+int tcl_RepMgrSSLConfig __P((Tcl_Interp *, DB_ENV *, Tcl_Obj *));
 int tcl_RepGetTwo __P((Tcl_Interp *, DB_ENV *, int));
 int tcl_RepGetConfig __P((Tcl_Interp *, DB_ENV *, Tcl_Obj *));
 int tcl_RepGetTimeout __P((Tcl_Interp *, DB_ENV *, Tcl_Obj *));

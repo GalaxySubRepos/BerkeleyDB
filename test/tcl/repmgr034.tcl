@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -93,6 +93,8 @@ proc repmgr034_sub { method tnum niter nentries} {
 		set verbargs ""
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	set omethod [convert_method $method]
 
 	puts "Repmgr$tnum: Repmgr site removal, clean-up\
@@ -108,7 +110,7 @@ proc repmgr034_sub { method tnum niter nentries} {
 
 	puts "\tRepmgr$tnum.a: Start master"
 	set env0 [eval "berkdb_env -create -errpfx MASTER -home $masterdir \
-	    -txn -rep -thread -recover $privargs $repmemargs $verbargs"]
+	    -txn -rep -thread -recover $privargs $repmemargs $verbargs $sslargs"]
 	$env0 repmgr -timeout {heartbeat_send 500000}
 	$env0 repmgr -local [list $hoststr $port0] -start master
 	error_check_good nsites_A0 [$env0 rep_get_nsites] 1
@@ -119,7 +121,7 @@ proc repmgr034_sub { method tnum niter nentries} {
 	puts "\tRepmgr$tnum.b: Start client1"
 	set env1 [eval "berkdb_env_noerr -create -errpfx CLIENT1 \
 	    -home $clientdir1 -txn -rep -thread -recover -event \
-	    $privargs $repmemargs $verbargs"]
+	    $privargs $repmemargs $verbargs $sslargs"]
 	$env1 repmgr -timeout {heartbeat_monitor 1100000}
 	$env1 repmgr -local [list $hoststr $port1] \
 	    -remote [list $hoststr $port0] -start client
@@ -200,7 +202,7 @@ proc repmgr034_sub { method tnum niter nentries} {
 
 	puts "\tRepmgr$tnum.d: Start client2"
 	set env2 [eval "berkdb_env -create -errpfx CLIENT2  -home $clientdir2 \
-	    -txn -rep -thread -recover -event $privargs $repmemargs $verbargs"]
+	    -txn -rep -thread -recover -event $privargs $repmemargs $verbargs $sslargs"]
 	# It is possible, especially when nentries=0, that we need a delay
 	# before the recently restarted client1 can ack a new site addition.
 	$env2 repmgr -timeout {heartbeat_monitor 1200000}

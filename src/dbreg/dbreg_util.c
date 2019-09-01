@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -37,6 +37,17 @@ __dbreg_add_dbentry(env, dblp, dbp, ndx)
 	ret = 0;
 
 	MUTEX_LOCK(env, dblp->mtx_dbreg);
+#ifdef DEBUG_RECOVER
+	if (dbp != NULL) {
+		char stack[1024];
+
+		__os_stack_text(env, stack, sizeof(stack), 12, 1);
+		__db_msg(env, "dbreg_add %s %s %d %s\n%s", env->db_home,
+		    dbp->fname == NULL ? "in-mem" : dbp->fname, ndx,
+		    IS_REP_MASTER(env) ? "M" : IS_REP_CLIENT(env) ? "C" : "",
+		    stack);
+	}
+#endif
 
 	/*
 	 * Check if we need to grow the table.  Note, ndx is 0-based (the
@@ -78,6 +89,20 @@ __dbreg_rem_dbentry(dblp, ndx)
 {
 	MUTEX_LOCK(dblp->env, dblp->mtx_dbreg);
 	if (dblp->dbentry_cnt > ndx) {
+#ifdef DEBUG_RECOVER
+		DB *dbp = dblp->dbentry[ndx].dbp;
+		ENV *env = dblp->env;
+		char stack[1024];
+
+		dbp = dblp->dbentry[ndx].dbp;
+		env = dblp->env;
+		__os_stack_text(env, stack, sizeof(stack), 12, 1);
+		__db_msg(env, "dbreg_rem %s %s %d %s\n%s", env->db_home,
+		    dbp == NULL ? "no dbp" : dbp->fname == NULL ? "in-mem" :
+		    dbp->fname, ndx,
+		    IS_REP_MASTER(env) ? "M" : IS_REP_CLIENT(env) ? "C" : "",
+		    stack);
+#endif
 		dblp->dbentry[ndx].dbp = NULL;
 		dblp->dbentry[ndx].deleted = 0;
 	}
@@ -436,14 +461,14 @@ __dbreg_id_to_db(env, txn, dbpp, ndx, tryopen)
 			return (ret);
 
 		*dbpp = dblp->dbentry[ndx].dbp;
-		return (*dbpp == NULL ? DB_DELETED : 0);
+		return (*dbpp == NULL ? USR_ERR(env, DB_DELETED) : 0);
 	}
 
 	/*
 	 * Return DB_DELETED if the file has been deleted (it's not an error).
 	 */
 	if (dblp->dbentry[ndx].deleted) {
-		ret = DB_DELETED;
+		ret = USR_ERR(env, DB_DELETED);
 		goto err;
 	}
 
@@ -645,7 +670,7 @@ __dbreg_do_open(env, txn,
 	db_seq_t blob_file_id;
 {
 	DB *dbp;
-	u_int32_t cstat, ret_stat;
+	u_int32_t cstat, open_flags, ret_stat;
 	int ret, t_ret, try_inmem;
 	char *dname, *fname;
 
@@ -696,9 +721,13 @@ retry_inmem:
 	    opcode == DBREG_XREOPEN)
 		F2_SET(dbp, DB2_AM_EXCL|DB2_AM_INTEXCL);
 
+	open_flags = DB_DURABLE_UNKNOWN | DB_ODDFILESIZE;
+	if (txn != NULL && FLD_ISSET(txn->begin_flags, DB_TXN_DISPATCH) &&
+	    FLD_ISSET(env->open_flags, DB_MULTIVERSION) &&
+	     (ftype == DB_BTREE || ftype == DB_HASH))
+		open_flags |= DB_MULTIVERSION;
 	if ((ret = __db_open(dbp, NULL, txn, fname, dname, ftype,
-	    DB_DURABLE_UNKNOWN | DB_ODDFILESIZE,
-	    DB_MODE_600, meta_pgno)) == 0) {
+	    open_flags, DB_MODE_600, meta_pgno)) == 0) {
 skip_open:
 		/*
 		 * Verify that we are opening the same file that we were
@@ -721,7 +750,8 @@ skip_open:
 		 * because there will be no explicit close for this handle and
 		 * we want it to be closed when the transaction ends.
 		 */
-		if (txn != NULL && (ret =
+		if (txn != NULL &&
+		    !FLD_ISSET(txn->begin_flags, DB_TXN_DISPATCH) && (ret =
 		    __txn_record_fname(env, txn, dbp->log_filename)) != 0)
 			goto err;
 		--dbp->log_filename->txn_ref;

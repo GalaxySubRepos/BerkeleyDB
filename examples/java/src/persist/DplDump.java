@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package persist;
@@ -15,7 +14,6 @@ import com.sleepycat.db.DatabaseException;
 import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
 import com.sleepycat.persist.EntityCursor;
-import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.sleepycat.persist.StoreConfig;
 import com.sleepycat.persist.model.EntityMetadata;
@@ -42,7 +40,7 @@ public class DplDump {
             dump.open();
             dump.dump();
             dump.close();
-        } catch (Throwable e) {
+        } catch (DatabaseException | FileNotFoundException e) {
             e.printStackTrace();
             System.exit(1);
         }
@@ -57,20 +55,23 @@ public class DplDump {
                 i += 1;
                 val = args[i];
             }
-            if (name.equals("-h")) {
-                if (val == null) {
-                    usage("No value after -h");
-                }
-                envHome = new File(val);
-            } else if (name.equals("-s")) {
-                if (val == null) {
-                    usage("No value after -s");
-                }
-                storeName = val;
-            } else if (name.equals("-meta")) {
-                dumpMetadata = true;
-            } else {
-                usage("Unknown arg: " + name);
+            switch (name) {
+                case "-h":
+                    if (val == null) {
+                        usage("No value after -h");
+                    }   envHome = new File(val);
+                    break;
+                case "-s":
+                    if (val == null) {
+                        usage("No value after -s");
+                    }   storeName = val;
+                    break;
+                case "-meta":
+                    dumpMetadata = true;
+                    break;
+                default:
+                    usage("Unknown arg: " + name);
+                    break;
             }
         }
 

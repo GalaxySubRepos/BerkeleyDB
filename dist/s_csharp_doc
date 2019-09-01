@@ -7,9 +7,10 @@
 SYSROOT=`echo "$SYSTEMROOT" | sed '#\\#/#g'`
 
 # Build the release version of the C# library.
+# We assume Visual Studio 2010 compiler and solution file.
 cd ../build_windows
-devenv BDB_dotNet.sln /upgrade
-devenv BDB_dotNet.sln /build "Release|Win32"
+# devenv BDB_dotNet.sln /upgrade
+devenv BDB_dotNet_vs2010.sln /build "Release|Win32"
 
 # Build the C# documentation.
 cd ../lang/csharp/doc

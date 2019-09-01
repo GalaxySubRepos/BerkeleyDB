@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2010 November 19
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -256,7 +262,14 @@ int sqlite3demo_superlock(
 
 #ifdef SQLITE_TEST
 
-#include <tcl.h>
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#  ifndef SQLITE_TCLAPI
+#    define SQLITE_TCLAPI
+#  endif
+#endif
 
 struct InterpAndScript {
   Tcl_Interp *interp;
@@ -264,11 +277,11 @@ struct InterpAndScript {
 };
 typedef struct InterpAndScript InterpAndScript;
 
-static void superunlock_del(ClientData cd){
+static void SQLITE_TCLAPI superunlock_del(ClientData cd){
   sqlite3demo_superunlock((void *)cd);
 }
 
-static int superunlock_cmd(
+static int SQLITE_TCLAPI superunlock_cmd(
   ClientData cd,
   Tcl_Interp *interp,
   int objc,
@@ -300,7 +313,7 @@ static int superlock_busy(void *pCtx, int nBusy){
 /*
 ** Tclcmd: sqlite3demo_superlock CMDNAME PATH VFS BUSY-HANDLER-SCRIPT
 */
-static int superlock_cmd(
+static int SQLITE_TCLAPI superlock_cmd(
   ClientData cd,
   Tcl_Interp *interp,
   int objc,

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -789,7 +789,7 @@ __db_set_create_dir(dbp, dir)
 			break;
 
 	if (i == dbenv->data_next) {
-		__db_errx(dbp->env, DB_STR_A("0507",
+		__db_errx(dbp->env, DB_STR_A("1561",
 		    "Directory %s not in environment list.", "%s"), dir);
 		return (EINVAL);
 	}

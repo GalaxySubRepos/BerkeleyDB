@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -654,7 +654,7 @@ cksum:	/*
 		 * This might be a log whose checksum does not include the hdr.
 		 * Try again without the header, either for logs whose version
 		 * is pre-DB_LOGCHKSUM, or for the persist record which contains
-		 * the log version. Check for the zero offset first to avoid
+		 * the log version.  Check for the zero offset first to avoid
 		 * unwanted recursion in __logc_version().
 		 *
 		 * Set the cursor to the LSN we are trying to look at.
@@ -1295,7 +1295,8 @@ __logc_io(logc, fnum, offset, p, nrp, eofp)
 
 	env = logc->env;
 	dblp = env->lg_handle;
-	lp = dblp->reginfo.primary;
+	
+	COMPQUIET(lp, dblp->reginfo.primary);
 
 	/*
 	 * If we've switched files, discard the current file handle and acquire
@@ -1422,6 +1423,11 @@ __logc_set_maxrec(logc, np)
 }
 
 /*
+ * __log_read_record_pp --
+ *	This is an undocumented API: DB_ENV->log_read_record().  It is
+ *	intended to be used for application-specific log record processing, and
+ *	probably nowhere else.
+ *
  * PUBLIC: int __log_read_record_pp  __P((DB_ENV *, DB **, void *, void *,
  * PUBLIC:     DB_LOG_RECSPEC *, u_int32_t, void **));
  */
@@ -1456,6 +1462,25 @@ done:	ENV_LEAVE(dbenv->env, ip);
 }
 
 /*
+ * __log_read_record --
+ *	Deserialize a byte stream from the log's format into a structure
+ *	described by the DB_LOG_RECSPEC, so that a transactionally-protected
+ *	operation can be performed, printed, or log-verified.
+ *
+ *	The caller usually is a small function that is automatically generated
+ *	from the DB_LOG_RECSPEC by dist/s_recover, e.g., __db_addrem_read().
+ *	Those functions are in turn typically named in a REC_INTRO() call.
+ *
+ *	Parameters:
+ *		env	- typical opened environment
+ *		dbpp	- Either NULL or the address of a dbp pointer.  This
+ *			  is an 'out' parameter only for DB_LOG_RECSPEC entries
+ *			  of type LOGREC_DB.
+ *		td	- Either NULL or the relevant TXN_DETAIL *.  This is a
+ *			  void * solely to keep that internal structure
+ *			  definition out of the public API.
+ *		recbuf	- The buffer (a struct) into which the record is read.
+ *
  * PUBLIC: int __log_read_record  __P((ENV *, DB **, void *, void *,
  * PUBLIC:     DB_LOG_RECSPEC *, u_int32_t, void **));
  */
@@ -1488,7 +1513,7 @@ __log_read_record(env, dbpp, td, recbuf, spec, size, argpp)
 	 */
 	if (ap == NULL &&
 	    (ret = __os_malloc(env, size + sizeof(DB_TXN), &ap)) != 0)
-		return (ret);
+		return (USR_ERR(env, ret));
 	txnp = (DB_TXN *)(ap + size);
 	memset(txnp, 0, sizeof(DB_TXN));
 	txnp->td = td;
@@ -1505,7 +1530,7 @@ __log_read_record(env, dbpp, td, recbuf, spec, size, argpp)
 	LOGCOPY_32(env, ap + SSZ(LOG_REC_HEADER, type), bp);
 	bp += sizeof(u_int32_t);
 
-	/* txnp */
+	/* "txnp" -- the actual log bytes are the txn id, not the pointer. */
 	LOGCOPY_32(env, &txnp->txnid, bp);
 	*(DB_TXN **)(ap + SSZ(LOG_REC_HEADER, txnp)) = txnp;
 	bp += sizeof(txnp->txnid);
@@ -1606,7 +1631,7 @@ __log_read_record(env, dbpp, td, recbuf, spec, size, argpp)
 				    (ret = __db_pageswap(env, *dbpp, hdrstart,
 				    hdrsize, has_data == 0 ? NULL :
 				    (DBT *)(ap + sp->offset), 1)) != 0)
-					return (ret);
+					return (USR_ERR(env, ret));
 				break;
 			default:
 				DB_ASSERT(env, sp->type != sp->type);

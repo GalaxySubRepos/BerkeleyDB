@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -174,6 +174,13 @@ __repmgr_start_int(env, nthreads, flags)
 		db_rep->prefmas_init_lsn = lp->lsn;
 		LOG_SYSTEM_UNLOCK(env);
 	}
+
+	/* Setup SSL context for this repmgr node. */
+#if defined(HAVE_REPMGR_SSL)
+	if (IS_REPMGR_SSL_ENABLED(env))
+		if ((ret = __repmgr_set_ssl_ctx(env)) != 0)
+			return (ret);
+#endif	
 
 	if ((ret = __rep_set_transport_int(env,
 	    db_rep->self_eid, __repmgr_send)) != 0)
@@ -963,6 +970,274 @@ __repmgr_stop(env)
 }
 
 /*
+ * __repmgr_ssl_not_available --
+ *
+ * Used to detect and throw error while configuring SSL for RepMgr
+ * if ssl is not present on the system or has been disabled.
+ */
+static int
+__repmgr_ssl_not_available(env)
+	ENV *env;
+{
+	DB_REP *db_rep;
+	REP *rep;
+	int ssl_not_available;
+	int ssl_disabled;
+
+	ssl_not_available = 0;
+	ssl_disabled = 0;
+	db_rep = env->rep_handle;
+	rep = db_rep->region;
+	
+#if !defined(HAVE_REPMGR_SSL)
+	ssl_not_available = 1;
+#endif
+
+	if (rep && FLD_ISSET(rep->config, REP_C_DISABLE_SSL))
+		ssl_disabled = 1;
+
+	if (ssl_disabled || ssl_not_available) {
+		__db_errx(env, DB_STR_A("5513",
+		    "SSL support for replication %s on this system. "
+		    "Ignoring configuration parameters.","%s"),
+		    (ssl_disabled)?"has been disabled":"is not available");
+		return (1);
+	}
+
+	return (0);
+}
+
+#if defined(HAVE_REPMGR_SSL)
+/*
+ * __repmgr_set_ssl_ca_cert --
+ *
+ * Sets the path for public certificate for root authority or
+ * certificate authority on current replication node.
+ */
+static int
+__repmgr_set_ssl_ca_cert(dbenv, ca_cert_path)
+	DB_ENV *dbenv;
+	const char *ca_cert_path;
+{
+	ENV *env;
+	DB_REP *db_rep;
+
+	env = dbenv->env;
+
+	db_rep = env->rep_handle;
+
+	if (db_rep->repmgr_ssl_conf.repmgr_ca_cert_file != NULL)
+		__os_free(env, db_rep->repmgr_ssl_conf.repmgr_ca_cert_file);
+
+	return (__os_strdup(env, ca_cert_path,
+	    &db_rep->repmgr_ssl_conf.repmgr_ca_cert_file));
+
+	return (0);
+}
+
+/*
+ * __repmgr_set_ssl_ca_dir --
+ *
+ * Sets the path for directory with Certificate Authority
+ * Certificates.(used for verification)
+ * Note:
+ *  1) Each file in this directory must contain only one certificate.
+ *  2) c_rehash should have been run in this directory before starting BDB.
+ */
+static int
+__repmgr_set_ssl_ca_dir(dbenv, ca_dir_path)
+	DB_ENV *dbenv;
+	const char *ca_dir_path;
+{
+	ENV *env;
+	DB_REP *db_rep;
+
+	env = dbenv->env;
+
+	db_rep = env->rep_handle;
+
+	if (db_rep->repmgr_ssl_conf.repmgr_ca_dir != NULL)
+		__os_free(env, db_rep->repmgr_ssl_conf.repmgr_ca_dir);
+
+	return (__os_strdup(env, ca_dir_path,
+	    &db_rep->repmgr_ssl_conf.repmgr_ca_dir));
+
+	return (0);
+}
+
+/*
+ * __repmgr_set_ssl_cert --
+ *
+ * Sets the path for certificate representing the identity of
+ * current replication node.
+ */
+static int
+__repmgr_set_ssl_cert(dbenv, ssl_cert_path)
+	DB_ENV *dbenv;
+	const char *ssl_cert_path;
+{
+	ENV *env;
+	DB_REP *db_rep;
+
+	env = dbenv->env;
+	db_rep = env->rep_handle;
+
+	db_rep = env->rep_handle;
+
+	if (db_rep->repmgr_ssl_conf.repmgr_cert_file != NULL)
+		__os_free(env, db_rep->repmgr_ssl_conf.repmgr_cert_file);
+
+	return (__os_strdup(env, ssl_cert_path,
+	    &db_rep->repmgr_ssl_conf.repmgr_cert_file));
+
+	return (0);
+}
+
+/*
+ * __repmgr_set_ssl_key_file --
+ *
+ * Sets the path for the private key file corresponding to the
+ * certificate representing the identity of current repnode.
+ */
+static int
+__repmgr_set_ssl_key_file(dbenv, key_file_path)
+	DB_ENV *dbenv;
+	const char *key_file_path;
+{
+	ENV *env;
+	DB_REP *db_rep;
+
+	env = dbenv->env;
+
+	db_rep = env->rep_handle;
+
+	if (db_rep->repmgr_ssl_conf.repmgr_key_file != NULL)
+		__os_free(env, db_rep->repmgr_ssl_conf.repmgr_key_file);
+
+	return (__os_strdup(env, key_file_path,
+	    &db_rep->repmgr_ssl_conf.repmgr_key_file));
+
+	return (0);
+}
+
+/*
+ * __repmgr_set_ssl_key_passwd --
+ *
+ * Sets the password for the aforementioned private key file for
+ * the replication node.
+ */
+static int
+__repmgr_set_ssl_key_passwd(dbenv, key_file_passwd)
+	DB_ENV *dbenv;
+	const char *key_file_passwd;
+{
+	ENV *env;
+	DB_REP *db_rep;
+
+	env = dbenv->env;
+
+	db_rep = env->rep_handle;
+
+	if (db_rep->repmgr_ssl_conf.repmgr_key_file_passwd != NULL)
+		__os_free(env, db_rep->repmgr_ssl_conf.repmgr_key_file_passwd);
+
+	return (__os_strdup(env, key_file_passwd,
+	    &db_rep->repmgr_ssl_conf.repmgr_key_file_passwd));
+
+	return (0);
+}
+
+/*
+ * __repmgr_set_ssl_verify_depth --
+ *
+ * Sets the verification depth for the SSL verification routines
+ * in case intermediate certificates are being used to sign
+ * replication node certificates.
+ */
+static int
+__repmgr_set_ssl_verify_depth(dbenv, ssl_verify_depth)
+	DB_ENV *dbenv;
+	u_int32_t ssl_verify_depth;
+{
+	ENV *env;
+	DB_REP *db_rep;
+
+	env = dbenv->env;
+
+	db_rep = env->rep_handle;
+
+	db_rep->repmgr_ssl_conf.repmgr_ssl_verify_depth = ssl_verify_depth;
+
+	return (0);
+}
+#endif
+
+/*
+ * __repmgr_set_ssl_config_pp --
+ *
+ * Based on user input via api or DB_CONFIG file, this routine configures the
+ * locations of certificates and private keys and corresponding passwords in
+ * BDB.
+ *
+ * PUBLIC: int __repmgr_set_ssl_config_pp __P((DB_ENV *, int, char *value));
+ */
+int
+__repmgr_set_ssl_config_pp(dbenv, config_field, value)
+	DB_ENV *dbenv;
+	int config_field;
+	char *value;
+{
+	ENV *env;
+	int ret;
+	u_long verify_depth;
+
+	ret = 0;
+	env = dbenv->env;
+
+	if (__repmgr_ssl_not_available(env))
+		return (0);
+
+#if defined(HAVE_REPMGR_SSL)
+	switch (config_field) {
+	case DB_REPMGR_SSL_CA_CERT:
+		ret = __repmgr_set_ssl_ca_cert(dbenv, value);
+		break;
+	case DB_REPMGR_SSL_CA_DIR:
+		ret = __repmgr_set_ssl_ca_dir(dbenv, value);
+		break;
+	case DB_REPMGR_SSL_REPNODE_CERT:
+		ret = __repmgr_set_ssl_cert(dbenv, value);
+		break;
+	case DB_REPMGR_SSL_REPNODE_PRIVATE_KEY:
+		ret = __repmgr_set_ssl_key_file(dbenv, value);
+		break;
+	case DB_REPMGR_SSL_REPNODE_KEY_PASSWD:
+		ret = __repmgr_set_ssl_key_passwd(dbenv, value);
+		break;
+	case DB_REPMGR_SSL_VERIFY_DEPTH:
+		if (__db_getulong(env->dbenv, NULL, value, 0,
+		    UINT32_MAX, &verify_depth) != 0) {
+			__db_errx(env, DB_STR("5526",
+			    "Invalid value supplied for SSL verify depth."));
+			return (EINVAL);
+		}
+		ret = __repmgr_set_ssl_verify_depth(dbenv,
+		    (u_int32_t)verify_depth);
+		break;
+	default:
+		__db_errx(env, DB_STR("5527",
+		    "Invalid ssl_config value supplied in "
+		    "DB_ENV->repmgr_set_ssl_config."));
+		return (EINVAL);
+	}
+#else
+	COMPQUIET(verify_depth, 0);
+#endif
+
+	return (ret);
+}
+
+/*
  * PUBLIC: int __repmgr_set_ack_policy __P((DB_ENV *, int));
  */
 int
@@ -1275,6 +1550,10 @@ __repmgr_env_create(env, db_rep)
 
 	__repmgr_env_create_pf(db_rep);
 	ret = __repmgr_create_mutex(env, &db_rep->mutex);
+
+#if defined(HAVE_REPMGR_SSL)
+	db_rep->repmgr_ssl_ctx = NULL;
+#endif
 
 	return (ret);
 }

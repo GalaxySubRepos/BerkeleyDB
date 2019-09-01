@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -124,18 +124,18 @@ main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0) {
- 				if (passwd != NULL)
- 					free(passwd);
- 				goto err;
-  			}
-  			ret = dbenv->set_encrypt(dbenv, passwd, DB_ENCRYPT_AES);
-  			free(passwd);
- 			passwd = NULL;
-  			if (ret != 0) {
-  				dbenv->err(dbenv, ret, "set_passwd");
-  				goto err;
-  			}
+			    optarg, &passwd) != 0) {
+				if (passwd != NULL)
+					free(passwd);
+				goto err;
+			}
+			ret = dbenv->set_encrypt(dbenv, passwd, DB_ENCRYPT_AES);
+			free(passwd);
+			passwd = NULL;
+			if (ret != 0) {
+				dbenv->err(dbenv, ret, "set_passwd");
+				goto err;
+			}
 			break;
 		case 'T':
 			if (__db_getlong(NULL, progname,

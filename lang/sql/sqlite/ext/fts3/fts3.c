@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2006 Oct 10
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -349,8 +355,9 @@ int sqlite3Fts3PutVarint(char *p, sqlite_int64 v){
 ** Return the number of bytes read, or 0 on error.
 ** The value is stored in *v.
 */
-int sqlite3Fts3GetVarint(const char *p, sqlite_int64 *v){
-  const char *pStart = p;
+int sqlite3Fts3GetVarint(const char *pBuf, sqlite_int64 *v){
+  const unsigned char *p = (const unsigned char*)pBuf;
+  const unsigned char *pStart = p;
   u32 a;
   u64 b;
   int shift;
@@ -492,6 +499,7 @@ static int fts3DisconnectMethod(sqlite3_vtab *pVtab){
   assert( p->pSegments==0 );
 
   /* Free any prepared statements held */
+  sqlite3_finalize(p->pSeekStmt);
   for(i=0; i<SizeofArray(p->aStmt); i++){
     sqlite3_finalize(p->aStmt[i]);
   }
@@ -1363,9 +1371,9 @@ static int fts3InitVtab(
   p->pTokenizer = pTokenizer;
   p->nMaxPendingData = FTS3_MAX_PENDING_DATA;
   p->bHasDocsize = (isFts4 && bNoDocsize==0);
-  p->bHasStat = isFts4;
-  p->bFts4 = isFts4;
-  p->bDescIdx = bDescIdx;
+  p->bHasStat = (u8)isFts4;
+  p->bFts4 = (u8)isFts4;
+  p->bDescIdx = (u8)bDescIdx;
   p->nAutoincrmerge = 0xff;   /* 0xff means setting unknown */
   p->zContentTbl = zContent;
   p->zLanguageid = zLanguageid;
@@ -1396,7 +1404,9 @@ static int fts3InitVtab(
     char *z; 
     int n = 0;
     z = (char *)sqlite3Fts3NextToken(aCol[iCol], &n);
-    memcpy(zCsr, z, n);
+    if( n>0 ){
+      memcpy(zCsr, z, n);
+    }
     zCsr[n] = '\0';
     sqlite3Fts3Dequote(zCsr);
     p->azColumn[iCol] = zCsr;
@@ -1517,6 +1527,19 @@ static void fts3SetEstimatedRows(sqlite3_index_info *pIdxInfo, i64 nRow){
 #endif
 }
 
+/*
+** Set the SQLITE_INDEX_SCAN_UNIQUE flag in pIdxInfo->flags. Unless this
+** extension is currently being used by a version of SQLite too old to
+** support index-info flags. In that case this function is a no-op.
+*/
+static void fts3SetUniqueFlag(sqlite3_index_info *pIdxInfo){
+#if SQLITE_VERSION_NUMBER>=3008012
+  if( sqlite3_libversion_number()>=3008012 ){
+    pIdxInfo->idxFlags |= SQLITE_INDEX_SCAN_UNIQUE;
+  }
+#endif
+}
+
 /* 
 ** Implementation of the xBestIndex method for FTS3 tables. There
 ** are three possible strategies, in order of preference:
@@ -1607,6 +1630,9 @@ static int fts3BestIndexMethod(sqlite3_vtab *pVTab, sqlite3_index_info *pInfo){
     }
   }
 
+  /* If using a docid=? or rowid=? strategy, set the UNIQUE flag. */
+  if( pInfo->idxNum==FTS3_DOCID_SEARCH ) fts3SetUniqueFlag(pInfo);
+
   iIdx = 1;
   if( iCons>=0 ){
     pInfo->aConstraintUsage[iCons].argvIndex = iIdx++;
@@ -1665,17 +1691,37 @@ static int fts3OpenMethod(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCsr){
 }
 
 /*
+** Finalize the statement handle at pCsr->pStmt.
+**
+** Or, if that statement handle is one created by fts3CursorSeekStmt(),
+** and the Fts3Table.pSeekStmt slot is currently NULL, save the statement
+** pointer there instead of finalizing it.
+*/
+static void fts3CursorFinalizeStmt(Fts3Cursor *pCsr){
+  if( pCsr->bSeekStmt ){
+    Fts3Table *p = (Fts3Table *)pCsr->base.pVtab;
+    if( p->pSeekStmt==0 ){
+      p->pSeekStmt = pCsr->pStmt;
+      sqlite3_reset(pCsr->pStmt);
+      pCsr->pStmt = 0;
+    }
+    pCsr->bSeekStmt = 0;
+  }
+  sqlite3_finalize(pCsr->pStmt);
+}
+
+/*
 ** Close the cursor.  For additional information see the documentation
 ** on the xClose method of the virtual table interface.
 */
 static int fts3CloseMethod(sqlite3_vtab_cursor *pCursor){
   Fts3Cursor *pCsr = (Fts3Cursor *)pCursor;
   assert( ((Fts3Table *)pCsr->base.pVtab)->pSegments==0 );
-  sqlite3_finalize(pCsr->pStmt);
+  fts3CursorFinalizeStmt(pCsr);
   sqlite3Fts3ExprFree(pCsr->pExpr);
   sqlite3Fts3FreeDeferredTokens(pCsr);
   sqlite3_free(pCsr->aDoclist);
-  sqlite3_free(pCsr->aMatchinfo);
+  sqlite3Fts3MIBufferFree(pCsr->pMIBuffer);
   assert( ((Fts3Table *)pCsr->base.pVtab)->pSegments==0 );
   sqlite3_free(pCsr);
   return SQLITE_OK;
@@ -1689,20 +1735,23 @@ static int fts3CloseMethod(sqlite3_vtab_cursor *pCursor){
 **
 ** (or the equivalent for a content=xxx table) and set pCsr->pStmt to
 ** it. If an error occurs, return an SQLite error code.
-**
-** Otherwise, set *ppStmt to point to pCsr->pStmt and return SQLITE_OK.
 */
-static int fts3CursorSeekStmt(Fts3Cursor *pCsr, sqlite3_stmt **ppStmt){
+static int fts3CursorSeekStmt(Fts3Cursor *pCsr){
   int rc = SQLITE_OK;
   if( pCsr->pStmt==0 ){
     Fts3Table *p = (Fts3Table *)pCsr->base.pVtab;
     char *zSql;
-    zSql = sqlite3_mprintf("SELECT %s WHERE rowid = ?", p->zReadExprlist);
-    if( !zSql ) return SQLITE_NOMEM;
-    rc = sqlite3_prepare_v2(p->db, zSql, -1, &pCsr->pStmt, 0);
-    sqlite3_free(zSql);
+    if( p->pSeekStmt ){
+      pCsr->pStmt = p->pSeekStmt;
+      p->pSeekStmt = 0;
+    }else{
+      zSql = sqlite3_mprintf("SELECT %s WHERE rowid = ?", p->zReadExprlist);
+      if( !zSql ) return SQLITE_NOMEM;
+      rc = sqlite3_prepare_v2(p->db, zSql, -1, &pCsr->pStmt, 0);
+      sqlite3_free(zSql);
+    }
+    if( rc==SQLITE_OK ) pCsr->bSeekStmt = 1;
   }
-  *ppStmt = pCsr->pStmt;
   return rc;
 }
 
@@ -1714,9 +1763,7 @@ static int fts3CursorSeekStmt(Fts3Cursor *pCsr, sqlite3_stmt **ppStmt){
 static int fts3CursorSeek(sqlite3_context *pContext, Fts3Cursor *pCsr){
   int rc = SQLITE_OK;
   if( pCsr->isRequireSeek ){
-    sqlite3_stmt *pStmt = 0;
-
-    rc = fts3CursorSeekStmt(pCsr, &pStmt);
+    rc = fts3CursorSeekStmt(pCsr);
     if( rc==SQLITE_OK ){
       sqlite3_bind_int64(pCsr->pStmt, 1, pCsr->iPrevId);
       pCsr->isRequireSeek = 0;
@@ -3174,9 +3221,9 @@ static int fts3FilterMethod(
   assert( iIdx==nVal );
 
   /* In case the cursor has been used before, clear it now. */
-  sqlite3_finalize(pCsr->pStmt);
+  fts3CursorFinalizeStmt(pCsr);
   sqlite3_free(pCsr->aDoclist);
-  sqlite3_free(pCsr->aMatchinfo);
+  sqlite3Fts3MIBufferFree(pCsr->pMIBuffer);
   sqlite3Fts3ExprFree(pCsr->pExpr);
   memset(&pCursor[1], 0, sizeof(Fts3Cursor)-sizeof(sqlite3_vtab_cursor));
 
@@ -3242,7 +3289,7 @@ static int fts3FilterMethod(
       rc = SQLITE_NOMEM;
     }
   }else if( eSearch==FTS3_DOCID_SEARCH ){
-    rc = fts3CursorSeekStmt(pCsr, &pCsr->pStmt);
+    rc = fts3CursorSeekStmt(pCsr);
     if( rc==SQLITE_OK ){
       rc = sqlite3_bind_value(pCsr->pStmt, 1, pCons);
     }
@@ -3370,8 +3417,10 @@ static int fts3SyncMethod(sqlite3_vtab *pVtab){
   const u32 nMinMerge = 64;       /* Minimum amount of incr-merge work to do */
 
   Fts3Table *p = (Fts3Table*)pVtab;
-  int rc = sqlite3Fts3PendingTermsFlush(p);
+  int rc;
+  i64 iLastRowid = sqlite3_last_insert_rowid(p->db);
 
+  rc = sqlite3Fts3PendingTermsFlush(p);
   if( rc==SQLITE_OK 
    && p->nLeafAdd>(nMinMerge/16) 
    && p->nAutoincrmerge && p->nAutoincrmerge!=0xff
@@ -3386,6 +3435,7 @@ static int fts3SyncMethod(sqlite3_vtab *pVtab){
     if( A>(int)nMinMerge ) rc = sqlite3Fts3Incrmerge(p, A, p->nAutoincrmerge);
   }
   sqlite3Fts3SegmentsClose(p);
+  sqlite3_set_last_insert_rowid(p->db, iLastRowid);
   return rc;
 }
 
@@ -3406,7 +3456,7 @@ static int fts3SetHasStat(Fts3Table *p){
       if( rc==SQLITE_OK ){
         int bHasStat = (sqlite3_step(pStmt)==SQLITE_ROW);
         rc = sqlite3_finalize(pStmt);
-        if( rc==SQLITE_OK ) p->bHasStat = bHasStat;
+        if( rc==SQLITE_OK ) p->bHasStat = (u8)bHasStat;
       }
       sqlite3_free(zSql);
     }else{
@@ -4231,7 +4281,6 @@ static int fts3EvalPhraseStart(Fts3Cursor *pCsr, int bOptOk, Fts3Phrase *p){
   int bIncrOk = (bOptOk 
    && pCsr->bDesc==pTab->bDescIdx 
    && p->nToken<=MAX_INCR_PHRASE_TOKENS && p->nToken>0
-   && p->nToken<=MAX_INCR_PHRASE_TOKENS && p->nToken>0
 #ifdef SQLITE_TEST
    && pTab->bNoIncrDoclist==0
 #endif
@@ -4351,6 +4400,7 @@ void sqlite3Fts3DoclistNext(
     p += sqlite3Fts3GetVarint(p, piDocid);
   }else{
     fts3PoslistCopy(0, &p);
+    while( p<&aDoclist[nDoclist] && *p==0 ) p++; 
     if( p>=&aDoclist[nDoclist] ){
       *pbEof = 1;
     }else{
@@ -5074,7 +5124,7 @@ static int fts3EvalNearTrim(
 **   2. NEAR is treated as AND. If the expression is "x NEAR y", it is 
 **      advanced to point to the next row that matches "x AND y".
 ** 
-** See fts3EvalTestDeferredAndNear() for details on testing if a row is
+** See sqlite3Fts3EvalTestDeferred() for details on testing if a row is
 ** really a match, taking into account deferred tokens and NEAR operators.
 */
 static void fts3EvalNextRow(
@@ -5294,7 +5344,7 @@ static int fts3EvalNearTest(Fts3Expr *pExpr, int *pRc){
 }
 
 /*
-** This function is a helper function for fts3EvalTestDeferredAndNear().
+** This function is a helper function for sqlite3Fts3EvalTestDeferred().
 ** Assuming no error occurs or has occurred, It returns non-zero if the
 ** expression passed as the second argument matches the row that pCsr 
 ** currently points to, or zero if it does not.
@@ -5415,7 +5465,7 @@ static int fts3EvalTestExpr(
 ** Or, if no error occurs and it seems the current row does match the FTS
 ** query, return 0.
 */
-static int fts3EvalTestDeferredAndNear(Fts3Cursor *pCsr, int *pRc){
+int sqlite3Fts3EvalTestDeferred(Fts3Cursor *pCsr, int *pRc){
   int rc = *pRc;
   int bMiss = 0;
   if( rc==SQLITE_OK ){
@@ -5462,7 +5512,7 @@ static int fts3EvalNext(Fts3Cursor *pCsr){
       pCsr->isRequireSeek = 1;
       pCsr->isMatchinfoNeeded = 1;
       pCsr->iPrevId = pExpr->iDocid;
-    }while( pCsr->isEof==0 && fts3EvalTestDeferredAndNear(pCsr, &rc) );
+    }while( pCsr->isEof==0 && sqlite3Fts3EvalTestDeferred(pCsr, &rc) );
   }
 
   /* Check if the cursor is past the end of the docid range specified
@@ -5623,7 +5673,7 @@ static int fts3EvalGatherStats(
         pCsr->iPrevId = pRoot->iDocid;
       }while( pCsr->isEof==0 
            && pRoot->eType==FTSQUERY_NEAR 
-           && fts3EvalTestDeferredAndNear(pCsr, &rc) 
+           && sqlite3Fts3EvalTestDeferred(pCsr, &rc) 
       );
 
       if( rc==SQLITE_OK && pCsr->isEof==0 ){
@@ -5648,7 +5698,6 @@ static int fts3EvalGatherStats(
         fts3EvalNextRow(pCsr, pRoot, &rc);
         assert( pRoot->bEof==0 );
       }while( pRoot->iDocid!=iDocid && rc==SQLITE_OK );
-      fts3EvalTestDeferredAndNear(pCsr, &rc);
     }
   }
   return rc;
@@ -5758,10 +5807,10 @@ int sqlite3Fts3EvalPhrasePoslist(
     int rc = SQLITE_OK;
     int bDescDoclist = pTab->bDescIdx;      /* For DOCID_CMP macro */
     int bOr = 0;
-    u8 bEof = 0;
     u8 bTreeEof = 0;
     Fts3Expr *p;                  /* Used to iterate from pExpr to root */
     Fts3Expr *pNear;              /* Most senior NEAR ancestor (or pExpr) */
+    int bMatch;
 
     /* Check if this phrase descends from an OR expression node. If not, 
     ** return NULL. Otherwise, the entry that corresponds to docid 
@@ -5795,31 +5844,47 @@ int sqlite3Fts3EvalPhrasePoslist(
     }
     if( rc!=SQLITE_OK ) return rc;
 
-    pIter = pPhrase->pOrPoslist;
-    iDocid = pPhrase->iOrDocid;
-    if( pCsr->bDesc==bDescDoclist ){
-      bEof = !pPhrase->doclist.nAll ||
-                 (pIter >= (pPhrase->doclist.aAll + pPhrase->doclist.nAll));
-      while( (pIter==0 || DOCID_CMP(iDocid, pCsr->iPrevId)<0 ) && bEof==0 ){
-        sqlite3Fts3DoclistNext(
-            bDescDoclist, pPhrase->doclist.aAll, pPhrase->doclist.nAll, 
-            &pIter, &iDocid, &bEof
-        );
-      }
-    }else{
-      bEof = !pPhrase->doclist.nAll || (pIter && pIter<=pPhrase->doclist.aAll);
-      while( (pIter==0 || DOCID_CMP(iDocid, pCsr->iPrevId)>0 ) && bEof==0 ){
-        int dummy;
-        sqlite3Fts3DoclistPrev(
-            bDescDoclist, pPhrase->doclist.aAll, pPhrase->doclist.nAll, 
-            &pIter, &iDocid, &dummy, &bEof
-        );
-      }
-    }
-    pPhrase->pOrPoslist = pIter;
-    pPhrase->iOrDocid = iDocid;
+    bMatch = 1;
+    for(p=pNear; p; p=p->pLeft){
+      u8 bEof = 0;
+      Fts3Expr *pTest = p;
+      Fts3Phrase *pPh;
+      assert( pTest->eType==FTSQUERY_NEAR || pTest->eType==FTSQUERY_PHRASE );
+      if( pTest->eType==FTSQUERY_NEAR ) pTest = pTest->pRight;
+      assert( pTest->eType==FTSQUERY_PHRASE );
+      pPh = pTest->pPhrase;
 
-    if( bEof || iDocid!=pCsr->iPrevId ) pIter = 0;
+      pIter = pPh->pOrPoslist;
+      iDocid = pPh->iOrDocid;
+      if( pCsr->bDesc==bDescDoclist ){
+        bEof = !pPh->doclist.nAll ||
+          (pIter >= (pPh->doclist.aAll + pPh->doclist.nAll));
+        while( (pIter==0 || DOCID_CMP(iDocid, pCsr->iPrevId)<0 ) && bEof==0 ){
+          sqlite3Fts3DoclistNext(
+              bDescDoclist, pPh->doclist.aAll, pPh->doclist.nAll, 
+              &pIter, &iDocid, &bEof
+          );
+        }
+      }else{
+        bEof = !pPh->doclist.nAll || (pIter && pIter<=pPh->doclist.aAll);
+        while( (pIter==0 || DOCID_CMP(iDocid, pCsr->iPrevId)>0 ) && bEof==0 ){
+          int dummy;
+          sqlite3Fts3DoclistPrev(
+              bDescDoclist, pPh->doclist.aAll, pPh->doclist.nAll, 
+              &pIter, &iDocid, &dummy, &bEof
+              );
+        }
+      }
+      pPh->pOrPoslist = pIter;
+      pPh->iOrDocid = iDocid;
+      if( bEof || iDocid!=pCsr->iPrevId ) bMatch = 0;
+    }
+
+    if( bMatch ){
+      pIter = pPhrase->pOrPoslist;
+    }else{
+      pIter = 0;
+    }
   }
   if( pIter==0 ) return SQLITE_OK;
 

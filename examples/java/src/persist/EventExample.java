@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package persist;
@@ -69,18 +68,17 @@ public class EventExample {
     static class Event implements Serializable {
 
         /* This example will add secondary indices on price and accountReps. */
-        private int price;
-        private Set<String> accountReps;
+        private final int price;
+        private final Set<String> accountReps;
 
-        private String customerName;
-        private int quantity;
+        private final String customerName;
 
         Event(int price,
               String customerName) {
 
             this.price = price;
             this.customerName = customerName;
-            this.accountReps = new HashSet<String>();
+            this.accountReps = new HashSet<>();
         }
 
         void addRep(String rep) {
@@ -93,7 +91,7 @@ public class EventExample {
             sb.append(" price=").append(price);
             sb.append(" customerName=").append(customerName);
             sb.append(" reps=");
-            if (accountReps.size() == 0) {
+            if (accountReps.isEmpty()) {
                 sb.append("none");
             } else {
                 for (String rep: accountReps) {
@@ -109,7 +107,7 @@ public class EventExample {
     }
 
     /* A BDB environment is roughly equivalent to a relational database. */
-    private Environment env;
+    private final Environment env;
 
     /*
      * A BDB table is roughly equivalent to a relational table with a
@@ -126,10 +124,10 @@ public class EventExample {
      * Persistence Layer API supports Java objects as arguments directly.
      */
     private Database catalogDb;
-    private EntryBinding eventBinding;
+    private EntryBinding<Event> eventBinding;
 
     /* Used for generating example data. */
-    private Calendar cal;
+    private final Calendar cal;
 
 
     /*
@@ -211,7 +209,7 @@ public class EventExample {
          * We can use some pre-defined binding classes to convert
          * primitives like the long key value to the a byte array.
          */
-        eventBinding = new SerialBinding(catalog, Event.class);
+        eventBinding = new SerialBinding<>(catalog, Event.class);
 
         /*
          * Open a secondary database to allow accessing the primary
@@ -398,12 +396,13 @@ public class EventExample {
      */
     private static class PriceKeyCreator implements SecondaryKeyCreator {
 
-        private EntryBinding dataBinding;
+        private final EntryBinding<Event> dataBinding;
 
-        PriceKeyCreator(EntryBinding eventBinding) {
+        PriceKeyCreator(EntryBinding<Event> eventBinding) {
             this.dataBinding = eventBinding;
         }
 
+        @Override
         public boolean createSecondaryKey(SecondaryDatabase secondaryDb,
                                           DatabaseEntry keyEntry,
                                           DatabaseEntry dataEntry,
@@ -415,7 +414,7 @@ public class EventExample {
              * key value from it, and then convert it to the resulting
              * secondary key entry.
              */
-            Event e  = (Event) dataBinding.entryToObject(dataEntry);
+            Event e  = dataBinding.entryToObject(dataEntry);
             int price = e.getPrice();
             IntegerBinding.intToEntry(price, resultEntry);
             return true;

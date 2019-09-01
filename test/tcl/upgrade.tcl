@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 
@@ -261,7 +261,10 @@ proc _upgrade_test { temp_dir version method file endianness } {
 		# the right message.
 		if { [is_substr $file "test116"] ||
 		    [is_substr $file "test123"] ||
-		    [is_substr $file "test129"] } {
+		    [is_substr $file "test129"] ||
+		    [is_substr $file "test147"] ||
+		    [is_substr $file "test150"] ||
+		    [is_substr $file "test151"] } {
 			error_check_good subdatabases \
 			    [is_substr $res "multiple databases"] 1	
 		} else {

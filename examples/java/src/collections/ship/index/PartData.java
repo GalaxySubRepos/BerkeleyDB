@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.index;
@@ -21,10 +20,10 @@ import java.io.Serializable;
  */
 public class PartData implements Serializable {
 
-    private String name;
-    private String color;
-    private Weight weight;
-    private String city;
+    private final String name;
+    private final String color;
+    private final Weight weight;
+    private final String city;
 
     public PartData(String name, String color, Weight weight, String city) {
 
@@ -54,6 +53,7 @@ public class PartData implements Serializable {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[PartData: name=" + name +

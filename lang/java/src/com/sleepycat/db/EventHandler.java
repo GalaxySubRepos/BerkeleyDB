@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -48,6 +48,15 @@ public interface EventHandler {
     and recovery should be run.
     */
     public void handlePanicEvent();
+
+    /**
+    A callback function to be called when a Replication automatic takeover
+    event is sent from the Berkeley DB library.
+    <p>
+    This event callback is received in a replication manager subordinate
+    process when it succeeds to take over as the replication process.
+    */
+    public void handleRepAutoTakeoverEvent();
 
     /**
     A callback function to be called when a Replication automatic takeover

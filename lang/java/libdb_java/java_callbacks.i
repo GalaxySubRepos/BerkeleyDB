@@ -17,7 +17,7 @@ JAVA_TYPEMAP(_sig, _jclass, jboolean)
 static void __dbj_error(const DB_ENV *dbenv,
     const char *prefix, const char *msg)
 {
-	int detach;
+	int detach, ret;
 	JNIEnv *jenv = __dbj_get_jnienv(&detach);
 	jobject jdbenv = (jobject)DB_ENV_INTERNAL(dbenv);
 	jobject jmsg;
@@ -29,6 +29,11 @@ static void __dbj_error(const DB_ENV *dbenv,
 		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv, dbenv_class,
 		    errcall_method, jmsg);
 		(*jenv)->DeleteLocalRef(jenv, jmsg);
+	}
+
+	if ((*jenv)->ExceptionOccurred(jenv)) {
+		/* The exception will be thrown, so this could be any error. */
+		ret = EINVAL;
 	}
 
 	if (detach)
@@ -52,7 +57,7 @@ static void __dbj_env_feedback(DB_ENV *dbenv, int opcode, int percent)
 static void __dbj_message(const DB_ENV *dbenv,
     const char *prefix, const char *msg)
 {
-	int detach;
+	int detach, ret;
 	JNIEnv *jenv = __dbj_get_jnienv(&detach);
 	jobject jdbenv = (jobject)DB_ENV_INTERNAL(dbenv);
 	jobject jmsg;
@@ -64,6 +69,11 @@ static void __dbj_message(const DB_ENV *dbenv,
 		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv, dbenv_class,
 		    msgcall_method, jmsg);
 		(*jenv)->DeleteLocalRef(jenv, jmsg);
+	}
+
+	if ((*jenv)->ExceptionOccurred(jenv)) {
+		/* The exception will be thrown, so this could be any error. */
+		ret = EINVAL;
 	}
 
 	if (detach)
@@ -117,6 +127,11 @@ static void __dbj_panic(DB_ENV *dbenv, int ret)
 		    paniccall_method,
 		    __dbj_get_except(jenv, ret, NULL, NULL, jdbenv));
 
+	if ((*jenv)->ExceptionOccurred(jenv)) {
+		/* The exception will be thrown, so this could be any error. */
+		ret = EINVAL;
+	}
+
 	if (detach)
 		__dbj_detach();
 }
@@ -165,7 +180,7 @@ err:	if (detach)
 
 static void __dbj_event_notify(DB_ENV *dbenv, u_int32_t event_id, void * info)
 {
-	int detach;
+	int detach, ret;
 	JNIEnv *jenv = __dbj_get_jnienv(&detach);
 	jobject jdbenv = (jobject)DB_ENV_INTERNAL(dbenv);
 
@@ -176,6 +191,10 @@ static void __dbj_event_notify(DB_ENV *dbenv, u_int32_t event_id, void * info)
 	case DB_EVENT_PANIC:
 		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv,
 		    dbenv_class, panic_event_notify_method);
+		break;
+	case DB_EVENT_REP_AUTOTAKEOVER:
+		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv,
+		    dbenv_class, rep_autotakeover_event_notify_method);
 		break;
 	case DB_EVENT_REP_AUTOTAKEOVER_FAILED:
 		(*jenv)->CallNonvirtualVoidMethod(jenv, jdbenv,
@@ -262,6 +281,11 @@ static void __dbj_event_notify(DB_ENV *dbenv, u_int32_t event_id, void * info)
 	default:
                 dbenv->errx(dbenv, "Unhandled event callback in the Java API");
                 DB_ASSERT(dbenv->env, 0);
+	}
+
+	if ((*jenv)->ExceptionOccurred(jenv)) {
+		/* The exception will be thrown, so this could be any error. */
+		ret = EINVAL;
 	}
 
 done:	if (detach)
@@ -466,6 +490,11 @@ static int __dbj_seckey_create(DB *db,
 
 	jskeys = (jobjectArray)(*jenv)->CallNonvirtualObjectMethod(jenv,
 	    jdb, db_class, seckey_create_method, jkey, jdata);
+
+	if ((*jenv)->ExceptionOccurred(jenv)) {
+		/* The exception will be thrown, so this could be any error. */
+		ret = EINVAL;
+	}
 
 	if (jskeys == NULL ||
 	    (num_skeys = (*jenv)->GetArrayLength(jenv, jskeys)) == 0) {

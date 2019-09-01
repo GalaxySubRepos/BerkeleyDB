@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;set_alloc()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;set_alloc()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbrename.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_alloc"></a>DB-&gt;set_alloc()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_alloc"></a>
+        <span>DB-&gt;set_alloc()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -61,14 +67,35 @@ DB-&gt;set_alloc(DB *db,
          application.  (See <a class="link" href="dbt.html" title="Chapter 4.  The DBT Handle">DBT</a> 
          for more information.)  Other examples are the Berkeley DB interfaces
          which return statistical information to the application: 
-         <a class="xref" href="dbstat.html" title="DB-&gt;stat()">DB-&gt;stat()</a>, 
-         <a class="xref" href="lockstat.html" title="DB_ENV-&gt;lock_stat()">DB_ENV-&gt;lock_stat()</a>, 
-         <a class="xref" href="logarchive.html" title="DB_ENV-&gt;log_archive()">DB_ENV-&gt;log_archive()</a>, 
-         <a class="xref" href="logstat.html" title="DB_ENV-&gt;log_stat()">DB_ENV-&gt;log_stat()</a>, 
-         <a class="xref" href="mempstat.html" title="DB_ENV-&gt;memp_stat()">DB_ENV-&gt;memp_stat()</a>, 
-         and <a class="xref" href="txnstat.html" title="DB_ENV-&gt;txn_stat()">DB_ENV-&gt;txn_stat()</a>.  There is
+         <a class="xref" href="dbstat.html" title="DB-&gt;stat()">
+        <span>DB-&gt;stat()</span>
+        
+    </a>, 
+         <a class="xref" href="lockstat.html" title="DB_ENV-&gt;lock_stat()">
+        <span>DB_ENV-&gt;lock_stat()</span>
+        
+    </a>, 
+         <a class="xref" href="logarchive.html" title="DB_ENV-&gt;log_archive()">
+        <span>DB_ENV-&gt;log_archive()</span>
+        
+    </a>, 
+         <a class="xref" href="logstat.html" title="DB_ENV-&gt;log_stat()">
+        <span>DB_ENV-&gt;log_stat()</span>
+        
+    </a>, 
+         <a class="xref" href="mempstat.html" title="DB_ENV-&gt;memp_stat()">
+        <span>DB_ENV-&gt;memp_stat()</span>
+        
+    </a>, 
+         and <a class="xref" href="txnstat.html" title="DB_ENV-&gt;txn_stat()">
+        <span>DB_ENV-&gt;txn_stat()</span>
+        
+    </a>.  There is
          one method in Berkeley DB where memory is allocated by the application
-         and then given to the library: <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">DB-&gt;associate()</a>.
+         and then given to the library: <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">
+        <span>DB-&gt;associate()</span>
+        
+    </a>.
     </p>
       <p>
          On systems in which there may be multiple library versions of the
@@ -76,7 +103,10 @@ DB-&gt;set_alloc(DB *db,
          between the library and the application will fail because the Berkeley
          DB library allocates memory from a different heap than the application
          uses to free it.  To avoid this problem, the 
-         <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">DB_ENV-&gt;set_alloc()</a>  and
+         <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">
+        <span>DB_ENV-&gt;set_alloc()</span>
+        
+    </a>  and
          <code class="methodname">DB-&gt;set_alloc()</code> methods can be used to pass Berkeley DB references to
          the application's allocation routines.
     </p>
@@ -96,7 +126,10 @@ DB-&gt;set_alloc(DB *db,
     </p>
       <p>
              The <code class="methodname">DB-&gt;set_alloc()</code> method may not be called after the 
-             <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method is called.
+             <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DB-&gt;set_alloc()</code> <span>
@@ -110,7 +143,7 @@ DB-&gt;set_alloc(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236905792"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113489385328"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -126,13 +159,16 @@ DB-&gt;set_alloc(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236945840"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113489384192"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
                         If called in a database environment, or called after 
-                        <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  was called; or if an
+                        <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  was called; or if an
                          invalid flag value or parameter was specified.
                 </p>
         </div>
@@ -141,7 +177,7 @@ DB-&gt;set_alloc(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236957152"></a>Class</h3>
+              <h3 class="title"><a id="idm140113489388544"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -153,7 +189,7 @@ DB-&gt;set_alloc(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236888544"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113489371152"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -173,11 +209,17 @@ DB-&gt;set_alloc(DB *db,
           <td width="40%" align="right"> <a accesskey="n" href="dbset_append_recno.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;rename() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;rename()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_append_recno()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_append_recno()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

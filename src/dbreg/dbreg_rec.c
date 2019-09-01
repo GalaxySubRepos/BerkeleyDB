@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1995, 1996
@@ -44,8 +44,8 @@
 
 static int __dbreg_open_file __P((ENV *,
     DB_TXN *, __dbreg_register_args *, void *));
-static int __dbreg_register_recover_int
-    __P((ENV *, DBT *, DB_LSN *, db_recops, void *, __dbreg_register_args *));
+static int __dbreg_register_recover_int __P((ENV *,
+    DBT *, DB_LSN *, db_recops, void *, __dbreg_register_args *));
 
 /*
  * PUBLIC: int __dbreg_register_recover
@@ -275,8 +275,9 @@ __dbreg_register_recover_int(env, dbtp, lsnp, op, info, argp)
 		 * open.  We pass the txnid along to ensure this.
 		 */
 		ret = __dbreg_open_file(env,
-		    op == DB_TXN_ABORT || op == DB_TXN_POPENFILES ?
-		    argp->txnp : NULL, argp, info);
+		    op == DB_TXN_ABORT || op == DB_TXN_POPENFILES ? argp->txnp :
+		    (info == NULL ? NULL :
+		    ((DB_TXNHEAD *)info)->txn), argp, info);
 		if (ret == DB_PAGE_NOTFOUND && argp->meta_pgno != PGNO_BASE_MD)
 			ret = USR_ERR(env, ENOENT);
 		if (ret == ENOENT || ret == EINVAL) {
@@ -290,8 +291,8 @@ __dbreg_register_recover_int(env, dbtp, lsnp, op, info, argp)
 			if (DB_REDO(op) && argp->txnp != 0 &&
 			    dblp->dbentry[argp->fileid].deleted) {
 				dblp->dbentry[argp->fileid].deleted = 0;
-				ret =
-				    __dbreg_open_file(env, NULL, argp, info);
+				ret = __dbreg_open_file(env,
+				    ((DB_TXNHEAD *)info)->txn, argp, info);
 				if (ret == DB_PAGE_NOTFOUND &&
 				     argp->meta_pgno != PGNO_BASE_MD)
 					ret = USR_ERR(env, ENOENT);
@@ -535,7 +536,7 @@ reopen:
 	 * We are about to pass a recovery txn pointer into the main library.
 	 * We need to make sure that any accessed fields are set appropriately.
 	 */
-	if (txn != NULL) {
+	if (txn != NULL && !F_ISSET(txn, TXN_DISPATCH)) {
 		id = txn->txnid;
 		memset(txn, 0, sizeof(DB_TXN));
 		txn->txnid = id;

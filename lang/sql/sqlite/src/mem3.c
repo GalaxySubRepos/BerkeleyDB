@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2007 October 14
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -476,7 +482,7 @@ static void memsys3FreeUnsafe(void *pOld){
 */
 static int memsys3Size(void *p){
   Mem3Block *pBlock;
-  if( p==0 ) return 0;
+  assert( p!=0 );
   pBlock = (Mem3Block*)p;
   assert( (pBlock[-1].u.hdr.size4x&1)!=0 );
   return (pBlock[-1].u.hdr.size4x&~3)*2 - 4;

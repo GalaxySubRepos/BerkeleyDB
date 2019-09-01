@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * GetHelper implements a few helper methods for making remote get / pGet
  * calls.
  */
-interface GetHelper extends RemoteCallHelper {
+public interface GetHelper extends RemoteCallHelper {
 
     /**
      * This method helps to create the TKeyData argument used in a remote get
@@ -159,12 +159,12 @@ interface GetHelper extends RemoteCallHelper {
     }
 
     @FunctionalInterface
-    interface RemoteGetFunction {
+    public interface RemoteGetFunction {
         TGetResult applyWithException(TKeyData keyData) throws TException;
     }
 
     @FunctionalInterface
-    interface RemotePGetFunction {
+    public interface RemotePGetFunction {
         TGetWithPKeyResult applyWithException(TKeyDataWithPKey tKeyDataWithPKey)
                 throws TException;
     }

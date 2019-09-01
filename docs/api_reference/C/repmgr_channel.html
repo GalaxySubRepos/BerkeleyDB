@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;repmgr_channel()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;repmgr_channel()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repsync.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repmgr_channel"></a>DB_ENV-&gt;repmgr_channel()</h2>
+            <h2 class="title" style="clear: both"><a id="repmgr_channel"></a>
+        <span>DB_ENV-&gt;repmgr_channel()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -53,13 +59,19 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
         the structure in the memory to which 
         <span class="bold"><strong>channelp</strong></span> refers. To release the
         allocated memory and discard the handle, call the
-        <a class="xref" href="dbchannel_close.html" title="DB_CHANNEL-&gt;close()">DB_CHANNEL-&gt;close()</a>
+        <a class="xref" href="dbchannel_close.html" title="DB_CHANNEL-&gt;close()">
+        <span>DB_CHANNEL-&gt;close()</span>
+        
+    </a>
         method.
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;repmgr_channel()</code> method may be
          called at any time after 
-         <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">DB_ENV-&gt;repmgr_start()</a> has
+         <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">
+        <span>DB_ENV-&gt;repmgr_start()</span>
+        
+    </a> has
          been called with a <code class="literal">0</code> return code.
     </p>
       <p>
@@ -74,7 +86,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228823280"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113481118912"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -82,7 +94,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228822896"></a>eid</h4>
+                <h4 class="title"><a id="idm140113481118528"></a>eid</h4>
               </div>
             </div>
           </div>
@@ -123,7 +135,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228807408"></a>channelp</h4>
+                <h4 class="title"><a id="idm140113481102864"></a>channelp</h4>
               </div>
             </div>
           </div>
@@ -136,7 +148,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228811984"></a>flags</h4>
+                <h4 class="title"><a id="idm140113481107440"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -150,7 +162,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228814480"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113481109936"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -167,7 +179,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228801680"></a>DB_REP_UNAVAIL</h4>
+                <h4 class="title"><a id="idm140113481096176"></a>DB_REP_UNAVAIL</h4>
               </div>
             </div>
           </div>
@@ -181,7 +193,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228796880"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113481092336"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -195,7 +207,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228806992"></a>Class</h3>
+              <h3 class="title"><a id="idm140113481097360"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -207,7 +219,7 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228793760"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113481089216"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -228,11 +240,17 @@ DB_ENV-&gt;repmgr_channel(DB_ENV *env, int eid, DB_CHANNEL **channelp,
           <td width="40%" align="right"> <a accesskey="n" href="repmgr_local_site.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;rep_sync() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;rep_sync()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;repmgr_local_site()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;repmgr_local_site()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

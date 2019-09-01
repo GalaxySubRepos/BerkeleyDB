@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -208,6 +208,7 @@ alloc:	if ((ret = __env_alloc(infop, len, &p)) == 0) {
 				__env_alloc_free(infop, bhp);
 				goto search;
 			}
+			atomic_init(&bhp->ref, 0);
 			c_mp->pages++;
 		}
 		MPOOL_REGION_UNLOCK(env, infop);
@@ -444,7 +445,8 @@ retry_search:	bhp = NULL;
 				if (bucket_priority > current_bhp->priority) {
 					bucket_priority = current_bhp->priority;
 					if (bhp != NULL)
-						(void)atomic_dec(env, &bhp->ref);
+						(void)atomic_dec(env,
+						    &bhp->ref);
 					bhp = current_bhp;
 					(void)atomic_inc(env, &bhp->ref);
 				}

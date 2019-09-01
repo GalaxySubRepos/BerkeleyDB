@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.basic;
@@ -32,14 +31,17 @@ public class SampleDatabase {
     private static final String PART_STORE = "part_store";
     private static final String SHIPMENT_STORE = "shipment_store";
 
-    private Environment env;
-    private Database partDb;
-    private Database supplierDb;
-    private Database shipmentDb;
-    private StoredClassCatalog javaCatalog;
+    private final Environment env;
+    private final Database partDb;
+    private final Database supplierDb;
+    private final Database shipmentDb;
+    private final StoredClassCatalog javaCatalog;
 
     /**
      * Open all storage containers, indices, and catalogs.
+     * @param homeDirectory
+     * @throws com.sleepycat.db.DatabaseException
+     * @throws java.io.FileNotFoundException
      */
     public SampleDatabase(String homeDirectory)
         throws DatabaseException, FileNotFoundException {
@@ -80,6 +82,7 @@ public class SampleDatabase {
 
     /**
      * Return the storage environment for the database.
+     * @return 
      */
     public final Environment getEnvironment() {
 
@@ -88,6 +91,7 @@ public class SampleDatabase {
 
     /**
      * Return the class catalog.
+     * @return 
      */
     public final StoredClassCatalog getClassCatalog() {
 
@@ -96,6 +100,7 @@ public class SampleDatabase {
 
     /**
      * Return the part storage container.
+     * @return 
      */
     public final Database getPartDatabase() {
 
@@ -104,6 +109,7 @@ public class SampleDatabase {
 
     /**
      * Return the supplier storage container.
+     * @return 
      */
     public final Database getSupplierDatabase() {
 
@@ -112,6 +118,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment storage container.
+     * @return 
      */
     public final Database getShipmentDatabase() {
 
@@ -120,6 +127,7 @@ public class SampleDatabase {
 
     /**
      * Close all databases and the environment.
+     * @throws com.sleepycat.db.DatabaseException
      */
     public void close()
         throws DatabaseException {

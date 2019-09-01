@@ -1,4 +1,11 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
+**
 ** 2011 March 24
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -344,10 +351,10 @@ static int fuzzerLoadOneRule(
       memset(pRule, 0, sizeof(*pRule));
       pRule->zFrom = pRule->zTo;
       pRule->zFrom += nTo + 1;
-      pRule->nFrom = nFrom;
+      pRule->nFrom = (fuzzer_len)nFrom;
       memcpy(pRule->zFrom, zFrom, nFrom+1);
       memcpy(pRule->zTo, zTo, nTo+1);
-      pRule->nTo = nTo;
+      pRule->nTo = (fuzzer_len)nTo;
       pRule->rCost = nCost;
       pRule->iRuleset = (int)iRuleset;
     }

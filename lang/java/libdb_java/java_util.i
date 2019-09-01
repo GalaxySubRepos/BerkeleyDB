@@ -403,10 +403,12 @@ static jfieldID repmgr_stat_st_incoming_msgs_dropped_fid;
 static jfieldID repmgr_stat_st_connection_drop_fid;
 static jfieldID repmgr_stat_st_connect_fail_fid;
 static jfieldID repmgr_stat_st_elect_threads_fid;
+static jfieldID repmgr_stat_st_group_stable_log_file_fid;
 static jfieldID repmgr_stat_st_max_elect_threads_fid;
 static jfieldID repmgr_stat_st_site_participants_fid;
 static jfieldID repmgr_stat_st_site_total_fid;
 static jfieldID repmgr_stat_st_site_views_fid;
+static jfieldID repmgr_stat_st_polling_method_fid;
 static jfieldID repmgr_stat_st_takeovers_fid;
 static jfieldID repmgr_stat_st_write_ops_forwarded_fid;
 static jfieldID repmgr_stat_st_write_ops_received_fid;
@@ -472,6 +474,7 @@ static jmethodID lock_construct;
 static jmethodID app_dispatch_method, errcall_method, env_feedback_method;
 static jmethodID msgcall_method, paniccall_method, rep_transport_method;
 static jmethodID panic_event_notify_method;
+static jmethodID rep_autotakeover_event_notify_method;
 static jmethodID rep_autotakeover_failed_event_notify_method;
 static jmethodID rep_client_event_notify_method;
 static jmethodID rep_connect_broken_event_notify_method;
@@ -899,10 +902,12 @@ const struct {
 	{ &repmgr_stat_st_connection_drop_fid, &repmgr_stat_class, "st_connection_drop", "J" },
 	{ &repmgr_stat_st_connect_fail_fid, &repmgr_stat_class, "st_connect_fail", "J" },
 	{ &repmgr_stat_st_elect_threads_fid, &repmgr_stat_class, "st_elect_threads", "I" },
+	{ &repmgr_stat_st_group_stable_log_file_fid, &repmgr_stat_class, "st_group_stable_log_file", "I" },
 	{ &repmgr_stat_st_max_elect_threads_fid, &repmgr_stat_class, "st_max_elect_threads", "I" },
 	{ &repmgr_stat_st_site_participants_fid, &repmgr_stat_class, "st_site_participants", "I" },
 	{ &repmgr_stat_st_site_total_fid, &repmgr_stat_class, "st_site_total", "I" },
 	{ &repmgr_stat_st_site_views_fid, &repmgr_stat_class, "st_site_views", "I" },
+	{ &repmgr_stat_st_polling_method_fid, &repmgr_stat_class, "st_polling_method", "I" },
 	{ &repmgr_stat_st_takeovers_fid, &repmgr_stat_class, "st_takeovers", "J" },
 	{ &repmgr_stat_st_write_ops_forwarded_fid, &repmgr_stat_class, "st_write_ops_forwarded", "J" },
 	{ &repmgr_stat_st_write_ops_received_fid, &repmgr_stat_class, "st_write_ops_received", "J" },
@@ -980,7 +985,7 @@ const struct {
 	{ &txn_active_construct, &txn_active_class, "<init>", "()V" },
 	{ &rephost_construct, &rephost_class, "<init>", "(Ljava/lang/String;I)V" },
         { &repmgr_siteinfo_construct, &repmgr_siteinfo_class, "<init>", 
-	    "(L" DB_PKG "ReplicationHostAddress;I)V" },
+	    "(L" DB_PKG "ReplicationHostAddress;L" DB_PKG "LogSequenceNumber;I)V" },
 
 	{ &dbex_construct, &dbex_class, "<init>",
 	    "(Ljava/lang/String;IL" DB_PKG "internal/DbEnv;)V" },
@@ -1037,6 +1042,8 @@ const struct {
 	    "(III[B)I" },
 	{ &panic_event_notify_method, &dbenv_class, "handle_panic_event_notify",
 	    "()V" },
+	{ &rep_autotakeover_event_notify_method, &dbenv_class, 
+	    "handle_rep_autotakeover_event_notify", "()V" },
 	{ &rep_autotakeover_failed_event_notify_method, &dbenv_class,
 	    "handle_rep_autotakeover_failed_event_notify", "()V" },
 	{ &rep_connect_broken_event_notify_method, &dbenv_class, 
@@ -1163,6 +1170,7 @@ SWIGEXPORT void JNICALL Java_com_sleepycat_db_internal_db_1javaJNI_initialize(
 			    all_classes[i].name);
 			return;
 		}
+		(*jenv)->DeleteLocalRef(jenv, cl);
 	}
 
 	/* Get field IDs */

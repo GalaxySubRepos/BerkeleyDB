@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;set_heapsize()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;set_heapsize()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_h_nelem.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_heapsize"></a>DB-&gt;set_heapsize()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_heapsize"></a>
+        <span>DB-&gt;set_heapsize()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -56,12 +62,18 @@ DB-&gt;set_heapsize(DB *db,
         The size specified to this method must be at least three times the
         database page size. That is, a Heap database must contain at least
         three database pages. You can set the database page size using the 
-        <a class="xref" href="dbset_pagesize.html" title="DB-&gt;set_pagesize()">DB-&gt;set_pagesize()</a>
+        <a class="xref" href="dbset_pagesize.html" title="DB-&gt;set_pagesize()">
+        <span>DB-&gt;set_pagesize()</span>
+        
+    </a>
         method.
     </p>
       <p>
          The <code class="methodname">DB-&gt;set_heapsize()</code> method may not be
-         called after the <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>
+         called after the <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>
          method is called. Further, if this method is called on an existing
          Heap database, the size specified here must match the size used to
          create the database. Note, however, that specifying an incorrect
@@ -80,7 +92,7 @@ DB-&gt;set_heapsize(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236272144"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488734464"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -88,7 +100,7 @@ DB-&gt;set_heapsize(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236252880"></a>gbytes</h4>
+                <h4 class="title"><a id="idm140113488712128"></a>gbytes</h4>
               </div>
             </div>
           </div>
@@ -100,7 +112,7 @@ DB-&gt;set_heapsize(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236364272"></a>bytes</h4>
+                <h4 class="title"><a id="idm140113488719264"></a>bytes</h4>
               </div>
             </div>
           </div>
@@ -112,7 +124,7 @@ DB-&gt;set_heapsize(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236265584"></a>flags</h4>
+                <h4 class="title"><a id="idm140113488711616"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -126,7 +138,7 @@ DB-&gt;set_heapsize(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236248256"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113488706464"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -142,13 +154,16 @@ DB-&gt;set_heapsize(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236239296"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113488697376"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
                   If the specified heap size was too small; the method was
-                  called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> 
+                  called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> 
                   was called; or if an invalid flag value or parameter was specified.
              </p>
         </div>
@@ -157,7 +172,7 @@ DB-&gt;set_heapsize(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236236816"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488694896"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -169,7 +184,7 @@ DB-&gt;set_heapsize(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236249712"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113488708832"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -189,11 +204,17 @@ DB-&gt;set_heapsize(DB *db,
           <td width="40%" align="right"> <a accesskey="n" href="dbset_heap_regionsize.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;set_h_nelem() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;set_h_nelem()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_heap_regionsize()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_heap_regionsize()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

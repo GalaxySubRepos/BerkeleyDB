@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -40,7 +40,7 @@ __os_seek(env, fhp, pgno, pgsize, relative)
 	offset = (off_t)pgsize * pgno + relative;
 
 	if (dbenv != NULL && FLD_ISSET(dbenv->verbose, DB_VERB_FILEOPS_ALL))
-		__db_msg(env, DB_STR_A("0170",
+		__db_msg(env, DB_STR_A("0038",
 		    "fileops: seek %s to %lu", "%s %lu"),
 		    fhp->name, (u_long)offset);
 
@@ -55,7 +55,7 @@ __os_seek(env, fhp, pgno, pgsize, relative)
 		fhp->pgno = pgno;
 		fhp->offset = relative;
 	} else {
-		__db_syserr(env, ret, DB_STR_A("0171",
+		__db_syserr(env, ret, DB_STR_A("0039",
 		    "seek: %lu: (%lu * %lu) + %lu", "%lu %lu %lu %lu"),
 		    (u_long)offset, (u_long)pgno, (u_long)pgsize,
 		    (u_long)relative);

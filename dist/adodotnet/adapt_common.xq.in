@@ -19,7 +19,6 @@ declare variable $COMMON_FLAGS := fn:concat(
 
 declare variable $WINDOWS_FLAGS := fn:concat(';',
   $COMMON_FLAGS,
-  'INTEROP_LEGACY_CLOSE;',
   '_CRT_SECURE_NO_DEPRECATE;',
   '_CRT_NONSTDC_NO_DEPRECATE;',
   'DB_CREATE_DLL;');

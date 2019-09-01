@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -16,7 +16,7 @@
 #include "dbinc/qam.h"
 #include "dbinc/txn.h"
 
-static int __qam_adjust_first __P((DB *, DBC *, QMETA *, db_recno_t));
+static int __qam_adjust_first __P((DB *, DBC *, QMETA *, db_recno_t, void *));
 
 /*
  * LSNs in queue data pages are advisory.  They do not have to be accurate
@@ -35,16 +35,19 @@ static int __qam_adjust_first __P((DB *, DBC *, QMETA *, db_recno_t));
 	}
 
 static int
-__qam_adjust_first(file_dbp, dbc, meta, recno)
+__qam_adjust_first(file_dbp, dbc, meta, recno, info)
 	DB *file_dbp;
 	DBC *dbc;
 	QMETA *meta;
 	db_recno_t recno;
+	void *info;
 {
+	DB_TXNHEAD *txnhead;
 	QUEUE_CURSOR *cp;
 	u_int32_t rec_ext;
 	int exact, ret;
 
+	txnhead = info;
 	ret = 0;
 	if (meta->page_ext == 0)
 		rec_ext = 0;
@@ -69,8 +72,7 @@ __qam_adjust_first(file_dbp, dbc, meta, recno)
 			if ((ret =
 			    __qam_fremove(file_dbp, cp->pgno)) != 0)
 				return (ret);
-		REC_DIRTY(file_dbp->mpf,
-		    dbc->thread_info, dbc->priority, &meta);
+		REC_DIRTY(file_dbp->mpf, txnhead, dbc->priority, &meta);
 		QAM_INC_RECNO(meta->first_recno);
 	}
 out:	return (ret);
@@ -97,15 +99,17 @@ __qam_incfirst_recover(env, dbtp, lsnp, op, info)
 	DBC *dbc;
 	DB_LSN trunc_lsn;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	QMETA *meta;
 	db_pgno_t metapg;
 	int ret;
 
 	COMPQUIET(meta, NULL);
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	REC_PRINT(__qam_incfirst_print);
-	REC_INTRO(__qam_incfirst_read, ip, 0);
+	REC_INTRO(__qam_incfirst_read, txnhead, 0);
 
 	metapg = ((QUEUE *)file_dbp->q_internal)->q_meta;
 
@@ -136,28 +140,28 @@ __qam_incfirst_recover(env, dbtp, lsnp, op, info)
 	 */
 	if (DB_UNDO(op)) {
 		if (QAM_BEFORE_FIRST(meta, argp->recno)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			meta->first_recno = argp->recno;
 		}
 
-		trunc_lsn = ((DB_TXNHEAD *)info)->trunc_lsn;
+		trunc_lsn = txnhead->trunc_lsn;
 		/* if we are truncating, update the LSN */
 		if (!IS_ZERO_LSN(trunc_lsn) &&
 		    LOG_COMPARE(&LSN(meta), &trunc_lsn) > 0) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			LSN(meta) = trunc_lsn;
 		}
 	} else {
 		if (LOG_COMPARE(&LSN(meta), lsnp) < 0) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			LSN(meta) = *lsnp;
 		}
 		if (QAM_BEFORE_FIRST(meta, argp->recno)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			meta->first_recno = argp->recno;
 		}
 		if ((ret = __qam_adjust_first(file_dbp,
-		    dbc, meta, argp->recno + 1)) != 0)
+		    dbc, meta, argp->recno + 1, txnhead)) != 0)
 			goto err;
 	}
 
@@ -191,19 +195,21 @@ __qam_mvptr_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__qam_mvptr_args *argp;
-	DB_THREAD_INFO *ip;
 	DB *file_dbp;
 	DBC *dbc;
 	DB_LSN trunc_lsn;
 	DB_MPOOLFILE *mpf;
+	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
 	QMETA *meta;
 	QUEUE_CURSOR *cp;
 	db_pgno_t metapg;
 	int cmp_n, cmp_p, exact, ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	REC_PRINT(__qam_mvptr_print);
-	REC_INTRO(__qam_mvptr_read, ip, 0);
+	REC_INTRO(__qam_mvptr_read, txnhead, 0);
 
 	/* Allocate our own cursor without DB_RECOVER as we need a locker. */
 	if ((ret = __db_cursor_int(file_dbp, ip, NULL,
@@ -242,20 +248,20 @@ __qam_mvptr_recover(env, dbtp, lsnp, op, info)
 	 */
 	if (DB_UNDO(op)) {
 		if ((argp->opcode & QAM_TRUNCATE) && cmp_n <= 0) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			meta->first_recno = argp->old_first;
 			meta->cur_recno = argp->old_cur;
 			LSN(meta) = argp->metalsn;
 		}
 		/* If the page lsn is beyond the truncate point, move it back */
-		trunc_lsn = ((DB_TXNHEAD *)info)->trunc_lsn;
+		trunc_lsn = txnhead->trunc_lsn;
 		if (!IS_ZERO_LSN(trunc_lsn) &&
 		    LOG_COMPARE(&trunc_lsn, &LSN(meta)) < 0) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			LSN(meta) = argp->metalsn;
 		}
 	} else if (op == DB_TXN_APPLY || cmp_p == 0) {
-		REC_DIRTY(mpf, ip, dbc->priority, &meta);
+		REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 		cp = (QUEUE_CURSOR *)dbc->internal;
 		if ((argp->opcode & QAM_SETFIRST) &&
 		    meta->first_recno == argp->old_first) {
@@ -324,26 +330,29 @@ __qam_del_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__qam_del_args *argp;
-	DB_THREAD_INFO *ip;
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_THREAD_INFO *ip;
+	DB_TXNHEAD *txnhead;
+	DB_TXN *txn;
 	QAMDATA *qp;
 	QMETA *meta;
 	QPAGE *pagep;
 	db_pgno_t metapg;
 	int cmp_n, ret, t_ret;
 
-	COMPQUIET(pagep, NULL);
+	txnhead = info;
+	ip = txnhead->thread_info;
+	txn = txnhead->txn;
 	meta = NULL;
 	pagep = NULL;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
 	REC_PRINT(__qam_del_print);
-	REC_INTRO(__qam_del_read, ip, 0);
+	REC_INTRO(__qam_del_read, txnhead, 0);
 
 	/* Allocate our own cursor without DB_RECOVER as we need a locker. */
-	if ((ret = __db_cursor_int(file_dbp, ip, NULL,
+	if ((ret = __db_cursor_int(file_dbp, ip, txnhead->txn,
 	    DB_QUEUE, PGNO_INVALID, 0, NULL, &dbc)) != 0)
 		goto out;
 	F_SET(dbc, DBC_RECOVER);
@@ -351,7 +360,7 @@ __qam_del_recover(env, dbtp, lsnp, op, info)
 	/* Get the meta page before latching the page. */
 	metapg = ((QUEUE *)file_dbp->q_internal)->q_meta;
 	if ((ret = __memp_fget(mpf, &metapg,
-	     ip, NULL, DB_MPOOL_EDIT, &meta)) != 0)
+	     ip, txn, DB_MPOOL_EDIT, &meta)) != 0)
 		goto err;
 
 	if ((ret = __qam_fget(dbc, &argp->pgno, DB_MPOOL_CREATE, &pagep)) != 0)
@@ -372,7 +381,7 @@ __qam_del_recover(env, dbtp, lsnp, op, info)
 		    (meta->first_recno <= meta->cur_recno ||
 		    meta->first_recno -
 		    argp->recno < argp->recno - meta->cur_recno))) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			meta->first_recno = argp->recno;
 		}
 
@@ -413,7 +422,7 @@ __qam_del_recover(env, dbtp, lsnp, op, info)
 			goto err;
 		pagep = NULL;
 		if ((ret = __qam_adjust_first(file_dbp,
-		    dbc, meta, argp->recno)) != 0)
+		    dbc, meta, argp->recno, txnhead)) != 0)
 			goto err;
 	}
 
@@ -449,6 +458,7 @@ __qam_delext_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	QAMDATA *qp;
 	QMETA *meta;
 	QPAGE *pagep;
@@ -459,9 +469,10 @@ __qam_delext_recover(env, dbtp, lsnp, op, info)
 	meta = NULL;
 	pagep = NULL;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	REC_PRINT(__qam_delext_print);
-	REC_INTRO(__qam_delext_read, ip, 0);
+	REC_INTRO(__qam_delext_read, txnhead, 0);
 
 	/* Allocate our own cursor without DB_RECOVER as we need a locker. */
 	if ((ret = __db_cursor_int(file_dbp, ip, NULL,
@@ -539,7 +550,7 @@ __qam_delext_recover(env, dbtp, lsnp, op, info)
 			goto err;
 		pagep = NULL;
 		if ((ret = __qam_adjust_first(file_dbp,
-		    dbc, meta, argp->recno)) != 0)
+		    dbc, meta, argp->recno, txnhead)) != 0)
 			goto err;
 	}
 
@@ -576,6 +587,7 @@ __qam_add_recover(env, dbtp, lsnp, op, info)
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_TXNHEAD *txnhead;
 	QAMDATA *qp;
 	QMETA *meta;
 	QPAGE *pagep;
@@ -584,9 +596,10 @@ __qam_add_recover(env, dbtp, lsnp, op, info)
 
 	COMPQUIET(pagep, NULL);
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
 	REC_PRINT(__qam_add_print);
-	REC_INTRO(__qam_add_read, ip, 1);
+	REC_INTRO(__qam_add_read, txnhead, 1);
 
 	if ((ret = __qam_fget(dbc, &argp->pgno,
 	     DB_UNDO(op) ? 0 : DB_MPOOL_CREATE, &pagep)) != 0) {
@@ -614,12 +627,12 @@ __qam_add_recover(env, dbtp, lsnp, op, info)
 		    0, &meta)) != 0)
 			goto err;
 		if (QAM_BEFORE_FIRST(meta, argp->recno)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			meta->first_recno = argp->recno;
 		}
 		if (argp->recno == meta->cur_recno ||
 		    QAM_AFTER_CURRENT(meta, argp->recno)) {
-			REC_DIRTY(mpf, ip, dbc->priority, &meta);
+			REC_DIRTY(mpf, txnhead, dbc->priority, &meta);
 			meta->cur_recno = argp->recno + 1;
 		}
 		if ((ret = __memp_fput(mpf, ip, meta, dbc->priority)) != 0)

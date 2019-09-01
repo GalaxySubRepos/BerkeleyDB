@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1707,13 +1707,13 @@ __qam_getno(dbp, key, rep)
 {
 	/* If passed an empty DBT from Java, key->data may be NULL */
 	if (key->size != sizeof(db_recno_t)) {
-		__db_errx(dbp->env, DB_STR("1143",
+		__db_errx(dbp->env, DB_STR("1001",
 		    "illegal record number size"));
 		return (EINVAL);
 	}
 
 	if ((*rep = *(db_recno_t *)key->data) == 0) {
-		__db_errx(dbp->env, DB_STR("1144",
+		__db_errx(dbp->env, DB_STR("1002",
 		    "illegal record number of 0"));
 		return (EINVAL);
 	}

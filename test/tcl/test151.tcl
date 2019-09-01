@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates. All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -29,6 +29,8 @@ proc test151 { method {tnum "151"} args } {
 	# load/loadr_args contains arguments used in db_load and db_load -r.
 	set load_args ""
 	set loadr_args ""
+	# loadt_args contains arguments used in db_load -T.
+	set loadt_args ""
 
 	# Set up environment and home folder.
 	set env NULL
@@ -180,22 +182,24 @@ proc test151 { method {tnum "151"} args } {
 
 	if { $subdb != 0} {
 		# List databases stored in file.
-		test151_execmd "$binname -l $dump_args $testfile2 $std_redirect"
+		test151_execmd "$binname -l $dump_args\
+		    $testfile2 $std_redirect"
 	}
 
 	# For hash database with custom hash functions, -v v flag returns
 	# DB_VERIFY_BAD.
 	if { [is_hash $method] == 1 } {
-		test151_execmd "$binname -v v $dump_args $testfile3 $std_redirect"\
-		    [list "DB_VERIFY_BAD"]
+		test151_execmd "$binname -v v $dump_args $testfile3\
+		$std_redirect" [list "DB_VERIFY_BAD"]
 		test151_execmd "$binname -S v $dump_args $testfile3\
 		$std_redirect" [list "DB_VERIFY_BAD"]
 		# Remove the database so the general verification doesn't fail
-		error_check_good dbremove [eval {berkdb dbremove} $dbremove_args\
-		    $testfile3] 0
+		error_check_good dbremove [eval {berkdb dbremove} \
+		    $dbremove_args $testfile3] 0
 	}
 
-	# wordlist is not a valid database file, error with DB_VERIFY_BAD is allowed.
+	# wordlist is not a valid database file, 
+	# error with DB_VERIFY_BAD is allowed.
 	file copy $test_path/wordlist $testdir/wordlist
 	test151_execmd "$binname -v o $dump_args $badfile $std_redirect"\
 	    [list "DB_VERIFY_BAD"]
@@ -216,10 +220,20 @@ proc test151 { method {tnum "151"} args } {
 		if { $flag == "-r" } {
 			continue
 		}
-		if { $subdb != 0} {
+		if { $subdb != 0 } {
 			# Test flags with specified database name.
 			test151_execmd "$binname $flag $dump_args\
 			    -s $dbname $testfile2 $std_redirect"
+		}
+		# Test with "-D" flag only when the flag "-d a" is set.
+		if { $flag == "-d a" } {
+			test151_execmd "$binname $flag $dump_args\
+		        -D 100 $testfile $std_redirect"
+		}
+		# Test with flags "-F" and "-L" only when the flag "-d" is set.
+		if { $flag == "-d a" || $flag == "-d h" || $flag == "-d r" } {
+			test151_execmd "$binname $flag $dump_args\
+		        -F 0 -L 1 $testfile $std_redirect"
 		}
 	}
 
@@ -238,12 +252,15 @@ proc test151 { method {tnum "151"} args } {
 		append binname $EXE
 	}
 
+	file copy $test_path/wordlist2 $testdir/wordlist2
 	# Relative path of testfile3, which is the target file of db_load.
 	# We need to put it in another folder in case of conflict with 
 	# current environment.
 	set loaddir $testdir/dbload
 	file mkdir $loaddir
 	set testfile3 $loaddir/test$tnum.3.db
+	set loadfile1 $testdir/wordlist
+	set loadfile2 $testdir/wordlist2
 
 	set flaglist [list "-c chksum=0" "-c db_pagesize=$pgsize"]
 	# Omit page params for heap mode DB.
@@ -256,6 +273,8 @@ proc test151 { method {tnum "151"} args } {
 	if { $env != "NULL" } {
 		append load_args " -h $loaddir"
 		set testfile3 test$tnum.3.db
+
+		append loadt_args "-h $loaddir "
 	}
 	if { [big_endian] == 1 } {
 		lappend flaglist "-c db_lorder=4321"
@@ -270,8 +289,9 @@ proc test151 { method {tnum "151"} args } {
 		lappend flaglist "-c database=test151"
 		lappend flaglist "-c subdatabase=test151"
 	}
-       	if { [is_queue $method] == 1 } {
+	if { [is_queue $method] == 1 } {
 		lappend flaglist "-t queue"
+		append loadt_args "-f $loadfile2 -T -t queue -c re_len=30"
 	}
 	if { [is_compressed $args] != 1 && [is_partitioned $args] != 1 } {
 		if { [is_btree $method] == 1 || [is_hash $method] == 1 } {
@@ -289,6 +309,7 @@ proc test151 { method {tnum "151"} args } {
 			lappend flaglist "-c recnum=0"
 		}
 		lappend flaglist "-t btree"
+		append loadt_args "-f $loadfile1 -T -t btree"
 	}
 	if { [is_hash $method] } {
 		lappend flaglist "-c h_ffactor=40"
@@ -298,6 +319,7 @@ proc test151 { method {tnum "151"} args } {
 		lappend flaglist "-c h_nelem=1000"
 		lappend flaglist "-c h_nelem=10000"
 		lappend flaglist "-t hash"
+		append loadt_args "-f $loadfile1 -T -t hash"
 	}
 	if { [is_queue $method] == 1 || [is_recno $method] == 1 } {
 		lappend flaglist "-c keys=0"
@@ -311,6 +333,7 @@ proc test151 { method {tnum "151"} args } {
 		lappend flaglist "-c renumber=1"
 		lappend flaglist "-c renumber=0"
 		lappend flaglist "-t recno"
+		append loadt_args "-f $loadfile2 -T -t recno"
 	}
 	# Prepare a suitable DB file for testing load -r.
 	lappend flaglist ""
@@ -337,6 +360,13 @@ proc test151 { method {tnum "151"} args } {
 	    [list "key already exists"]
 	# Clean up.
 	env_cleanup $loaddir 
+	# Flag -T is available for method btree, hash, queue and recno.
+	if { [is_btree $method] == 1 || [is_hash $method] == 1 ||\
+	    [is_queue $method] == 1 || [is_recno $method] == 1 } {
+		test151_execmd "$binname $loadt_args $testfile3 $std_redirect"
+		# Clean up.
+		env_cleanup $loaddir
+	}
 
 	# Print version.
 	test151_execmd "$binname -V $std_redirect"

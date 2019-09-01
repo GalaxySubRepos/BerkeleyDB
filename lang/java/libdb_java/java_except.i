@@ -71,6 +71,11 @@ static jthrowable __dbj_get_except(JNIEnv *jenv,
 		    jdbenv, dbenv_class, get_err_msg_method, jmsg);
 	}
 
+	if ((*jenv)->ExceptionOccurred(jenv)) {
+		/* The exception will be thrown, so this could be any error. */
+		ret = EINVAL;
+	}
+
 	switch (ret) {
 	case EINVAL:
 		return (jthrowable)(*jenv)->NewObject(jenv,

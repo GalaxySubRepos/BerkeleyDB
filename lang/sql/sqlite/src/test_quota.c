@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2010 September 31
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -111,7 +117,7 @@ struct quotaFile {
 
 /*
 ** An instance of the following object represents each open connection
-** to a file that participates in quota tracking.  This object is a 
+** to a file that participates in quota tracking.  This object is a
 ** subclass of sqlite3_file.  The sqlite3_file object for the underlying
 ** VFS is appended to this structure.
 */
@@ -154,11 +160,11 @@ static struct {
   */
   sqlite3_vfs sThisVfs;
 
-  /* The sIoMethods defines the methods used by sqlite3_file objects 
+  /* The sIoMethods defines the methods used by sqlite3_file objects
   ** associated with this shim.  It is initialized at start-time and does
   ** not require a mutex.
   **
-  ** When the underlying VFS is called to open a file, it might return 
+  ** When the underlying VFS is called to open a file, it might return
   ** either a version 1 or a version 2 sqlite3_file object.  This shim
   ** has to create a wrapper sqlite3_file of the same version.  Hence
   ** there are two I/O method structures, one for version 1 and the other
@@ -190,7 +196,7 @@ static struct {
 static void quotaEnter(void){ sqlite3_mutex_enter(gQuota.pMutex); }
 static void quotaLeave(void){ sqlite3_mutex_leave(gQuota.pMutex); }
 
-/* Count the number of open files in a quotaGroup 
+/* Count the number of open files in a quotaGroup
 */
 static int quotaGroupOpenFileCount(quotaGroup *pGroup){
   int N = 0;
@@ -399,7 +405,7 @@ static char *quota_utf8_to_mbcs(const char *zUtf8){
   return zMbcs;
 #else
   return (char*)zUtf8;  /* No-op on unix */
-#endif  
+#endif
 }
 
 /*
@@ -410,7 +416,7 @@ static void quota_mbcs_free(char *zOld){
   sqlite3_free(zOld);
 #else
   /* No-op on unix */
-#endif  
+#endif
 }
 
 /************************* VFS Method Wrappers *****************************/
@@ -428,7 +434,7 @@ static int quotaOpen(
   int flags,                  /* Flags to control the opening */
   int *pOutFlags              /* Flags showing results of opening */
 ){
-  int rc;                                    /* Result code */         
+  int rc;                                    /* Result code */
   quotaConn *pQuotaOpen;                     /* The new quota file descriptor */
   quotaFile *pFile;                          /* Corresponding quotaFile obj */
   quotaGroup *pGroup;                        /* The group file belongs to */
@@ -488,7 +494,7 @@ static int quotaDelete(
   const char *zName,          /* Name of file to be deleted */
   int syncDir                 /* Do a directory sync after deleting */
 ){
-  int rc;                                    /* Result code */         
+  int rc;                                    /* Result code */
   quotaFile *pFile;                          /* Files in the quota */
   quotaGroup *pGroup;                        /* The group file belongs to */
   sqlite3_vfs *pOrigVfs = gQuota.pOrigVfs;   /* Real VFS */
@@ -581,7 +587,7 @@ static int quotaWrite(
     szNew = pGroup->iSize - pFile->iSize + iEnd;
     if( szNew>pGroup->iLimit && pGroup->iLimit>0 ){
       if( pGroup->xCallback ){
-        pGroup->xCallback(pFile->zFilename, &pGroup->iLimit, szNew, 
+        pGroup->xCallback(pFile->zFilename, &pGroup->iLimit, szNew,
                           pGroup->pArg);
       }
       if( szNew>pGroup->iLimit && pGroup->iLimit>0 ){
@@ -738,7 +744,7 @@ static int quotaShmUnmap(sqlite3_file *pConn, int deleteFlag){
 /*
 ** Initialize the quota VFS shim.  Use the VFS named zOrigVfsName
 ** as the VFS that does the actual work.  Use the default if
-** zOrigVfsName==NULL.  
+** zOrigVfsName==NULL.
 **
 ** The quota VFS shim is named "quota".  It will become the default
 ** VFS if makeDefault is non-zero.
@@ -908,7 +914,7 @@ int sqlite3_quota_file(const char *zFilename){
 
   if( rc==SQLITE_OK ){
     zFull[strlen(zFull)+1] = '\0';
-    rc = quotaOpen(&gQuota.sThisVfs, zFull, fd, 
+    rc = quotaOpen(&gQuota.sThisVfs, zFull, fd,
                    SQLITE_OPEN_READONLY | SQLITE_OPEN_MAIN_DB, &outFlags);
     if( rc==SQLITE_OK ){
       fd->pMethods->xFileSize(fd, &iSize);
@@ -1016,7 +1022,7 @@ size_t sqlite3_quota_fwrite(
     szNew = pGroup->iSize - pFile->iSize + iEnd;
     if( szNew>pGroup->iLimit && pGroup->iLimit>0 ){
       if( pGroup->xCallback ){
-        pGroup->xCallback(pFile->zFilename, &pGroup->iLimit, szNew, 
+        pGroup->xCallback(pFile->zFilename, &pGroup->iLimit, szNew,
                           pGroup->pArg);
       }
       if( szNew>pGroup->iLimit && pGroup->iLimit>0 ){
@@ -1203,7 +1209,7 @@ sqlite3_int64 sqlite3_quota_file_truesize(quota_FILE *p){
 sqlite3_int64 sqlite3_quota_file_size(quota_FILE *p){
   return p->pFile ? p->pFile->iSize : -1;
 }
- 
+
 /*
 ** Determine the amount of data in bytes available for reading
 ** in the given file.
@@ -1275,10 +1281,17 @@ int sqlite3_quota_remove(const char *zFilename){
   sqlite3_free(zFull);
   return rc;
 }
-  
+
 /***************************** Test Code ***********************************/
 #ifdef SQLITE_TEST
-#include <tcl.h>
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#  ifndef SQLITE_TCLAPI
+#    define SQLITE_TCLAPI
+#  endif
+#endif
 
 /*
 ** Argument passed to a TCL quota-over-limit callback.
@@ -1350,7 +1363,7 @@ static void tclCallbackDestructor(void *pObj){
 /*
 ** tclcmd: sqlite3_quota_initialize NAME MAKEDEFAULT
 */
-static int test_quota_initialize(
+static int SQLITE_TCLAPI test_quota_initialize(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1379,7 +1392,7 @@ static int test_quota_initialize(
 /*
 ** tclcmd: sqlite3_quota_shutdown
 */
-static int test_quota_shutdown(
+static int SQLITE_TCLAPI test_quota_shutdown(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1402,7 +1415,7 @@ static int test_quota_shutdown(
 /*
 ** tclcmd: sqlite3_quota_set PATTERN LIMIT SCRIPT
 */
-static int test_quota_set(
+static int SQLITE_TCLAPI test_quota_set(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1456,7 +1469,7 @@ static int test_quota_set(
 /*
 ** tclcmd: sqlite3_quota_file FILENAME
 */
-static int test_quota_file(
+static int SQLITE_TCLAPI test_quota_file(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1482,7 +1495,7 @@ static int test_quota_file(
 /*
 ** tclcmd:  sqlite3_quota_dump
 */
-static int test_quota_dump(
+static int SQLITE_TCLAPI test_quota_dump(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1530,7 +1543,7 @@ static int test_quota_dump(
 /*
 ** tclcmd: sqlite3_quota_fopen FILENAME MODE
 */
-static int test_quota_fopen(
+static int SQLITE_TCLAPI test_quota_fopen(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1560,7 +1573,7 @@ extern void *sqlite3TestTextToPtr(const char*);
 /*
 ** tclcmd: sqlite3_quota_fread HANDLE SIZE NELEM
 */
-static int test_quota_fread(
+static int SQLITE_TCLAPI test_quota_fread(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1594,7 +1607,7 @@ static int test_quota_fread(
 /*
 ** tclcmd: sqlite3_quota_fwrite HANDLE SIZE NELEM CONTENT
 */
-static int test_quota_fwrite(
+static int SQLITE_TCLAPI test_quota_fwrite(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1622,7 +1635,7 @@ static int test_quota_fwrite(
 /*
 ** tclcmd: sqlite3_quota_fclose HANDLE
 */
-static int test_quota_fclose(
+static int SQLITE_TCLAPI test_quota_fclose(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1644,7 +1657,7 @@ static int test_quota_fclose(
 /*
 ** tclcmd: sqlite3_quota_fflush HANDLE ?HARDSYNC?
 */
-static int test_quota_fflush(
+static int SQLITE_TCLAPI test_quota_fflush(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1670,7 +1683,7 @@ static int test_quota_fflush(
 /*
 ** tclcmd: sqlite3_quota_fseek HANDLE OFFSET WHENCE
 */
-static int test_quota_fseek(
+static int SQLITE_TCLAPI test_quota_fseek(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1708,7 +1721,7 @@ static int test_quota_fseek(
 /*
 ** tclcmd: sqlite3_quota_rewind HANDLE
 */
-static int test_quota_rewind(
+static int SQLITE_TCLAPI test_quota_rewind(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1727,7 +1740,7 @@ static int test_quota_rewind(
 /*
 ** tclcmd: sqlite3_quota_ftell HANDLE
 */
-static int test_quota_ftell(
+static int SQLITE_TCLAPI test_quota_ftell(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1748,7 +1761,7 @@ static int test_quota_ftell(
 /*
 ** tclcmd: sqlite3_quota_ftruncate HANDLE SIZE
 */
-static int test_quota_ftruncate(
+static int SQLITE_TCLAPI test_quota_ftruncate(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1773,7 +1786,7 @@ static int test_quota_ftruncate(
 /*
 ** tclcmd: sqlite3_quota_file_size HANDLE
 */
-static int test_quota_file_size(
+static int SQLITE_TCLAPI test_quota_file_size(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1794,7 +1807,7 @@ static int test_quota_file_size(
 /*
 ** tclcmd: sqlite3_quota_file_truesize HANDLE
 */
-static int test_quota_file_truesize(
+static int SQLITE_TCLAPI test_quota_file_truesize(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1815,7 +1828,7 @@ static int test_quota_file_truesize(
 /*
 ** tclcmd: sqlite3_quota_file_mtime HANDLE
 */
-static int test_quota_file_mtime(
+static int SQLITE_TCLAPI test_quota_file_mtime(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1838,7 +1851,7 @@ static int test_quota_file_mtime(
 /*
 ** tclcmd: sqlite3_quota_remove FILENAME
 */
-static int test_quota_remove(
+static int SQLITE_TCLAPI test_quota_remove(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1862,7 +1875,7 @@ static int test_quota_remove(
 ** Test the glob pattern matching.  Return 1 if TEXT matches PATTERN
 ** and return 0 if it does not.
 */
-static int test_quota_glob(
+static int SQLITE_TCLAPI test_quota_glob(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1888,7 +1901,7 @@ static int test_quota_glob(
 ** Return the number of bytes from the current file point to the end of
 ** the file.
 */
-static int test_quota_file_available(
+static int SQLITE_TCLAPI test_quota_file_available(
   void * clientData,
   Tcl_Interp *interp,
   int objc,
@@ -1911,7 +1924,7 @@ static int test_quota_file_available(
 **
 ** Return true if the file handle is in the error state.
 */
-static int test_quota_ferror(
+static int SQLITE_TCLAPI test_quota_ferror(
   void * clientData,
   Tcl_Interp *interp,
   int objc,

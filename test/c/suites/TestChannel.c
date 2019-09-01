@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2011, 2019 Oracle and/or its affiliates. All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include <ctype.h>
@@ -209,6 +209,7 @@ setup(envp1, envp2, envp3, g)
 	u_int32_t flags;
 	int ret;
 	u_int *ports;
+	int ssl_cert_gen_success;
 
 #define CHECK(call) \
 	do {	    \
@@ -219,6 +220,24 @@ setup(envp1, envp2, envp3, g)
 	} while (0);
 
 	ports = g->ports;
+	ssl_cert_gen_success = -1;
+
+	/* 
+	 * For these test to run with ssl_support for repmgr on windows
+	 * or unix, the location of respective scripts must be in PATH.
+	 * These scripts would generate the ssl certificates necessary
+	 * for testing. If these scripts are not found then ssl will be
+	 * disabled.
+	 */
+#if defined(HAVE_REPMGR_SSL)
+#if defined(DB_WIN32)
+	ssl_cert_gen_success = system("ssl_cert_gen_script.bat > nul 2>&1");
+#else
+	ssl_cert_gen_success = system("ssl_cert_gen_script.sh > /dev/null 2>&1");
+#endif
+#endif
+	if (ssl_cert_gen_success == 0)
+		fprintf(stderr, "DEBUG : SSL enabled for Replication Manager Tests.\n");
 
 	dbenv1 = dbenv2 = dbenv3 = NULL;
 	CHECK(db_env_create(&dbenv1, 0));
@@ -231,6 +250,23 @@ setup(envp1, envp2, envp3, g)
 	CHECK(dbenv1->open(dbenv1, "DIR1", flags, 0));
 	
 	CHECK(dbenv1->rep_set_config(dbenv1, DB_REPMGR_CONF_ELECTIONS, 0));
+#if defined(HAVE_REPMGR_SSL)
+	if (ssl_cert_gen_success == 0) {
+		CHECK(dbenv1->repmgr_set_ssl_config(dbenv1,
+		    DB_REPMGR_SSL_CA_CERT, "certs/rootCA.crt"));
+		CHECK(dbenv1->repmgr_set_ssl_config(dbenv1,
+		    DB_REPMGR_SSL_REPNODE_CERT, "certs/repNode.crt"));
+		CHECK(dbenv1->repmgr_set_ssl_config(dbenv1,
+		    DB_REPMGR_SSL_REPNODE_PRIVATE_KEY, "certs/repNode.key"));
+		CHECK(dbenv1->repmgr_set_ssl_config(dbenv1, 
+		    DB_REPMGR_SSL_REPNODE_KEY_PASSWD, "someRandomPass"));
+		CHECK(dbenv1->repmgr_set_ssl_config(dbenv1,
+		    DB_REPMGR_SSL_VERIFY_DEPTH, "9"));
+	}
+	else
+		CHECK(dbenv1->rep_set_config(dbenv1,
+		    DB_REPMGR_CONF_DISABLE_SSL, 1));
+#endif
 	CHECK(dbenv1->repmgr_site(dbenv1, "::1", ports[0], &dbsite, 0));
 	CHECK(dbsite->set_config(dbsite, DB_LOCAL_SITE, 1));
 	CHECK(dbsite->close(dbsite));
@@ -245,6 +281,23 @@ setup(envp1, envp2, envp3, g)
 	setup_envdir("DIR2", 1);
 	CHECK(dbenv2->open(dbenv2, "DIR2", flags, 0));
 	CHECK(dbenv2->rep_set_config(dbenv2, DB_REPMGR_CONF_ELECTIONS, 0));
+#if defined(HAVE_REPMGR_SSL)
+	if (ssl_cert_gen_success == 0) {
+		CHECK(dbenv2->repmgr_set_ssl_config(dbenv2,
+		    DB_REPMGR_SSL_CA_CERT, "certs/rootCA.crt"));
+		CHECK(dbenv2->repmgr_set_ssl_config(dbenv2,
+		    DB_REPMGR_SSL_REPNODE_CERT, "certs/repNode.crt"));
+		CHECK(dbenv2->repmgr_set_ssl_config(dbenv2,
+		    DB_REPMGR_SSL_REPNODE_PRIVATE_KEY, "certs/repNode.key"));
+		CHECK(dbenv2->repmgr_set_ssl_config(dbenv2, 
+		    DB_REPMGR_SSL_REPNODE_KEY_PASSWD, "someRandomPass"));
+		CHECK(dbenv2->repmgr_set_ssl_config(dbenv2,
+		    DB_REPMGR_SSL_VERIFY_DEPTH, "9"));
+	}
+	else
+		CHECK(dbenv2->rep_set_config(dbenv2,
+		    DB_REPMGR_CONF_DISABLE_SSL, 1));
+#endif
 
 	CHECK(dbenv2->repmgr_site(dbenv2, "::1", ports[1], &dbsite, 0));
 	CHECK(dbsite->set_config(dbsite, DB_LOCAL_SITE, 1));
@@ -270,6 +323,23 @@ setup(envp1, envp2, envp3, g)
 	setup_envdir("DIR3", 1);
 	CHECK(dbenv3->open(dbenv3, "DIR3", flags, 0));
 	CHECK(dbenv3->rep_set_config(dbenv3, DB_REPMGR_CONF_ELECTIONS, 0));
+#if defined(HAVE_REPMGR_SSL)
+	if (ssl_cert_gen_success == 0) {
+		CHECK(dbenv3->repmgr_set_ssl_config(dbenv3,
+		    DB_REPMGR_SSL_CA_CERT, "certs/rootCA.crt"));
+		CHECK(dbenv3->repmgr_set_ssl_config(dbenv3,
+		    DB_REPMGR_SSL_REPNODE_CERT, "certs/repNode.crt"));
+		CHECK(dbenv3->repmgr_set_ssl_config(dbenv3,
+		    DB_REPMGR_SSL_REPNODE_PRIVATE_KEY, "certs/repNode.key"));
+		CHECK(dbenv3->repmgr_set_ssl_config(dbenv3, 
+		    DB_REPMGR_SSL_REPNODE_KEY_PASSWD, "someRandomPass"));
+		CHECK(dbenv3->repmgr_set_ssl_config(dbenv3,
+		    DB_REPMGR_SSL_VERIFY_DEPTH, "9"));
+	}
+	else
+		CHECK(dbenv3->rep_set_config(dbenv3,
+		    DB_REPMGR_CONF_DISABLE_SSL, 1));
+#endif
 
 	CHECK(dbenv3->repmgr_site(dbenv3, "::1", ports[2], &dbsite, 0));
 	CHECK(dbsite->set_config(dbsite, DB_LOCAL_SITE, 1));
@@ -454,7 +524,7 @@ int TestChannelFeature(CuTest *ct) {
 	await_condition(has_msgs, &info, 90);
 	rpt = get_rpt(dbenv2);
 	CuAssertTrue(ct, rpt->msg_count == 1);
-	CuAssertTrue(ct, strncmp(rpt->msg[0], "BDB3670", strlen("BDB3670")) == 0);
+	CuAssertTrue(ct, strncmp(rpt->msg[0], "BDB3655", strlen("BDB3655")) == 0);
 
 	printf("2. send request with no msg dispatch in place\n");
 	clear_rpt(dbenv2);
@@ -464,7 +534,7 @@ int TestChannelFeature(CuTest *ct) {
 		free(resp.data);
 	await_condition(has_msgs, &info, 90);
 	CuAssertTrue(ct, rpt->msg_count == 1);
-	CuAssertTrue(ct, strncmp(rpt->msg[0], "BDB3670", strlen("BDB3670")) == 0);
+	CuAssertTrue(ct, strncmp(rpt->msg[0], "BDB3655", strlen("BDB3655")) == 0);
 
 	CuAssertTrue(ct, (ret = dbenv2->repmgr_msg_dispatch(dbenv2, msg_disp, 0)) == 0);
 
@@ -476,7 +546,7 @@ int TestChannelFeature(CuTest *ct) {
 		free(resp.data);
 	await_done(dbenv2);
 	CuAssertTrue(ct, rpt->msg_count == 1);
-	CuAssertTrue(ct, strncmp(rpt->msg[0], "BDB3671", strlen("BDB3671")) == 0);
+	CuAssertTrue(ct, strncmp(rpt->msg[0], "BDB3656", strlen("BDB3656")) == 0);
 
 	printf("4. now with dispatch fn installed, send a simple async msg\n");
 	clear_rpt(dbenv2);

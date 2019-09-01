@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2001 September 15
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -15,7 +21,11 @@
 */
 #include "sqliteInt.h"
 #include "btreeInt.h"
-#include "tcl.h"
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#endif
 #include <stdlib.h>
 #include <string.h>
 
@@ -42,7 +52,7 @@ static int nRefSqlite3 = 0;
 **
 ** Open a new database
 */
-static int btree_open(
+static int SQLITE_TCLAPI btree_open(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -88,7 +98,7 @@ static int btree_open(
 **
 ** Close the given database.
 */
-static int btree_close(
+static int SQLITE_TCLAPI btree_close(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -123,7 +133,7 @@ static int btree_close(
 **
 ** Start a new transaction
 */
-static int btree_begin_transaction(
+static int SQLITE_TCLAPI btree_begin_transaction(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -152,7 +162,7 @@ static int btree_begin_transaction(
 **
 ** Returns pager statistics
 */
-static int btree_pager_stats(
+static int SQLITE_TCLAPI btree_pager_stats(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -202,7 +212,7 @@ static int btree_pager_stats(
 **
 ** Create a new cursor.  Return the ID for the cursor.
 */
-static int btree_cursor(
+static int SQLITE_TCLAPI btree_cursor(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -223,16 +233,19 @@ static int btree_cursor(
   pBt = sqlite3TestTextToPtr(argv[1]);
   if( Tcl_GetInt(interp, argv[2], &iTable) ) return TCL_ERROR;
   if( Tcl_GetBoolean(interp, argv[3], &wrFlag) ) return TCL_ERROR;
+  if( wrFlag ) wrFlag = BTREE_WRCSR;
   pCur = (BtCursor *)ckalloc(sqlite3BtreeCursorSize());
   memset(pCur, 0, sqlite3BtreeCursorSize());
+  sqlite3_mutex_enter(pBt->db->mutex);
   sqlite3BtreeEnter(pBt);
 #ifndef SQLITE_OMIT_SHARED_CACHE
-  rc = sqlite3BtreeLockTable(pBt, iTable, wrFlag);
+  rc = sqlite3BtreeLockTable(pBt, iTable, !!wrFlag);
 #endif
   if( rc==SQLITE_OK ){
     rc = sqlite3BtreeCursor(pBt, iTable, wrFlag, 0, pCur);
   }
   sqlite3BtreeLeave(pBt);
+  sqlite3_mutex_leave(pBt->db->mutex);
   if( rc ){
     ckfree((char *)pCur);
     Tcl_AppendResult(interp, sqlite3ErrName(rc), 0);
@@ -248,14 +261,13 @@ static int btree_cursor(
 **
 ** Close a cursor opened using btree_cursor.
 */
-static int btree_close_cursor(
+static int SQLITE_TCLAPI btree_close_cursor(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
   const char **argv      /* Text of each argument */
 ){
   BtCursor *pCur;
-  Btree *pBt;
   int rc;
 
   if( argc!=2 ){
@@ -264,10 +276,18 @@ static int btree_close_cursor(
     return TCL_ERROR;
   }
   pCur = sqlite3TestTextToPtr(argv[1]);
-  pBt = pCur->pBtree;
-  sqlite3BtreeEnter(pBt);
+#if SQLITE_THREADSAFE>0
+  {
+    Btree *pBt = pCur->pBtree;
+    sqlite3_mutex_enter(pBt->db->mutex);
+    sqlite3BtreeEnter(pBt);
+    rc = sqlite3BtreeCloseCursor(pCur);
+    sqlite3BtreeLeave(pBt);
+    sqlite3_mutex_leave(pBt->db->mutex);
+  }
+#else
   rc = sqlite3BtreeCloseCursor(pCur);
-  sqlite3BtreeLeave(pBt);
+#endif
   ckfree((char *)pCur);
   if( rc ){
     Tcl_AppendResult(interp, sqlite3ErrName(rc), 0);
@@ -283,7 +303,7 @@ static int btree_close_cursor(
 ** or 1 if the cursor was already on the last entry in the table or if
 ** the table is empty.
 */
-static int btree_next(
+static int SQLITE_TCLAPI btree_next(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -318,7 +338,7 @@ static int btree_next(
 ** Move the cursor to the first entry in the table.  Return 0 if the
 ** cursor was left point to something and 1 if the table is empty.
 */
-static int btree_first(
+static int SQLITE_TCLAPI btree_first(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -352,14 +372,14 @@ static int btree_first(
 **
 ** Return the number of bytes of payload
 */
-static int btree_payload_size(
+static int SQLITE_TCLAPI btree_payload_size(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
   const char **argv      /* Text of each argument */
 ){
   BtCursor *pCur;
-  int n1;
+  u32 n;
   char zBuf[50];
 
   if( argc!=2 ){
@@ -369,11 +389,11 @@ static int btree_payload_size(
   }
   pCur = sqlite3TestTextToPtr(argv[1]);
   sqlite3BtreeEnter(pCur->pBtree);
-
   /* The cursor may be in "require-seek" state. If this is the case, the
   ** call to BtreeDataSize() will fix it. */
-  sqlite3BtreeDataSize(pCur, (u32*)&n1);
-  sqlite3_snprintf(sizeof(zBuf),zBuf, "%d", (int)n1);
+  sqlite3BtreeDataSize(pCur, (u32*)&n);
+  sqlite3BtreeLeave(pCur->pBtree);
+  sqlite3_snprintf(sizeof(zBuf),zBuf, "%u", n);
   Tcl_AppendResult(interp, zBuf, 0);
   return SQLITE_OK;
 }
@@ -387,7 +407,7 @@ static int btree_payload_size(
 ** sqlite3 db test.db
 ** set bt [btree_from_db db]
 */
-static int btree_from_db(
+static int SQLITE_TCLAPI btree_from_db(
   void *NotUsed,
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int argc,              /* Number of arguments */
@@ -422,6 +442,51 @@ static int btree_from_db(
   return TCL_OK;
 }
 
+/*
+** usage:   btree_insert CSR ?KEY? VALUE
+**
+** Set the size of the cache used by btree $ID.
+*/
+static int SQLITE_TCLAPI btree_insert(
+  ClientData clientData,
+  Tcl_Interp *interp,
+  int objc,
+  Tcl_Obj *const objv[]
+){
+  BtCursor *pCur;
+  int rc;
+  BtreePayload x;
+
+  if( objc!=4 && objc!=3 ){
+    Tcl_WrongNumArgs(interp, 1, objv, "?-intkey? CSR KEY VALUE");
+    return TCL_ERROR;
+  }
+
+  memset(&x, 0, sizeof(x));
+  if( objc==4 ){
+    if( Tcl_GetIntFromObj(interp, objv[2], &rc) ) return TCL_ERROR;
+    x.nKey = rc;
+    x.pData = (void*)Tcl_GetByteArrayFromObj(objv[3], &x.nData);
+  }else{
+    x.pKey = (void*)Tcl_GetByteArrayFromObj(objv[2], &rc);
+    x.nKey = rc;
+  }
+  pCur = (BtCursor*)sqlite3TestTextToPtr(Tcl_GetString(objv[1]));
+
+  sqlite3_mutex_enter(pCur->pBtree->db->mutex);
+  sqlite3BtreeEnter(pCur->pBtree);
+  rc = sqlite3BtreeInsert(pCur, &x, 0, 0);
+  sqlite3BtreeLeave(pCur->pBtree);
+  sqlite3_mutex_leave(pCur->pBtree->db->mutex);
+
+  Tcl_ResetResult(interp);
+  if( rc ){
+    Tcl_AppendResult(interp, sqlite3ErrName(rc), 0);
+    return TCL_ERROR;
+  }
+  return TCL_OK;
+}
+
 
 /*
 ** Register commands with the TCL interpreter.
@@ -451,6 +516,8 @@ int Sqlitetest3_Init(Tcl_Interp *interp){
   for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
+
+  Tcl_CreateObjCommand(interp, "btree_insert", btree_insert, 0, 0);
 
   return TCL_OK;
 }

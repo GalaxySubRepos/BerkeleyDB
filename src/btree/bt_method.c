@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -161,11 +161,13 @@ __bam_set_flags(dbp, flagsp)
 	DB *dbp;
 	u_int32_t *flagsp;
 {
-	BTREE *t;
 	u_int32_t flags;
 
+#ifdef HAVE_COMPRESSION
+	BTREE *t;
 	t = dbp->bt_internal;
-
+#endif
+	
 	flags = *flagsp;
 	if (LF_ISSET(DB_DUP | DB_DUPSORT | DB_RECNUM | DB_REVSPLITOFF))
 		DB_ILLEGAL_AFTER_OPEN(dbp, "DB->set_flags");
@@ -306,7 +308,7 @@ __bam_get_bt_compress(dbp, compressp, decompressp)
 	COMPQUIET(compressp, NULL);
 	COMPQUIET(decompressp, NULL);
 
-	__db_errx(dbp->env, DB_STR("1026",
+	__db_errx(dbp->env, DB_STR("1017",
 	    "compression support has not been compiled in"));
 	return (EINVAL);
 #endif
@@ -383,7 +385,7 @@ __bam_set_bt_compress(dbp, compress, decompress)
 	COMPQUIET(compress, NULL);
 	COMPQUIET(decompress, NULL);
 
-	__db_errx(dbp->env, DB_STR("1030",
+	__db_errx(dbp->env, DB_STR("1017",
 	    "compression support has not been compiled in"));
 	return (EINVAL);
 #endif

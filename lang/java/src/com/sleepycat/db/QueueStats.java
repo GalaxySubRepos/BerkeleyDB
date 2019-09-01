@@ -2,9 +2,9 @@
  * Automatically built by dist/s_java_stat.
  * Only the javadoc comments can be edited.
  *
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 package com.sleepycat.db;

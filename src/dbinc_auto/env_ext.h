@@ -200,6 +200,9 @@ int __repmgr_init_recover __P((ENV *, DB_DISTAB *));
 #ifndef HAVE_REPLICATION_THREADS
 int __repmgr_set_socket __P((DB_ENV *, int (*)(DB_ENV *, DB_REPMGR_SOCKET, int *, u_int32_t)));
 #endif
+#ifndef HAVE_REPLICATION_THREADS
+int __repmgr_set_ssl_config_pp __P((DB_ENV *, int, char *value));
+#endif
 
 #if defined(__cplusplus)
 }

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -151,14 +151,30 @@ proc env029_slice_enabled { } {
 			[[lindex $slices $i] get_msgpfx] "slice-msg"
 	}
 	# Change one slice, verify that the other is not changed.
-	error_check_good set_slice1_msgpfx [[lindex $slices 1] msgpfx "slice1-msg"] 0
+	error_check_good set_slice1_msgpfx \
+		[[lindex $slices 1] msgpfx "slice1-msg"] 0
 	error_check_match get_slice0_msgpfx \
 		[[lindex $slices 0] get_msgpfx] "slice-msg"
 	error_check_match get_slice1_msgpfx \
 		[[lindex $slices 1] get_msgpfx] "slice1-msg"
 
 	error_check_good restore_errpfx [$dbenv errpfx $old_errpfx] 0
+	
+	puts "\tEnv029.p: Open a database with -msgpfx flag."
+	set db2 [berkdb_open -create -btree -msgpfx "db-msg" db2.db]
+	error_check_good non-sliced_db [is_valid_db $db2] TRUE
+	error_check_match get_db_msgpfx [$db2 get_msgpfx] "db-msg"
+	error_check_good db2_close [$db2 close] 0
 
+	puts "\tEnv029.q: Open a sliced environment with -msgpfx flag."
+	set dbenv2 [eval {berkdb_env \
+		-create -msgpfx "env-msg" -txn -home $testdir}]
+	error_check_good sliced_env_open [is_valid_env $dbenv2] TRUE
+	set old_env_msgpfx [$dbenv2 get_msgpfx]
+	error_check_good set_env_msgpfx [$dbenv2 msgpfx "sliced-msg"] 0
+	error_check_match get_sliced_env_msgpfx [$dbenv2 get_msgpfx] "sliced-msg"
+	error_check_good restore_env_msgpfx [$dbenv2 msgpfx $old_env_msgpfx] 0
+	error_check_good dbenv_close [$dbenv2 close] 0
 
 	error_check_good sliced_db_close [$db close] 0
    	set txn [$dbenv txn]
@@ -214,6 +230,23 @@ proc env029_slice_not_enabled { } {
 	set ret [catch {$db slice_lookup 1} msg]
 	error_check_good db_get_slices_msg [is_substr $msg $err_msg] 1
 
+	puts "\tEnv029.j Open a database with -msgpfx flag."
+	set db1 [berkdb_open -create  -btree -msgpfx "db-msg" test1.db]
+	error_check_good db_with_msgpfx [is_valid_db $db1] TRUE
+	error_check_match get_db_msgpfx [$db1 get_msgpfx] "db-msg"
+
+	puts "\tEnv029.k Open a non-sliced environment with -msgpfx flag."
+	set dbenv1 [eval {berkdb_env \
+		-create -msgpfx "env-msg" -txn -home $testdir }]
+	error_check_good env_open [is_valid_env $dbenv1] TRUE
+	set old_env_msgpfx [$dbenv1 get_msgpfx]
+	error_check_good set_msgpfx [$dbenv1 msgpfx "non-sliced-msg"] 0
+	error_check_match get_non_sliced_env_msgpfx \
+		[$dbenv1 get_msgpfx] "non-sliced-msg"
+	error_check_good restore_msgpfx [$dbenv1 msgpfx $old_env_msgpfx] 0
+
 	error_check_good db_close [$db close] 0
 	error_check_good env_close [$dbenv close] 0
+	error_check_good db1_close [$db1 close] 0
+	error_check_good env1_close [$dbenv1 close] 0
 }

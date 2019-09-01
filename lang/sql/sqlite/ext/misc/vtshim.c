@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2013-06-12
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -95,6 +101,7 @@ static int vtshimCreate(
   if( rc ){
     sqlite3_free(pNew);
     *ppVtab = 0;
+    return rc;
   }
   pNew->pAux = pAux;
   pNew->ppPrev = &pAux->pAllVtab;
@@ -133,6 +140,7 @@ static int vtshimConnect(
   if( rc ){
     sqlite3_free(pNew);
     *ppVtab = 0;
+    return rc;
   }
   pNew->pAux = pAux;
   pNew->ppPrev = &pAux->pAllVtab;

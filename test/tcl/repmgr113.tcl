@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -55,6 +55,10 @@ proc repmgr113_loop { {tnum "113"} } {
 	make_dbconfig $c2dir \
 	    [list [list repmgr_site $hoststr $c2port db_local_site on] \
 	    [list repmgr_site $hoststr $mport db_bootstrap_helper on]]
+
+	setup_repmgr_ssl $mdir
+	setup_repmgr_ssl $c1dir
+	setup_repmgr_ssl $c2dir
 
 	puts "\t\tRepmgr$tnum.loop.a: Start master and client1."
 	set cmds {
@@ -273,6 +277,11 @@ proc repmgr113_test { {tnum "113"} } {
 	make_dbconfig $c3dir \
 	    [list [list repmgr_site $hoststr $c3port db_local_site on] \
 	    [list repmgr_site $hoststr $mport db_bootstrap_helper on]]
+
+	setup_repmgr_ssl $mdir
+	setup_repmgr_ssl $c1dir
+	setup_repmgr_ssl $c2dir
+	setup_repmgr_ssl $c3dir
 
 	# Test case 1: Test listener takeover on master.
 	# 2 sites, master and client1
@@ -682,6 +691,7 @@ proc repmgr113_zero_nthreads { {tnum "113"} } {
 	file mkdir [set mdir $testdir/MASTER]
 	make_dbconfig $mdir \
 	    [list [list repmgr_site $hoststr $mport db_local_site on]]
+	setup_repmgr_ssl $mdir
 
 	puts "\t\tRepmgr$tnum.zero.nthreads.a: Start master listener."
 	set cmds {
@@ -709,6 +719,8 @@ proc repmgr113_zero_nthreads { {tnum "113"} } {
 	error_check_good m_takeover $takeover_count 1
 	set ev [find_event [$m_2 event_info] autotakeover_failed]
 	error_check_good m_no_autotakeover_failed [string length $ev] 0
+	set ev2 [find_event [$m_2 event_info] autotakeover]
+	error_check_good m_autotakeover_event [is_substr $ev2 "autotakeover"] 1
 	$m_2 close
 }
 
@@ -747,6 +759,9 @@ proc repmgr113_prefmas { {tnum "113"} } {
 	    [list repmgr_site $hoststr $mport db_bootstrap_helper on] \
 	    "rep_set_config db_repmgr_conf_prefmas_client on" \
 	    "repmgr_set_ack_policy db_repmgr_acks_all"]
+
+	setup_repmgr_ssl $mdir
+	setup_repmgr_ssl $cdir
 
 	puts "\t\tRepmgr$tnum.pm.a: Start master and client."
 	set cmds {

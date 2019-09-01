@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -57,6 +57,7 @@ public class StoreConfig implements Cloneable {
      *
      * @deprecated As of JE 4.0.13, replaced by {@link StoreConfig#clone()}.
      */
+	@Deprecated
     public StoreConfig cloneConfig() {
         try {
             return (StoreConfig) super.clone();

@@ -1,4 +1,4 @@
---- /dev/null	Thu Jan 01 00:00:00 1970 +0000
+--- /dev/null   Thu Jan 01 00:00:00 1970 +0000
 +++ build_config.h.in
 @@ -0,0 +1,47 @@
 +
@@ -50,7 +50,12 @@
 +#endif
 --- configure
 +++ configure
-@@ -13600,7 +13600,7 @@
+@@ -11638,17 +11638,17 @@ fi
+ # Output the config header
+ ac_config_headers="$ac_config_headers config.h"
+ 
+ 
+ #########
  # Generate the output files.
  #
  
@@ -59,17 +64,37 @@
  
  cat >confcache <<\_ACEOF
  # This file is a shell script that caches the results of configure
-@@ -14454,6 +14454,7 @@
+ # tests run on this system so they can be shared between configure
+ # scripts and configure runs, see configure's option --config-cache.
+ # It is not useful on other systems.  If it contains results you don't
+ # want to keep, you may remove or edit it.
+ #
+@@ -12597,16 +12597,17 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_wri
+ # Handling of arguments.
+ for ac_config_target in $ac_config_targets
+ do
+   case $ac_config_target in
+     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
      "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
      "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
      "sqlite3.pc") CONFIG_FILES="$CONFIG_FILES sqlite3.pc" ;;
 +    "build_config.h") CONFIG_FILES="$CONFIG_FILES build_config.h" ;;
  
-   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
- $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
+   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+   esac
+ done
+ 
+ 
+ # If the user did not use the arguments to specify the items to instantiate,
+ # then the envvar interface is used.  Set only those that are not.
 --- configure.ac
 +++ configure.ac
-@@ -690,4 +690,5 @@
+@@ -733,9 +733,10 @@ AC_CONFIG_HEADERS(config.h)
+ 
+ #########
+ # Generate the output files.
+ #
+ AC_SUBST(BUILD_CFLAGS)
  AC_OUTPUT([
  Makefile
  sqlite3.pc

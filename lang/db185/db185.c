@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -546,7 +546,7 @@ db185_compare(dbp, a, b, locp)
 {
 	DBT185 a185, b185;
 
-	locp = NULL;
+	COMPQUIET(locp, NULL);
 	a185.data = a->data;
 	a185.size = a->size;
 	b185.data = b->data;

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -272,8 +272,8 @@ proc repmgr035_method_version { } {
 
 	set mv {}
 	set versions "$valid_releases(50) $valid_releases(51)\
-	    $valid_releases(52) $valid_releases(53)\
-	    $valid_releases(60) $valid_releases(61)"
+	    $valid_releases(52) $valid_releases(53) $valid_releases(60)\
+	    $valid_releases(61) $valid_releases(62) $valid_releases(181)"
 	set versions_len [expr [llength $versions] - 1]
 
 	# Walk through the list of versions and pair each with btree method.

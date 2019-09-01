@@ -4,7 +4,9 @@
 # Build the automatically generated logging/recovery files.
 #
 # When adding a new log record, the log record needs a unique id. Currently
-# there is a large gap of unused ids from 87-137.
+# there are gaps of unused ids from 87-137 (between DB___fop_write_file and
+# DB___crdel_inmem_create) and from 155-199 (between DB___heap_trunc_page
+# and DB___repmgr_member).
 
 header=/tmp/__db_a
 loglist=/tmp/__db_b

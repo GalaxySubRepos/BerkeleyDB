@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -3995,7 +3995,7 @@ __txn_child_verify(env, dbtp, lsnp, notused2, lvhp)
 		}
 		if (ret2 != 0)
 			ret = ret2;
-		__db_errx(lvh->dbenv->env, DB_STR_A("2553",
+		__db_errx(lvh->dbenv->env, DB_STR_A("2547",
 		    "[%lu][%lu] Can not find an active transaction's "
 		    "information, txnid: %lx.", "%lu %lu %lx"),
 		    (u_long)lsnp->file, (u_long)lsnp->offset,
@@ -4040,7 +4040,7 @@ __txn_child_verify(env, dbtp, lsnp, notused2, lvhp)
 		}
 		if (ret2 != 0)
 			ret = ret2;
-		__db_errx(lvh->dbenv->env, DB_STR_A("2555",
+		__db_errx(lvh->dbenv->env, DB_STR_A("2547",
 		    "[%lu][%lu] Can not find an active "
 		    "transaction's information, txnid: %lx.",
 		    "%lu %lu %lx"), (u_long)lsnp->file,
@@ -4146,7 +4146,7 @@ __txn_prepare_verify(env, dbtp, lsnp, notused2, lvhp)
 		}
 		if (ret2 != 0)
 			ret = ret2;
-		__db_errx(lvh->dbenv->env, DB_STR_A("2557",
+		__db_errx(lvh->dbenv->env, DB_STR_A("2547",
 		    "[%lu][%lu] Can not find an active transaction's "
 		    "information, txnid: %lx.", "%lu %lu %lx"),
 		    (u_long)lsnp->file, (u_long)lsnp->offset,
@@ -4332,7 +4332,7 @@ cont:
 		if (ret2 != 0)
 			ret = ret2;
 
-		__db_errx(lvh->dbenv->env, DB_STR_A("2561",
+		__db_errx(lvh->dbenv->env, DB_STR_A("2547",
 		    "[%lu][%lu] Can not find an active transaction's "
 		    "information, txnid: %lx.", "%lu %lu %lx"),
 		    (u_long)lsnp->file, (u_long)lsnp->offset, (u_long)txnid);
@@ -4594,7 +4594,7 @@ __lv_on_txn_aborted(lvinfo)
 		}
 		if (ret2 != 0)
 			ret = ret2;/* Use the same error msg below. */
-		__db_errx(lvinfo->dbenv->env, DB_STR_A("2566",
+		__db_errx(lvinfo->dbenv->env, DB_STR_A("2547",
 		    "[%lu][%lu] Can not find an active transaction's "
 		    "information, txnid: %lx.", "%lu %lu %lx"),
 		    (u_long)lsn.file, (u_long)lsn.offset,

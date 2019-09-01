@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -487,7 +487,7 @@ __env_setup(dbp, txn, fname, dname, id, flags)
 	/* If we don't yet have an environment, it's time to create it. */
 	if (!F_ISSET(env, ENV_OPEN_CALLED)) {
 #if defined(HAVE_MIXED_SIZE_ADDRESSING) && (SIZEOF_CHAR_P == 8)
-		__db_errx(env, DB_STR("0701", "DB_PRIVATE is not supported by"
+		__db_errx(env, DB_STR("1589", "DB_PRIVATE is not supported by"
 		    " 64-bit applications in mixed-size-addressing mode"));
 	       return (EINVAL);
 #endif

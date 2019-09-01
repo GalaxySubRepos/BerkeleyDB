@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -365,7 +365,7 @@ __mutex_region_size(env)
 
 	s = sizeof(DB_MUTEXMGR) + 1024;
 
-	/* 
+	/*
 	 * We discard one mutex for the OOB slot. Make sure mutex_cnt doesn't
 	 * overflow.
 	 */

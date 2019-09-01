@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::txn_recover()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::txn_recover()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_tx_timestamp.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txnrecover"></a>DbEnv::txn_recover()</h2>
+            <h2 class="title" style="clear: both"><a id="txnrecover"></a>
+        
+        <span>DbEnv::txn_recover()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -57,10 +63,19 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
       <p>
          Multiple threads of control may call <code class="methodname">DbEnv::txn_recover()</code>, but only
          one thread of control may resolve each returned transaction, that is,
-         only one thread of control may call <a class="xref" href="txncommit.html" title="DbTxn::commit()">DbTxn::commit()</a>  
-         or <a class="xref" href="txnabort.html" title="DbTxn::abort()">DbTxn::abort()</a>  on each
+         only one thread of control may call <a class="xref" href="txncommit.html" title="DbTxn::commit()">
+        
+        <span>DbTxn::commit()</span>
+    </a>  
+         or <a class="xref" href="txnabort.html" title="DbTxn::abort()">
+        
+        <span>DbTxn::abort()</span>
+    </a>  on each
          returned transaction.  Callers of <code class="methodname">DbEnv::txn_recover()</code> must call
-         <a class="xref" href="txndiscard.html" title="DbTxn::discard()">DbTxn::discard()</a>  to
+         <a class="xref" href="txndiscard.html" title="DbTxn::discard()">
+        
+        <span>DbTxn::discard()</span>
+    </a>  to
          discard each transaction they do not resolve.
     </p>
       <p>
@@ -106,7 +121,7 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806410544"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176763589904"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -114,7 +129,7 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806364544"></a>preplist</h4>
+                <h4 class="title"><a id="idm140176763560592"></a>preplist</h4>
               </div>
             </div>
           </div>
@@ -128,7 +143,7 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806365568"></a>count</h4>
+                <h4 class="title"><a id="idm140176763609456"></a>count</h4>
               </div>
             </div>
           </div>
@@ -142,7 +157,7 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806375632"></a>flags</h4>
+                <h4 class="title"><a id="idm140176763515888"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -184,7 +199,7 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806352272"></a>Class</h3>
+              <h3 class="title"><a id="idm140176763505360"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -196,7 +211,7 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806411376"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176763516928"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -216,11 +231,17 @@ DbEnv::txn_recover(DB_PREPLIST preplist[],
           <td width="40%" align="right"> <a accesskey="n" href="txnbegin.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_tx_timestamp() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_tx_timestamp()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::txn_begin()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::txn_begin()</span>
+    </td>
         </tr>
       </table>
     </div>

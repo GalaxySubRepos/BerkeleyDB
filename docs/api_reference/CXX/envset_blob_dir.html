@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_ext_file_dir()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_ext_file_dir()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envget_blob_threshold.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_blob_dir"></a>DbEnv::set_ext_file_dir()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_blob_dir"></a>
+        
+        <span>DbEnv::set_ext_file_dir()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -46,14 +52,20 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
          The <code class="methodname">DbEnv::set_ext_file_dir()</code> method sets the
          directory where external file data is stored. Use this method when the
          database is opened within an encompassing environment. If an
-         environment is not in use, use <a class="xref" href="set_blob_dir.html" title="Db::set_ext_file_dir()">Db::set_ext_file_dir()</a> instead.
+         environment is not in use, use <a class="xref" href="set_blob_dir.html" title="Db::set_ext_file_dir()">
+        
+        <span>Db::set_ext_file_dir()</span>
+    </a> instead.
      </p>
       <p>
          By default, if this method is not called then external file data is placed
          in a subdirectory within the DB's environment.
      </p>
       <p>
-         Once this method has been used, you can call <a class="xref" href="envget_blob_dir.html" title="DbEnv::get_ext_file_dir()">DbEnv::get_ext_file_dir()</a> to
+         Once this method has been used, you can call <a class="xref" href="envget_blob_dir.html" title="DbEnv::get_ext_file_dir()">
+        
+        <span>DbEnv::get_ext_file_dir()</span>
+    </a> to
          identify the current storage location used for external file data.
      </p>
       <p>
@@ -62,7 +74,10 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
          performed on the underlying database environment.
      </p>
       <p>
-         This method may not be called after <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> is called.
+         This method may not be called after <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> is called.
      </p>
       <p>
          Unless otherwise specified, the
@@ -79,7 +94,7 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703805746208"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176762883232"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -87,7 +102,7 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703805762080"></a>dir</h4>
+                <h4 class="title"><a id="idm140176762848544"></a>dir</h4>
               </div>
             </div>
           </div>
@@ -103,7 +118,7 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703805705824"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176762845568"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -121,12 +136,15 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703805690848"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176762848416"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> was called; or if
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> was called; or if
                 an invalid parameter was specified.
             </p>
         </div>
@@ -135,7 +153,7 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703805707968"></a>Class</h3>
+              <h3 class="title"><a id="idm140176762871904"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -147,7 +165,7 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703805694544"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176762845024"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -167,11 +185,17 @@ DbEnv::set_ext_file_dir(const char *dir);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_blob_threshold.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::get_ext_file_threshold() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::get_ext_file_threshold()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_ext_file_threshold()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_ext_file_threshold()</span>
+    </td>
         </tr>
       </table>
     </div>

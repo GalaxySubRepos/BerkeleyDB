@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">db_sequence_create</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">db_sequence_create</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="seq.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="seqcreate"></a>db_sequence_create</h2>
+            <h2 class="title" style="clear: both"><a id="seqcreate"></a>
+        <span>db_sequence_create</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -43,29 +49,50 @@
 int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
       <p>
             Creates a sequence handle, which can then be opened with 
-            <a class="xref" href="seqopen.html" title="DB_SEQUENCE-&gt;open()">DB_SEQUENCE-&gt;open()</a>.
+            <a class="xref" href="seqopen.html" title="DB_SEQUENCE-&gt;open()">
+        <span>DB_SEQUENCE-&gt;open()</span>
+        
+    </a>.
     </p>
       <p>
             
         <code class="classname">DB_SEQUENCE</code> handles are free-threaded if the 
         <a class="link" href="seqopen.html#seqopen_DB_THREAD">DB_THREAD</a>
         flag is specified to the
-        <a class="xref" href="seqopen.html" title="DB_SEQUENCE-&gt;open()">DB_SEQUENCE-&gt;open()</a>
+        <a class="xref" href="seqopen.html" title="DB_SEQUENCE-&gt;open()">
+        <span>DB_SEQUENCE-&gt;open()</span>
+        
+    </a>
         method when the sequence is opened. Once the 
-        <a class="xref" href="seqclose.html" title="DB_SEQUENCE-&gt;close()">DB_SEQUENCE-&gt;close()</a> or
-        <a class="xref" href="seqremove.html" title="DB_SEQUENCE-&gt;remove()">DB_SEQUENCE-&gt;remove()</a>
+        <a class="xref" href="seqclose.html" title="DB_SEQUENCE-&gt;close()">
+        <span>DB_SEQUENCE-&gt;close()</span>
+        
+    </a> or
+        <a class="xref" href="seqremove.html" title="DB_SEQUENCE-&gt;remove()">
+        <span>DB_SEQUENCE-&gt;remove()</span>
+        
+    </a>
         methods are called, the handle can not be accessed again, regardless
         of the method's return.
     </p>
       <p>
             Each handle opened on a sequence may maintain a separate cache of values which are
-            returned to the application using the <a class="xref" href="seqget.html" title="DB_SEQUENCE-&gt;get()">DB_SEQUENCE-&gt;get()</a>
+            returned to the application using the <a class="xref" href="seqget.html" title="DB_SEQUENCE-&gt;get()">
+        <span>DB_SEQUENCE-&gt;get()</span>
+        
+    </a>
             method either singly or in groups
             depending on its <span class="bold"><strong>delta</strong></span> parameter.
     </p>
       <p>
-            Calling the  <a class="xref" href="seqclose.html" title="DB_SEQUENCE-&gt;close()">DB_SEQUENCE-&gt;close()</a>
-            or <a class="xref" href="seqremove.html" title="DB_SEQUENCE-&gt;remove()">DB_SEQUENCE-&gt;remove()</a>
+            Calling the  <a class="xref" href="seqclose.html" title="DB_SEQUENCE-&gt;close()">
+        <span>DB_SEQUENCE-&gt;close()</span>
+        
+    </a>
+            or <a class="xref" href="seqremove.html" title="DB_SEQUENCE-&gt;remove()">
+        <span>DB_SEQUENCE-&gt;remove()</span>
+        
+    </a>
             methods discards this handle.
     </p>
       <p>
@@ -80,7 +107,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228395872"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113480629488"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -88,7 +115,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228402128"></a>seq</h4>
+                <h4 class="title"><a id="idm140113480628240"></a>seq</h4>
               </div>
             </div>
           </div>
@@ -101,7 +128,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228385152"></a>db</h4>
+                <h4 class="title"><a id="idm140113480660224"></a>db</h4>
               </div>
             </div>
           </div>
@@ -116,7 +143,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228360304"></a>flags</h4>
+                <h4 class="title"><a id="idm140113480604880"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -130,7 +157,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228349424"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113480594112"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -146,7 +173,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228340016"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113480584512"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -159,7 +186,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228342608"></a>Class</h3>
+              <h3 class="title"><a id="idm140113480587104"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -171,7 +198,7 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228337536"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113480587760"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -197,7 +224,10 @@ int db_sequence_create(DB_SEQUENCE **seq, DB *db, u_int32_t flags);  </pre>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_SEQUENCE-&gt;close()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_SEQUENCE-&gt;close()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -108,6 +108,8 @@ __db_new(dbc, type, lockp, pagepp)
 	PAGE *h;
 	db_pgno_t last, *list, pgno, newnext;
 	int extend, hash, ret;
+
+	COMPQUIET(last, 0);
 
 	meta = NULL;
 	dbp = dbc->dbp;
@@ -1330,8 +1332,9 @@ __db_haslock(env, locker, dbmfp, pgno, mode, type)
 }
 /*
  * __db_has_pagelock --
- *	Determine if this locker holds a particular page lock.
- *	Returns 0 if lock is held, non-zero otherwise.
+ *	Determine if this locker holds a particular page lock, and return an
+ *	error if it is missing a page lock that it should have.
+ *	Otherwise (TDS with the page locked, or DS or CDS) return 0.
  *
  * PUBLIC: #ifdef DIAGNOSTIC
  * PUBLIC: int __db_has_pagelock __P((ENV *, DB_LOCKER *,
@@ -1347,6 +1350,9 @@ __db_has_pagelock(env, locker, dbmfp, pagep, mode)
 	db_lockmode_t mode;
 {
 	int ret;
+
+	if (!FLD_ISSET(env->open_flags, DB_INIT_TXN))
+		return (0);
 
 	switch (pagep->type) {
 	case P_OVERFLOW:

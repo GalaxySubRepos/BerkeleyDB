@@ -1,19 +1,17 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db.repquote;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sleepycat.db.ReplicationHostAddress;
 import com.sleepycat.db.ReplicationManagerAckPolicy;
 import com.sleepycat.db.ReplicationManagerStartPolicy;
-import com.sleepycat.db.ReplicationManagerSiteInfo;
 import com.sleepycat.db.ReplicationManagerSiteConfig;
 
 public class RepConfig
@@ -27,11 +25,12 @@ public class RepConfig
     public ReplicationManagerAckPolicy ackPolicy;
     public boolean bulk; /* Whether bulk transfer should be performed. */
     public String home; /* The home directory for rep files. */
-    private Vector otherHosts; /* Stores an optional set of "other" hosts. */
+     /* Stores an optional set of "other" hosts. */
+    private final ArrayList<RepRemoteHost> otherHosts;
     public int priority; /* Priority within the replication group. */
     public ReplicationManagerStartPolicy startPolicy;
     /* Local Host configuration to listen to. */
-    private ReplicationManagerSiteConfig thisHost;
+    private final ReplicationManagerSiteConfig thisHost;
     public boolean verbose;
 
     /* Member variables used internally. */
@@ -47,7 +46,7 @@ public class RepConfig
         verbose = false;
         currOtherHost = 0;
         thisHost = new ReplicationManagerSiteConfig();
-        otherHosts = new Vector();
+        otherHosts = new ArrayList<>();
         ackPolicy = ReplicationManagerAckPolicy.QUORUM;
         bulk = false;
     }
@@ -95,9 +94,9 @@ public class RepConfig
     public RepRemoteHost getFirstOtherHost()
     {
         currOtherHost = 0;
-        if (otherHosts.size() == 0)
+        if (otherHosts.isEmpty())
             return null;
-        return (RepRemoteHost)otherHosts.get(currOtherHost);
+        return otherHosts.get(currOtherHost);
     }
 
     public RepRemoteHost getNextOtherHost()
@@ -105,14 +104,14 @@ public class RepConfig
         currOtherHost++;
         if (currOtherHost >= otherHosts.size())
             return null;
-        return (RepRemoteHost)otherHosts.get(currOtherHost);
+        return otherHosts.get(currOtherHost);
     }
 
     public RepRemoteHost getOtherHost(int i)
     {
         if (i >= otherHosts.size())
             return null;
-        return (RepRemoteHost)otherHosts.get(i);
+        return otherHosts.get(i);
     }
 
 }

@@ -1,4 +1,11 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
+**
 ** 2013-05-28
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -167,7 +174,7 @@ static void percentStep(sqlite3_context *pCtx, int argc, sqlite3_value **argv){
 /*
 ** Compare to doubles for sorting using qsort()
 */
-static int doubleCmp(const void *pA, const void *pB){
+static int SQLITE_CDECL doubleCmp(const void *pA, const void *pB){
   double a = *(double*)pA;
   double b = *(double*)pB;
   if( a==b ) return 0;

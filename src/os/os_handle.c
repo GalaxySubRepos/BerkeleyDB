@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1998, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -52,7 +52,7 @@ __os_openhandle(env, name, flags, mode, fhpp)
 	/* If the application specified an interface, use it. */
 	if (DB_GLOBAL(j_open) != NULL) {
 		if ((fhp->fd = DB_GLOBAL(j_open)(name, flags, mode)) == -1) {
-			ret = __os_posix_err(__os_get_syserr());
+			ret = USR_ERR(env, __os_posix_err(__os_get_syserr()));
 			goto err;
 		}
 		goto done;
@@ -63,8 +63,8 @@ __os_openhandle(env, name, flags, mode, fhpp)
 		ret = 0;
 #ifdef	HAVE_VXWORKS
 		/*
-		 * VxWorks does not support O_CREAT on open, you have to use
-		 * creat() instead.  (It does not support O_EXCL or O_TRUNC
+		 * VxWorks does not support O_CREAT on open previously, you have
+		 * to use creat() instead.  (It does not support O_EXCL or O_TRUNC
 		 * either, even though they are defined "for future support".)
 		 * We really want the POSIX behavior that if O_CREAT is set,
 		 * we open if it exists, or create it if it doesn't exist.
@@ -103,7 +103,11 @@ __os_openhandle(env, name, flags, mode, fhpp)
 				 * ENOENT.
 				 */
 			} else
+#if defined(_WRS_VXWORKS_MAJOR) && (_WRS_VXWORKS_MAJOR >= 7)
+				fhp->fd = open(name, newflags | O_CREAT | O_EXCL, mode);
+#else
 				fhp->fd = creat(name, newflags);
+#endif
 			DB_END_SINGLE_THREAD;
 		} else
 		/* FALLTHROUGH */
@@ -162,7 +166,7 @@ __os_openhandle(env, name, flags, mode, fhpp)
 		if ((fcntl_flags = fcntl(fhp->fd, F_GETFD)) == -1 ||
 		    fcntl(fhp->fd, F_SETFD, fcntl_flags | FD_CLOEXEC) == -1) {
 			ret = USR_ERR(env, __os_get_syserr());
-			__db_syserr(env, ret, DB_STR("0162", "fcntl(F_SETFD)"));
+			__db_syserr(env, ret, DB_STR("0001", "fcntl(F_SETFD)"));
 			ret = __os_posix_err(ret);
 			goto err;
 		}

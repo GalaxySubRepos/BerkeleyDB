@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_flags()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_flags()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_feedback.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_flags"></a>Db::set_flags()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_flags"></a>
+        
+        <span>Db::set_flags()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -48,7 +54,10 @@ Db::set_flags(u_int32_t flags); </pre>
     </p>
       <p>
              The <code class="methodname">Db::set_flags()</code> method may not be called after the 
-             <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called.
+             <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">Db::set_flags()</code> <span>
@@ -64,7 +73,7 @@ Db::set_flags(u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703823339648"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176783403376"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -72,7 +81,7 @@ Db::set_flags(u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703823228688"></a>flags</h4>
+                <h4 class="title"><a id="idm140176783109056"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -106,7 +115,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          any other Berkeley DB handles opened within the scope of that handle).
                     </p>
                 <p>
-                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
                             is called, the DB_CHKSUM flag will be ignored.
                     </p>
               </li>
@@ -116,8 +128,14 @@ Db::set_flags(u_int32_t flags); </pre>
                     </p>
                 <p>
                          Encrypt the database using the cryptographic password specified to the
-                         <a class="xref" href="envset_encrypt.html" title="DbEnv::set_encrypt()">DbEnv::set_encrypt()</a>  or
-                         <a class="xref" href="dbset_encrypt.html" title="Db::set_encrypt()">Db::set_encrypt()</a> 
+                         <a class="xref" href="envset_encrypt.html" title="DbEnv::set_encrypt()">
+        
+        <span>DbEnv::set_encrypt()</span>
+    </a>  or
+                         <a class="xref" href="dbset_encrypt.html" title="Db::set_encrypt()">
+        
+        <span>Db::set_encrypt()</span>
+    </a> 
                          methods.
                     </p>
                 <p>
@@ -126,7 +144,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          any other Berkeley DB handles opened within the scope of that handle).
                     </p>
                 <p>
-                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
                             is called, the DB_ENCRYPT flag must be the same as the existing database or an error
                             will be returned.
                     </p>
@@ -151,8 +172,14 @@ Db::set_flags(u_int32_t flags); </pre>
                          must be closed without specifying 
                          <a class="link" href="dbclose.html#dbclose_DB_NOSYNC">DB_NOSYNC</a>, or all
                          database changes must be flushed from the database environment cache
-                         using either the <a class="xref" href="txncheckpoint.html" title="DbEnv::txn_checkpoint()">DbEnv::txn_checkpoint()</a> 
-                         or <a class="xref" href="mempsync.html" title="DbEnv::memp_sync()">DbEnv::memp_sync()</a> 
+                         using either the <a class="xref" href="txncheckpoint.html" title="DbEnv::txn_checkpoint()">
+        
+        <span>DbEnv::txn_checkpoint()</span>
+    </a> 
+                         or <a class="xref" href="mempsync.html" title="DbEnv::memp_sync()">
+        
+        <span>DbEnv::memp_sync()</span>
+    </a> 
                          methods.  All database handles for a single physical file must set
                          DB_TXN_NOT_DURABLE, including database handles for different databases
                          in a physical file.
@@ -200,7 +227,10 @@ Db::set_flags(u_int32_t flags); </pre>
                     </p>
                 <p>
                         If the database already exists when 
-                        <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>
+                        <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>
                         is called, the DB_DUP flag must be the same as
                         the existing database or an error will be
                         returned.
@@ -219,7 +249,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          database will be successful.  The ordering of duplicates in the
                          database is determined by the duplicate comparison function.  If the
                          application does not specify a comparison function using the 
-                         <a class="xref" href="dbset_dup_compare.html" title="Db::set_dup_compare()">Db::set_dup_compare()</a> 
+                         <a class="xref" href="dbset_dup_compare.html" title="Db::set_dup_compare()">
+        
+        <span>Db::set_dup_compare()</span>
+    </a> 
                          method, a default lexical comparison will be used. It is an error to
                          specify both DB_DUPSORT and DB_RECNUM.
                     </p>
@@ -231,7 +264,10 @@ Db::set_flags(u_int32_t flags); </pre>
                     </p>
                 <p>
                         If the database already exists when 
-                        <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>
+                        <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>
                         is called, the DB_DUPSORT flag must be the same
                         as the existing database or an error will be
                         returned.
@@ -245,8 +281,14 @@ Db::set_flags(u_int32_t flags); </pre>
                          Support retrieval from the Btree using record numbers.  For more
                          information, see the 
                          <a class="link" href="dbget.html#dbget_DB_SET_RECNO">DB_SET_RECNO</a>  
-                         flag to the <a class="xref" href="dbget.html" title="Db::get()">Db::get()</a>  and 
-                         <a class="xref" href="dbcget.html" title="Dbc::get()">Dbc::get()</a>  methods.
+                         flag to the <a class="xref" href="dbget.html" title="Db::get()">
+        
+        <span>Db::get()</span>
+    </a>  and 
+                         <a class="xref" href="dbcget.html" title="Dbc::get()">
+        
+        <span>Dbc::get()</span>
+    </a>  methods.
                     </p>
                 <p>
                          Logical record numbers in Btree databases are mutable in the face of
@@ -269,7 +311,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          including all threads of control accessing the database.
                     </p>
                 <p>
-                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
                             is called, the DB_RECNUM flag must be the same as the existing database or an error
                             will be returned.
                     </p>
@@ -329,7 +374,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          including all threads of control accessing the database.
                     </p>
                 <p>
-                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
                             is called, the DB_DUP flag must be the same as the existing database or an error will be
                             returned.
                     </p>
@@ -344,7 +392,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          database will be successful.  The ordering of duplicates in the
                          database is determined by the duplicate comparison function.  If the
                          application does not specify a comparison function using the 
-                         <a class="xref" href="dbset_dup_compare.html" title="Db::set_dup_compare()">Db::set_dup_compare()</a> 
+                         <a class="xref" href="dbset_dup_compare.html" title="Db::set_dup_compare()">
+        
+        <span>Db::set_dup_compare()</span>
+    </a> 
                          method, a default lexical comparison will be used.
                     </p>
                 <p>
@@ -352,7 +403,10 @@ Db::set_flags(u_int32_t flags); </pre>
                          database, including all threads of control accessing the database.
                     </p>
                 <p>
-                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+                            If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
                             is called, the DB_DUPSORT flag must be the same as the existing database or an error
                             will be returned.
                     </p>
@@ -396,7 +450,10 @@ Db::set_flags(u_int32_t flags); </pre>
                      The DB_INORDER flag modifies the operation of the 
                      <a class="link" href="dbget.html#dbget_DB_CONSUME">DB_CONSUME</a>  or 
                      <a class="link" href="dbget.html#dbget_DB_CONSUME_WAIT">DB_CONSUME_WAIT</a> 
-                     flags to <a class="xref" href="dbget.html" title="Db::get()">Db::get()</a>  to
+                     flags to <a class="xref" href="dbget.html" title="Db::get()">
+        
+        <span>Db::get()</span>
+    </a>  to
                      return key/data pairs in order.  That is, they will always return the
                      key/data item from the head of the queue.
             </p>
@@ -405,11 +462,17 @@ Db::set_flags(u_int32_t flags); </pre>
                  readers, and does not guarantee that record will be retrieved in the
                  order they are added to the queue.  Specifically, if a writing thread
                  adds multiple records to an empty queue, reading threads may skip some
-                 of the initial records when the next <a class="xref" href="dbget.html" title="Db::get()">Db::get()</a> 
+                 of the initial records when the next <a class="xref" href="dbget.html" title="Db::get()">
+        
+        <span>Db::get()</span>
+    </a> 
                  call returns.
             </p>
                 <p>
-                    This flag modifies the <a class="xref" href="dbget.html" title="Db::get()">Db::get()</a>  
+                    This flag modifies the <a class="xref" href="dbget.html" title="Db::get()">
+        
+        <span>Db::get()</span>
+    </a>  
                     call to verify that the record being returned is in fact the head of the queue.  This will
                     increase contention and reduce concurrency when there are many reading threads.
             </p>
@@ -439,8 +502,14 @@ Db::set_flags(u_int32_t flags); </pre>
                  database.
             </p>
                 <p>
-                 Using the <a class="xref" href="dbput.html" title="Db::put()">Db::put()</a>  or
-                 <a class="xref" href="dbcput.html" title="Dbc::put()">Dbc::put()</a>  interfaces
+                 Using the <a class="xref" href="dbput.html" title="Db::put()">
+        
+        <span>Db::put()</span>
+    </a>  or
+                 <a class="xref" href="dbcput.html" title="Dbc::put()">
+        
+        <span>Dbc::put()</span>
+    </a>  interfaces
                  to create new records will cause the creation of multiple records if
                  the record number is more than one greater than the largest record
                  currently in the database.  For example, creating record 28, when
@@ -471,11 +540,17 @@ Db::set_flags(u_int32_t flags); </pre>
                  prior to the removal will no longer be positioned on a valid entry.
                  This includes cursors used to delete an item. For example, if
                  a cursor was positioned to record number 8 before the removal of
-                 that record, subsequent calls to <a class="xref" href="dbcget.html" title="Dbc::get()">Dbc::get()</a>
+                 that record, subsequent calls to <a class="xref" href="dbcget.html" title="Dbc::get()">
+        
+        <span>Dbc::get()</span>
+    </a>
                  with flags of DB_CURRENT will result in an error return of 
                  <a href="../../programmer_reference/program_errorret.html#program_errorret.DB_KEYEMPTY" class="olink">DB_KEYEMPTY</a>
                  until the cursor is moved to another record. A call to 
-                 <a class="xref" href="dbcget.html" title="Dbc::get()">Dbc::get()</a> with flags of DB_NEXT
+                 <a class="xref" href="dbcget.html" title="Dbc::get()">
+        
+        <span>Dbc::get()</span>
+    </a> with flags of DB_NEXT
                  will return the new record numbered 8 - which is the record that was
                  numbered 9 prior to the delete (if such a record existed).
             </p>
@@ -489,7 +564,10 @@ Db::set_flags(u_int32_t flags); </pre>
                  database, including all threads of control accessing the database.
             </p>
                 <p>
-                    If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+                    If the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
                     is called, the DB_RENUMBER flag must be the same as the existing database or an error
                     will be returned.
             </p>
@@ -500,11 +578,17 @@ Db::set_flags(u_int32_t flags); </pre>
             </p>
                 <p>
                  This flag specifies that any specified <span class="bold"><strong>re_source</strong></span> file be read in its entirety when
-                 <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  is called.  If
+                 <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  is called.  If
                  this flag is not specified, the <span class="bold"><strong>re_source</strong></span> file may be read lazily.
             </p>
                 <p>
-                See the <a class="xref" href="dbset_re_source.html" title="Db::set_re_source()">Db::set_re_source()</a>
+                See the <a class="xref" href="dbset_re_source.html" title="Db::set_re_source()">
+        
+        <span>Db::set_re_source()</span>
+    </a>
                 method for information on the <span class="bold"><strong>re_source</strong></span> file.
             </p>
                 <p>
@@ -521,7 +605,7 @@ Db::set_flags(u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703829330048"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176781755168"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -539,7 +623,7 @@ Db::set_flags(u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703829441904"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176786830256"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -552,7 +636,7 @@ Db::set_flags(u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703830288048"></a>Class</h3>
+              <h3 class="title"><a id="idm140176784837968"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -564,7 +648,7 @@ Db::set_flags(u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703828663840"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176776677888"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -584,11 +668,17 @@ Db::set_flags(u_int32_t flags); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_h_compare.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_feedback() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_feedback()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_h_compare()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_h_compare()</span>
+    </td>
         </tr>
       </table>
     </div>

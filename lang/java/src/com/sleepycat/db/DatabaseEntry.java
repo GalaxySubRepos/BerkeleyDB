@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -214,6 +214,7 @@ public class DatabaseEntry {
     @param externalFile
     Whether this DatabaseEntry is configured to be stored as an external file.
     */
+	@Deprecated
     public void setBlob(final boolean externalFile) {
         setExternalFile(externalFile);
     }
@@ -224,6 +225,7 @@ public class DatabaseEntry {
     @return
     Whether this DatabaseEntry is configured to be stored as an external file.
     */
+	@Deprecated
     public boolean getBlob() {
         return getExternalFile();
     }

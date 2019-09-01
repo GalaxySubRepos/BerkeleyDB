@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information. 
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information. 
 # 
 # $Id: backup.tcl,v 4b37b36844da 2012/10/18 15:03:32 sue $
 #
@@ -10,7 +10,8 @@
 # TEST	Do all the of the following tests with and without 
 # TEST	the -c (checkpoint) option; and with and without the
 # TEST  transactional bulk loading optimization; and with
-# TEST  and without BLOB. Make sure that -c and -d (data_dir)
+# TEST  and without BLOB, with and without -deepcopy.
+# TEST  Make sure that -c and -d (data_dir)
 # TEST  are not allowed together; and backing up with BLOB
 # TEST  but without -log_blob is not allowed.  If slices are
 # TEST  enabled, run some of the tests with the -sliced
@@ -37,11 +38,15 @@ proc backup { method {nentries 1000} } {
 		return
 	}
 
-	foreach txnmode { normal bulk } {
+	foreach txnmode { txn bulk } {
 		foreach ckpoption { nocheckpoint checkpoint } {
 			foreach bloption { noblob blob } {
-				backup_sub $method $nentries \
-				    $txnmode $ckpoption $bloption 0
+				foreach cpoption { shallow deep } {
+					backup_sub $method \
+					    $nentries $txnmode \
+					    $ckpoption $bloption \
+					    0 $cpoption
+				}
 			}
 		}
 	}
@@ -52,12 +57,14 @@ proc backup { method {nentries 1000} } {
 		set num_slices 2
 		foreach ckpoption { checkpoint nocheckpoint } {
 			backup_sub $method $nentries \
-			    normal $ckpoption noblob $num_slices
+			    txn $ckpoption noblob \
+			    $num_slices shallow
 		}
 	}
 }
 
-proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
+proc backup_sub { method nentries txnmode \
+		      ckpoption bloption num_slices cpoption } {
 	source ./include.tcl
 
 	set omethod [convert_method $method]
@@ -69,8 +76,8 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	# Set up small logs so we quickly create more than one. 
 	set log_size 20000
 	set env_flags " -create -txn -home $testdir -log_max $log_size"
-	set db_flags " -create $omethod -auto_commit $testfile "
-	set bu_flags " -create -clean -files -verbose "
+	set db_flags " -create $omethod -auto_commit "
+	set bu_flags " -create -clean -files "
 
 	if { $txnmode == "bulk" } {
 		set bmsg "with bulk optimization"
@@ -99,13 +106,29 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	} else {
 		set blmsg "without blob"
 	}
+	
 	set slicemsg ""
 	if { $num_slices > 0 } {
 		set db_flags " -sliced $db_flags "
 		set slicemsg " with slices"
 	}
 
-	puts "Backuptest ($omethod) $bmsg $msg $blmsg$slicemsg."
+	if { $cpoption == "deep" } {
+		set cpmsg "with deep copy"
+		set subdir1 "subdir1"
+		set subdir2 "$subdir1/subdir2"
+		set subfile1 $subdir1/$testfile
+		set subfile2 $subdir2/$testfile
+		set subdb_flags $db_flags
+		set deep "C"
+		set bu_flags " -deep_copy $bu_flags "
+	} else {
+		set cpmsg "with shallow copy"
+		set deep ""
+	}
+	set db_flags "$db_flags $testfile"
+
+	puts "Backuptest ($omethod) $bmsg $cpmsg $msg $blmsg$slicemsg."
 
 	env_cleanup $testdir
 	env_cleanup $backupdir
@@ -118,6 +141,16 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	set db [eval {berkdb_open} -env $env $db_flags]
 	error_check_good envopen [is_valid_env $env] TRUE
 	error_check_good dbopen [is_valid_db $db] TRUE
+	if { $cpoption == "deep" } {
+		file mkdir $testdir/$subdir1
+		file mkdir $testdir/$subdir2
+		set subdb1 [eval {berkdb_open} \
+		    -env $env $subdb_flags $subfile1 ]
+		error_check_good subdb1open [is_valid_db $subdb1] TRUE
+		set subdb2 [eval {berkdb_open} \
+		    -env $env $subdb_flags $subfile2 ]
+		error_check_good subdb2open [is_valid_db $subdb2] TRUE
+	}
 
 	if { $num_slices > 0 } {
 		set txn ""
@@ -126,11 +159,19 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	} else {
 		set txn [$env txn]
 	}
-	populate $db $omethod $txn $nentries 0 0 
+	populate $db $omethod $txn $nentries 0 0
+	if { $cpoption == "deep" } {
+		populate $subdb1 $omethod $txn $nentries 0 0
+		populate $subdb2 $omethod $txn $nentries 0 0
+	}
 	if { $txn != "" } {
 		error_check_good txn_commit [$txn commit] 0
 	}
 	error_check_good db_sync [$db sync] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_sync [$subdb1 sync] 0
+		error_check_good subdb2_sync [$subdb2 sync] 0
+	}
 
 	# Verify that blobs are created.
 	if { $bloption == "blob" } {
@@ -156,14 +197,34 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 			error "FAIL: $res"
 		}	
 	}
-	if {[catch { eval exec $util_path/db_hotbackup\
-	    -${c}vh $testdir -b $backupdir } res] } {
+	# Blobs and deep copy are incompatible.
+	set deepmsg "DB_BACKUP_DEEP_COPY and external file support cannot"
+	if { $cpoption == "deep" && $bloption == "blob" } {
+		catch {eval exec $util_path/db_hotbackup \
+		    -${c}${deep}vh $testdir -b $backupdir } res
+		error_check_good deep_and_blob [is_substr $res $deepmsg] 1
+		error_check_good db_close [$db close] 0
+		error_check_good subdb1_close [$subdb1 close] 0
+		error_check_good subdb2_close [$subdb2 close] 0
+		error_check_good env_close [$env close] 0
+		env_cleanup $testdir
+		env_cleanup $backupdir
+		env_cleanup $backupapidir	
+		return;
+	} elseif {[catch { eval exec $util_path/db_hotbackup \
+	    -${c}${deep}vh $testdir -b $backupdir } res] } {
 		error "FAIL: $res"
 	}
 
 	set logfiles [glob $backupdir/log*]
 	error_check_bad found_logs [llength $logfiles] 0
-	error_check_good found_db [file exists $backupdir/$testfile] 1 
+	error_check_good found_db [file exists $backupdir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good found_subdb1 \
+		    [file exists $backupdir/$subfile1] 1
+		error_check_good found_subdb2 \
+		    [file exists $backupdir/$subfile2] 1
+	}
 	if { $bloption == "blob" } {
 		set blfiles [glob -nocomplain \
 		    $backupdir/__db_bl/$blob_subdir/*]
@@ -198,6 +259,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	error_check_bad found_logs [llength $logfiles] 0
 	error_check_good found_db\
 	    [file exists $backupapidir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good found_subdb1 \
+		    [file exists $backupapidir/$subfile1] 1
+		error_check_good found_subdb2 \
+		    [file exists $backupapidir/$subfile2] 1
+	}
 	if { $bloption == "blob" } {
 		set blfiles [glob -nocomplain \
 		    $backupapidir/__db_bl/$blob_subdir/*]
@@ -210,7 +277,48 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	    set logfiles [glob $backupapidir/__db.slice00$i/log*]
 	    error_check_bad slices_found_logs [llength $logfiles] 0
 	}
-	set stmsg "a.2"
+
+	puts "\tBackuptest.a.2: API hot backup with -no_logs flag."
+	if { [catch {eval $env backup $bu_flags \
+	    -single_dir -no_logs $backupapidir} res] } {
+		error "FAIL: $res"
+	}
+	if { $num_slices > 0 } {
+		set slices [$env get_slices]
+		set i 0
+		foreach slice $slices {
+			file mkdir $backupapidir/__db.slice00$i
+			if { [catch {eval $slice backup $bu_flags -no_logs \
+			    -single_dir $backupapidir/__db.slice00$i} res] } {
+				error "FAIL: $res"
+			}
+			incr i
+		}	
+	}
+	set logfiles [glob -nocomplain $backupapidir/log*]
+	error_check_good found_no_logs [llength $logfiles] 0
+	error_check_good found_db\
+	    [file exists $backupapidir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good found_subdb1 \
+		    [file exists $backupapidir/$subfile1] 1
+		error_check_good found_subdb2 \
+		    [file exists $backupapidir/$subfile2] 1
+	}
+	if { $bloption == "blob" } {
+		set blfiles [glob -nocomplain \
+		    $backupapidir/__db_bl/$blob_subdir/*]
+		error_check_bad found_blobs [llength $blfiles] 0
+	}
+	# Verify slices are backed up
+	for {set i 0} {$i < $num_slices} {incr i} {
+	    error_check_good created_slices_db$i \
+		[file exists $backupapidir/__db.slice00$i/$testfile] 1
+	    set logfiles [glob -nocomplain $backupapidir/__db.slice00$i/log*]
+	    error_check_good slices_found_no_logs [llength $logfiles] 0
+	}
+	
+	set stmsg "a.3"
 	# If either checkpoint or bulk is in effect, the copy
 	# will exactly match the original database.
 	if { $ckpoption == "checkpoint" || $txnmode == "bulk"} {
@@ -228,11 +336,21 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		} else {
 			dump_compare $testdir/$testfile $backupdir/$testfile
 			dump_compare $testdir/$testfile $backupapidir/$testfile
+			if { $cpoption == "deep" } {
+				dump_compare $testdir/$subfile1 \
+				    $backupdir/$subfile1
+				dump_compare $testdir/$subfile1 \
+				    $backupapidir/$subfile1
+				dump_compare $testdir/$subfile2 \
+				    $backupdir/$subfile2
+				dump_compare $testdir/$subfile2 \
+				    $backupapidir/$subfile2
+			}
 		}
 	}
 	# Hot backup requires -log_blob. Testing for the error once is enough.
 	if { $bloption == "blob" && \
-	    $txnmode == "normal" && $ckpoption == "nocheckpoint" } {
+	    $txnmode == "txn" && $ckpoption == "nocheckpoint" } {
 		puts "\tBackuptest.$stmsg:\
 		    API backup without -log_blob will fail."
 		set env1 [eval {berkdb_env_noerr} -home $testdir]
@@ -243,6 +361,10 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		error_check_good env_close [$env1 close] 0
 	}
 	error_check_good db_close [$db close] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_close [$subdb1 close] 0
+		error_check_good subdb2_close [$subdb2 close] 0
+	}
 	error_check_good env_close [$env close] 0
 	env_cleanup $testdir
 	env_cleanup $backupdir
@@ -259,6 +381,10 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	puts "\tBackuptest.b: Hot backup $dirmsg."
 	file mkdir $testdir/data1
 	error_check_good db_data_dir [file exists $testdir/data1/$testfile] 0
+	if { $cpoption == "deep" } {
+		file mkdir $testdir/data1/$subdir1
+		file mkdir $testdir/data1/$subdir2
+	}
 	for {set i 0} {$i < $num_slices} {incr i} {
 	    file mkdir $testdir/__db.slice00$i
 	    file mkdir $testdir/__db.slice00$i/data1
@@ -273,6 +399,16 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	set db [eval {berkdb_open} -env $env $db_flags]
 	error_check_good envopen [is_valid_env $env] TRUE
 	error_check_good dbopen [is_valid_db $db] TRUE
+	if { $cpoption == "deep" } {
+		file mkdir $testdir/$subdir1
+		file mkdir $testdir/$subdir2
+		set subdb1 [eval {berkdb_open} \
+				-env $env $subdb_flags $subfile1 ]
+		error_check_good subdb1open [is_valid_db $subdb1] TRUE
+		set subdb2 [eval {berkdb_open} \
+				-env $env $subdb_flags $subfile2 ]
+		error_check_good subdb2open [is_valid_db $subdb2] TRUE
+	}
 
 	if { $num_slices > 0 } {
 		set txn ""
@@ -282,14 +418,28 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		set txn [$env txn]
 	}
 
-	populate $db $omethod $txn $nentries 0 0 
+	populate $db $omethod $txn $nentries 0 0
+	if { $cpoption == "deep" } {
+		populate $subdb1 $omethod $txn $nentries 0 0
+		populate $subdb2 $omethod $txn $nentries 0 0
+	}
 	if { $txn != "" } {
 		error_check_good txn_commit [$txn commit] 0
 	}
 	error_check_good db_sync [$db sync] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_sync [$subdb1 sync] 0
+		error_check_good subdb2_sync [$subdb2 sync] 0
+	}
 
 	# Check that data went into data_dir.
 	error_check_good db_data_dir [file exists $testdir/data1/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_data_dir \
+		    [file exists $testdir/data1/$subfile1] 1
+		error_check_good subdb2_data_dir \
+		    [file exists $testdir/data1/$subfile2] 1
+	}
 	for {set i 0} {$i < $num_slices} {incr i} {
 	    error_check_good slice_db_data_dir$i \
 		[file exists $testdir/__db.slice00$i/data1/$testfile] 1
@@ -307,11 +457,11 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	set msg2 "cannot specify -d and -c"
 	if { $ckpoption == "checkpoint" } {
 		catch {eval exec $util_path/db_hotbackup \
-		    -${c}vh $testdir -b $backupdir $bk_dirflags} res
+		    -${c}${deep}vh $testdir -b $backupdir $bk_dirflags} res
 		error_check_good c_and_d [is_substr $res $msg2] 1
 	} else {
 		if {[catch {eval exec $util_path/db_hotbackup\
-		    -${c}vh $testdir -b $backupdir $bk_dirflags} res] } {
+		    -${c}${deep}vh $testdir -b $backupdir $bk_dirflags} res] } {
 			error "FAIL: $res"
 		}
 		for {set i 0} {$i < $num_slices} {incr i} {
@@ -323,6 +473,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		}
 		# Check that logs and db are in backupdir.
 		error_check_good db_backup [file exists $backupdir/$testfile] 1
+		if { $cpoption == "deep" } {
+			error_check_good subdb1_backup \
+			    [file exists $backupdir/$subfile1] 1
+			error_check_good subdb2_backup \
+			    [file exists $backupdir/$subfile2] 1
+		}
 		set logfiles [glob $backupdir/log*]
 		error_check_bad logs_backed_up [llength $logfiles] 0
 		# Check that blobs are in backupdir/__db_bl.
@@ -362,6 +518,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		}
 		error_check_good db_backup\
 		    [file exists $backupapidir/$testfile] 1
+		if { $cpoption == "deep" } {
+			error_check_good subdb1_backup \
+			    [file exists $backupapidir/$subfile1] 1
+			error_check_good subdb2_backup \
+			    [file exists $backupapidir/$subfile2] 1
+		}
 		set logfiles [glob $backupapidir/log*]
 		error_check_bad logs_backed_up [llength $logfiles] 0
 		if { $bloption == "blob" } {
@@ -389,18 +551,26 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	}
 
 	populate $db $omethod $txn [expr $nentries * 2] 0 0
+	if { $cpoption == "deep" } {
+		populate $subdb1 $omethod $txn [expr $nentries * 2] 0 0
+		populate $subdb2 $omethod $txn [expr $nentries * 2] 0 0
+	}
 	if { $txn != "" } {
 		error_check_good txn_commit [$txn commit] 0
 	}
 	error_check_good db_sync [$db sync] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_sync [$subdb1 sync] 0
+		error_check_good subdb2_sync [$subdb2 sync] 0
+	}
 
 	if { $ckpoption == "checkpoint" } {
 		catch {eval exec $util_path/db_hotbackup\
-		    -${c}vuh $testdir -b backup $bk_dirflags} res
+		    -${c}${deep}vuh $testdir -b backup $bk_dirflags} res
 		error_check_good c_and_d [is_substr $res $msg2] 1
 	} else {
 		if {[catch {eval exec $util_path/db_hotbackup\
-		    -${c}vuh $testdir -b backup $bk_dirflags} res] } {
+		    -${c}${deep}vuh $testdir -b backup $bk_dirflags} res] } {
 			error "FAIL: $res"
 		}
 		for {set i 0} {$i < $num_slices} {incr i} {
@@ -446,6 +616,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		}
 		error_check_good db_backup\
 		    [file exists $backupapidir/$testfile] 1
+		if { $cpoption == "deep" } {
+			error_check_good subdb1_backup \
+			    [file exists $backupapidir/$subfile1] 1
+			error_check_good subdb2_backup \
+			    [file exists $backupapidir/$subfile2] 1
+		}
 		for {set i 0} {$i < $num_slices} {incr i} {
 			error_check_good slice_backedup$i [file exists \
 			    $backupapidir/__db.slice00$i/$testfile] 1
@@ -473,12 +649,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	}
 
 	if { $ckpoption == "checkpoint" } {
-		catch {eval exec $util_path/db_hotbackup\
-		    -${c}vh $testdir -b backup $bk_dirflags} res
+		catch {eval exec $util_path/db_hotbackup -${c}${deep}vh\
+		    $fullpath/$testdir -b backup $bk_dirflags} res
 			error_check_good c_and_d [is_substr $res $msg2] 1
 	} else {
-		if {[catch {eval exec $util_path/db_hotbackup\
-		    -${c}vh $testdir -b backup $bk_dirflags} res] } {
+		if {[catch {eval exec $util_path/db_hotbackup -${c}${deep}vh\
+		    $fullpath/$testdir -b backup $bk_dirflags} res] } {
 			error "FAIL: $res"
 		}
 		for {set i 0} {$i < $num_slices} {incr i} {
@@ -494,6 +670,10 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		
 	}
 	error_check_good db_close [$db close] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_close [$subdb1 close] 0
+		error_check_good supdb2_close [$subdb2 close] 0
+	}
 	error_check_good env_close [$env close] 0
 	env_cleanup $testdir
 	env_cleanup $backupdir
@@ -502,7 +682,7 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	# without -single_dir will fail.
 	# Testing for this error once is enough.
 	if { $bloption == "blob" && \
-	    $txnmode == "normal" && $ckpoption == "nocheckpoint" } {
+	    $txnmode == "txn" && $ckpoption == "nocheckpoint" } {
 		file mkdir $testdir/data
 		file mkdir $testdir/log
 
@@ -540,6 +720,16 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	set db [eval {berkdb_open} -env $env $db_flags]
 	error_check_good envopen [is_valid_env $env] TRUE
 	error_check_good dbopen [is_valid_db $db] TRUE
+	if { $cpoption == "deep" } {
+		file mkdir $testdir/data1/$subdir1
+		file mkdir $testdir/data1/$subdir2
+		set subdb1 [eval {berkdb_open} \
+				-env $env $subdb_flags $subfile1 ]
+		error_check_good subdb1open [is_valid_db $subdb1] TRUE
+		set subdb2 [eval {berkdb_open} \
+				-env $env $subdb_flags $subfile2 ]
+		error_check_good subdb2open [is_valid_db $subdb2] TRUE
+	}
 
 	if { $num_slices > 0 } {
 		set txn ""
@@ -549,11 +739,19 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		set txn [$env txn]
 	}
 
-	populate $db $omethod $txn $nentries 0 0 
+	populate $db $omethod $txn $nentries 0 0
+	if { $cpoption == "deep" } {
+		populate $subdb1 $omethod $txn $nentries 0 0
+		populate $subdb2 $omethod $txn $nentries 0 0
+	}
 	if { $txn != "" } {
 		error_check_good txn_commit [$txn commit] 0
 	}
 	error_check_good db_sync [$db sync] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_sync [$subdb1 sync] 0
+		error_check_good subdb2_sync [$subdb2 sync] 0
+	}
 
 	set bk_dirflags "-l logs -d $testdir/data1"
 	if { $bloption == "blob" } {
@@ -563,11 +761,11 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	# just look for the warning message.
 	if { $ckpoption == "checkpoint" } {
 		catch {eval exec $util_path/db_hotbackup\
-		    -${c}vh $testdir -b $backupdir $bk_dirflags} res
+		    -${c}${deep}vh $testdir -b $backupdir $bk_dirflags} res
 		error_check_good c_and_d [is_substr $res $msg2] 1
 	} else {
 		catch {eval exec $util_path/db_hotbackup\
-		    -${c}vh $testdir -b $backupdir $bk_dirflags} res
+		    -${c}${deep}vh $testdir -b $backupdir $bk_dirflags} res
 		error_check_good l_and_config [is_substr $res $msg3] 1
 		for {set i 0} {$i < $num_slices} {incr i} {
 			if {[catch {eval exec $util_path/db_hotbackup\
@@ -580,6 +778,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 
 		# Check that logs and db are in backupdir.
 		error_check_good db_backup [file exists $backupdir/$testfile] 1
+		if { $cpoption == "deep" } {
+			error_check_good subdb1_backup \
+			    [file exists $backupdir/$subfile1] 1
+			error_check_good subdb2_backup \
+			    [file exists $backupdir/$subfile2] 1
+		}
 		set logfiles [glob $backupdir/log*]
 		error_check_bad logs_backed_up [llength $logfiles] 0
 		# Check that blobs are in backupdir/__db_bl.
@@ -618,6 +822,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		}
 		error_check_good db_backup\
 		    [file exists $backupapidir/$testfile] 1
+		if { $cpoption == "deep" } {
+			error_check_good found_subdb1 \
+			    [file exists $backupapidir/$subfile1] 1
+			error_check_good found_subdb2 \
+			    [file exists $backupapidir/$subfile2] 1
+		}
 		set logfiles [glob $backupapidir/log*]
 		error_check_bad logs_backed_up [llength $logfiles] 0
 		if { $bloption == "blob" } {
@@ -643,20 +853,28 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		set txn [$env txn]
 	}
 
-	populate $db $omethod $txn [expr $nentries * 2] 0 0 
+	populate $db $omethod $txn [expr $nentries * 2] 0 0
+	if { $cpoption == "deep" } {
+		populate $subdb1 $omethod $txn [expr $nentries * 2] 0 0
+		populate $subdb2 $omethod $txn [expr $nentries * 2] 0 0
+	}
 	if { $txn != "" } {
 		error_check_good txn_commit [$txn commit] 0
 	}
 	error_check_good db_sync [$db sync] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_sync [$subdb1 sync] 0
+		error_check_good subdb2_sync [$subdb2 sync] 0
+	}
 
 	puts "\tBackuptest.f: Hot backup update with DB_CONFIG."
 	if { $ckpoption == "checkpoint" } {
 		catch {eval exec $util_path/db_hotbackup\
-		    -${c}vuh $testdir -b backup $bk_dirflags} res
+		    -${c}${deep}vuh $testdir -b backup $bk_dirflags} res
 		error_check_good c_and_d [is_substr $res $msg2] 1
 	} else {
 		catch {eval exec $util_path/db_hotbackup\
-		    -${c}vuh $testdir -b backup $bk_dirflags} res
+		    -${c}${deep}vuh $testdir -b backup $bk_dirflags} res
 		error_check_good l_and_config [is_substr $res $msg3] 1
 		for {set i 0} {$i < $num_slices} {incr i} {
 			if {[catch {eval exec $util_path/db_hotbackup\
@@ -700,6 +918,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 		}
 		error_check_good db_backup\
 		    [file exists $backupapidir/$testfile] 1
+		if { $cpoption == "deep" } {
+			error_check_good found_subdb1 \
+			    [file exists $backupapidir/$subfile1] 1
+			error_check_good found_subdb2 \
+			    [file exists $backupapidir/$subfile2] 1
+		}
 		for {set i 0} {$i < $num_slices} {incr i} {
 			error_check_good db_backup_slice$i \
 			    [file exists \
@@ -733,7 +957,7 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	# cleaning. We are not doing an update this time.
 	puts "\tBackuptest.g.0: Hot backup with -D (non-update)."
 	if { [catch { eval exec $util_path/db_hotbackup\
-	    -${c}vh $testdir -b $backupdir -D } res] } {
+	    -${c}${deep}vh $testdir -b $backupdir -D } res] } {
 		error "FAIL: $res"
 	}
 	# Check that DB_CONFIG file is in backupdir.
@@ -742,8 +966,20 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	# Check that db is in backupdir/data1 and not in backupdir.
 	error_check_good found_db\
 	    [file exists $backupdir/data1/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good found_subdb1 \
+		    [file exists $backupdir/data1/$subfile1] 1
+		error_check_good found_subdb2 \
+		    [file exists $backupdir/data1/$subfile2] 1
+	}
 	error_check_bad found_db\
 	    [file exists $backupdir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_bad found_subdb1 \
+		    [file exists $backupdir/$subfile1] 1
+		error_check_bad found_subdb2 \
+		    [file exists $backupdir/$subfile2] 1
+	}
 	# Check that logs are in backupdir/logs and not in backupdir.
 	set logfiles [glob $backupdir/logs/log*]
 	error_check_bad found_logs [llength $logfiles] 0
@@ -768,6 +1004,16 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	    [file exists $backupapidir/data1/$testfile] 1
 	error_check_bad found_db\
 	    [file exists $backupapidir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good found_subdb1 \
+		    [file exists $backupapidir/data1/$subfile1] 1
+		error_check_good found_subdb2 \
+		    [file exists $backupapidir/data1/$subfile2] 1
+		error_check_bad found_subdb1 \
+		    [file exists $backupapidir/$subfile1] 1
+		error_check_bad found_subdb2 \
+		    [file exists $backupapidir/$subfile2] 1
+	}
 	# Check that logs are in backupapidir/logs and not in backupapidir.
 	set logfiles [glob $backupapidir/logs/log*]
 	error_check_bad found_logs [llength $logfiles] 0
@@ -784,13 +1030,19 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	# We are not doing an update this time.
 	puts "\tBackuptest.g.2: Hot backup with DB_CONFIG (non-update)."
 	if { [catch { eval exec $util_path/db_hotbackup\
-	    -${c}vh $testdir -b $backupdir } res] } {
+	    -${c}${deep}vh $testdir -b $backupdir } res] } {
 		error "FAIL: $res"
 	}
 	# Check that no DB_CONFIG file is in backupdir.
 	error_check_bad found_db_config [file exists $backupdir/DB_CONFIG] 1
 	# Check that db is in backupdir.
 	error_check_good found_db [file exists $backupdir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_backup \
+		    [file exists $backupdir/$subfile1] 1
+		error_check_good subdb2_backup \
+		    [file exists $backupdir/$subfile2] 1	
+	}
 	# Check that logs are in backupdir.
 	set logfiles [glob $backupdir/log*]
 	error_check_good found_logs [expr [llength $logfiles] > 1] 1
@@ -810,6 +1062,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	error_check_bad found_db_config [file exists $backupapidir/DB_CONFIG] 1
 	# Check that db is in backupapidir.
 	error_check_good found_db [file exists $backupapidir/$testfile] 1
+	if { $cpoption == "deep" } {
+		error_check_good found_subdb1 \
+		    [file exists $backupapidir/$subfile1] 1
+		error_check_good found_subdb2 \
+		    [file exists $backupapidir/$subfile2] 1
+	}
 	# Check that logs are in backupapidir.
 	set logfiles [glob $backupapidir/log*]
 	error_check_good found_logs [expr [llength $logfiles] > 1] 1
@@ -821,7 +1079,12 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	}
 
 	error_check_good db_close [$db close] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_close [$subdb1 close] 0
+		error_check_good supdb2_close [$subdb2 close] 0
+	}
 	error_check_good env_close [$env close] 0
+	tclsleep 1
 
 	set dirmsg "with different -log_dir, -data_dir"
 	set dir_flags "-data_dir data1 -log_dir log1"
@@ -848,6 +1111,16 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 	set db [eval {berkdb_open} -env $env $db_flags]
 	error_check_good envopen [is_valid_env $env] TRUE
 	error_check_good dbopen [is_valid_db $db] TRUE
+	if { $cpoption == "deep" } {
+		file mkdir $testdir/data1/$subdir1
+		file mkdir $testdir/data1/$subdir2
+		set subdb1 [eval {berkdb_open} \
+				-env $env $subdb_flags $subfile1 ]
+		error_check_good subdb1open [is_valid_db $subdb1] TRUE
+		set subdb2 [eval {berkdb_open} \
+				-env $env $subdb_flags $subfile2 ]
+		error_check_good subdb2open [is_valid_db $subdb2] TRUE
+	}
 
 	if { $txnmode == "bulk" } {
 		set txn [$env txn -txn_bulk]
@@ -870,19 +1143,32 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 
 	puts "\tBackuptest.h2: Full hot backup with -l"
 
-	if {[catch {eval exec $util_path/db_hotbackup \
-	    -vh $testdir -b $backupdir -d $testdir/data1 -l log1} res] } {
+	if {[catch {eval exec $util_path/db_hotbackup -${deep}vh \
+	    $testdir -b $backupdir -d $testdir/data1 -l log1} res] } {
 		error "FAIL: <$res>"
 	}
 
 	puts "\tBackuptest.h3: Hot backup update with -l -u"
-	if {[catch {eval exec $util_path/db_hotbackup\
-	    -vh $testdir -b $backupdir -d $testdir/data1 -l log1 -u} res] } {
+	if {[catch {eval exec $util_path/db_hotbackup -${deep}vh \
+	    $testdir -b $backupdir -d $testdir/data1 -l log1 -u} res] } {
 		error "FAIL: <$res>"
 	}
 
 	error_check_good db_close [$db close] 0
+	if { $cpoption == "deep" } {
+		error_check_good subdb1_close [$subdb1 close] 0
+		error_check_good supdb2_close [$subdb2 close] 0
+	}
 	error_check_good env_close [$env close] 0
+	
+	# Whether deep copy is used or not has no effect on the
+	# incremental tests, so quit.
+	if { $cpoption == "deep" } {
+		env_cleanup $testdir
+		env_cleanup $backupdir 
+		env_cleanup $backupapidir
+		return
+	}
 
 	foreach bumode { util api } {
 		if { $bumode == "util" } {
@@ -1001,7 +1287,7 @@ proc backup_sub { method nentries txnmode ckpoption bloption num_slices } {
 
 		puts "\tBackuptest.$s.3: $msg (update)."
 		# Set up the backup flags.
-		set bflags "-create -verbose"
+		set bflags "-create"
 		backup_and_recover $e $bflags $dir $c u
 
 		puts "\tBackuptest.$s.4: Compare the db files."

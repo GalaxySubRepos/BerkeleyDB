@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -38,15 +38,21 @@
           </div>
         </div>
       </div>
-      <pre class="programlisting">db_hotbackup [-cDEguVv] [-d data_dir ...] [-h home] 
+      <pre class="programlisting">db_hotbackup [-CcDEguVv] [-d data_dir ...] [-h home] 
         [-l log_dir] [-P password] -b backup_dir  </pre>
       <p>
          The <span class="command"><strong>db_hotbackup</strong></span> utility creates "hot backup" or "hot failover"
          snapshots of Berkeley DB database environments. Hot backups can
          also be performed using the 
-         <a class="xref" href="envbackup.html" title="DbEnv::backup()">DbEnv::backup()</a>
+         <a class="xref" href="envbackup.html" title="DbEnv::backup()">
+        
+        <span>DbEnv::backup()</span>
+    </a>
          or
-         <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">DbEnv::dbbackup()</a>
+         <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">
+        
+        <span>DbEnv::dbbackup()</span>
+    </a>
          methods.
     </p>
       <p>
@@ -123,10 +129,16 @@
          are in the prepared state.  
          <span>
             Applications that use 
-            <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">DbTxn::prepare()</a> must specify 
+            <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">
+        
+        <span>DbTxn::prepare()</span>
+    </a> must specify 
             <a class="link" href="envopen.html#envopen_DB_RECOVER_FATAL">DB_RECOVER_FATAL</a>
             when opening the environment, and run 
-            <a class="xref" href="txnrecover.html" title="DbEnv::txn_recover()">DbEnv::txn_recover()</a> to
+            <a class="xref" href="txnrecover.html" title="DbEnv::txn_recover()">
+        
+        <span>DbEnv::txn_recover()</span>
+    </a> to
             resolve any pending transactions, when failing over to the backup.
         </span>
     </p>
@@ -159,6 +171,22 @@
               <p>
                     This option cannot be used when backing up
                     environments replicated using the base replication API.
+                </p>
+            </div>
+          </li>
+          <li>
+            <p>
+                 <span class="bold"><strong>-C</strong></span>
+            </p>
+            <p>
+                Copy databases in any sub-directories in the environment home and
+	        any supplied data directories.
+            </p>
+            <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+              <h3 class="title">Note</h3>
+              <p>
+                  This option cannot be used in environments or with databases that
+		  support external files.
                 </p>
             </div>
           </li>
@@ -239,7 +267,10 @@
                  Please note the database environment recovery log references database
                  files as they are named by the application program.  <span class="bold"><strong>If the application uses absolute or relative pathnames to
                  name database files, (rather than filenames and the 
-                 <a class="xref" href="envadd_data_dir.html" title="DbEnv::add_data_dir()">DbEnv::add_data_dir()</a>
+                 <a class="xref" href="envadd_data_dir.html" title="DbEnv::add_data_dir()">
+        
+        <span>DbEnv::add_data_dir()</span>
+    </a>
                  method or the <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> configuration file to specify
                  filenames), running recovery in the target directory may
                  not properly find the copies of the files or might even
@@ -353,7 +384,7 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703805365312"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140176762545520"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -361,7 +392,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703805367408"></a>DB_HOME</h4>
+                <h4 class="title"><a id="idm140176762509792"></a>DB_HOME</h4>
               </div>
             </div>
           </div>
@@ -369,7 +400,10 @@
                   If the <span class="bold"><strong>-h</strong></span> option is not specified and
                   the environment variable DB_HOME is set, it is used as the path of the
                   database home, as described in the
-                  <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> method.
+                  <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> method.
              </p>
         </div>
       </div>

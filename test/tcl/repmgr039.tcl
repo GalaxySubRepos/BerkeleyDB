@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -81,6 +81,9 @@ proc repmgr039_sub { method niter tnum electopt moredataopt largs } {
 
 	file mkdir $masterdir
 	file mkdir $clientdir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
 
 	# Open a master.
 	puts "\tRepmgr$tnum.a: Start master."

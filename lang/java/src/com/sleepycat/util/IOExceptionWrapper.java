@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -30,6 +30,7 @@ public class IOExceptionWrapper
     /**
      * @deprecated replaced by {@link #getCause}.
      */
+	@Deprecated
     public Throwable getDetail() {
 
         return e;

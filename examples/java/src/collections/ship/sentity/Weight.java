@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.sentity;
@@ -23,8 +22,8 @@ public class Weight implements Serializable {
     public final static String GRAMS = "grams";
     public final static String OUNCES = "ounces";
 
-    private double amount;
-    private String units;
+    private final double amount;
+    private final String units;
 
     public Weight(double amount, String units) {
 
@@ -42,6 +41,7 @@ public class Weight implements Serializable {
         return units;
     }
 
+    @Override
     public String toString() {
 
         return "[" + amount + ' ' + units + ']';

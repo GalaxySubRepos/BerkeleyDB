@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -92,8 +92,11 @@ copy %THRIFT_HOME%\server\bdb.properties .
 copy %THRIFT_HOME%\server\log4j.xml .
 
 set CLASSPATH=.;%THRIFT_HOME%\jars\slf4j-api.jar
-set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\slf4j-log4j12.jar
-set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\log4j.jar
+set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\slf4j-api.jar
+set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\log4j-slf4j-impl.jar
+set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\log4j-core.jar
+set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\log4j-api.jar
+set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\log4j-1.2-api.jar
 set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\libthrift.jar
 set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\db_thrift_interface.jar
 set CLASSPATH=%CLASSPATH%;%THRIFT_HOME%\jars\db_thrift_server.jar

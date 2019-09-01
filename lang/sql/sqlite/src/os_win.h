@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2013 November 25
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -12,8 +18,8 @@
 **
 ** This file contains code that is specific to Windows.
 */
-#ifndef _OS_WIN_H_
-#define _OS_WIN_H_
+#ifndef SQLITE_OS_WIN_H
+#define SQLITE_OS_WIN_H
 
 /*
 ** Include the primary Windows SDK header file.
@@ -85,4 +91,4 @@
 # define SQLITE_OS_WIN_THREADS 0
 #endif
 
-#endif /* _OS_WIN_H_ */
+#endif /* SQLITE_OS_WIN_H */

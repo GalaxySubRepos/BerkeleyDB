@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;rep_set_priority()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;rep_set_priority()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repnsites.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="reppriority"></a>DB_ENV-&gt;rep_set_priority()</h2>
+            <h2 class="title" style="clear: both"><a id="reppriority"></a>
+        <span>DB_ENV-&gt;rep_set_priority()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -52,7 +58,10 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
         <h3 class="title">Note</h3>
         <p>
             The 
-            <a class="xref" href="repmgrset_ack_policy.html" title="DB_ENV-&gt;repmgr_set_ack_policy()">DB_ENV-&gt;repmgr_set_ack_policy()</a> 
+            <a class="xref" href="repmgrset_ack_policy.html" title="DB_ENV-&gt;repmgr_set_ack_policy()">
+        <span>DB_ENV-&gt;repmgr_set_ack_policy()</span>
+        
+    </a> 
             method describes <span class="emphasis"><em>electable peers</em></span>, which
             are replication sites with a non-zero priority. For some
             acknowledgement policies, Replication Manager's computation of
@@ -101,7 +110,7 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229221008"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113481523664"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -109,7 +118,7 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229222256"></a>priority</h4>
+                <h4 class="title"><a id="idm140113481522512"></a>priority</h4>
               </div>
             </div>
           </div>
@@ -126,7 +135,7 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229312624"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113481620192"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -142,7 +151,20 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229205856"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113481505776"></a>DB_REP_INELECT</h4>
+              </div>
+            </div>
+          </div>
+          <p>
+                If attempting to change the database environment's
+                priority while an election is in progress.
+            </p>
+        </div>
+        <div class="sect3" lang="en" xml:lang="en">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="idm140113481493376"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -156,7 +178,7 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229215072"></a>Class</h3>
+              <h3 class="title"><a id="idm140113481514992"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -168,7 +190,7 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229332512"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113481543856"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -188,11 +210,17 @@ DB_ENV-&gt;rep_set_priority(DB_ENV *env, u_int32_t priority);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="repset_request.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;rep_set_nsites() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;rep_set_nsites()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;rep_set_request()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;rep_set_request()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

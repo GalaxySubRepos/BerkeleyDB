@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -121,7 +121,7 @@ add_color(DB_ENV *dbenv, DB *dbp, char *color, int increment)
     DBT key, data;
     DB_TXN *tid;
     int fail, original, ret, t_ret;
-    char buf64;
+    char buf[64];
 
     /* Initialization. */
     memset(&amp;key, 0, sizeof(key));

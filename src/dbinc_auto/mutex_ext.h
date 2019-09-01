@@ -50,7 +50,7 @@ int __db_pthread_mutex_readlock __P((ENV *, db_mutex_t, u_int32_t));
 #ifdef HAVE_MUTEX_HYBRID
 int __db_hybrid_mutex_suspend  __P((ENV *, db_mutex_t, db_timespec *, DB_THREAD_INFO *, int));
 #endif
-int __db_pthread_mutex_unlock  __P((ENV *, db_mutex_t, DB_THREAD_INFO *, u_int32_t));
+int __db_pthread_mutex_unlock __P((ENV *, db_mutex_t, DB_THREAD_INFO *, u_int32_t));
 int __db_pthread_mutex_destroy __P((ENV *, db_mutex_t));
 int __mutex_open __P((ENV *, int));
 int __mutex_region_detach __P((ENV *, DB_MUTEXMGR *));

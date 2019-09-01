@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_encrypt()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_encrypt()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_create_dir.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_encrypt"></a>DbEnv::set_encrypt()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_encrypt"></a>
+        
+        <span>DbEnv::set_encrypt()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -53,9 +59,15 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
     </p>
       <p>
          The <code class="methodname">DbEnv::set_encrypt()</code> method may not be called after the 
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
          If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  is called, the
          information specified to <code class="methodname">DbEnv::set_encrypt()</code> must be consistent
          with the existing environment or an error will be returned.
     </p>
@@ -73,7 +85,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812138176"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176769458608"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -81,7 +93,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812138688"></a>passwd</h4>
+                <h4 class="title"><a id="idm140176769459536"></a>passwd</h4>
               </div>
             </div>
           </div>
@@ -94,7 +106,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812179152"></a>flags</h4>
+                <h4 class="title"><a id="idm140176769469056"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -122,7 +134,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812152800"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176769501072"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -140,12 +152,15 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812110416"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176769431920"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -153,7 +168,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812116736"></a>EOPNOTSUPP</h4>
+                <h4 class="title"><a id="idm140176769438240"></a>EOPNOTSUPP</h4>
               </div>
             </div>
           </div>
@@ -166,7 +181,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812118816"></a>Class</h3>
+              <h3 class="title"><a id="idm140176769429424"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -178,7 +193,7 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812128224"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176769484880"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -198,11 +213,17 @@ DbEnv::set_encrypt(const char *passwd, u_int32_t flags); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envevent_notify.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_create_dir() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_create_dir()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_event_notify()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_event_notify()</span>
+    </td>
         </tr>
       </table>
     </div>

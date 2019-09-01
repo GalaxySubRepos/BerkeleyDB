@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -58,6 +58,10 @@ namespace BerkeleyDB {
         /// </summary>
         public uint ElectionThreads { get { return st.st_elect_threads; } }
         /// <summary>
+        /// Earliest log file needed by replication group sites.
+        /// </summary>
+        public uint GroupStableLogFile { get { return st.st_group_stable_log_file; } }
+        /// <summary>
         /// Election threads for which space is reserved
         /// </summary>
         public uint MaxElectionThreads { get { return st.st_max_elect_threads; } }
@@ -65,6 +69,10 @@ namespace BerkeleyDB {
         /// Number of replication group participant sites.
         /// </summary>
         public uint ParticipantSites { get { return st.st_site_participants; } }
+        /// <summary>
+        /// Replication manager polling method.
+        /// </summary>
+        public uint PollingMethod { get { return st.st_polling_method; } }
         /// <summary>
         /// Total number of replication group sites.
         /// </summary>

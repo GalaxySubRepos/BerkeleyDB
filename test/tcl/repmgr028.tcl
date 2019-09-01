@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr028
 # TEST	Repmgr allows applications to choose master explicitly, instead of
@@ -31,6 +31,7 @@ proc repmgr028_sub { tnum } {
 	global rep_verbose
 	global verbose_type
 	global ipversion
+	global ssl_test_enabled
 	
 	set verbargs ""
 	if { $rep_verbose == 1 } {
@@ -42,13 +43,15 @@ proc repmgr028_sub { tnum } {
 		set repmemargs "-rep_inmem_files "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	file mkdir [set dira $testdir/SITE_A]
 	file mkdir [set dirb $testdir/SITE_B]
 	foreach { porta portb } [available_ports 2] {}
 	set hoststr [get_hoststr $ipversion]
 
-	set common "-create -txn $verbargs $repmemargs \
+	set common "-create -txn $verbargs $repmemargs $sslargs \
 	    -rep -thread -event"
 	set common_mgr "-msgth 2 -timeout {connection_retry 3000000} \
 	     -timeout {election_retry 3000000}"
@@ -191,7 +194,7 @@ proc repmgr028_sub { tnum } {
 	# subordinate replication process:
 	# 
 	set resultfile "$testdir/repmgr028script.log"
-	exec $tclsh_path $test_path/wrap.tcl repmgr028script.tcl $resultfile
+	exec $tclsh_path $test_path/wrap.tcl repmgr028script.tcl $resultfile $ssl_test_enabled
 	set file [open $resultfile r]
 	set result [read -nonewline $file]
 	close $file

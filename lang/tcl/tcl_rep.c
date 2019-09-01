@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -31,6 +31,16 @@ static const NAMEMAP rep_ack_policies[] = {
 	{NULL,			0}
 };
 
+static const NAMEMAP repmgr_ssl_config[] = {
+	{"ca_cert",		DB_REPMGR_SSL_CA_CERT},
+	{"ca_dir",		DB_REPMGR_SSL_CA_DIR},
+	{"node_cert",		DB_REPMGR_SSL_REPNODE_CERT},
+	{"node_pkey",		DB_REPMGR_SSL_REPNODE_PRIVATE_KEY},
+	{"pkey_passwd",		DB_REPMGR_SSL_REPNODE_KEY_PASSWD},
+	{"verify_depth", 	DB_REPMGR_SSL_VERIFY_DEPTH},
+	{NULL,			0}
+};
+
 static const NAMEMAP rep_config_types[] = {
 	{"autoinit",		DB_REP_CONF_AUTOINIT},
 	{"autorollback",	DB_REP_CONF_AUTOROLLBACK},
@@ -40,7 +50,10 @@ static const NAMEMAP rep_config_types[] = {
 	{"inmem",		DB_REP_CONF_INMEM},
 	{"lease",		DB_REP_CONF_LEASE},
 	{"mgr2sitestrict",	DB_REPMGR_CONF_2SITE_STRICT},
+	{"mgrdisablepoll",	DB_REPMGR_CONF_DISABLE_POLL},
+	{"mgrdisablessl",	DB_REPMGR_CONF_DISABLE_SSL},
 	{"mgrelections",	DB_REPMGR_CONF_ELECTIONS},
+	{"mgrenableepoll",	DB_REPMGR_CONF_ENABLE_EPOLL},
 	{"mgrforwardwrites",	DB_REPMGR_CONF_FORWARD_WRITES},
 	{"mgrprefmasclient",	DB_REPMGR_CONF_PREFMAS_CLIENT},
 	{"mgrprefmasmaster",	DB_REPMGR_CONF_PREFMAS_MASTER},
@@ -117,6 +130,56 @@ tcl_RepConfig(interp, dbenv, list)
 	ret = dbenv->rep_set_config(dbenv, wh, on);
 	return (_ReturnSetup(interp, ret, DB_RETOK_STD(ret),
 	    "env rep_config"));
+}
+
+/*
+ * tcl_RepMgrSSLConfig --
+ *	Call DB_ENV->repmgr_set_ssl_config().
+ *
+ * PUBLIC: int tcl_RepMgrSSLConfig
+ * PUBLIC:     __P((Tcl_Interp *, DB_ENV *, Tcl_Obj *));
+ */
+int
+tcl_RepMgrSSLConfig(interp, dbenv, list)
+	Tcl_Interp *interp;		/* Interpreter */
+	DB_ENV *dbenv;			/* Environment pointer */
+	Tcl_Obj *list;			/* {which value} */
+{
+	Tcl_Obj **myobjv, *which;
+	int myobjc, optindex, result, ret;
+	char *val;
+	u_int32_t wh;
+
+	result = Tcl_ListObjGetElements(interp, list, &myobjc, &myobjv);
+
+	if (result != TCL_OK)
+		return (result);
+
+	if (myobjc != 2) {
+		Tcl_WrongNumArgs(interp, 2, myobjv,
+		    "?-repmgr_ssl_config {config_type config_value}?");
+		result = TCL_ERROR;
+		return (result);
+	}
+
+	which = myobjv[0];
+	val = Tcl_GetStringFromObj(myobjv[1], NULL);
+
+	_debug_check();
+
+	if (Tcl_GetIndexFromObjStruct(interp, which,
+		&repmgr_ssl_config[0].name, sizeof(NAMEMAP),
+		"config type", TCL_EXACT, &optindex) != TCL_OK)
+		return (IS_HELP(which));
+
+	wh = repmgr_ssl_config[optindex].value;
+
+	_debug_check();
+
+	ret = dbenv->repmgr_set_ssl_config(dbenv, wh, val);
+
+	return (_ReturnSetup(interp, ret, DB_RETOK_STD(ret),
+	    "env repmgr_ssl_config"));
 }
 
 /*
@@ -1512,9 +1575,9 @@ tcl_RepMgrSiteList(interp, objc, objv, dbenv)
 	DB_ENV *dbenv;
 {
 	DB_REPMGR_SITE *sp;
-	Tcl_Obj *myobjv[6], *res, *thislist;
+	Tcl_Obj *myobjv[10], *res, *thislist;
 	u_int count, i;
-	char *pr, *st, *vw;
+	char *el, *pr, *st, *vw;
 	int myobjc, result, ret;
 
 	result = TCL_OK;
@@ -1532,7 +1595,8 @@ tcl_RepMgrSiteList(interp, objc, objv, dbenv)
 		return (result);
 
 	/*
-	 * Have our sites, now construct the {eid host port status peer}
+	 * Have our sites, now construct the
+	 * {eid host port status peer view unelect maxackfile maxackoffset}
 	 * tuples and free up the memory.
 	 */
 	res = Tcl_NewObj();
@@ -1549,7 +1613,11 @@ tcl_RepMgrSiteList(interp, objc, objv, dbenv)
 			st = "unknown";
 		pr = F_ISSET(&sp[i], DB_REPMGR_ISPEER) ? "peer" : "non-peer";
 		vw = F_ISSET(&sp[i], DB_REPMGR_ISVIEW) ? "view" : "participant";
-		MAKE_SITE_LIST(sp[i].eid, sp[i].host, sp[i].port, st, pr, vw);
+		el = F_ISSET(&sp[i],
+		    DB_REPMGR_ISELECTABLE) ? "electable" : "non-electable";
+		MAKE_SITE_LIST(sp[i].eid,
+		    sp[i].host, sp[i].port, st, pr, vw, el,
+		    sp[i].max_ack_lsn.file, sp[i].max_ack_lsn.offset);
 	}
 
 	Tcl_SetObjResult(interp, res);
@@ -1623,6 +1691,7 @@ tcl_RepMgrStat(interp, objc, objv, dbenv)
 	MAKE_WSTAT_LIST("Connections dropped", sp->st_connection_drop);
 	MAKE_WSTAT_LIST("Failed re-connects", sp->st_connect_fail);
 	MAKE_STAT_LIST("Election threads", sp->st_elect_threads);
+	MAKE_STAT_LIST("Group stable log file", sp->st_group_stable_log_file);
 	MAKE_STAT_LIST("Max elect threads", sp->st_max_elect_threads);
 	MAKE_STAT_LIST("Total sites", sp->st_site_total);
 	MAKE_STAT_LIST("View sites", sp->st_site_views);
@@ -1633,6 +1702,8 @@ tcl_RepMgrStat(interp, objc, objv, dbenv)
 	    sp->st_write_ops_forwarded);
 	MAKE_WSTAT_LIST("Forwarded write operations received",
 	    sp->st_write_ops_received);
+	MAKE_WSTAT_LIST("Replication Manager Polling method",
+	    sp->st_polling_method);
 
 	Tcl_SetObjResult(interp, res);
 error:

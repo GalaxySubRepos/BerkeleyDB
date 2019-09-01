@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -156,7 +156,7 @@ __memp_fget(dbmfp, pgnoaddr, ip, txn, flags, addrp)
 
 	if (LF_ISSET(DB_MPOOL_DIRTY)) {
 		if (F_ISSET(dbmfp, MP_READONLY)) {
-			__db_errx(env, DB_STR_A("3021",
+			__db_errx(env, DB_STR_A("3008",
 			    "%s: dirty flag set for readonly file page",
 			    "%s"), __memp_fn(dbmfp));
 			return (EINVAL);
@@ -614,7 +614,7 @@ newpg:		/*
 			break;
 		case DB_MPOOL_CREATE:
 			if (mfp->maxpgno != 0 && *pgnoaddr > mfp->maxpgno) {
-				__db_errx(env, DB_STR_A("3024",
+				__db_errx(env, DB_STR_A("3023",
 				    "%s: file limited to %lu pages", "%s %lu"),
 				    __memp_fn(dbmfp), (u_long)mfp->maxpgno + 1);
 				ret = ENOSPC;
@@ -650,7 +650,7 @@ alloc:		/* Allocate a new buffer header and data space. */
 
 		/* Initialize enough so we can call __memp_bhfree. */
 		alloc_bhp->flags = 0;
-		atomic_init(&alloc_bhp->ref, 1);
+		atomic_write(&alloc_bhp->ref, 1);
 #ifdef DIAGNOSTIC
 		if ((uintptr_t)alloc_bhp->buf & (sizeof(size_t) - 1)) {
 			__db_errx(env, DB_STR("3025",
@@ -965,7 +965,7 @@ alloc:		/* Allocate a new buffer header and data space. */
 			MVCC_MPROTECT(bhp->buf, mfp->pagesize,
 			    PROT_READ);
 
-		atomic_init(&alloc_bhp->ref, 1);
+		atomic_write(&alloc_bhp->ref, 1);
 		MUTEX_LOCK(env, alloc_bhp->mtx_buf);
 		alloc_bhp->priority = bhp->priority;
 		alloc_bhp->pgno = bhp->pgno;

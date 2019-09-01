@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates. All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -16,19 +16,28 @@ proc env024 { } {
 		lappend encrypt 1
 	}
 
-	# Test with -P -c -v and -D.
+	# Test with -P -c -v -D -g and -m.
 	foreach e $encrypt {
 		foreach chkpt { 1 0 } {
 			foreach verbose { 1 0 } {
 				foreach configfile { 1 0 } {
-					env024_subtest $e $chkpt \
-					    $verbose $configfile
+					foreach debugoption { 1 0 } {
+						foreach msgpfx { 1 0 } {
+							env024_subtest \
+							    $e \
+							    $chkpt $verbose \
+							    $configfile \
+							    $debugoption \
+							    $msgpfx
+						}
+						
+					}
 				}
 			}
 		}
 	}
 
-	# Test with -V
+	# Test with -V.
 	set binname db_hotbackup
 	set std_redirect "> /dev/null"
 	if { $is_windows_test } {
@@ -36,16 +45,17 @@ proc env024 { } {
 		append binname $EXE
 	}
 	puts "Env024: Print version info."
-	env024_execmd "$binname -V"
+	env024_execmd "$binname -V $std_redirect"
 }
 
-proc env024_subtest { encrypt chkpt verbose configfile } {
+proc env024_subtest { encrypt chkpt verbose configfile debugoption msgpfx } {
 	source ./include.tcl
 	global passwd
 	global EXE
 
 	puts "Env024: Test with options: (encrypt:$encrypt chkpt:$chkpt\
-	    verbose:$verbose DB_CONFIG:$configfile)"
+	    verbose:$verbose DB_CONFIG:$configfile debugoption:$debugoption\
+	    msgpfx:$msgpfx)"
 
 	set envargs " -log -txn"
 	set envhome "$testdir/envhome"
@@ -71,6 +81,13 @@ proc env024_subtest { encrypt chkpt verbose configfile } {
 	}
 	if { $configfile } {
 		append backup_args " -D"
+	}
+	if { $debugoption } {
+		append backup_args " -g"
+	}
+	if { $msgpfx } {
+		append backup_args " -m env024"
+		append envargs " -msgpfx env024"
 	}
 
 	foreach logdir { 0 1 } {
@@ -98,13 +115,15 @@ proc env024_subtest { encrypt chkpt verbose configfile } {
 				append config_file_content "set_lg_dir logs\n"
 			}
 			if { $datadir } {
-				# Test with '-d', use individual data directory.
+				# Test with '-d',
+				# use individual data directory.
 				set datadir_path "$envhome/data"
 				file mkdir $datadir_path
 				append additional_envargs \
 				    " -data_dir data"
 				append additional_bkupargs " -d data"
-				append config_file_content "set_data_dir data\n"
+				append config_file_content \
+				    "set_data_dir data\n"
 			}
 			if { $configfile } {
 				# Reset args if use DB_CONFIG file.
@@ -122,11 +141,11 @@ proc env024_subtest { encrypt chkpt verbose configfile } {
 			set env [env024_prepare_env $envhome "$envargs \
 			    $additional_envargs -create -home $envhome"]
 			env024_execmd "$binname $backup_args \
-			    $additional_bkupargs"
+			    $additional_bkupargs $std_redirect"
 			puts "\t\tEnv024: update it again with '-u'."
 			# Back it up again with '-u' to update current backup.
 			env024_execmd "$binname -u $backup_args \
-			    $additional_bkupargs"
+			    $additional_bkupargs $std_redirect"
 			error_check_good env_close [$env close] 0
 		}
 	}
@@ -138,7 +157,8 @@ proc env024_prepare_env { envhome envargs } {
 
 	set env [eval berkdb_env_noerr $envargs]
 	set method "btree"
-	set db [eval {berkdb_open -env $env -create "-$method" -mode 0644 "db.db"}]
+	set db [eval {berkdb_open \
+	    -env $env -create "-$method" -mode 0644 "db.db"}]
 	error_check_good db_fill [populate $db $method "" 10 0 0] 0
 
 	error_check_good db_close [$db close] 0

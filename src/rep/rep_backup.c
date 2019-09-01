@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1215,7 +1215,7 @@ __rep_get_fileinfo(env, file, subdb, rfp, uid)
 	SET_LO_HI_VAR(dbp->blob_file_id, rfp->blob_fid_lo, rfp->blob_fid_hi);
 
 	rfp->pgno = 0;
-	
+
 	/*
 	 * Queue is a special-case.  We need to set max_pgno to 0 so that
 	 * the client can compute the pages from the meta-data.
@@ -4273,7 +4273,7 @@ __rep_nextfile(env, eid, rep)
 		}
 #ifndef HAVE_64BIT_TYPES
 		if (rfp->blob_fid_lo != 0 || rfp->blob_fid_hi != 0) {
-		    __db_errx(env, DB_STR("3705",
+		    __db_errx(env, DB_STR("0243",
 		"External files require 64 integer compiler support."));
 			__os_free(env, rffree);
 			return (DB_OPNOTSUP);

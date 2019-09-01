@@ -45,8 +45,9 @@ __repmgr_handshake_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_handshake message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_handshake");
 	return (EINVAL);
 }
 
@@ -88,8 +89,9 @@ __repmgr_v3handshake_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_v3handshake message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_v3handshake");
 	return (EINVAL);
 }
 
@@ -129,8 +131,9 @@ __repmgr_v2handshake_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_v2handshake message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_v2handshake");
 	return (EINVAL);
 }
 
@@ -170,8 +173,53 @@ __repmgr_parm_refresh_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_parm_refresh message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_parm_refresh");
+	return (EINVAL);
+}
+
+/*
+ * PUBLIC: void __repmgr_v6permlsn_marshal __P((ENV *,
+ * PUBLIC:	 __repmgr_v6permlsn_args *, u_int8_t *));
+ */
+void
+__repmgr_v6permlsn_marshal(env, argp, bp)
+	ENV *env;
+	__repmgr_v6permlsn_args *argp;
+	u_int8_t *bp;
+{
+	DB_HTONL_COPYOUT(env, bp, argp->generation);
+	DB_HTONL_COPYOUT(env, bp, argp->lsn.file);
+	DB_HTONL_COPYOUT(env, bp, argp->lsn.offset);
+}
+
+/*
+ * PUBLIC: int __repmgr_v6permlsn_unmarshal __P((ENV *,
+ * PUBLIC:	 __repmgr_v6permlsn_args *, u_int8_t *, size_t, u_int8_t **));
+ */
+int
+__repmgr_v6permlsn_unmarshal(env, argp, bp, max, nextp)
+	ENV *env;
+	__repmgr_v6permlsn_args *argp;
+	u_int8_t *bp;
+	size_t max;
+	u_int8_t **nextp;
+{
+	if (max < __REPMGR_V6PERMLSN_SIZE)
+		goto too_few;
+	DB_NTOHL_COPYIN(env, argp->generation, bp);
+	DB_NTOHL_COPYIN(env, argp->lsn.file, bp);
+	DB_NTOHL_COPYIN(env, argp->lsn.offset, bp);
+
+	if (nextp != NULL)
+		*nextp = bp;
+	return (0);
+
+too_few:
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_v6permlsn");
 	return (EINVAL);
 }
 
@@ -188,6 +236,8 @@ __repmgr_permlsn_marshal(env, argp, bp)
 	DB_HTONL_COPYOUT(env, bp, argp->generation);
 	DB_HTONL_COPYOUT(env, bp, argp->lsn.file);
 	DB_HTONL_COPYOUT(env, bp, argp->lsn.offset);
+	DB_HTONL_COPYOUT(env, bp, argp->last_ckp_lsn.file);
+	DB_HTONL_COPYOUT(env, bp, argp->last_ckp_lsn.offset);
 }
 
 /*
@@ -207,14 +257,106 @@ __repmgr_permlsn_unmarshal(env, argp, bp, max, nextp)
 	DB_NTOHL_COPYIN(env, argp->generation, bp);
 	DB_NTOHL_COPYIN(env, argp->lsn.file, bp);
 	DB_NTOHL_COPYIN(env, argp->lsn.offset, bp);
+	DB_NTOHL_COPYIN(env, argp->last_ckp_lsn.file, bp);
+	DB_NTOHL_COPYIN(env, argp->last_ckp_lsn.offset, bp);
 
 	if (nextp != NULL)
 		*nextp = bp;
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_permlsn message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_permlsn");
+	return (EINVAL);
+}
+
+/*
+ * PUBLIC: void __repmgr_heartbeat_marshal __P((ENV *,
+ * PUBLIC:	 __repmgr_heartbeat_args *, u_int8_t *));
+ */
+void
+__repmgr_heartbeat_marshal(env, argp, bp)
+	ENV *env;
+	__repmgr_heartbeat_args *argp;
+	u_int8_t *bp;
+{
+	DB_HTONL_COPYOUT(env, bp, argp->generation);
+	DB_HTONL_COPYOUT(env, bp, argp->lsn.file);
+	DB_HTONL_COPYOUT(env, bp, argp->lsn.offset);
+}
+
+/*
+ * PUBLIC: int __repmgr_heartbeat_unmarshal __P((ENV *,
+ * PUBLIC:	 __repmgr_heartbeat_args *, u_int8_t *, size_t, u_int8_t **));
+ */
+int
+__repmgr_heartbeat_unmarshal(env, argp, bp, max, nextp)
+	ENV *env;
+	__repmgr_heartbeat_args *argp;
+	u_int8_t *bp;
+	size_t max;
+	u_int8_t **nextp;
+{
+	if (max < __REPMGR_HEARTBEAT_SIZE)
+		goto too_few;
+	DB_NTOHL_COPYIN(env, argp->generation, bp);
+	DB_NTOHL_COPYIN(env, argp->lsn.file, bp);
+	DB_NTOHL_COPYIN(env, argp->lsn.offset, bp);
+
+	if (nextp != NULL)
+		*nextp = bp;
+	return (0);
+
+too_few:
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_heartbeat");
+	return (EINVAL);
+}
+
+/*
+ * PUBLIC: void __repmgr_readonly_response_marshal __P((ENV *,
+ * PUBLIC:	 __repmgr_readonly_response_args *, u_int8_t *));
+ */
+void
+__repmgr_readonly_response_marshal(env, argp, bp)
+	ENV *env;
+	__repmgr_readonly_response_args *argp;
+	u_int8_t *bp;
+{
+	DB_HTONL_COPYOUT(env, bp, argp->generation);
+	DB_HTONL_COPYOUT(env, bp, argp->lsn.file);
+	DB_HTONL_COPYOUT(env, bp, argp->lsn.offset);
+}
+
+/*
+ * PUBLIC: int __repmgr_readonly_response_unmarshal __P((ENV *,
+ * PUBLIC:	 __repmgr_readonly_response_args *, u_int8_t *, size_t,
+ * PUBLIC:	 u_int8_t **));
+ */
+int
+__repmgr_readonly_response_unmarshal(env, argp, bp, max, nextp)
+	ENV *env;
+	__repmgr_readonly_response_args *argp;
+	u_int8_t *bp;
+	size_t max;
+	u_int8_t **nextp;
+{
+	if (max < __REPMGR_READONLY_RESPONSE_SIZE)
+		goto too_few;
+	DB_NTOHL_COPYIN(env, argp->generation, bp);
+	DB_NTOHL_COPYIN(env, argp->lsn.file, bp);
+	DB_NTOHL_COPYIN(env, argp->lsn.offset, bp);
+
+	if (nextp != NULL)
+		*nextp = bp;
+	return (0);
+
+too_few:
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_readonly_response");
 	return (EINVAL);
 }
 
@@ -255,8 +397,9 @@ __repmgr_version_proposal_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_version_proposal message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_version_proposal");
 	return (EINVAL);
 }
 
@@ -295,8 +438,9 @@ __repmgr_version_confirmation_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_version_confirmation message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_version_confirmation");
 	return (EINVAL);
 }
 
@@ -338,8 +482,9 @@ __repmgr_msg_hdr_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_msg_hdr message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_msg_hdr");
 	return (EINVAL);
 }
 
@@ -381,8 +526,9 @@ __repmgr_msg_metadata_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_msg_metadata message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_msg_metadata");
 	return (EINVAL);
 }
 
@@ -448,8 +594,9 @@ __repmgr_membership_key_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_membership_key message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_membership_key");
 	return (EINVAL);
 }
 
@@ -490,8 +637,9 @@ __repmgr_membership_data_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_membership_data message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_membership_data");
 	return (EINVAL);
 }
 
@@ -530,8 +678,9 @@ __repmgr_v4membership_data_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_v4membership_data message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_v4membership_data");
 	return (EINVAL);
 }
 
@@ -572,8 +721,9 @@ __repmgr_member_metadata_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_member_metadata message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_member_metadata");
 	return (EINVAL);
 }
 
@@ -641,8 +791,9 @@ __repmgr_gm_fwd_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_gm_fwd message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_gm_fwd");
 	return (EINVAL);
 }
 
@@ -682,8 +833,9 @@ __repmgr_membr_vers_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_membr_vers message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_membr_vers");
 	return (EINVAL);
 }
 
@@ -753,8 +905,9 @@ __repmgr_site_info_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_site_info message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_site_info");
 	return (EINVAL);
 }
 
@@ -822,8 +975,9 @@ __repmgr_v4site_info_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_v4site_info message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_v4site_info");
 	return (EINVAL);
 }
 
@@ -865,8 +1019,9 @@ __repmgr_connect_reject_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_connect_reject message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_connect_reject");
 	return (EINVAL);
 }
 
@@ -907,8 +1062,9 @@ __repmgr_v4connect_reject_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_v4connect_reject message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_v4connect_reject");
 	return (EINVAL);
 }
 
@@ -956,8 +1112,9 @@ __repmgr_lsnhist_match_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __repmgr_lsnhist_match message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__repmgr_lsnhist_match");
 	return (EINVAL);
 }
 

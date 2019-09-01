@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -156,8 +156,11 @@ env_Cmd(clientData, interp, objc, objv)
 		"get_cache_max",
 		"get_create_dir",
 		"get_data_dirs",
+		"get_database",
+		"get_database_len",
 		"get_encrypt_flags",
 		"get_errpfx",
+		"get_extfile_db",
 		"get_flags",
 		"get_home",
 		"get_lg_bsize",
@@ -187,6 +190,7 @@ env_Cmd(clientData, interp, objc, objv)
 		"get_msgpfx",
 		"get_open_flags",
 		"get_region_dir",
+		"get_rep_site",
 		"get_shm_key",
 		"get_slice_count",
 		"get_slices",
@@ -198,6 +202,7 @@ env_Cmd(clientData, interp, objc, objv)
 		"get_tx_max",
 		"get_tx_timestamp",
 		"get_verbose",
+		"repmgr_set_ssl_config",
 		"resize_cache",
 		"set_blob_threshold",
 		"set_data_dir",
@@ -313,8 +318,11 @@ env_Cmd(clientData, interp, objc, objv)
 		ENVGETCACHEMAX,
 		ENVGETCREATEDIR,
 		ENVGETDATADIRS,
+		ENVGETDATABASE,
+		ENVGETDATABASELEN,
 		ENVGETENCRYPTFLAGS,
 		ENVGETERRPFX,
+		ENVGETEXTFILEDB,
 		ENVGETFLAGS,
 		ENVGETHOME,
 		ENVGETLGBSIZE,
@@ -344,6 +352,7 @@ env_Cmd(clientData, interp, objc, objv)
 		ENVGETMSGPFX,
 		ENVGETOPENFLAG,
 		ENVGETREGIONDIR,
+		ENVGETREPSITE,
 		ENVGETSHMKEY,
 		ENVGETSLICECNT,
 		ENVGETSLICES,
@@ -355,6 +364,7 @@ env_Cmd(clientData, interp, objc, objv)
 		ENVGETTXMAX,
 		ENVGETTXTIMESTAMP,
 		ENVGETVERBOSE,
+		ENVREPMGRSSLCONFIG,
 		ENVRESIZECACHE,
 		ENVSETBLOBTHRESHOLD,
 		ENVSETDATADIR,
@@ -750,6 +760,16 @@ env_Cmd(clientData, interp, objc, objv)
 	case ENVREPREQUEST:
 		result = tcl_RepRequest(interp, (objc-2), &objv[2], dbenv);
 		break;
+	case ENVREPMGRSSLCONFIG:
+		/*
+		 * Two args for this.  Error if different.
+		 */
+		if (objc != 3) {
+			Tcl_WrongNumArgs(interp, 2, objv, NULL);
+			return (TCL_ERROR);
+		}
+		result = tcl_RepMgrSSLConfig(interp, dbenv, objv[2]);
+		break;
 	case ENVREPSTART:
 		result = tcl_RepStart(interp, objc, objv, dbenv);
 		break;
@@ -1015,6 +1035,27 @@ env_Cmd(clientData, interp, objc, objv)
 				    dirs[i]  != NULL ? strlen(dirs[i]) : 0));
 		}
 		break;
+	case ENVGETDATABASE:
+		if (objc != 2) {
+			Tcl_WrongNumArgs(interp, 1, objv, NULL);
+			return (TCL_ERROR);
+		}
+		ret = dbenv->get_memory_init(dbenv, DB_MEM_DATABASE, &value);
+		if ((result = _ReturnSetup(interp, ret, DB_RETOK_STD(ret),
+		    "env get_database")) == TCL_OK)
+			res = Tcl_NewLongObj((long)value);
+		break;
+	case ENVGETDATABASELEN:
+		if (objc != 2) {
+			Tcl_WrongNumArgs(interp, 1, objv, NULL);
+			return (TCL_ERROR);
+		}
+		ret = dbenv->get_memory_init(dbenv,
+		    DB_MEM_DATABASE_LENGTH, &value);
+		if ((result = _ReturnSetup(interp, ret, DB_RETOK_STD(ret),
+		    "env get_database_len")) == TCL_OK)
+			res = Tcl_NewLongObj((long)value);
+		break;
 	case ENVGETENCRYPTFLAGS:
 		result = tcl_EnvGetEncryptFlags(interp, objc, objv, dbenv);
 		break;
@@ -1026,6 +1067,17 @@ env_Cmd(clientData, interp, objc, objv)
 		dbenv->get_errpfx(dbenv, &strval);
 		res = NewStringObj(strval,
 			strval != NULL ? strlen(strval) : 0);
+		break;
+	case ENVGETEXTFILEDB:
+		if (objc != 2) {
+			Tcl_WrongNumArgs(interp, 1, objv, NULL);
+			return (TCL_ERROR);
+		}
+		ret = dbenv->get_memory_init(dbenv,
+		    DB_MEM_EXTFILE_DATABASE, &value);
+		if ((result = _ReturnSetup(interp, ret, DB_RETOK_STD(ret),
+		    "env get_extfile_db")) == TCL_OK)
+			res = Tcl_NewLongObj((long)value);
 		break;
 	case ENVGETFLAGS:
 		result = env_GetFlags(interp, objc, objv, dbenv);
@@ -1303,6 +1355,16 @@ env_Cmd(clientData, interp, objc, objv)
 			"env get_region_dir")) == TCL_OK)
 			res = NewStringObj(strval,
 				strval != NULL ? strlen(strval) : 0);
+		break;
+	case ENVGETREPSITE:
+		if (objc != 2) {
+			Tcl_WrongNumArgs(interp, 1, objv, NULL);
+			return (TCL_ERROR);
+		}
+		ret = dbenv->get_memory_init(dbenv, DB_MEM_REP_SITE, &value);
+		if ((result = _ReturnSetup(interp, ret, DB_RETOK_STD(ret),
+		    "env get_rep_site")) == TCL_OK)
+			res = Tcl_NewLongObj((long)value);
 		break;
 	case ENVGETSHMKEY:
 		if (objc != 2) {
@@ -1886,23 +1948,23 @@ tcl_EnvBackup(interp, objc, objv, dbenv)
 	static const char *buwhich[] = {
 		"-clean",
 		"-create",
+		"-deep_copy",
 		"-excl",
 		"-files",
 		"-no_logs",
 		"-single_dir",
 		"-update",
-		"-verbose",
 		NULL
 	};
 	enum buwhich {
 		BKUPCLEAN,
 		BKUPCREATE,
+		BKUPDEEPCOPY,
 		BKUPEXCL,
 		BKUPFILES,
 		BKUPNOLOGS,
 		BKUPSINGLEDIR,
-		BKUPUPDATE,
-		BKUPVERBOSE
+		BKUPUPDATE
 	};
 	int i, optindex, result, ret;
 	u_int32_t flags;
@@ -1928,6 +1990,9 @@ tcl_EnvBackup(interp, objc, objv, dbenv)
 		case BKUPCREATE:
 			flags |= DB_CREATE;
 			break;
+		case BKUPDEEPCOPY:
+			flags |= DB_BACKUP_DEEP_COPY;
+			break;
 		case BKUPEXCL:
 			flags |= DB_EXCL;
 			break;
@@ -1942,9 +2007,6 @@ tcl_EnvBackup(interp, objc, objv, dbenv)
 			break;
 		case BKUPUPDATE:
 			flags |= DB_BACKUP_UPDATE;
-			break;
-		case BKUPVERBOSE:
-			flags |= DB_VERB_BACKUP;
 			break;
 		}
 	}
@@ -2143,6 +2205,9 @@ tcl_EnvVerbose(interp, dbenv, which, onoff)
 		"rep_test",
 		"repmgr_connfail",
 		"repmgr_misc",
+		"repmgr_ssl_all",
+		"repmgr_ssl_conn",
+		"repmgr_ssl_io",
 		"slice",
 		"wait",
 		NULL
@@ -2165,6 +2230,9 @@ tcl_EnvVerbose(interp, dbenv, which, onoff)
 		ENVVERB_REP_TEST,
 		ENVVERB_REPMGR_CONNFAIL,
 		ENVVERB_REPMGR_MISC,
+		ENVVERB_REPMGR_SSL_ALL,
+		ENVVERB_REPMGR_SSL_CONN,
+		ENVVERB_REPMGR_SSL_IO,
 		ENVVERB_SLICE,
 		ENVVERB_WAITSFOR
 	};
@@ -2235,6 +2303,15 @@ tcl_EnvVerbose(interp, dbenv, which, onoff)
 		break;
 	case ENVVERB_REPMGR_MISC:
 		wh = DB_VERB_REPMGR_MISC;
+		break;
+	case ENVVERB_REPMGR_SSL_ALL:
+		wh = DB_VERB_REPMGR_SSL_ALL;
+		break;
+	case ENVVERB_REPMGR_SSL_CONN:
+		wh = DB_VERB_REPMGR_SSL_CONN;
+		break;
+	case ENVVERB_REPMGR_SSL_IO:
+		wh = DB_VERB_REPMGR_SSL_IO;
 		break;
 	case ENVVERB_SLICE:
 		wh = DB_VERB_SLICE;
@@ -2357,6 +2434,7 @@ static const struct {
 	{ DB_EVENT_PANIC, "panic" },
 	{ DB_EVENT_REG_ALIVE, "reg_alive" },
 	{ DB_EVENT_REG_PANIC, "reg_panic" },
+	{ DB_EVENT_REP_AUTOTAKEOVER, "autotakeover" },
 	{ DB_EVENT_REP_AUTOTAKEOVER_FAILED, "autotakeover_failed" },
 	{ DB_EVENT_REP_CLIENT, "client" },
 	{ DB_EVENT_REP_CONNECT_BROKEN, "connection_broken" },
@@ -3746,6 +3824,9 @@ env_GetVerbose(interp, objc, objv, dbenv)
 		{ DB_VERB_REP_TEST, "rep_test" },
 		{ DB_VERB_REPMGR_CONNFAIL, "repmgr_connfail" },
 		{ DB_VERB_REPMGR_MISC, "repmgr_misc" },
+		{ DB_VERB_REPMGR_SSL_ALL, "repmgr_ssl_all" },
+		{ DB_VERB_REPMGR_SSL_CONN, "repmgr_ssl_conn" },
+		{ DB_VERB_REPMGR_SSL_IO, "repmgr_ssl_io" },
 		{ DB_VERB_SLICE, "slice" },
 		{ DB_VERB_WAITSFOR, "wait" },
 		{ 0, NULL }

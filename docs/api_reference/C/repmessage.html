@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;rep_process_message()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;rep_process_message()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repget_timeout.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repmessage"></a>DB_ENV-&gt;rep_process_message()</h2>
+            <h2 class="title" style="clear: both"><a id="repmessage"></a>
+        <span>DB_ENV-&gt;rep_process_message()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -64,9 +70,15 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
       <p>
         Before calling this method, the enclosing database environment must
         already have been opened by calling the 
-        <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method and must
+        <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method and must
         already have been configured to send replication messages by
-        calling the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">DB_ENV-&gt;rep_set_transport()</a> 
+        calling the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">
+        <span>DB_ENV-&gt;rep_set_transport()</span>
+        
+    </a> 
         method.
     </p>
       <p>
@@ -83,8 +95,14 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
                 The <code class="methodname">DB_ENV-&gt;rep_process_message()</code> method will return
                 <code class="literal">DB_REP_DUPMASTER</code> if the replication group has more than one
                 master. The application should reconfigure itself as a client by calling the 
-                <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a>  method, and then call for an
-                election by calling <a class="xref" href="repelect.html" title="DB_ENV-&gt;rep_elect()">DB_ENV-&gt;rep_elect()</a>.
+                <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a>  method, and then call for an
+                election by calling <a class="xref" href="repelect.html" title="DB_ENV-&gt;rep_elect()">
+        <span>DB_ENV-&gt;rep_elect()</span>
+        
+    </a>.
             </p>
           </li>
           <li>
@@ -95,7 +113,10 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
                  The <code class="methodname">DB_ENV-&gt;rep_process_message()</code> method will return
                  <code class="literal">DB_REP_HOLDELECTION</code> if an election is needed. The application
                  should call for an election by calling 
-                 <a class="xref" href="repelect.html" title="DB_ENV-&gt;rep_elect()">DB_ENV-&gt;rep_elect()</a>.
+                 <a class="xref" href="repelect.html" title="DB_ENV-&gt;rep_elect()">
+        <span>DB_ENV-&gt;rep_elect()</span>
+        
+    </a>.
             </p>
           </li>
           <li>
@@ -145,7 +166,10 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
                  The <code class="methodname">DB_ENV-&gt;rep_process_message()</code> method will return
                  <code class="literal">DB_REP_NEWSITE</code> if the system received contact information from a
                  new environment. The <span class="bold"><strong>rec</strong></span> parameter contains the
-                 opaque data specified to the <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a>
+                 opaque data specified to the <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a>
                  <span class="bold"><strong>cdata</strong></span> parameter.  The application should
                  take whatever action is needed to establish a communication channel with this new
                  environment.
@@ -179,7 +203,7 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229426368"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113481735168"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -187,7 +211,7 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229428016"></a>control</h4>
+                <h4 class="title"><a id="idm140113481736816"></a>control</h4>
               </div>
             </div>
           </div>
@@ -195,14 +219,17 @@ DB_ENV-&gt;rep_process_message(DB_ENV *env,
                           The <span class="bold"><strong>control</strong></span> parameter should
                           reference a copy of the <span class="bold"><strong>control</strong></span>
                           parameter specified by Berkeley DB on the sending environment.
-See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">DB_ENV-&gt;rep_set_transport()</a> method for more information.
+See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">
+        <span>DB_ENV-&gt;rep_set_transport()</span>
+        
+    </a> method for more information.
                      </p>
         </div>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229413376"></a>rec</h4>
+                <h4 class="title"><a id="idm140113481722288"></a>rec</h4>
               </div>
             </div>
           </div>
@@ -210,14 +237,17 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
                           The <span class="bold"><strong>rec</strong></span> parameter should reference a
                           copy of the <span class="bold"><strong>rec</strong></span> parameter specified
                           by Berkeley DB on the sending environment.
-See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">DB_ENV-&gt;rep_set_transport()</a> method for more information.
+See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">
+        <span>DB_ENV-&gt;rep_set_transport()</span>
+        
+    </a> method for more information.
                      </p>
         </div>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229462176"></a>envid</h4>
+                <h4 class="title"><a id="idm140113481719184"></a>envid</h4>
               </div>
             </div>
           </div>
@@ -232,7 +262,7 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229405312"></a>ret_lsnp</h4>
+                <h4 class="title"><a id="idm140113481714336"></a>ret_lsnp</h4>
               </div>
             </div>
           </div>
@@ -255,7 +285,7 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229435168"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113481743968"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -272,14 +302,17 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229394688"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113481703600"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
                 If the database environment was not already configured to
                 communicate with a replication group by a call to
-                <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">DB_ENV-&gt;rep_set_transport()</a>; 
+                <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_transport()">
+        <span>DB_ENV-&gt;rep_set_transport()</span>
+        
+    </a>; 
                 if the database environment was not already opened;
                 if this method is called from a Replication Manager
                 application; or if an invalid flag value or parameter
@@ -291,7 +324,7 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229392944"></a>Class</h3>
+              <h3 class="title"><a id="idm140113481701856"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -303,7 +336,7 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229452208"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113481758512"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -323,11 +356,17 @@ See the <a class="xref" href="reptransport.html" title="DB_ENV-&gt;rep_set_trans
           <td width="40%" align="right"> <a accesskey="n" href="repclockskew.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;rep_get_timeout() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;rep_get_timeout()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;rep_set_clockskew()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;rep_set_clockskew()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

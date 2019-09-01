@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr101
 # TEST Repmgr support for multi-process master.
@@ -61,6 +61,7 @@ proc repmgr101_sub { tnum testopt } {
 		    "rep_set_config db_repmgr_conf_2site_strict off"
 	}
 	make_dbconfig $masterdir $masconfig
+	setup_repmgr_ssl $masterdir
 	puts $master "output $testdir/m1output"
 	puts $master "open_env"
 	if { $testopt == "none" } {
@@ -107,6 +108,7 @@ proc repmgr101_sub { tnum testopt } {
 		    "rep_set_config db_repmgr_conf_2site_strict off"
 	}
 	make_dbconfig $clientdir $cliconfig
+	setup_repmgr_ssl $clientdir
 	puts $client "output $testdir/coutput"
 	puts $client "open_env"
 	puts $client "start client"

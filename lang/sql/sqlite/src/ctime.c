@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2010 February 23
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -48,10 +54,19 @@ static const char * const azCompileOpt[] = {
 #if SQLITE_CHECK_PAGES
   "CHECK_PAGES",
 #endif
+#if defined(__clang__) && defined(__clang_major__)
+  "COMPILER=clang-" CTIMEOPT_VAL(__clang_major__) "."
+                    CTIMEOPT_VAL(__clang_minor__) "."
+                    CTIMEOPT_VAL(__clang_patchlevel__),
+#elif defined(_MSC_VER)
+  "COMPILER=msvc-" CTIMEOPT_VAL(_MSC_VER),
+#elif defined(__GNUC__) && defined(__VERSION__)
+  "COMPILER=gcc-" __VERSION__,
+#endif
 #if SQLITE_COVERAGE_TEST
   "COVERAGE_TEST",
 #endif
-#if SQLITE_DEBUG
+#ifdef SQLITE_DEBUG
   "DEBUG",
 #endif
 #if SQLITE_DEFAULT_LOCKING_MODE
@@ -60,11 +75,23 @@ static const char * const azCompileOpt[] = {
 #if defined(SQLITE_DEFAULT_MMAP_SIZE) && !defined(SQLITE_DEFAULT_MMAP_SIZE_xc)
   "DEFAULT_MMAP_SIZE=" CTIMEOPT_VAL(SQLITE_DEFAULT_MMAP_SIZE),
 #endif
+#if SQLITE_DEFAULT_SYNCHRONOUS
+  "DEFAULT_SYNCHRONOUS=" CTIMEOPT_VAL(SQLITE_DEFAULT_SYNCHRONOUS),
+#endif
+#if SQLITE_DEFAULT_WAL_SYNCHRONOUS
+  "DEFAULT_WAL_SYNCHRONOUS=" CTIMEOPT_VAL(SQLITE_DEFAULT_WAL_SYNCHRONOUS),
+#endif
+#if SQLITE_DIRECT_OVERFLOW_READ
+  "DIRECT_OVERFLOW_READ",
+#endif
 #if SQLITE_DISABLE_DIRSYNC
   "DISABLE_DIRSYNC",
 #endif
 #if SQLITE_DISABLE_LFS
   "DISABLE_LFS",
+#endif
+#if SQLITE_ENABLE_8_3_NAMES
+  "ENABLE_8_3_NAMES=" CTIMEOPT_VAL(SQLITE_ENABLE_8_3_NAMES),
 #endif
 #if SQLITE_ENABLE_API_ARMOR
   "ENABLE_API_ARMOR",
@@ -99,11 +126,17 @@ static const char * const azCompileOpt[] = {
 #if SQLITE_ENABLE_FTS4
   "ENABLE_FTS4",
 #endif
+#if SQLITE_ENABLE_FTS5
+  "ENABLE_FTS5",
+#endif
 #if SQLITE_ENABLE_ICU
   "ENABLE_ICU",
 #endif
 #if SQLITE_ENABLE_IOTRACE
   "ENABLE_IOTRACE",
+#endif
+#if SQLITE_ENABLE_JSON1
+  "ENABLE_JSON1",
 #endif
 #if SQLITE_ENABLE_LOAD_EXTENSION
   "ENABLE_LOAD_EXTENSION",
@@ -137,6 +170,9 @@ static const char * const azCompileOpt[] = {
 #if SQLITE_ENABLE_UPDATE_DELETE_LIMIT
   "ENABLE_UPDATE_DELETE_LIMIT",
 #endif
+#if defined(SQLITE_ENABLE_URI_00_ERROR)
+  "ENABLE_URI_00_ERROR",
+#endif
 #if SQLITE_HAS_CODEC
   "HAS_CODEC",
 #endif
@@ -154,6 +190,9 @@ static const char * const azCompileOpt[] = {
 #endif
 #ifdef SQLITE_INT64_TYPE
   "INT64_TYPE",
+#endif
+#ifdef SQLITE_LIKE_DOESNT_MATCH_BLOBS
+  "LIKE_DOESNT_MATCH_BLOBS",
 #endif
 #if SQLITE_LOCK_TRACE
   "LOCK_TRACE",
@@ -208,9 +247,6 @@ static const char * const azCompileOpt[] = {
 #endif
 #if SQLITE_OMIT_BTREECOUNT
   "OMIT_BTREECOUNT",
-#endif
-#if SQLITE_OMIT_BUILTIN_TEST
-  "OMIT_BUILTIN_TEST",
 #endif
 #if SQLITE_OMIT_CAST
   "OMIT_CAST",
@@ -373,6 +409,9 @@ static const char * const azCompileOpt[] = {
 #endif
 #if defined(SQLITE_THREADSAFE)
   "THREADSAFE=" CTIMEOPT_VAL(SQLITE_THREADSAFE),
+#endif
+#if SQLITE_UNTESTABLE
+  "UNTESTABLE"
 #endif
 #if SQLITE_USE_ALLOCA
   "USE_ALLOCA",

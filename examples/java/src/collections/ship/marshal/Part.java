@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.marshal;
@@ -82,6 +81,7 @@ public class Part implements Serializable, MarshalledEnt {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[Part: number=" + number +
@@ -99,16 +99,23 @@ public class Part implements Serializable, MarshalledEnt {
         // instantiate objects of this class.
     }
 
+    @Override
     public void unmarshalPrimaryKey(TupleInput keyInput) {
 
         this.number = keyInput.readString();
     }
 
+    @Override
     public void marshalPrimaryKey(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.number);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean marshalSecondaryKey(String keyName, TupleOutput keyOutput) {
 
         throw new UnsupportedOperationException(keyName);

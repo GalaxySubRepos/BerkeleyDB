@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -55,8 +55,14 @@ public:
             surround a single transaction. Alternatively, Berkeley DB can be configured to not throw
             exceptions, and instead have the individual function return an error code, by setting
             the <a class="link" href="envcreate.html#env_DB_CXX_NO_EXCEPTIONS">DB_CXX_NO_EXCEPTIONS</a>
-            for the <a class="xref" href="dbcreate.html" title="Db">Db</a> and 
-            <a class="xref" href="envcreate.html" title="DbEnv">DbEnv</a> constructors.
+            for the <a class="xref" href="dbcreate.html" title="Db">
+        
+        <span>Db</span>
+    </a> and 
+            <a class="xref" href="envcreate.html" title="DbEnv">
+        
+        <span>DbEnv</span>
+    </a> constructors.
     </p>
       <p>
             A <code class="classname">DbException</code> object contains an informational string, an
@@ -73,7 +79,10 @@ public:
       <p>
             Some methods may return non-zero values without issuing an exception. This occurs in
             situations that are not normally considered an error, but when some informational status
-            is returned. For example, the <a class="xref" href="dbget.html" title="Db::get()">Db::get()</a> method returns
+            is returned. For example, the <a class="xref" href="dbget.html" title="Db::get()">
+        
+        <span>Db::get()</span>
+    </a> method returns
             <a href="../../programmer_reference/program_errorret.html#program_errorret.DB_NOTFOUND" class="olink">DB_NOTFOUND</a>
             when a requested key does not appear in the database.
     </p>
@@ -138,7 +147,10 @@ public:
           <td width="40%" align="right"> <a accesskey="n" href="dbdeadlock.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::version() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::version()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>

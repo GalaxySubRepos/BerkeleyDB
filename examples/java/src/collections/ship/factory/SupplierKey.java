@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.factory;
@@ -35,6 +34,7 @@ public class SupplierKey implements MarshalledTupleEntry {
         return number;
     }
 
+    @Override
     public String toString() {
 
         return "[SupplierKey: number=" + number + ']';
@@ -48,11 +48,13 @@ public class SupplierKey implements MarshalledTupleEntry {
         // instantiate objects of this class.
     }
 
+    @Override
     public void marshalEntry(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.number);
     }
 
+    @Override
     public void unmarshalEntry(TupleInput keyInput) {
 
         this.number = keyInput.readString();

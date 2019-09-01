@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_msgcall()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_msgcall()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_metadata_dir.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_msgcall"></a>DB_ENV-&gt;set_msgcall()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_msgcall"></a>
+        <span>DB_ENV-&gt;set_msgcall()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -49,12 +55,21 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
          There are interfaces in the Berkeley DB library which either directly
          output informational messages or statistical information, or configure
          the library to output such messages when performing other operations,
-         for example, <a class="xref" href="envset_verbose.html" title="DB_ENV-&gt;set_verbose()">DB_ENV-&gt;set_verbose()</a>  and
-         <a class="xref" href="envstat.html" title="DB_ENV-&gt;stat_print()">DB_ENV-&gt;stat_print()</a>.
+         for example, <a class="xref" href="envset_verbose.html" title="DB_ENV-&gt;set_verbose()">
+        <span>DB_ENV-&gt;set_verbose()</span>
+        
+    </a>  and
+         <a class="xref" href="envstat.html" title="DB_ENV-&gt;stat_print()">
+        <span>DB_ENV-&gt;stat_print()</span>
+        
+    </a>.
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_msgcall()</code> and 
-         <a class="xref" href="dbset_msgcall.html" title="DB-&gt;set_msgcall()">DB-&gt;set_msgcall()</a>
+         <a class="xref" href="dbset_msgcall.html" title="DB-&gt;set_msgcall()">
+        <span>DB-&gt;set_msgcall()</span>
+        
+    </a>
          methods are used to pass these messages to the application, and Berkeley DB will call
          <span class="bold"><strong>db_msgcall_fcn</strong></span> with each message.  It
          is up to the <span class="bold"><strong>db_msgcall_fcn</strong></span> function
@@ -67,8 +82,14 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
       <p>
          Alternatively, you can use the
             
-         <a class="xref" href="dbset_msgfile.html" title="DB-&gt;set_msgfile()">DB-&gt;set_msgfile()</a>  or
-         <a class="xref" href="envset_msgfile.html" title="DB_ENV-&gt;set_msgfile()">DB-&gt;set_msgfile()</a>
+         <a class="xref" href="dbset_msgfile.html" title="DB-&gt;set_msgfile()">
+        <span>DB-&gt;set_msgfile()</span>
+        
+    </a>  or
+         <a class="xref" href="envset_msgfile.html" title="DB_ENV-&gt;set_msgfile()">
+        <span>DB-&gt;set_msgfile()</span>
+        
+    </a>
          methods to display the messages via a C library FILE *.
          
     </p>
@@ -93,7 +114,7 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232868928"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113485246992"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -101,7 +122,7 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815232868544"></a>db_msgcall_fcn</h4>
+                <h4 class="title"><a id="idm140113485246608"></a>db_msgcall_fcn</h4>
               </div>
             </div>
           </div>
@@ -129,7 +150,13 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
                          The <span class="bold"><strong>msgpfx</strong></span> parameter is the message
                          prefix string that appears before informational messages.
                          This value is the environmental default, and can be
-                         changed at any time using <a class="xref" href="envset_msgpfx.html" title="DB_ENV-&gt;set_msgpfx()">DB_ENV-&gt;set_msgpfx()</a> or <a class="xref" href="dbset_msgpfx.html" title="DB-&gt;set_msgpfx()">DB-&gt;set_msgpfx()</a>.
+                         changed at any time using <a class="xref" href="envset_msgpfx.html" title="DB_ENV-&gt;set_msgpfx()">
+        <span>DB_ENV-&gt;set_msgpfx()</span>
+        
+    </a> or <a class="xref" href="dbset_msgpfx.html" title="DB-&gt;set_msgpfx()">
+        <span>DB-&gt;set_msgpfx()</span>
+        
+    </a>.
                     </p>
               </li>
               <li>
@@ -149,7 +176,7 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232855664"></a>Class</h3>
+              <h3 class="title"><a id="idm140113485233728"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -161,7 +188,7 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232866640"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113485244288"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -181,11 +208,17 @@ DB_ENV-&gt;set_msgcall(DB_ENV *dbenv,
           <td width="40%" align="right"> <a accesskey="n" href="envset_msgfile.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_metadata_dir() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_metadata_dir()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_msgfile()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_msgfile()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

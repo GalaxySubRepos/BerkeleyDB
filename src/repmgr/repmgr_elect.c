@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -555,10 +555,13 @@ __repmgr_elect(env, flags, failtimep)
 	REP *rep;
 	u_int32_t invitation, nsites, nvotes;
 	int ret, t_ret;
+	u_long peer_conn_waittime, sleeptime;
 
 	db_rep = env->rep_handle;
 	nsites = db_rep->region->config_nsites;
 	DB_ASSERT(env, nsites > 0);
+
+	rep = db_rep->region;
 
 	/*
 	 * With only 2 sites in the group, even a single failure could make it
@@ -566,8 +569,48 @@ __repmgr_elect(env, flags, failtimep)
 	 * really wants strict safety.
 	 */
 	if (nsites == 2 &&
-	    !FLD_ISSET(db_rep->region->config, REP_C_2SITE_STRICT))
+	    !FLD_ISSET(rep->config, REP_C_2SITE_STRICT)) {
 		nvotes = 1;
+
+		/*
+		 * For 2 node scenario, wait for the peer connection
+		 * to complete. If a newly joining node gets to VOTE2,
+		 * before the peer connection completes it would declare
+		 * itself the winner.
+		 */
+		peer_conn_waittime = DB_REP_PEER_WAIT_TIMEOUT;
+		sleeptime = peer_conn_waittime/25;
+
+		REP_SYSTEM_LOCK(env);
+		if (rep->sites_avail == 0) {
+			FLD_SET(rep->elect_flags, REP_E_PEER_CONN_WAIT);
+
+			/* 
+			 * When peer connection is complete, REP_E_PEER_CONN_WAIT
+			 * is cleared in the code that processes version reponse
+			 * as part of handshake (read_version_response()).
+			 */
+ 			while (peer_conn_waittime > 0
+			    && peer_conn_waittime <= DB_REP_PEER_WAIT_TIMEOUT) {
+				if (!FLD_ISSET(rep->elect_flags,
+				    REP_E_PEER_CONN_WAIT) 
+				    || (rep->sites_avail > 0))
+					break;
+
+				REP_SYSTEM_UNLOCK(env);
+
+				/* pauses the thread for sleeptime */
+				__os_yield(env, 0, sleeptime);
+
+				peer_conn_waittime -= sleeptime;
+
+				REP_SYSTEM_LOCK(env);
+			}
+
+			FLD_CLR(rep->elect_flags, REP_E_PEER_CONN_WAIT);
+		}
+		REP_SYSTEM_UNLOCK(env);
+	}
 	else
 		nvotes = ELECTION_MAJORITY(nsites);
 
@@ -580,7 +623,6 @@ __repmgr_elect(env, flags, failtimep)
 		 * so, let's not spoil it by imposing our own full nsites count
 		 * on it.)
 		 */
-		rep = db_rep->region;
 		invitation = rep->nsites;
 		if (invitation == nsites || invitation == nsites - 1) {
 			nsites = invitation;

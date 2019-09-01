@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;rep_stat()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;rep_stat()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repstart.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repstat"></a>DB_ENV-&gt;rep_stat()</h2>
+            <h2 class="title" style="clear: both"><a id="repstat"></a>
+        <span>DB_ENV-&gt;rep_stat()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -53,7 +59,10 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
     </p>
       <p>
          Statistical structures are stored in allocated memory.  If application-specific allocation
-         routines have been declared (see <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">DB_ENV-&gt;set_alloc()</a> 
+         routines have been declared (see <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">
+        <span>DB_ENV-&gt;set_alloc()</span>
+        
+    </a> 
          for more information), they are used to allocate the memory; otherwise, the standard
          C library <span class="bold"><strong>malloc</strong></span>(3) is used.  The caller is responsible
          for deallocating the memory.  To deallocate the memory, free the memory reference;
@@ -151,7 +160,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           </li>
           <li>
             <p>
-                     <span class="bold"><strong>int st_election_cur_winner;</strong></span>
+                     <span class="bold"><strong>db_ssize_t st_election_cur_winner;</strong></span>
             </p>
             <p>
                     The environment ID of the winner of the current or last election.
@@ -217,7 +226,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           </li>
           <li>
             <p>
-                    <span class="bold"><strong>int st_election_status;</strong></span>
+                    <span class="bold"><strong>int32_t st_election_status;</strong></span>
              </p>
             <p>
                     The current election phase (0 if no election is in progress).
@@ -267,7 +276,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           </li>
           <li>
             <p>
-                     <span class="bold"><strong>int st_env_id;</strong></span>
+                     <span class="bold"><strong>db_ssize_t st_env_id;</strong></span>
             </p>
             <p>
                     The current environment ID.
@@ -413,7 +422,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           </li>
           <li>
             <p>
-                     <span class="bold"><strong>int st_master;</strong></span>
+                     <span class="bold"><strong>db_ssize_t st_master;</strong></span>
             </p>
             <p>
                     The current master environment ID.
@@ -514,7 +523,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           </li>
           <li>
             <p>
-                     <span class="bold"><strong>u_int32_t st_next_pg;</strong></span>
+                     <span class="bold"><strong>db_pgno_t st_next_pg;</strong></span>
             </p>
             <p>
                     The next page number we expect to receive.
@@ -535,7 +544,10 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
             <p>
                 The number of times that data
                 transmission was stopped to limit the amount of data sent in response
-                to a single call to <a class="xref" href="repmessage.html" title="DB_ENV-&gt;rep_process_message()">DB_ENV-&gt;rep_process_message()</a>.
+                to a single call to <a class="xref" href="repmessage.html" title="DB_ENV-&gt;rep_process_message()">
+        <span>DB_ENV-&gt;rep_process_message()</span>
+        
+    </a>.
             </p>
           </li>
           <li>
@@ -629,7 +641,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           </li>
           <li>
             <p>
-                <span class="bold"><strong>u_int32_t st_waiting_pg;</strong></span>
+                <span class="bold"><strong>db_pgno_t st_waiting_pg;</strong></span>
             </p>
             <p>
                 The page number of the first page we have after missing pages being
@@ -640,7 +652,10 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
       </div>
       <p>
               The <code class="methodname">DB_ENV-&gt;rep_stat()</code> method may not be called before the 
-              <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is called.
+              <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;rep_stat()</code> <span>
@@ -654,7 +669,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228932304"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113481284112"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -662,7 +677,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228968272"></a>statp</h4>
+                <h4 class="title"><a id="idm140113481241888"></a>statp</h4>
               </div>
             </div>
           </div>
@@ -675,7 +690,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229103664"></a>flags</h4>
+                <h4 class="title"><a id="idm140113481206224"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -701,7 +716,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228872816"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113481177280"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -717,7 +732,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228864624"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113481200080"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -731,7 +746,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228868368"></a>Class</h3>
+              <h3 class="title"><a id="idm140113481163040"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -743,7 +758,7 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228862544"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113481159712"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -763,11 +778,17 @@ DB_ENV-&gt;rep_stat(DB_ENV *env, DB_REP_STAT **statp, u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="repstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;rep_start() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;rep_stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;rep_stat_print()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

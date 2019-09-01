@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;associate()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;associate()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="db.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbassociate"></a>DB-&gt;associate()</h2>
+            <h2 class="title" style="clear: both"><a id="dbassociate"></a>
+        <span>DB-&gt;associate()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -79,7 +85,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238344384"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113490861696"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -87,7 +93,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238318432"></a>primary</h4>
+                <h4 class="title"><a id="idm140113491016752"></a>primary</h4>
               </div>
             </div>
           </div>
@@ -100,17 +106,23 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238335584"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113490853648"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; 
+                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; 
                           if the operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected.
@@ -120,7 +132,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238333504"></a>secondary</h4>
+                <h4 class="title"><a id="idm140113490851568"></a>secondary</h4>
               </div>
             </div>
           </div>
@@ -143,7 +155,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238324928"></a>callback</h4>
+                <h4 class="title"><a id="idm140113490824256"></a>callback</h4>
               </div>
             </div>
           </div>
@@ -311,7 +323,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238311072"></a>flags</h4>
+                <h4 class="title"><a id="idm140113490828272"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -380,7 +392,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238333088"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113490769392"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -396,7 +408,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238231392"></a>  DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140113490747984"></a>  DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -415,7 +427,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238223856"></a>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140113490826736"></a>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -427,7 +439,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238318272"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113490793840"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -443,7 +455,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238305952"></a>Class</h3>
+              <h3 class="title"><a id="idm140113490824048"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -455,7 +467,7 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238267440"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113490774672"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -481,7 +493,10 @@ DB-&gt;associate(DB *primary, DB_TXN *txnid, DB *secondary,
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;associate_foreign()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;associate_foreign()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

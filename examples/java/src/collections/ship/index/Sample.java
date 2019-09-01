@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.index;
@@ -34,11 +33,12 @@ import com.sleepycat.db.DatabaseException;
  */
 public class Sample {
 
-    private SampleDatabase db;
-    private SampleViews views;
+    private final SampleDatabase db;
+    private final SampleViews views;
 
     /**
      * Run the sample program.
+     * @param args
      */
     public static void main(String[] args) {
 
@@ -120,6 +120,7 @@ public class Sample {
      */
     private class PopulateDatabase implements TransactionWorker {
 
+        @Override
         public void doWork()
             throws Exception {
             addSuppliers();
@@ -137,6 +138,7 @@ public class Sample {
      */
     private class PrintDatabase implements TransactionWorker {
 
+        @Override
         public void doWork()
             throws Exception {
             printEntries("Parts",
@@ -163,7 +165,7 @@ public class Sample {
      */
     private void addParts() {
 
-        Map parts = views.getPartMap();
+        Map<PartKey, PartData> parts = views.getPartMap();
         if (parts.isEmpty()) {
             System.out.println("Adding Parts");
             parts.put(new PartKey("P1"),
@@ -199,7 +201,7 @@ public class Sample {
      */
     private void addSuppliers() {
 
-        Map suppliers = views.getSupplierMap();
+        Map<SupplierKey, SupplierData> suppliers = views.getSupplierMap();
         if (suppliers.isEmpty()) {
             System.out.println("Adding Suppliers");
             suppliers.put(new SupplierKey("S1"),
@@ -221,7 +223,7 @@ public class Sample {
      */
     private void addShipments() {
 
-        Map shipments = views.getShipmentMap();
+        Map<ShipmentKey, ShipmentData> shipments = views.getShipmentMap();
         if (shipments.isEmpty()) {
             System.out.println("Adding Shipments");
             shipments.put(new ShipmentKey("P1", "S1"),

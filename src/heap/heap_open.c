@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include "db_config.h"
@@ -124,14 +124,14 @@ __heap_metachk(dbp, name, hm)
 		return (ret);
 	/* Blob databases must be upgraded. */
 	if (vers == 1 && dbp->blob_file_id != 0) {
-	    __db_errx(env, DB_STR_A("1209",
+	    __db_errx(env, DB_STR_A("1207",
 "%s: databases that support external files must be upgraded.", "%s"),
 		    name);
 		return (EINVAL);
 	}
 #ifndef HAVE_64BIT_TYPES
 	if (dbp->blob_file_id != 0) {
-		__db_errx(env, DB_STR_A("1205",
+		__db_errx(env, DB_STR_A("1199",
 	    "%s: external files require 64 integer compiler support.", "%s"),
 		    name);
 		return (EINVAL);

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * Some parts of this code originally written by Adam Stubblefield
  * -- astubble@rice.edu
@@ -341,7 +341,7 @@ alg_retry:
 				return (ret);
 			}
 			if (((BTMETA *)meta)->crypto_magic != meta->magic) {
-				__db_errx(env, DB_STR("0180",
+				__db_errx(env, DB_STR("0175",
 				    "Invalid password"));
 				F_CLR(dbp, added_flags);
 				return (EINVAL);

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 package com.sleepycat.db.test;
@@ -161,6 +161,15 @@ public class RepmgrElectionTest extends EventHandlerAdapter
         envConfig.setTxnNoSync(true);
         envConfig.setInitializeReplication(true);
         envConfig.setVerboseReplication(false);
+        envConfig.setReplicationManagerSSLdisabled(TestUtils.repmgrSSLDisabled);
+        envConfig.setReplicationManagerSSLconfiguration(
+            TestUtils.repmgrCACert,
+            TestUtils.repmgrCADir,
+            TestUtils.repmgrNodeCert,
+            TestUtils.repmgrNodePkey,
+            TestUtils.repmgrNodePkeyPassword,
+            TestUtils.repmgrVerifyDepth
+        );
 
         ReplicationManagerSiteConfig localConfig = new ReplicationManagerSiteConfig(address, basePort + siteIndex);
         localConfig.setLocalSite(true);

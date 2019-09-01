@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -51,6 +51,10 @@ proc repmgr040_sub { method niter tnum largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $otherdir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $otherdir
 
 	#
 	# Open environments without -errpfx so that full error text is

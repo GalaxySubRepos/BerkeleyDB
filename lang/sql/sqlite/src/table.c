@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2001 September 15
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -17,8 +23,6 @@
 ** if they are not used.
 */
 #include "sqliteInt.h"
-#include <stdlib.h>
-#include <string.h>
 
 #ifndef SQLITE_OMIT_GET_TABLE
 
@@ -101,7 +105,7 @@ static int sqlite3_get_table_cb(void *pArg, int nCol, char **argv, char **colv){
   return 0;
 
 malloc_failed:
-  p->rc = SQLITE_NOMEM;
+  p->rc = SQLITE_NOMEM_BKPT;
   return 1;
 }
 
@@ -142,7 +146,7 @@ int sqlite3_get_table(
   res.azResult = sqlite3_malloc64(sizeof(char*)*res.nAlloc );
   if( res.azResult==0 ){
      db->errCode = SQLITE_NOMEM;
-     return SQLITE_NOMEM;
+     return SQLITE_NOMEM_BKPT;
   }
   res.azResult[0] = 0;
   rc = sqlite3_exec(db, zSql, sqlite3_get_table_cb, &res, pzErrMsg);
@@ -171,7 +175,7 @@ int sqlite3_get_table(
     if( azNew==0 ){
       sqlite3_free_table(&res.azResult[1]);
       db->errCode = SQLITE_NOMEM;
-      return SQLITE_NOMEM;
+      return SQLITE_NOMEM_BKPT;
     }
     res.azResult = azNew;
   }

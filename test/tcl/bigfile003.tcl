@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -168,14 +168,16 @@ proc bigfile003_sub { method envtype } {
 	puts "\tBigfile003.c: Append data to blobs with dbstream."
 	flush stdout
 
-	# Append 1 MB data into the big blob until it gets to 5GB.
-	set basestr [repeat [repeat $alphabet 40] 1024]
-	set largeblobsize [ expr 5 * 1024 ]
-	fillblob $basestr $dbs $largeblobsize
+	# Append 1GB data into the big blob until it gets to 5GB.
+	set bigbasestr [repeat [repeat $alphabet 40] 1048576]
+	set largeblobsize 5
+	fillblob $bigbasestr $dbs $largeblobsize
 	puts "\tBigfile003.c1: Large blob is complete."
 
+	# Append 1MB data into the small blob until it gets to 5MB.
 	# Now the small blob file. 
 	set smallblobsize 5
+	set basestr [repeat [repeat $alphabet 40] 1024]
 	fillblob $basestr $dbs2 $smallblobsize
 	puts "\tBigfile003.c2: Small blob is complete."
 
@@ -223,7 +225,7 @@ proc bigfile003_sub { method envtype } {
 		error_check_good dbstream2_size [$dbs2 size] 0
 
 		puts "\tBigfile003.c5: Reappend 5 GB to the large blob."
-		fillblob $basestr $dbs $largeblobsize
+		fillblob $bigbasestr $dbs $largeblobsize
 		puts "\tBigfile003.c5: Done."
 		puts "\tBigfile003.c5: Reappend 5 MB to the small blob."
 		fillblob $basestr $dbs2 $smallblobsize

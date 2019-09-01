@@ -141,6 +141,10 @@ import java.util.Comparator;
 		event_notify_handler.handlePanicEvent();
 	}
 
+	private final void handle_rep_autotakeover_event_notify() {
+		event_notify_handler.handleRepAutoTakeoverEvent();	
+	}
+
 	private final void handle_rep_autotakeover_failed_event_notify() {
 		event_notify_handler.handleRepAutoTakeoverFailedEvent();
 	}

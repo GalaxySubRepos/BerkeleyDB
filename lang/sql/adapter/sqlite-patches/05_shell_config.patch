@@ -1,6 +1,11 @@
 --- src/shell.c
 +++ src/shell.c
-@@ -28,6 +28,14 @@
+@@ -37,16 +37,24 @@
+ #ifndef SQLITE_DISABLE_LFS
+ # define _LARGE_FILE       1
+ # ifndef _FILE_OFFSET_BITS
+ #   define _FILE_OFFSET_BITS 64
+ # endif
  # define _LARGEFILE_SOURCE 1
  #endif
  
@@ -15,3 +20,8 @@
  #include <stdlib.h>
  #include <string.h>
  #include <stdio.h>
+ #include <assert.h>
+ #include "sqlite3.h"
+ #if SQLITE_USER_AUTHENTICATION
+ # include "sqlite3userauth.h"
+ #endif

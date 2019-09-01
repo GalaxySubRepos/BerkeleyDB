@@ -62,16 +62,15 @@ fi
 # Otherwise, use the standard X.X.X format.
 VERSION=${1:-${DB_VERSION_MAJOR}.${DB_VERSION_MINOR}.${DB_VERSION_PATCH}}
 
-# Use "ustar" as the archiver
-TAR=/opt/schily/bin/ustar
+# Use "ustar" or "star" as the archiver
+TAR=star
 
 # Set root directory where we do the work, can be anywhere.
 START_DIR=`pwd`
 D=`pwd`/../release
 R="$D/db-${VERSION}"
-RNC="$D/db-$VERSION.NC"
-DOCS=`pwd`/../../docs_books-6.2
-DB_ADDONS=`pwd`/../../db_addons-6.2
+DOCS=`pwd`/../../docs_books
+DB_ADDONS=`pwd`/../../db_addons
 
 if [ ! -d $DB_ADDONS ]; then
 	echo "buildpkg requires a db_addons repository at the same level as the db repository."
@@ -79,7 +78,7 @@ if [ ! -d $DB_ADDONS ]; then
 fi
 
 # Create directory, remove any previous release tree.
-rm -rf $R $RNC
+rm -rf $R
 mkdir -p $R
 
 echo "Removed old release build from $R"
@@ -165,6 +164,7 @@ else
 
 	# Build the Java documentation.
 	cd $R/dist && sh s_javadoc
+	cd $R/dist && sh s_thrift -addons ../../../.. && sh s_javadoc_thrift
 fi
 
 cd $START_DIR
@@ -192,11 +192,17 @@ cp -rp $DB_ADDONS/bfile $SQL_EXT_DIR
 cd $R && rm -rf test/tcl/TODO test/upgrade test/scr036 test/erlang
 cd $R && rm -rf test/perf test/purify test/repmgr
 cd $R && rm -rf test/server test/stl test/vxworks
+cd $R && rm -rf malware_scans
+cd $R && rm -rf static_analysis
 cd $R && rm -rf lang/sql/jdbc
 cd $R && rm -rf lang/sql/sqlite/art lang/sql/sqlite/autoconf
 cd $R && rm -rf lang/sql/sqlite/autom4te.cache lang/sql/sqlite/contrib
 cd $R && rm -rf lang/sql/sqlite/doc lang/sql/sqlite/mptest
 cd $R && rm -rf lang/sql/sqlite/test lang/sql/sqlite/tool
+cd $R && rm -rf lang/sql/sqlite/ext/fts5/test
+cd $R && rm -rf lang/sql/sqlite/ext/rbu/*.test
+cd $R && rm -rf lang/sql/sqlite/ext/rtree/*.test
+cd $R && rm -rf lang/sql/sqlite/ext/session/*.test
 cd $R && rm -rf lang/sql/sqlite/vsixtest
 cd $R && find . -name '.hg*' | xargs rm -f
 cd $R && find . -name 'tags' | xargs rm -f
@@ -244,23 +250,10 @@ fi
 $TAR czf $T -find db-$VERSION -chown 100 -chgrp 100
 chmod 444 $T
 
-# Create the non-crypto tree.
-cd $D && mv -i db-$VERSION $RNC && $TAR xzf $T
-cd $RNC/dist && sh s_crypto
-
-(cd $RNC/dist && ./s_perm)
-
-# Create the non-crypto tar archive release.
-T="$D/db-$VERSION.NC.tar.gz"
-rm -f $T
-cd $RNC/.. && $TAR czf $T -find db-$VERSION.NC -chown 100 -chgrp 100
-chmod 444 $T
-
+# Adjust LICENSE and README to DOS mode.
 t=__tmp
 cd $R && awk '{print $0 "\r"}' < LICENSE > $t && rm -f LICENSE && cp $t LICENSE
 cd $R && awk '{print $0 "\r"}' < README > $t && rm -f README && cp $t README && rm $t
-cd $RNC && awk '{print $0 "\r"}' < LICENSE > $t && rm -f LICENSE && cp $t LICENSE
-cd $RNC && awk '{print $0 "\r"}' < README > $t && rm -f README && cp $t README && rm $t
 
 # Create the crypto zip archive release.
 T="$D/db-$VERSION.zip"
@@ -268,13 +261,7 @@ rm -f $T
 cd $R/.. && rm -f $T && zip -q -r $T db-$VERSION
 chmod 444 $T
 
-# Create the non-crypto zip archive release.
-T="$D/db-$VERSION.NC.zip"
-rm -f $T
-cd $RNC/.. && rm -f $T && zip -q -r $T db-$VERSION.NC 
-chmod 444 $T
-
-rm -rf $R $RNC
+rm -rf $R
 
 if [ "$TAG_CREATED" = "true" ]; then
 	echo "Created a tag in docs_books repository. Please push."

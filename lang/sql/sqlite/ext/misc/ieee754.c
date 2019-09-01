@@ -1,4 +1,11 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
+**
 ** 2013-04-17
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -94,16 +101,16 @@ static void ieee754func(
       m >>= 1;
       e++;
     }
-    while( ((m>>32)&0xfff00000)==0 ){
+    while( m!=0 && ((m>>32)&0xfff00000)==0 ){
       m <<= 1;
       e--;
     }
     e += 1075;
     if( e<0 ) e = m = 0;
-    if( e>0x7ff ) m = 0;
+    if( e>0x7ff ) e = 0x7ff;
     a = m & ((((sqlite3_int64)1)<<52)-1);
     a |= e<<52;
-    if( isNeg ) a |= ((sqlite3_int64)1)<<63;
+    if( isNeg ) a |= ((sqlite3_uint64)1)<<63;
     memcpy(&r, &a, sizeof(r));
     sqlite3_result_double(context, r);
   }

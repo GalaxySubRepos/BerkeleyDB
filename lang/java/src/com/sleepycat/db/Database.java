@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -644,7 +644,8 @@ deadlock.
     @return
     The method will return 
     {@link com.sleepycat.db.OperationStatus#NOTFOUND OperationStatus.NOTFOUND}
-    if the specified key is not found in the database; The method will return 
+    when it encounters an entry in the list that is not found in the database,
+    and will not process any remaining entries; The method will return 
     {@link com.sleepycat.db.OperationStatus#KEYEMPTY OperationStatus.KEYEMPTY}
     if the database is a Queue or Recno database and the specified key exists,
     but was never explicitly created by the application or was later
@@ -695,7 +696,8 @@ deadlock.
     @return
     The method will return 
     {@link com.sleepycat.db.OperationStatus#NOTFOUND OperationStatus.NOTFOUND}
-    if the specified key is not found in the database; The method will return 
+    when it encounters an entry in the list that is not found in the database,
+    and will not process any remaining entries; The method will return 
     {@link com.sleepycat.db.OperationStatus#KEYEMPTY OperationStatus.KEYEMPTY}
     if the database is a Queue or Recno database and the specified key exists,
     but was never explicitly created by the application or was later
@@ -1601,6 +1603,48 @@ The new name of the database or file.
         final Db db = DatabaseConfig.checkNull(config).createDatabase(null);
         db.upgrade(fileName,
             config.getSortedDuplicates() ? DbConstants.DB_DUPSORT : 0);
+        db.close(0);
+    }
+
+    /**
+    Convert the byte order of all the databases included in the specified file.
+    <p>
+    If no conversion is necessary, always returns success.
+    <p>
+    If the database is partitioned, config must contain the correct partition
+    configuration in order to convert database partitions.
+    <p>
+    <b>
+    Database conversions are done in place and are destructive. For example,
+    if pages need to be allocated and no disk space is available, the
+    database may be left corrupted.  Backups should be made before databases
+    are converted.
+    </b>
+    If the database was opened within a database environment, the
+    environment variable DB_HOME may be used as the path of the database
+    environment home.
+    <p>
+    This method is affected by any database directory specified with
+    {@link com.sleepycat.db.EnvironmentConfig#addDataDir EnvironmentConfig.addDataDir}, or by setting the "set_data_dir"
+    string in the database environment's DB_CONFIG file.
+    <p>
+    @param fileName
+    The physical file containing the databases to be converted.
+    <p>
+    @param useBigEndian If true, the databases are converted to big-endian;
+    otherwise, they are converted to little-endian.
+    <p>
+    @param config The database attributes.  If null, default attributes are used.
+    <p>
+@throws DatabaseException if a failure occurs.
+@throws java.io.FileNotFoundException if the database file does not exist
+    */
+    public static void convert(final String fileName, boolean useBigEndian,
+        DatabaseConfig config)
+        throws DatabaseException, java.io.FileNotFoundException {
+
+        final Db db = DatabaseConfig.checkNull(config).createDatabase(null);
+        db.convert(fileName, useBigEndian ? 4321 : 1234);
         db.close(0);
     }
 

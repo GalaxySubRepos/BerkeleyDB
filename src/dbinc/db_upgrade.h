@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -350,7 +350,7 @@ typedef struct _heapblob60 {
 			(ret) = EINVAL;					\
 		}							\
 		if ((p).size_lo > INT_MAX) {				\
-			__db_errx((e), DB_STR("0768",			\
+			__db_errx((e), DB_STR("0767",			\
 			    "External file size overflow."));		\
 			(ret) = EINVAL;					\
 		}							\

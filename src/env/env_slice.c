@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -112,7 +112,7 @@ __env_slice_open(dbenv, db_home, flags, mode)
 		 * Set encryption on the slices.  This has to be done here
 		 * since encryption has to be set before opening the
 		 * environment, and the container environment is not known
-		 * to be sliced until its open function is called.  The 
+		 * to be sliced until its open function is called.  The
 		 * container has not been open yet, so the passwd field has
 		 * not been deleted yet.
 		 */
@@ -275,12 +275,12 @@ __env_slice_fileid_reset_pp(dbenv, name, flags)
 		/*
 		 * Update the fileids of the slices in the container.
 		 * These operations should not be logged or replicated,
-		 * so open the database with DB_TXN_NOT_DURABLE.  
+		 * so open the database with DB_TXN_NOT_DURABLE.
 		 */
 		ENV_GET_THREAD_INFO(env, ip);
 		if ((ret = __db_create_internal(&dbp, env, 0)) != 0)
 			goto err;
-		
+
 		if ((ret = __db_set_flags(
 		    dbp, flags | DB_TXN_NOT_DURABLE)) != 0)
 			goto err;
@@ -310,12 +310,12 @@ __env_slice_fileid_reset_pp(dbenv, name, flags)
 			}
 		}
 		if ((ret = __env_get_slice_fileids(dbenv, dbp, name)) != 0)
-		  	goto err;
+			goto err;
 
 		for (i = 0; i < dbenv->slice_cnt; i++) {
-		  	if ((ret = __db_slice_fileid_metachk(
-		      	    dbp, NULL, NULL, i, 1)) != 0)
-		  	  	goto err;
+			if ((ret = __db_slice_fileid_metachk(
+			    dbp, NULL, NULL, i, 1)) != 0)
+				goto err;
 		}
 	}
 err:
@@ -345,7 +345,7 @@ err:
  *
  * Also assumes there are no subdatabases.
  *
- */	  
+ */
 static int
 __env_get_slice_fileids(dbenv, dbp, name)
 	DB_ENV *dbenv;

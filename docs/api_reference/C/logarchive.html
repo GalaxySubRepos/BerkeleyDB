@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;log_archive()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;log_archive()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envget_lg_regionmax.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="logarchive"></a>DB_ENV-&gt;log_archive()</h2>
+            <h2 class="title" style="clear: both"><a id="logarchive"></a>
+        <span>DB_ENV-&gt;log_archive()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -62,17 +68,29 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
       <p>
 
          Arrays of log filenames are stored in allocated memory.  If application-specific allocation
-         routines have been declared (see <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">DB_ENV-&gt;set_alloc()</a> 
+         routines have been declared (see <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">
+        <span>DB_ENV-&gt;set_alloc()</span>
+        
+    </a> 
          for more information), they are used to allocate the memory; otherwise, the standard
          C library <span class="bold"><strong>malloc</strong></span>(3) is used.  The caller is responsible
          for deallocating the memory.  To deallocate the memory, free the memory reference;
          references inside the returned memory need not be individually freed.
     </p>
       <p>
-         Log cursor handles (returned by the <a class="xref" href="logcursor.html" title="DB_ENV-&gt;log_cursor()">DB_ENV-&gt;log_cursor()</a>
+         Log cursor handles (returned by the <a class="xref" href="logcursor.html" title="DB_ENV-&gt;log_cursor()">
+        <span>DB_ENV-&gt;log_cursor()</span>
+        
+    </a>
          method) may have open file descriptors for log files in the database environment.  Also,
          the Berkeley DB interfaces to the database environment logging subsystem (for example,
-         <a class="xref" href="logput.html" title="DB_ENV-&gt;log_put()">DB_ENV-&gt;log_put()</a>  and <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">DB_TXN-&gt;abort()</a> ) may allocate log cursors and have open file descriptors
+         <a class="xref" href="logput.html" title="DB_ENV-&gt;log_put()">
+        <span>DB_ENV-&gt;log_put()</span>
+        
+    </a>  and <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">
+        <span>DB_TXN-&gt;abort()</span>
+        
+    </a> ) may allocate log cursors and have open file descriptors
          for log files as well.  On operating systems where filesystem related system calls (for
          example, rename and unlink on Windows/NT) can fail if a process has an open file descriptor
          for the affected file, attempting to move or remove the log files listed by
@@ -106,7 +124,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231697840"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113484056928"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -114,7 +132,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815231699088"></a>listp</h4>
+                <h4 class="title"><a id="idm140113484055776"></a>listp</h4>
               </div>
             </div>
           </div>
@@ -129,7 +147,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815231727280"></a>flags</h4>
+                <h4 class="title"><a id="idm140113484068288"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -198,7 +216,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231661808"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113484018656"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -214,7 +232,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815231678256"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113484034064"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -227,7 +245,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231661392"></a>Class</h3>
+              <h3 class="title"><a id="idm140113484018240"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -241,7 +259,7 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231650912"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113484007760"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -261,11 +279,17 @@ DB_ENV-&gt;log_archive(DB_ENV *env, char *(*listp)[], u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="logcursor.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;get_lg_regionmax() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;get_lg_regionmax()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;log_cursor()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;log_cursor()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

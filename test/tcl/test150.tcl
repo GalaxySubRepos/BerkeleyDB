@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates. All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -43,6 +43,7 @@ proc test150 { method {tnum "150"} args } {
 		}
 		set testfile test$tnum.db
 		set testfile2 test$tnum.2.db
+		set inmem_dbname test$tnum.3.db
 		append verify_args "-h $testdir "
 		append log_verify_args "-h $testdir "
 	} else {
@@ -77,6 +78,25 @@ proc test150 { method {tnum "150"} args } {
 		error_check_good txn_commit [$txn commit] 0
 	}
 	error_check_good db_close [$db close] 0
+
+	# Create a named in-memory database only when there is an environment 
+	# and queue extents are not meaningful for in-memory database.  
+	if { $eindex != -1 && [is_queueext $method] != 1 } {
+		set db1 [eval {berkdb_open -create -mode 0644} \
+		    $args $omethod \"\" $inmem_dbname]
+		error_check_good db1_open [is_valid_db $db1] TRUE
+
+		set txn ""
+		if { $txnenv == 1 } {
+			set txn [$env txn]
+		}
+		error_check_good db_fill [populate $db1 $method $txn 10 0 0] 0
+		
+		if { $txnenv == 1 } {
+			error_check_good txn_commit [$txn commit] 0
+		}
+		error_check_good db1_close [$db1 close] 0
+	}
 
 	if { $allow_subdb == 1 } {
 		# Create db with a given name in another file.
@@ -118,6 +138,12 @@ proc test150 { method {tnum "150"} args } {
 
 	# Try again with UNREF mode on.
 	test150_execmd "$binname -u $verify_args $testfile $std_redirect"
+
+	# Verify the named in-memory database.
+	if { $eindex != -1 && [is_queueext $method] != 1 } {
+		test150_execmd "$binname -m $verify_args $inmem_dbname\
+		    $std_redirect"
+	}
 
 	# Check usage info is contained in error message.
 	set execmd "$util_path/$binname $std_redirect"

@@ -8,6 +8,9 @@
   <env name="jar" group="group_java">
     <Environment Id="classpathdb" Name="CLASSPATH" Action="set" System="yes" Part="last" Permanent="no" Value="[INSTALLDIR]jar\db.jar" />
   </env>
+  <env name="jar" group="group_java">
+    <Environment Id="classpathdbg" Name="CLASSPATH" Action="set" System="yes" Part="last" Permanent="no" Value="[INSTALLDIR]jar\db_gui.jar" />
+  </env>
   <env name="jar" group="group_thrift">
     <Environment Id="classpathdts" Name="CLASSPATH" Action="set" System="yes" Part="last" Permanent="no" Value="[INSTALLDIR]jar\db_thrift_server.jar" />
   </env>

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include "db_config.h"
@@ -43,6 +43,7 @@ __db_stream_init(dbc, dbsp, flags)
 	memset(dbs, 0, sizeof(DB_STREAM));
 
 	ENV_ENTER(env, ip);
+	dbc->thread_info = ip;
 	/* Should the copy be transient? */
 	if ((ret = __dbc_idup(dbc, &dbs->dbc, DB_POSITION)) != 0)
 		goto err;
@@ -107,6 +108,7 @@ __db_stream_close(dbs, flags)
 		return (ret);
 
 	ENV_ENTER(env, ip);
+	dbs->dbc->thread_info = ip;
 
 	ret = __db_stream_close_int(dbs);
 
@@ -245,7 +247,7 @@ __db_stream_write(dbs, data, offset, flags)
 	}
 	if (F_ISSET(data, DB_DBT_PARTIAL)) {
 		ret = USR_ERR(env, EINVAL);
-		__db_errx(env, DB_STR("0214",
+		__db_errx(env, DB_STR("0212",
 		    "Error, do not use DB_DBT_PARTIAL with DB_STREAM."));
 		return (ret);
 	}
@@ -274,6 +276,7 @@ __db_stream_write(dbs, data, offset, flags)
 	}
 
 	ENV_ENTER(env, ip);
+	dbs->dbc->thread_info = ip;
 	wflags = 0;
 	if (LF_ISSET(DB_STREAM_SYNC_WRITE) || F_ISSET(dbs, DB_FOP_SYNC_WRITE))
 		wflags |= DB_FOP_SYNC_WRITE;

@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -74,7 +74,13 @@
             the external file threshold to a non-zero positive value. (The
             default value is <code class="literal">0</code>, which means that external
             files are not enabled). You set the external file threshold using
-            either <a class="xref" href="set_blob_threshold.html" title="DB-&gt;set_ext_file_threshold()">DB-&gt;set_ext_file_threshold()</a> or <a class="xref" href="envset_blob_threshold.html" title="DB_ENV-&gt;set_ext_file_threshold()">DB_ENV-&gt;set_ext_file_threshold()</a>.
+            either <a class="xref" href="set_blob_threshold.html" title="DB-&gt;set_ext_file_threshold()">
+        <span>DB-&gt;set_ext_file_threshold()</span>
+        
+    </a> or <a class="xref" href="envset_blob_threshold.html" title="DB_ENV-&gt;set_ext_file_threshold()">
+        <span>DB_ENV-&gt;set_ext_file_threshold()</span>
+        
+    </a>.
         </p>
       <p>
             Once external files are enabled, there are two ways to create an
@@ -109,9 +115,21 @@
             data, so long as the data itself will fit into memory. More
             likely, you will find it necessary to use the external file
             streaming API to read and write external file data. You open an
-            external file stream using the <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">DBC-&gt;db_stream()</a> method, close it with
-            the <a class="xref" href="dbstream_close.html" title="DB_STREAM-&gt;close()">DB_STREAM-&gt;close()</a> method, write to it using the the
-            <a class="xref" href="dbstream_write.html" title="DB_STREAM-&gt;write()">DB_STREAM-&gt;write()</a> method, and read it using the <a class="xref" href="dbstream_read.html" title="DB_STREAM-&gt;read()">DB_STREAM-&gt;read()</a>
+            external file stream using the <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">
+        <span>DBC-&gt;db_stream()</span>
+        
+    </a> method, close it with
+            the <a class="xref" href="dbstream_close.html" title="DB_STREAM-&gt;close()">
+        <span>DB_STREAM-&gt;close()</span>
+        
+    </a> method, write to it using the the
+            <a class="xref" href="dbstream_write.html" title="DB_STREAM-&gt;write()">
+        <span>DB_STREAM-&gt;write()</span>
+        
+    </a> method, and read it using the <a class="xref" href="dbstream_read.html" title="DB_STREAM-&gt;read()">
+        <span>DB_STREAM-&gt;read()</span>
+        
+    </a>
             method.
         </p>
       <div class="sect1" lang="en" xml:lang="en">
@@ -133,31 +151,46 @@
             <tbody>
               <tr>
                 <td>
-                  <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">DBC-&gt;db_stream()</a>
+                  <a class="xref" href="dbstream.html" title="DBC-&gt;db_stream()">
+        <span>DBC-&gt;db_stream()</span>
+        
+    </a>
                 </td>
                 <td>Create an external file stream</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="dbstream_close.html" title="DB_STREAM-&gt;close()">DB_STREAM-&gt;close()</a>
+                  <a class="xref" href="dbstream_close.html" title="DB_STREAM-&gt;close()">
+        <span>DB_STREAM-&gt;close()</span>
+        
+    </a>
                 </td>
                 <td>Close an external file stream</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="dbstream_read.html" title="DB_STREAM-&gt;read()">DB_STREAM-&gt;read()</a>
+                  <a class="xref" href="dbstream_read.html" title="DB_STREAM-&gt;read()">
+        <span>DB_STREAM-&gt;read()</span>
+        
+    </a>
                 </td>
                 <td>Read an external file stream</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="dbstream_size.html" title="DB_STREAM-&gt;size()">DB_STREAM-&gt;size()</a>
+                  <a class="xref" href="dbstream_size.html" title="DB_STREAM-&gt;size()">
+        <span>DB_STREAM-&gt;size()</span>
+        
+    </a>
                 </td>
                 <td>Returns the size of an external file</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="dbstream_write.html" title="DB_STREAM-&gt;write()">DB_STREAM-&gt;write()</a>
+                  <a class="xref" href="dbstream_write.html" title="DB_STREAM-&gt;write()">
+        <span>DB_STREAM-&gt;write()</span>
+        
+    </a>
                 </td>
                 <td>Write an external file stream</td>
               </tr>
@@ -169,19 +202,43 @@
                 </td>
               </tr>
               <tr>
-                <td><a class="xref" href="set_blob_dir.html" title="DB-&gt;set_ext_file_dir()">DB-&gt;set_ext_file_dir()</a>, <a class="xref" href="get_blob_dir.html" title="DB-&gt;get_ext_file_dir()">DB-&gt;get_ext_file_dir()</a></td>
+                <td><a class="xref" href="set_blob_dir.html" title="DB-&gt;set_ext_file_dir()">
+        <span>DB-&gt;set_ext_file_dir()</span>
+        
+    </a>, <a class="xref" href="get_blob_dir.html" title="DB-&gt;get_ext_file_dir()">
+        <span>DB-&gt;get_ext_file_dir()</span>
+        
+    </a></td>
                 <td>Sets/gets the location where external file data is stored</td>
               </tr>
               <tr>
-                <td><a class="xref" href="set_blob_threshold.html" title="DB-&gt;set_ext_file_threshold()">DB-&gt;set_ext_file_threshold()</a>, <a class="xref" href="get_blob_threshold.html" title="DB-&gt;get_ext_file_threshold()">DB-&gt;get_ext_file_threshold()</a></td>
+                <td><a class="xref" href="set_blob_threshold.html" title="DB-&gt;set_ext_file_threshold()">
+        <span>DB-&gt;set_ext_file_threshold()</span>
+        
+    </a>, <a class="xref" href="get_blob_threshold.html" title="DB-&gt;get_ext_file_threshold()">
+        <span>DB-&gt;get_ext_file_threshold()</span>
+        
+    </a></td>
                 <td>Sets/gets the size when data records are stored as external files</td>
               </tr>
               <tr>
-                <td><a class="xref" href="envset_blob_dir.html" title="DB_ENV-&gt;set_ext_file_dir()">DB_ENV-&gt;set_ext_file_dir()</a>, <a class="xref" href="envget_blob_dir.html" title="DB_ENV-&gt;get_ext_file_dir()">DB_ENV-&gt;get_ext_file_dir()</a></td>
+                <td><a class="xref" href="envset_blob_dir.html" title="DB_ENV-&gt;set_ext_file_dir()">
+        <span>DB_ENV-&gt;set_ext_file_dir()</span>
+        
+    </a>, <a class="xref" href="envget_blob_dir.html" title="DB_ENV-&gt;get_ext_file_dir()">
+        <span>DB_ENV-&gt;get_ext_file_dir()</span>
+        
+    </a></td>
                 <td>Sets/gets the location where external file data is stored</td>
               </tr>
               <tr>
-                <td><a class="xref" href="envset_blob_threshold.html" title="DB_ENV-&gt;set_ext_file_threshold()">DB_ENV-&gt;set_ext_file_threshold()</a>, <a class="xref" href="envget_blob_threshold.html" title="DB_ENV-&gt;get_ext_file_threshold()">DB_ENV-&gt;get_ext_file_threshold()</a></td>
+                <td><a class="xref" href="envset_blob_threshold.html" title="DB_ENV-&gt;set_ext_file_threshold()">
+        <span>DB_ENV-&gt;set_ext_file_threshold()</span>
+        
+    </a>, <a class="xref" href="envget_blob_threshold.html" title="DB_ENV-&gt;get_ext_file_threshold()">
+        <span>DB_ENV-&gt;get_ext_file_threshold()</span>
+        
+    </a></td>
                 <td>Sets/gets the default size for the environment when external files are used</td>
               </tr>
             </tbody>
@@ -198,11 +255,17 @@
           <td width="40%" align="right"> <a accesskey="n" href="get_blob_dir.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_TXN-&gt;set_timeout() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_TXN-&gt;set_timeout()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;get_ext_file_dir()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;get_ext_file_dir()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

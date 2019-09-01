@@ -1,7 +1,7 @@
 #
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -65,6 +65,8 @@ proc basic_repmgr_test { niter inmemdb inmemlog \
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set ports [available_ports $nsites]
 	set hoststr [get_hoststr $ipversion]
@@ -107,7 +109,7 @@ proc basic_repmgr_test { niter inmemdb inmemlog \
 	# Open a master.
 	puts "\tBasic repmgr test.a: Start an appointed master."
 	set ma_envcmd "berkdb_env_noerr -create $logargs $verbargs \
-	    $private \
+	    $private $sslargs \
 	    -errpfx MASTER -home $masterdir $txnargs -rep -thread \
 	    -lock_max_locks 10000 -lock_max_objects 10000 $repmemarg"
 	set masterenv [eval $ma_envcmd]
@@ -118,7 +120,7 @@ proc basic_repmgr_test { niter inmemdb inmemlog \
 	# Open first client
 	puts "\tBasic repmgr test.b: Start first client."
 	set cl_envcmd "berkdb_env_noerr -create $verbargs $logargs \
-	    $private \
+	    $private $sslargs \
 	    -errpfx CLIENT -home $clientdir $txnargs -rep -thread \
 	    -lock_max_locks 10000 -lock_max_objects 10000 $repmemarg"
 	set clientenv [eval $cl_envcmd]
@@ -132,7 +134,7 @@ proc basic_repmgr_test { niter inmemdb inmemlog \
 	# Open second client
 	puts "\tBasic repmgr test.c: Start second client."
 	set cl2_envcmd "berkdb_env_noerr -create $verbargs $logargs \
-	    $private \
+	    $private $sslargs \
 	    -errpfx CLIENT2 -home $clientdir2 $txnargs -rep -thread \
 	    -lock_max_locks 10000 -lock_max_objects 10000 $repmemarg"
 	set clientenv2 [eval $cl2_envcmd]

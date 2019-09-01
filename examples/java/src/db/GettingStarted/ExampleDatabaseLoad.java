@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File: ExampleDatabaseLoad.java
@@ -19,7 +18,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import com.sleepycat.bind.EntryBinding;
 import com.sleepycat.bind.serial.SerialBinding;
@@ -35,10 +33,10 @@ public class ExampleDatabaseLoad {
 
     // DatabaseEntries used for loading records
     private static DatabaseEntry theKey = new DatabaseEntry();
-    private static DatabaseEntry theData = new DatabaseEntry();
+    private static final DatabaseEntry theData = new DatabaseEntry();
 
     // Encapsulates the databases.
-    private static MyDbs myDbs = new MyDbs();
+    private static final MyDbs myDbs = new MyDbs();
 
     private static void usage() {
         System.out.println("ExampleDatabaseLoad [-h <database home>]");
@@ -92,8 +90,8 @@ public class ExampleDatabaseLoad {
         // key, and the data is a Vendor class object.
 
         // Need a serial binding for the data
-        EntryBinding dataBinding =
-            new SerialBinding(myDbs.getClassCatalog(), Vendor.class);
+        EntryBinding<Vendor> dataBinding =
+            new SerialBinding<>(myDbs.getClassCatalog(), Vendor.class);
 
         for (int i = 0; i < vendors.size(); i++) {
             String[] sArray = (String[])vendors.get(i);
@@ -137,7 +135,7 @@ public class ExampleDatabaseLoad {
         // key, and the data is an Inventory class object.
 
         // Need a tuple binding for the Inventory class.
-        TupleBinding inventoryBinding = new InventoryBinding();
+        TupleBinding<Inventory> inventoryBinding = new InventoryBinding();
 
         for (int i = 0; i < inventoryArray.size(); i++) {
             String[] sArray = (String[])inventoryArray.get(i);
@@ -149,8 +147,8 @@ public class ExampleDatabaseLoad {
             Inventory theInventory = new Inventory();
             theInventory.setItemName(sArray[0]);
             theInventory.setSku(sArray[1]);
-            theInventory.setVendorPrice((new Float(sArray[2])).floatValue());
-            theInventory.setVendorInventory((new Integer(sArray[3])).intValue());
+            theInventory.setVendorPrice((new Float(sArray[2])));
+            theInventory.setVendorInventory((new Integer(sArray[3])));
             theInventory.setCategory(sArray[4]);
             theInventory.setVendor(sArray[5]);
 
@@ -170,7 +168,7 @@ public class ExampleDatabaseLoad {
             if (args[i].startsWith("-")) {
                 switch(args[i].charAt(1)) {
                   case 'h':
-                    myDbsPath = new String(args[++i]);
+                    myDbsPath = args[++i];
                     break;
                   case 'i':
                     inventoryFile = new File(args[++i]);
@@ -187,7 +185,7 @@ public class ExampleDatabaseLoad {
 
 
     private List loadFile(File theFile, int numFields) {
-        List records = new ArrayList();
+        List<String []> records = new ArrayList<>();
         try {
             String theLine = null;
             FileInputStream fis = new FileInputStream(theFile);
@@ -217,12 +215,12 @@ public class ExampleDatabaseLoad {
 
 
     private static String[] splitString(String s, String delimiter) {
-        Vector resultVector = new Vector();
+        ArrayList<String> resultVector = new ArrayList<>();
         StringTokenizer tokenizer = new StringTokenizer(s, delimiter);
         while (tokenizer.hasMoreTokens())
             resultVector.add(tokenizer.nextToken());
         String[] resultArray = new String[resultVector.size()];
-        resultVector.copyInto(resultArray);
+        resultArray = resultVector.toArray(resultArray);
         return resultArray;
     }
 

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -316,7 +316,7 @@ tcl_MutStat(interp, objc, objv, dbenv)
 	MAKE_STAT_LIST("Mutex max", sp->st_mutex_max);
 	MAKE_STAT_LIST("Free mutexes", sp->st_mutex_free);
 	MAKE_STAT_LIST("Mutexes in use", sp->st_mutex_inuse);
-	MAKE_STAT_LIST("Max in use", sp->st_mutex_inuse_max);
+	MAKE_STAT_LIST("Max mutexes in use", sp->st_mutex_inuse_max);
 	MAKE_STAT_LIST("Mutex region size", sp->st_regsize);
 	MAKE_STAT_LIST("Mutex region max", sp->st_regmax);
 	MAKE_WSTAT_LIST("Number of region waits", sp->st_region_wait);

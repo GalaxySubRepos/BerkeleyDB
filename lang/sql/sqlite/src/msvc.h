@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2015 January 12
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -12,8 +18,8 @@
 **
 ** This file contains code that is specific to MSVC.
 */
-#ifndef _MSVC_H_
-#define _MSVC_H_
+#ifndef SQLITE_MSVC_H
+#define SQLITE_MSVC_H
 
 #if defined(_MSC_VER)
 #pragma warning(disable : 4054)
@@ -33,4 +39,4 @@
 #pragma warning(disable : 4706)
 #endif /* defined(_MSC_VER) */
 
-#endif /* _MSVC_H_ */
+#endif /* SQLITE_MSVC_H */

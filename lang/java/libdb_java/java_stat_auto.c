@@ -2,9 +2,9 @@
  * Automatically built by dist/s_java_stat.
  * Only the javadoc comments can be edited.
  *
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 static int __dbj_fill_bt_stat(JNIEnv *jnienv,
     jobject jobj, struct __db_bt_stat *statp) {
@@ -347,10 +347,12 @@ static int __dbj_fill_repmgr_stat(JNIEnv *jnienv,
 	JAVADB_STAT_LONG(jnienv, jobj, repmgr_stat_st_connection_drop_fid, statp, st_connection_drop);
 	JAVADB_STAT_LONG(jnienv, jobj, repmgr_stat_st_connect_fail_fid, statp, st_connect_fail);
 	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_elect_threads_fid, statp, st_elect_threads);
+	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_group_stable_log_file_fid, statp, st_group_stable_log_file);
 	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_max_elect_threads_fid, statp, st_max_elect_threads);
 	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_site_participants_fid, statp, st_site_participants);
 	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_site_total_fid, statp, st_site_total);
 	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_site_views_fid, statp, st_site_views);
+	JAVADB_STAT_INT(jnienv, jobj, repmgr_stat_st_polling_method_fid, statp, st_polling_method);
 	JAVADB_STAT_LONG(jnienv, jobj, repmgr_stat_st_takeovers_fid, statp, st_takeovers);
 	JAVADB_STAT_LONG(jnienv, jobj, repmgr_stat_st_write_ops_forwarded_fid, statp, st_write_ops_forwarded);
 	JAVADB_STAT_LONG(jnienv, jobj, repmgr_stat_st_write_ops_received_fid, statp, st_write_ops_received);

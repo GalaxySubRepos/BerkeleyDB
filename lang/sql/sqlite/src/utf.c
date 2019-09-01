@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2004 April 13
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -37,13 +43,13 @@
 #include <assert.h>
 #include "vdbeInt.h"
 
-#ifndef SQLITE_AMALGAMATION
+#if !defined(SQLITE_AMALGAMATION) && SQLITE_BYTEORDER==0
 /*
 ** The following constant value is used by the SQLITE_BIGENDIAN and
 ** SQLITE_LITTLEENDIAN macros.
 */
 const int sqlite3one = 1;
-#endif /* SQLITE_AMALGAMATION */
+#endif /* SQLITE_AMALGAMATION && SQLITE_BYTEORDER==0 */
 
 /*
 ** This lookup table is used to help decode the first byte of
@@ -231,7 +237,7 @@ SQLITE_NOINLINE int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
     rc = sqlite3VdbeMemMakeWriteable(pMem);
     if( rc!=SQLITE_OK ){
       assert( rc==SQLITE_NOMEM );
-      return SQLITE_NOMEM;
+      return SQLITE_NOMEM_BKPT;
     }
     zIn = (u8*)pMem->z;
     zTerm = &zIn[pMem->n&~1];
@@ -273,7 +279,7 @@ SQLITE_NOINLINE int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
   zTerm = &zIn[pMem->n];
   zOut = sqlite3DbMallocRaw(pMem->db, len);
   if( !zOut ){
-    return SQLITE_NOMEM;
+    return SQLITE_NOMEM_BKPT;
   }
   z = zOut;
 
@@ -316,7 +322,7 @@ SQLITE_NOINLINE int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
 
   c = pMem->flags;
   sqlite3VdbeMemRelease(pMem);
-  pMem->flags = MEM_Str|MEM_Term|(c&MEM_AffMask);
+  pMem->flags = MEM_Str|MEM_Term|(c&(MEM_AffMask|MEM_Subtype));
   pMem->enc = desiredEnc;
   pMem->z = (char*)zOut;
   pMem->zMalloc = pMem->z;

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -138,13 +138,13 @@ struct {								\
 	((elm)->field.sle_next == -1 ? NULL :				\
 	((struct type *)(((u_int8_t *)(elm)) + (elm)->field.sle_next)))
 
-  /*
-   * __SH_LIST_WAS_EMPTY is private API.  SH_LIST_FIRST is not thread-safe;
-   * the slh_first field could be evaluated multiple times if the optimizer
-   * does not eliminate the second load.  __SH_LIST_WAS_EMPTY tests whether a
-   * prior call of SH_LIST_FIRSTP occurred while the list was empty; i.e., its
-   * relative offset was -1. It is thread-safe to call SH_LIST_FIRSTP and then
-   * test the resulting pointer with __SH_LIST_WAS_EMPTY.
+/*
+ * __SH_LIST_WAS_EMPTY is private API.  SH_LIST_FIRST is not thread-safe;
+ * the slh_first field could be evaluated multiple times if the optimizer
+ * does not eliminate the second load.  __SH_LIST_WAS_EMPTY tests whether a
+ * prior call of SH_LIST_FIRSTP occurred while the list was empty; i.e., its
+ * relative offset was -1.  It is thread-safe to call SH_LIST_FIRSTP and then
+ * test the resulting pointer with __SH_LIST_WAS_EMPTY.
  */
 #define	__SH_LIST_WAS_EMPTY(head, ptr)					\
 	((u_int8_t *)(ptr) == (((u_int8_t *)(head)) + (-1)))

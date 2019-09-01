@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -21,6 +21,7 @@ proc mut004 { } {
 	    -cachesize {0 1000000 0}]
 
 	set max_size [mutex_stat $env "Mutex region max"]
+
 	$env close
 
 	env_cleanup $testdir
@@ -35,6 +36,7 @@ proc mut004 { } {
 	set new_max_size [mutex_stat $env "Mutex region max"]
 	error_check_good "The mutex region maximum size doesn't grow" \
 	    [expr $new_max_size > $max_size] 1
+
 	$env close
 
 	env_cleanup $testdir
@@ -49,6 +51,7 @@ proc mut004 { } {
 	    [expr [mutex_stat $env "Mutex count"] < $init_count] 1
 	error_check_good "The mutex region maximum size should not change" \
 	    [expr [mutex_stat $env "Mutex region max"] == $new_max_size] 1
+
 	$env close
 
 	env_cleanup $testdir

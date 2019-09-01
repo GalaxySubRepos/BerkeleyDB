@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -85,7 +85,7 @@ ARG	pgsize		u_int32_t
 ARG	pgno		db_pgno_t
 ARG	max_pgno	db_pgno_t
 ARG	filenum		u_int32_t
-ARG	finfo_flags	u_int32_t		
+ARG	finfo_flags	u_int32_t
 ARG	type		u_int32_t
 ARG	db_flags	u_int32_t
 ARG	uid		DBT
@@ -158,7 +158,7 @@ END
 
 /*
  * LSN history database - key
- */ 
+ */
 BEGIN_MSG lsn_hist_key
 ARG	version		u_int32_t
 ARG	gen		u_int32_t
@@ -166,7 +166,7 @@ END
 
 /*
  * LSN history database - data
- */ 
+ */
 BEGIN_MSG lsn_hist_data
 ARG	envid		u_int32_t
 ARG	lsn		DB_LSN
@@ -234,4 +234,4 @@ ARG	blob_fid	u_int64_t
 ARG	blob_sid	u_int64_t
 ARG	blob_id		u_int64_t
 ARG	offset		u_int64_t
-END	
+END

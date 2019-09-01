@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -43,7 +43,7 @@ __db_tas_mutex_init(env, mutex, flags)
 
 #ifdef HAVE_SHARED_LATCHES
 	if (F_ISSET(mutexp, DB_MUTEX_SHARED))
-		atomic_init(&mutexp->sharecount, 0);
+		atomic_write(&mutexp->sharecount, 0);
 	else
 #endif
 	if (MUTEX_INIT(&mutexp->tas)) {
@@ -188,7 +188,7 @@ loop:	/* Attempt to acquire the resource for N spins. */
 					    (u_long)mutex);
 					return (ret);
 				}
-						
+
 			}
 			if (!LF_ISSET(MUTEX_WAIT)) {
 				/*
@@ -353,7 +353,7 @@ loop:	/* Attempt to acquire the resource for N spins. */
  * __db_tas_mutex_readlock --
  *	Acquire a shared readlock on o latch, possibly waiting if necessary.
  *
- *	
+ *
  *
  * PUBLIC: int __db_tas_mutex_readlock __P((ENV *, db_mutex_t, u_int32_t));
  */
@@ -493,7 +493,8 @@ loop:	/* Attempt to acquire the resource for N spins. */
 	if (atomic_read(&mutexp->sharecount) != MUTEX_SHARE_ISEXCLUSIVE)
 		goto loop;
 	/* Wait until the mutex is no longer exclusively locked. */
-	if ((ret = __db_hybrid_mutex_suspend(env, mutex, NULL, ip, FALSE)) != 0) {
+	if ((ret =
+	    __db_hybrid_mutex_suspend(env, mutex, NULL, ip, FALSE)) != 0) {
 		if (state != NULL)
 			state->action = MUTEX_ACTION_UNLOCKED;
 		return (ret);
@@ -521,7 +522,7 @@ loop:	/* Attempt to acquire the resource for N spins. */
 /*
  * __db_tas_mutex_unlock --
  *	Release a test-and-set mutex/latch.
- *	The DB_THREAD_INFO allows one to unlock on behalf of another thread.  
+ *	The DB_THREAD_INFO allows one to unlock on behalf of another thread.
  *
  * PUBLIC: int __db_tas_mutex_unlock
  * PUBLIC:     __P((ENV *, db_mutex_t, DB_THREAD_INFO *, u_int32_t));
@@ -617,7 +618,7 @@ was_not_locked:
 			F_CLR(mutexp, DB_MUTEX_LOCKED);
 			/* Flush flag update before zeroing count */
 			MEMBAR_EXIT();
-			atomic_init(&mutexp->sharecount, 0);
+			atomic_write(&mutexp->sharecount, 0);
 		} else {
 			DB_ASSERT(env, sharecount > 0);
 			MEMBAR_EXIT();

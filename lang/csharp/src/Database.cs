@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -960,6 +960,37 @@ namespace BerkeleyDB {
             Database db = new Database(cfg.Env, 0);
             db.Config(cfg);
             db.db.upgrade(file, dupSortUpgraded ? DbConstants.DB_DUPSORT : 0);
+        }
+
+        /// <summary>
+        /// Convert all of the databases included in the file
+        /// <paramref name="file"/> to the byte order
+        /// <paramref name="use_big_endian"/>, if necessary. If no conversion
+        /// is necessary, Convert always returns successfully. If the database
+        /// is partitioned, <paramref name="cfg"/> must contain the correct
+        /// partition configuration in order to convert database partitions.
+        /// </summary>
+        /// <overloads>
+        /// Database conversions are done in place and are destructive. For
+        /// example, if the conversion is interrupted, the database may be
+        /// left corrupted. Backups should be made before databases are
+        /// converted.
+        /// </overloads>
+        /// <param name="file">
+        /// The physical file containing the databases to be converted.
+        /// </param>
+        /// <param name="cfg">
+        /// Configuration parameters for the databases to be converted.
+        /// </param>
+        /// <param name="useBigEndian">
+        /// If true, the databases are converted to big-endian; otherwise
+        /// they are converted to little-endian.
+        /// </param>
+        public static void Convert(
+            string file, DatabaseConfig cfg, bool useBigEndian) {
+            Database db = new Database(cfg.Env, 0);
+            db.Config(cfg);
+            db.db.convert(file, useBigEndian ? 4321 : 1234);
         }
 
         /// <summary>

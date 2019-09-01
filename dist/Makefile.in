@@ -139,10 +139,11 @@ libstlso_default=$(libstl_base)@SOSUFFIX@
 libstlso_major=	$(libstl_base)-$(LIBMAJOR)@SOSUFFIX@
 
 ##################################################
-# Java API.
+# Java API and GUI.
 #
 # Java support is optional and requires shared librarires.
 ##################################################
+GUITESTCLASSPATH=@CLASSPATH@
 CLASSPATH=	$(JAVA_CLASSTOP)
 LIBJSO_LIBS=	@LIBJSO_LIBS@ @LIBSO_LIBS@
 SWIGCFLAGS=	@SWIGCFLAGS@
@@ -154,9 +155,13 @@ JAVACFLAGS=	@JAVACFLAGS@
 JAVA_CLASSTOP=	./classes
 JAVA_EXCLASSTOP=./classes.ex
 JAVA_DEMOCLASSTOP=./classes.demo
+JAVA_GUICLASSTOP=./classes.gui
+JAVA_GUITESTCLASSTOP=./classes.guitest
 JAVA_SRCDIR=	$(langdir)/java/src
 JAVA_EXDIR=	$(exampledir)/java/src
 JAVA_DEMODIR=	$(exampledir)/java/parking_demo/src/com/sleepycat/sample
+JAVA_GUIDIR=	$(utildir)/db_gui
+JAVA_GUITESTDIR=$(testdir)/db_guitest
 JAVA_SLEEPYCAT=	$(langdir)/java/src/com/sleepycat
 JAVA_MANIFEST=	$(langdir)/java/jarManifestEntries
 
@@ -165,6 +170,8 @@ JDK_VERSION=	`$(JAVAC) -version 2>&1 | sed 's/.*\.\(.*\)\..*/\\1/'`
 libj_jarfile=	db.jar
 libj_exjarfile=	dbexamples.jar
 libj_demojarfile=dbdemos.jar
+libj_guijarfile=db_gui.jar
+libj_guitestjarfile=db_guitest.jar
 libjso_base=	libdb_java
 libjso=		$(libjso_base)-$(LIBVERSION)@JMODSUFFIX@
 libjso_static=	$(libjso_base)-$(LIBVERSION).a
@@ -327,22 +334,31 @@ JAVA_DBSRCS=\
 	$(JAVA_SLEEPYCAT)/asm/Attribute.java \
 	$(JAVA_SLEEPYCAT)/asm/ByteVector.java \
 	$(JAVA_SLEEPYCAT)/asm/ClassReader.java \
+	$(JAVA_SLEEPYCAT)/asm/ClassTooLargeException.java \
 	$(JAVA_SLEEPYCAT)/asm/ClassVisitor.java \
 	$(JAVA_SLEEPYCAT)/asm/ClassWriter.java \
+	$(JAVA_SLEEPYCAT)/asm/ConstantDynamic.java \
+	$(JAVA_SLEEPYCAT)/asm/Constants.java \
 	$(JAVA_SLEEPYCAT)/asm/Context.java \
+	$(JAVA_SLEEPYCAT)/asm/CurrentFrame.java \
 	$(JAVA_SLEEPYCAT)/asm/Edge.java \
 	$(JAVA_SLEEPYCAT)/asm/FieldVisitor.java \
 	$(JAVA_SLEEPYCAT)/asm/FieldWriter.java \
 	$(JAVA_SLEEPYCAT)/asm/Frame.java \
 	$(JAVA_SLEEPYCAT)/asm/Handle.java \
 	$(JAVA_SLEEPYCAT)/asm/Handler.java \
-	$(JAVA_SLEEPYCAT)/asm/Item.java \
 	$(JAVA_SLEEPYCAT)/asm/Label.java \
+	$(JAVA_SLEEPYCAT)/asm/MethodTooLargeException.java \
 	$(JAVA_SLEEPYCAT)/asm/MethodVisitor.java \
 	$(JAVA_SLEEPYCAT)/asm/MethodWriter.java \
+	$(JAVA_SLEEPYCAT)/asm/ModuleVisitor.java \
+	$(JAVA_SLEEPYCAT)/asm/ModuleWriter.java \
 	$(JAVA_SLEEPYCAT)/asm/Opcodes.java \
+	$(JAVA_SLEEPYCAT)/asm/Symbol.java \
+	$(JAVA_SLEEPYCAT)/asm/SymbolTable.java \
 	$(JAVA_SLEEPYCAT)/asm/Type.java \
 	$(JAVA_SLEEPYCAT)/asm/TypePath.java \
+	$(JAVA_SLEEPYCAT)/asm/TypeReference.java \
 	$(JAVA_SLEEPYCAT)/bind/ByteArrayBinding.java \
 	$(JAVA_SLEEPYCAT)/bind/EntityBinding.java \
 	$(JAVA_SLEEPYCAT)/bind/EntryBinding.java \
@@ -816,6 +832,80 @@ JAVA_DEMOSRCS=\
 	$(JAVA_DEMODIR)/park/Meter.java \
 	$(JAVA_DEMODIR)/park/Reporting.java
 
+JAVA_GUISRCS=\
+	$(JAVA_GUIDIR)/BDBInitializable.java \
+	$(JAVA_GUIDIR)/BDBState.java \
+	$(JAVA_GUIDIR)/db_gui.java \
+	$(JAVA_GUIDIR)/EnableRunnable.java \
+	$(JAVA_GUIDIR)/MessageBuffer.java \
+	$(JAVA_GUIDIR)/datapage/BDBDataInitializable.java \
+	$(JAVA_GUIDIR)/datapage/BtreeHashController.java \
+	$(JAVA_GUIDIR)/datapage/DataAccessController.java \
+	$(JAVA_GUIDIR)/datapage/HeapController.java \
+	$(JAVA_GUIDIR)/datapage/QueueController.java \
+	$(JAVA_GUIDIR)/datapage/RecnoController.java \
+	$(JAVA_GUIDIR)/datapage/TransactionController.java \
+	$(JAVA_GUIDIR)/dbpage/BDBDbInitializable.java \
+	$(JAVA_GUIDIR)/dbpage/CompactTask.java \
+	$(JAVA_GUIDIR)/dbpage/DatabaseCompactController.java \
+	$(JAVA_GUIDIR)/dbpage/DatabaseCreateController.java \
+	$(JAVA_GUIDIR)/dbpage/DatabaseOpenController.java \
+	$(JAVA_GUIDIR)/dbpage/DatabasePageController.java \
+	$(JAVA_GUIDIR)/dbpage/DatabaseRemoveController.java \
+	$(JAVA_GUIDIR)/dbpage/DatabaseRenameController.java \
+	$(JAVA_GUIDIR)/envpage/BDBEnvInitializable.java \
+	$(JAVA_GUIDIR)/envpage/BackupTask.java \
+	$(JAVA_GUIDIR)/envpage/EnvConfig.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentBackupController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentCreateController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentOpenController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentPageController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentRecoveryController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentRemoveLogController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentUpgradeController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentVerifyDataController.java \
+	$(JAVA_GUIDIR)/envpage/EnvironmentVerifyLogController.java \
+	$(JAVA_GUIDIR)/envpage/RecoveryTask.java \
+	$(JAVA_GUIDIR)/envpage/RemoveLogTask.java \
+	$(JAVA_GUIDIR)/envpage/UpgradeTask.java \
+	$(JAVA_GUIDIR)/envpage/VerifyDataTask.java \
+	$(JAVA_GUIDIR)/envpage/VerifyLogTask.java
+
+JAVA_GUIDATAFXML=\
+	$(JAVA_GUIDIR)/datapage/FXMLBtreeHash.fxml \
+	$(JAVA_GUIDIR)/datapage/FXMLDataAccess.fxml \
+	$(JAVA_GUIDIR)/datapage/FXMLHeap.fxml \
+	$(JAVA_GUIDIR)/datapage/FXMLQueue.fxml \
+	$(JAVA_GUIDIR)/datapage/FXMLRecno.fxml \
+	$(JAVA_GUIDIR)/datapage/FXMLTransaction.fxml 
+
+JAVA_GUIDBFXML=\
+	$(JAVA_GUIDIR)/dbpage/FXMLDatabaseCompactTab.fxml \
+	$(JAVA_GUIDIR)/dbpage/FXMLDatabaseCreateTab.fxml \
+	$(JAVA_GUIDIR)/dbpage/FXMLDatabaseOpenTab.fxml \
+	$(JAVA_GUIDIR)/dbpage/FXMLDatabasePage.fxml \
+	$(JAVA_GUIDIR)/dbpage/FXMLDatabaseRemoveTab.fxml \
+	$(JAVA_GUIDIR)/dbpage/FXMLDatabaseRenameTab.fxml 
+
+JAVA_GUIENVFXML=\
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentBackupTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentCreateTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentOpenTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentPage.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentRecoveryTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentRemoveLogTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentUpgradeTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentVerifyDataTab.fxml \
+	$(JAVA_GUIDIR)/envpage/FXMLEnvironmentVerifyLogTab.fxml
+
+JAVA_GUITESTSRCS=\
+	$(JAVA_GUITESTDIR)/BDBGUITestConfig.java \
+	$(JAVA_GUITESTDIR)/BDBGUITestRunner.java \
+	$(JAVA_GUITESTDIR)/ComboBoxTask.java \
+	$(JAVA_GUITESTDIR)/DataAccessPageTests.java \
+	$(JAVA_GUITESTDIR)/DatabasePageTests.java \
+	$(JAVA_GUITESTDIR)/DisplayAccessPageTask.java \
+	$(JAVA_GUITESTDIR)/EnvironmentPageTests.java
 
 THRIFT_JARDIR=$(langdir)/thrift/jars
 THRIFT_JARS=$(THRIFT_JARDIR)/log4j-core.jar \
@@ -895,6 +985,7 @@ LIB_INSTALL_FILE_LIST=\
 	$(libjso_static) \
 	$(libj_exjarfile) \
 	$(libj_demojarfile) \
+	$(libj_guijarfile) \
 	$(libj_jarfile) \
 	@INSTALL_LIBS@ @INSTALL_LIBS_EXTRA@
 
@@ -1064,6 +1155,30 @@ $(libj_demojarfile): $(libj_jarfile) $(JAVA_DEMOSRCS)
 		echo "$(libj_demojarfile) requires JDK 7 or above." ; \
 	fi
 
+db_gui:	$(libj_guijarfile)
+
+$(libj_guijarfile): $(libj_jarfile) $(JAVA_GUISRCS)
+		test -d $(JAVA_GUICLASSTOP) || \
+	   	    ($(MKDIR) -p $(JAVA_GUICLASSTOP) && \
+			$(CHMOD) $(dmode) $(JAVA_GUICLASSTOP)) ; \
+		$(JAVAC) -classpath $(libj_jarfile) -d $(JAVA_GUICLASSTOP) \
+			$(JAVACFLAGS) $(JAVA_GUISRCS) ; \
+		$(CP) $(JAVA_GUIDATAFXML) $(JAVA_GUICLASSTOP)/db_gui/datapage ; \
+		$(CP) $(JAVA_GUIDBFXML) $(JAVA_GUICLASSTOP)/db_gui/dbpage ; \
+		$(CP) $(JAVA_GUIDATAFXML) $(JAVA_GUICLASSTOP)/db_gui/envpage ; \
+		cd $(JAVA_GUICLASSTOP) && $(JAR) cf ../$(libj_guijarfile) . ; 
+
+db_guitest: $(libj_guitestjarfile)
+
+$(libj_guitestjarfile): $(libj_guijarfile) $(JAVA_GUITESTSRCS)
+		test -d $(JAVA_GUITESTCLASSTOP) || \
+	   	    ($(MKDIR) -p $(JAVA_GUITESTCLASSTOP) && \
+			$(CHMOD) $(dmode) $(JAVA_GUICLASSTOP)) ; \
+		@JAVAC@ -classpath "$(libj_jarfile):$(libj_guijarfile):"$(GUITESTCLASSPATH) -d $(JAVA_GUITESTCLASSTOP) \
+			$(JAVACFLAGS) $(JAVA_GUITESTSRCS) ; \
+		cd $(JAVA_GUITESTCLASSTOP) && $(JAR) cf ../$(libj_guitestjarfile) . ;
+
+
 ##################################################
 # Utilities
 ##################################################
@@ -1124,15 +1239,6 @@ db_recover: db_recover@o@ $(COMMON_UTIL_OBJS) $(DEF_LIB)
 db_replicate: db_replicate@o@ $(COMMON_UTIL_OBJS) $(DEF_LIB)
 	$(CCLINK) -o $@ $(LDFLAGS) \
 	    db_replicate@o@ $(COMMON_UTIL_OBJS) $(DEF_LIB) $(LIBS)
-	$(POSTLINK) $@
-
-DBSQL_CODEGEN_OBJS=\
-          db_sql_codegen@o@ parse@o@ preparser@o@ parsefuncs@o@ tokenize@o@ \
-          sqlprintf@o@ buildpt@o@ utils@o@ generate@o@ generate_test@o@ \
-          generation_utils@o@ generate_verification@o@ hint_comment@o@
-
-db_sql_codegen: $(DBSQL_CODEGEN_OBJS) $(DEF_LIB)
-	$(CCLINK) -o $@ $(LDFLAGS) $(DBSQL_CODEGEN_OBJS) $(DEF_LIB) $(LIBS)
 	$(POSTLINK) $@
 
 db_stat: db_stat@o@ $(COMMON_UTIL_OBJS) $(DEF_LIB)
@@ -1215,6 +1321,9 @@ install_lib:
 	@(test -f $(libj_jarfile) && \
 	    $(CP) $(libj_jarfile) $(DESTDIR)$(libdir) && \
 	    $(CHMOD) $(fmode) $(DESTDIR)$(libdir)/$(libj_jarfile)) || exit 0
+	@(test -f $(libj_guijarfile) && \
+	    $(CP) $(libj_guijarfile) $(DESTDIR)$(libdir) && \
+	    $(CHMOD) $(fmode) $(DESTDIR)$(libdir)/$(libj_guijarfile)) || exit 0
 	@(test -d jdbc && cd jdbc && make install && cd -) || exit 0
 
 uninstall_lib:
@@ -1283,7 +1392,7 @@ uninstall_docs:
 CLEAN_LIST=\
 	StlTxnGuide TxnGuide TxnGuideInMemory \
 	berkeley_db_cxxsvc berkeley_db_svc cutest \
-	db_dump185 db_perf db_repsite db_reptest dbs ex_access \
+	db_dump185 db_perf db_repsite db_reptest bdb_ha dbs ex_access \
 	ex_advertising ex_ad_data ex_ad_event ex_apprec \
 	ex_btrec ex_bulk ex_dbclient ex_env ex_external_file ex_firewall \
 	ex_firewall_dest ex_firewall_msg ex_heap ex_lock ex_mpool  \
@@ -1292,22 +1401,22 @@ CLEAN_LIST=\
 	ex_rep_gsg_simple ex_rep_mgr ex_sequence ex_slice ex_stream ex_thread \
 	ex_toll_booth ex_toll_data ex_toll_event ex_tpcb \
 	example_database_load example_database_read excxx_access \
-	excxx_btrec excxx_bulk excxx_env excxx_example_database_load \
+	excxx_btrec excxx_bulk excxx_env excxx_env_sql excxx_example_database_load \
 	excxx_example_database_read excxx_lock excxx_mpool \
 	excxx_repquote excxx_repquote_gsg_repmgr excxx_repquote_gsg_simple \
-	excxx_repquote_gsg_wrfor excxx_sequence excxx_tpcb \
+	excxx_repquote_gsg_wrfor excxx_sequence excxx_tpcb excxx_order \
 	ex_sql_binding ex_sql_fts3 ex_sql_index \
 	ex_sql_load ex_sql_multi_thread ex_sql_query ex_sql_rtree \
 	ex_sql_savepoint ex_sql_statement ex_sql_transaction exstl_access \
 	exstl_advancedfeatures exstl_repquote exstl_tpcb txn_guide test_dbstl \
 	test_dbstl_ms_examples test_dbstl_stlport txn_guide_inmemory \
-	ex_servicemgmt
+	ex_servicemgmt db_guitest.jar
 
 mostly-clean clean:
 	$(RM) -r $(C_OBJS) $(CUTEST_OBJS)
 	$(RM) -r $(CXX_OBJS) $(JAVA_OBJS) $(SQL_OBJS) $(SQL_OBJS) $(STL_OBJS)
 	$(RM) -r $(TCL_OBJS) $(UTIL_PROGS) *.exe $(CLEAN_LIST)
-	$(RM) -r $(JAVA_CLASSTOP) $(JAVA_EXCLASSTOP) $(JAVA_DEMOCLASSTOP)
+	$(RM) -r $(JAVA_CLASSTOP) $(JAVA_EXCLASSTOP) $(JAVA_DEMOCLASSTOP) $(JAVA_GUICLASSTOP) $(JAVA_GUITESTCLASSTOP)
 	$(RM) -r $(DB_STL_TEST_OBJS) $(TEST_MICRO_OBJS)
 	$(RM) -r tags *@o@ *.o *.o.lock *.lo core *.core core.*
 	$(RM) -r ALL.OUT.* PARALLEL_TESTDIR.*
@@ -1495,6 +1604,14 @@ db_reptest: $(DBREPTEST_OBJS) $(DEF_LIB)
 	    $(LDFLAGS) $(DBREPTEST_OBJS) $(DEF_LIB) $(TEST_LIBS) $(LIBS)
 	$(POSTLINK) $@
 
+bdb_ha@o@: $(testdir)/repmgr/bdb_ha.c
+	$(CC) $(CFLAGS) $?
+BDBHA_OBJS=bdb_ha@o@ 
+bdb_ha: $(BDBHA_OBJS) $(DEF_LIB)
+	$(CCLINK) -o $@ \
+	    $(LDFLAGS) $(BDBHA_OBJS) $(DEF_LIB) $(TEST_LIBS) $(LIBS)
+	$(POSTLINK) $@
+
 test_dbstl@o@: $(testdir)/stl/base/test_dbstl.cpp
 	$(CXX) $(STLFLAGS) $?
 test_util@o@: $(testdir)/stl/base/test_util.cpp
@@ -1589,10 +1706,10 @@ examples_c: ex_access ex_apprec \
 	txn_guide_inmemory ex_servicemgmt
 
 examples_cxx: TxnGuide TxnGuideInMemory excxx_access excxx_btrec excxx_bulk \
-	excxx_env excxx_example_database_load excxx_example_database_read \
+	excxx_env excxx_env_sql excxx_example_database_load excxx_example_database_read \
 	excxx_lock excxx_mpool excxx_repquote excxx_repquote_gsg_repmgr \
 	excxx_repquote_gsg_simple excxx_repquote_gsg_wrfor \
-	excxx_sequence excxx_tpcb
+	excxx_sequence excxx_tpcb excxx_order
 
 examples_stl: StlTxnGuide exstl_access exstl_advancedfeatures exstl_repquote \
 	exstl_tpcb
@@ -1896,6 +2013,12 @@ excxx_env: EnvExample@o@ $(DEF_LIB_CXX)
 	$(CXXLINK) -o $@ $(LDFLAGS) EnvExample@o@ $(DEF_LIB_CXX) $(LIBS)
 	$(POSTLINK) $@
 
+EnvLoadSqlExample@o@: $(exampledir)/cxx/EnvLoadSqlExample.cpp
+	$(CXX) $(CXXFLAGS) $(SQLFLAGS) $?
+excxx_env_sql: EnvLoadSqlExample@o@ $(DEF_LIB_CXX)
+	$(CXXLINK) -o $@ $(LDFLAGS) EnvLoadSqlExample@o@ $(DEF_LIB_CXX) $(DEF_LIB_SQL) $(LIBS)
+	$(POSTLINK) $@
+
 LockExample@o@: $(exampledir)/cxx/LockExample.cpp
 	$(CXX) $(CXXFLAGS) $?
 excxx_lock: LockExample@o@ $(DEF_LIB_CXX)
@@ -1915,6 +2038,13 @@ RepConfigInfo@o@: $(exampledir)/cxx/excxx_repquote/RepConfigInfo.cpp
 excxx_repquote: RepQuoteExample@o@ RepConfigInfo@o@ $(DEF_LIB_CXX)
 	$(CXXLINK) -o $@ $(LDFLAGS) \
 	    RepQuoteExample@o@ RepConfigInfo@o@ $(DEF_LIB_CXX) $(LIBS)
+	$(POSTLINK) $@
+
+OrderSystem@o@: $(exampledir)/cxx/excxx_order/OrderSystem.cpp
+	$(CXX) -I$(exampledir)/cxx/excxx_order $(CXXFLAGS) $?
+excxx_order: OrderSystem@o@ $(DEF_LIB_CXX)
+	$(CXXLINK) -o $@ $(LDFLAGS) \
+	    OrderSystem@o@ $(DEF_LIB_CXX) $(LIBS)
 	$(POSTLINK) $@
 
 RepMgrGSG@o@: $(exampledir)/cxx/excxx_repquote_gsg/RepMgrGSG.cpp
@@ -2131,6 +2261,17 @@ toll_event_processor@o@: $(exampledir)/sql/ex_toll_booth/toll_event_processor.c
 	$(CC) $(CFLAGS) $(SQLFLAGS) $?
 traffic@o@: $(exampledir)/sql/ex_toll_booth/traffic.c
 	$(CC) $(CFLAGS) $(SQLFLAGS) $?
+
+##################################################
+# Test programs for SQL.
+##################################################
+bdb_sqlthreadtest@o@: $(testdir)/sql/bdb_sqlthreadtest.c
+	$(CC) $(CFLAGS) $(SQLFLAGS) $?
+
+bdb_sqlthreadtest: bdb_sqlthreadtest@o@ $(DEF_LIB_SQL)
+	$(CCLINK) -o $@ $(LDFLAGS) bdb_sqlthreadtest@o@ \
+		$(DEF_LIB_SQL) @SQL_LIBS@ $(LIBS)
+	$(POSTLINK) $@
 
 ##################################################
 # C API build rules.
@@ -2842,33 +2983,6 @@ db_tuner@o@: $(utildir)/db_tuner.c
 db_upgrade@o@: $(utildir)/db_upgrade.c
 	$(CC) $(CFLAGS) $?
 db_verify@o@: $(utildir)/db_verify.c
-	$(CC) $(CFLAGS) $?
-
-db_sql_codegen@o@: $(utildir)/db_sql_codegen/db_sql_codegen.c
-	$(CC) $(CFLAGS) $?
-preparser@o@: $(utildir)/db_sql_codegen/preparser.c
-	$(CC) $(CFLAGS) $?
-parsefuncs@o@: $(utildir)/db_sql_codegen/parsefuncs.c
-	$(CC) $(CFLAGS) $?
-tokenize@o@: $(utildir)/db_sql_codegen/tokenize.c
-	$(CC) $(CFLAGS) $?
-buildpt@o@: $(utildir)/db_sql_codegen/buildpt.c
-	$(CC) $(CFLAGS) $?
-utils@o@: $(utildir)/db_sql_codegen/utils.c
-	$(CC) $(CFLAGS) $?
-generate@o@: $(utildir)/db_sql_codegen/generate.c
-	$(CC) $(CFLAGS) $?
-generate_test@o@: $(utildir)/db_sql_codegen/generate_test.c
-	$(CC) $(CFLAGS) $?
-generate_verification@o@: $(utildir)/db_sql_codegen/generate_verification.c
-	$(CC) $(CFLAGS) $?
-generation_utils@o@: $(utildir)/db_sql_codegen/generation_utils.c
-	$(CC) $(CFLAGS) $?
-hint_comment@o@: $(utildir)/db_sql_codegen/hint_comment.c
-	$(CC) $(CFLAGS) $?
-sqlprintf@o@: $(utildir)/db_sql_codegen/sqlite/sqlprintf.c
-	$(CC) $(CFLAGS) $?
-parse@o@: $(utildir)/db_sql_codegen/sqlite/parse.c
 	$(CC) $(CFLAGS) $?
 
 ##################################################

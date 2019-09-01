@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_MPOOLFILE-&gt;open()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_MPOOLFILE-&gt;open()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mempfget.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mempfopen"></a>DB_MPOOLFILE-&gt;open()</h2>
+            <h2 class="title" style="clear: both"><a id="mempfopen"></a>
+        <span>DB_MPOOLFILE-&gt;open()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -58,7 +64,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230528896"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113482864912"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -66,7 +72,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230518560"></a>file</h4>
+                <h4 class="title"><a id="idm140113482854544"></a>file</h4>
               </div>
             </div>
           </div>
@@ -88,7 +94,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230576112"></a>flags</h4>
+                <h4 class="title"><a id="idm140113482887264"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -125,7 +131,10 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
                 <p>
                                         Open the file with support for 
                                         <a href="../../programmer_reference/transapp_read.html" class="olink">multiversion concurrency control</a>. 
-                                        Calls to <a class="xref" href="mempfget.html" title="DB_MPOOLFILE-&gt;get()">DB_MPOOLFILE-&gt;get()</a>
+                                        Calls to <a class="xref" href="mempfget.html" title="DB_MPOOLFILE-&gt;get()">
+        <span>DB_MPOOLFILE-&gt;get()</span>
+        
+    </a>
                                         with dirty pages will cause copies to be made in the cache.
                                 </p>
               </li>
@@ -136,7 +145,10 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
                 <p>
                                         Always copy this file into the local cache instead of potentially mapping it
                                         into process memory (see the
-                                        <a class="xref" href="envset_mp_mmapsize.html" title="DB_ENV-&gt;set_mp_mmapsize()">DB_ENV-&gt;set_mp_mmapsize()</a>  
+                                        <a class="xref" href="envset_mp_mmapsize.html" title="DB_ENV-&gt;set_mp_mmapsize()">
+        <span>DB_ENV-&gt;set_mp_mmapsize()</span>
+        
+    </a>  
                                         method for further information).
                                 </p>
               </li>
@@ -167,7 +179,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230488304"></a>mode</h4>
+                <h4 class="title"><a id="idm140113482824240"></a>mode</h4>
               </div>
             </div>
           </div>
@@ -192,7 +204,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230589904"></a>pagesize</h4>
+                <h4 class="title"><a id="idm140113482840832"></a>pagesize</h4>
               </div>
             </div>
           </div>
@@ -208,7 +220,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230581648"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113482825232"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -224,7 +236,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230476992"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113482832368"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -240,7 +252,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230508960"></a>ENOMEM</h4>
+                <h4 class="title"><a id="idm140113482845392"></a>ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -253,7 +265,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230501424"></a>Class</h3>
+              <h3 class="title"><a id="idm140113482837328"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -265,7 +277,7 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230492048"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113482807440"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -285,11 +297,17 @@ DB_MPOOLFILE-&gt;open(DB_MPOOLFILE *mpf,
           <td width="40%" align="right"> <a accesskey="n" href="mempput.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_MPOOLFILE-&gt;get() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_MPOOLFILE-&gt;get()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_MPOOLFILE-&gt;put()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_MPOOLFILE-&gt;put()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

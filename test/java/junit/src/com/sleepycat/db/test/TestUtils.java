@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -37,6 +37,14 @@ public class TestUtils
     public static File   BASETEST_DBFILE  = null; //      new File(TestUtils.BASETEST_DBDIR);
     public static String BASETEST_BACKUPDIR   = "";
     public static File   BASETEST_BACKUPFILE  = null; //      new File(TestUtils.BASETEST_BACKUPDIR);
+
+    public static Boolean repmgrSSLDisabled = true;
+    public static String repmgrCACert = null;
+    public static String repmgrNodeCert = null;
+    public static String repmgrNodePkey = null;
+    public static String repmgrNodePkeyPassword = null;
+    public static String repmgrCADir = null;
+    public static int repmgrVerifyDepth = 0;
  
     public static void ERR(String a)
     {
@@ -159,6 +167,73 @@ public class TestUtils
             return "not null";
     }
 
+    public static void loadSSLConfig(Properties props)
+    {
+        try {
+            String disable_ssl = props.getProperty("disable_ssl");
+            DEBUGOUT(2, "disable_ssl : " + disable_ssl);
+
+            if (disable_ssl != null && disable_ssl.length() != 0)
+            {
+                repmgrSSLDisabled = Boolean.parseBoolean(disable_ssl);
+
+		if (repmgrSSLDisabled == false)
+		    DEBUGOUT(3, "SSL enabled for Replication Manager Tests.");
+            }
+            
+            String ca_cert = props.getProperty("ca_cert");
+            DEBUGOUT(2, "ca_cert : " + ca_cert);
+
+            if (ca_cert != null && ca_cert.length() != 0)
+            {
+                repmgrCACert = ca_cert;
+            }
+
+            String ca_dir = props.getProperty("ca_dir");
+            DEBUGOUT(2, "ca_dir : " + ca_dir);
+
+            if (ca_dir != null && ca_dir.length() != 0)
+            {
+                repmgrCACert = ca_dir;
+            }
+
+            String node_cert = props.getProperty("node_cert");
+            DEBUGOUT(2, "node_cert : " + node_cert);
+
+            if (node_cert != null && node_cert.length() != 0)
+            {
+                repmgrNodeCert = node_cert;
+            }
+
+            String node_pkey = props.getProperty("node_pkey");
+            DEBUGOUT(2, "node_pkey : " + node_pkey);
+
+            if (node_pkey != null && node_pkey.length() != 0)
+            {
+                repmgrNodePkey = node_pkey;
+            }
+
+            String pkey_passwd = props.getProperty("pkey_passwd");
+            DEBUGOUT(2, "pkey_passwd : " + pkey_passwd);
+
+            if (pkey_passwd != null && pkey_passwd.length() != 0)
+            {
+                repmgrNodePkeyPassword = pkey_passwd;
+            }
+
+            String verify_depth = props.getProperty("verify_depth");	
+            DEBUGOUT(2, "verify_depth : " + verify_depth);
+
+            if (verify_depth != null && verify_depth.length() != 0)
+            {
+                repmgrVerifyDepth = Integer.parseInt(verify_depth);
+            }
+        } catch (Exception e) {
+            // expected - the config file is optional.
+            DEBUGOUT(0, "loadEnvVars -- loading of default variables failed. error: " + e);
+        }
+    }
+
 	/*
 	 * The config file is not currently required.
 	 * The only variable that can be set via the
@@ -198,6 +273,8 @@ public class TestUtils
                 BASETEST_DBDIR = var;
             }             
             DEBUGOUT(2, "BASETEST_DBDIR is: " + BASETEST_DBDIR);
+
+            loadSSLConfig(props);
 
         } catch (Exception e) {
 			// expected - the config file is optional.

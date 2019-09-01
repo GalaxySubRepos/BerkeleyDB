@@ -8,6 +8,7 @@
 
 source $testdir/tester.tcl
 source $testdir/../../../../test/tcl_utils/common_test_utils.tcl
+source $testdir/../../../../test/tcl/reputils.tcl
 
 # 
 # Functions for threads that return SQLITE_LOCK error when caught
@@ -70,8 +71,10 @@ proc setup_rep_sites {} {
 	file delete -force $site1dir/rep.db
 	file delete -force $site1dir/rep.db-journal
 	file delete -force $site1dir
-	file mkdir $site1dir
+	file mkdir $site1dir	
 	sqlite3 db $site1dir/rep.db
+	file mkdir $site1dir/rep.db-journal
+	setup_repmgr_ssl $site1dir/rep.db-journal
 	set site1addr "$hoststr:[lindex $ports 0]"
 
 	# Set up site2 directory and database.
@@ -80,8 +83,10 @@ proc setup_rep_sites {} {
 	file delete -force $site2dir/rep.db
 	file delete -force $site2dir/rep.db-journal
 	file delete -force $site2dir
-	file mkdir $site2dir
+	file mkdir $site2dir		
 	sqlite3 db2 $site2dir/rep.db
+	file mkdir $site2dir/rep.db-journal
+	setup_repmgr_ssl $site2dir/rep.db-journal
 	set site2addr "$hoststr:[lindex $ports 1]"
 
 	# Set up site3 directory and database.
@@ -90,7 +95,9 @@ proc setup_rep_sites {} {
 	file delete -force $site3dir/rep.db
 	file delete -force $site3dir/rep.db-journal
 	file delete -force $site3dir
-	file mkdir $site3dir
+	file mkdir $site3dir	
 	sqlite3 db3 $site3dir/rep.db
+	file mkdir $site3dir/rep.db-journal
+	setup_repmgr_ssl $site3dir/rep.db-journal
 	set site3addr "$hoststr:[lindex $ports 2]"
 }

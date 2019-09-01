@@ -33,6 +33,10 @@ sed -e '/__addrinfo/d' \
 #ifdef	HAVE_MUTEX_SUPPORT' \
     -e '/struct.*mutex.*{/a\
 #endif' \
+    -e '/struct.*ssl.*{/i\
+#ifdef	HAVE_REPMGR_SSL' \
+    -e '/struct.*ssl.*{/a\
+#endif' \
     -e 's/.*[	 ]*struct[	 ]*\(__[a-z_]*\)[	 ]*{.*/	__ADD(\1);/p' \
     -e d > $c
 

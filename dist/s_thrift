@@ -17,8 +17,6 @@
 
 . ./RELEASE
 
-DB_ADDONS=db_addons-6.2
-
 # Versions of 3rd party libraries. Versions of slf4j and log4j depend on
 # the version of thrift.
 THRIFT_VERSION=0.11.0
@@ -52,7 +50,7 @@ done
 THRIFT_DIR=`pwd`/../lang/thrift
 BUILD_DIR=$THRIFT_DIR/jars
 
-DB_ADDONS_REPO=$PKG_ROOT/$DB_ADDONS
+DB_ADDONS_REPO=$PKG_ROOT/db_addons
 update_repo()
 {
 	if [ ! -d $DB_ADDONS_REPO ]; then

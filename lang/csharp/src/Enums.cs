@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using BerkeleyDB.Internal;
@@ -169,6 +169,11 @@ namespace BerkeleyDB {
         /// environment, and recovery should be run.
         /// </remarks>
         PANIC = DbConstants.DB_EVENT_PANIC,
+        /// <summary>
+        /// The replication manager subordinate process take over as the replication
+        /// process.
+        /// </summary>
+        REP_AUTOTAKEOVER = DbConstants.DB_EVENT_REP_AUTOTAKEOVER,
         /// <summary>
         /// The replication manager subordinate process was unable to take over
         /// as the replication process.

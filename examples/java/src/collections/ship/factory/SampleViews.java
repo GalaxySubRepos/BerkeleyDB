@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.factory;
@@ -20,15 +19,16 @@ import com.sleepycat.collections.TupleSerialFactory;
  */
 public class SampleViews {
 
-    private StoredSortedMap partMap;
-    private StoredSortedMap supplierMap;
-    private StoredSortedMap shipmentMap;
-    private StoredSortedMap shipmentByPartMap;
-    private StoredSortedMap shipmentBySupplierMap;
-    private StoredSortedMap supplierByCityMap;
+    private final StoredSortedMap<PartKey, Part> partMap;
+    private final StoredSortedMap<SupplierKey, Supplier> supplierMap;
+    private final StoredSortedMap<ShipmentKey, Shipment> shipmentMap;
+    private final StoredSortedMap<PartKey, Shipment> shipmentByPartMap;
+    private final StoredSortedMap<SupplierKey, Shipment> shipmentBySupplierMap;
+    private final StoredSortedMap<String, Supplier> supplierByCityMap;
 
     /**
      * Create the data bindings and collection views.
+     * @param db
      */
     public SampleViews(SampleDatabase db) {
 
@@ -70,72 +70,81 @@ public class SampleViews {
 
     /**
      * Return a map view of the part storage container.
+     * @return 
      */
-    public StoredSortedMap getPartMap() {
+    public StoredSortedMap<PartKey, Part> getPartMap() {
 
         return partMap;
     }
 
     /**
      * Return a map view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedMap getSupplierMap() {
+    public StoredSortedMap<SupplierKey, Supplier> getSupplierMap() {
 
         return supplierMap;
     }
 
     /**
      * Return a map view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedMap getShipmentMap() {
+    public StoredSortedMap<ShipmentKey, Shipment> getShipmentMap() {
 
         return shipmentMap;
     }
 
     /**
      * Return an entity set view of the part storage container.
+     * @return 
      */
-    public StoredSortedValueSet getPartSet() {
+    public StoredSortedValueSet<Part> getPartSet() {
 
-        return (StoredSortedValueSet) partMap.values();
+        return (StoredSortedValueSet<Part>) partMap.values();
     }
 
     /**
      * Return an entity set view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedValueSet getSupplierSet() {
+    public StoredSortedValueSet<Supplier> getSupplierSet() {
 
-        return (StoredSortedValueSet) supplierMap.values();
+        return (StoredSortedValueSet<Supplier>) supplierMap.values();
     }
 
     /**
      * Return an entity set view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedValueSet getShipmentSet() {
+    public StoredSortedValueSet<Shipment> getShipmentSet() {
 
-        return (StoredSortedValueSet) shipmentMap.values();
+        return (StoredSortedValueSet<Shipment>) shipmentMap.values();
     }
 
     /**
      * Return a map view of the shipment-by-part index.
+     * @return 
      */
-    public StoredSortedMap getShipmentByPartMap() {
+    public StoredSortedMap<PartKey, Shipment> getShipmentByPartMap() {
 
         return shipmentByPartMap;
     }
 
     /**
      * Return a map view of the shipment-by-supplier index.
+     * @return 
      */
-    public StoredSortedMap getShipmentBySupplierMap() {
+    public StoredSortedMap<SupplierKey, Shipment> getShipmentBySupplierMap() {
 
         return shipmentBySupplierMap;
     }
 
     /**
      * Return a map view of the supplier-by-city index.
+     * @return 
      */
-    public StoredSortedMap getSupplierByCityMap() {
+    public StoredSortedMap<String, Supplier> getSupplierByCityMap() {
 
         return supplierByCityMap;
     }

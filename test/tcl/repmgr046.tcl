@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2015, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -54,7 +54,8 @@ proc repmgr046 { { niter 100 } { tnum "046" } args } {
 }
 
 proc repmgr046_basic { method niter tnum largs } {
-	global testdir
+	
+	source ./include.tcl
 	global rep_verbose
 	global verbose_type
 	global databases_in_memory
@@ -66,6 +67,8 @@ proc repmgr046_basic { method niter tnum largs } {
 	if { $rep_verbose == 1 } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
+
+	set sslargs [setup_repmgr_sslargs]
 
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
@@ -79,7 +82,7 @@ proc repmgr046_basic { method niter tnum largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.a: Start a master and a client."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrforwardwrites on}
@@ -87,7 +90,7 @@ proc repmgr046_basic { method niter tnum largs } {
 	    -local [list $hoststr [lindex $ports 0]] \
 	    -start master
 
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrforwardwrites on}
@@ -230,23 +233,29 @@ proc repmgr046_basic { method niter tnum largs } {
 	error_check_good cursdel [is_substr $res "permission denied"] 1
 	$c close
 
-	puts "\tRepmgr$tnum.i: DB_TIMEOUT if operation takes too long."
-	set key 8
-	# Set a tiny write forwarding timeout.
-	$clientenv repmgr -timeout {write_forward 3}
-	catch { $cdmldb put $key [chop_data $method data$key] } res
-	error_check_good ctimeoutp [is_substr $res "timed out"] 1
-	catch { $cdmldb del $key } res
-	error_check_good ctimeoutd [is_substr $res "timed out"] 1
-	# Restore reasonable timeout and make sure write forwarding works.
-	$clientenv repmgr -timeout {write_forward 3000000}
-	error_check_good cdmldb_put$key \
-	    [eval $cdmldb put $key [chop_data $method data$key]] 0
-	# Allow time for DML to be replicated back to client.
-	tclsleep $dmlsleep
-	set ret [lindex [$cdmldb get $key] 0]
-	error_check_good cdmldb_get$key $ret \
-	    [list $key [pad_data $method data$key]]
+	# The granularity of timeouts on Windows is too large for thie
+	# test to be reliable. 
+	if { $is_windows_test } { 
+		puts "\tRepmgr$tnum.i: Skipping for Windows platform."
+	} else {
+		puts "\tRepmgr$tnum.i: DB_TIMEOUT if operation takes too long."
+		set key 8
+		# Set a tiny write forwarding timeout.
+		$clientenv repmgr -timeout {write_forward 3}
+		catch { $cdmldb put $key [chop_data $method data$key] } res
+		error_check_good ctimeoutp [is_substr $res "timed out"] 1
+		catch { $cdmldb del $key } res
+		error_check_good ctimeoutd [is_substr $res "timed out"] 1
+		# Restore reasonable timeout and verify write forwarding works.
+		$clientenv repmgr -timeout {write_forward 3000000}
+		error_check_good cdmldb_put$key \
+		    [eval $cdmldb put $key [chop_data $method data$key]] 0
+		# Allow time for DML to be replicated back to client.
+		tclsleep $dmlsleep
+		set ret [lindex [$cdmldb get $key] 0]
+		error_check_good cdmldb_get$key $ret \
+		    [list $key [pad_data $method data$key]]
+	}
 
 	error_check_good cdmldb_close [$cdmldb close] 0
 	error_check_good mdmldb_close [$mdmldb close] 0
@@ -326,6 +335,8 @@ proc repmgr046_3site { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -340,7 +351,7 @@ proc repmgr046_3site { method niter tnum largs } {
 	file mkdir $clientdir2
 
 	puts "\tRepmgr$tnum.3s.a: Start a master and two clients."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrforwardwrites on}
@@ -349,7 +360,7 @@ proc repmgr046_3site { method niter tnum largs } {
 	    -timeout [list write_forward 4000000] \
 	    -start master
 
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrforwardwrites on}
@@ -359,7 +370,7 @@ proc repmgr046_3site { method niter tnum largs } {
 	    -start client
 	await_startup_done $clientenv
 
-	set cl2_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl2_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT2 -home $clientdir2 -txn -rep -thread"
 	set clientenv2 [eval $cl2_envcmd]
 	$clientenv2 rep_config {mgrforwardwrites on}
@@ -494,6 +505,8 @@ proc repmgr046_blob { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -506,7 +519,7 @@ proc repmgr046_blob { method niter tnum largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.bl.a: Start a master and a client."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrforwardwrites on}
@@ -515,7 +528,7 @@ proc repmgr046_blob { method niter tnum largs } {
 	    -timeout [list write_forward 4000000] \
 	    -start master
 
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrforwardwrites on}
@@ -584,6 +597,8 @@ proc repmgr046_subdb { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -596,7 +611,7 @@ proc repmgr046_subdb { method niter tnum largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.sdb.a: Start a master and a client."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrforwardwrites on}
@@ -604,7 +619,7 @@ proc repmgr046_subdb { method niter tnum largs } {
 	    -local [list $hoststr [lindex $ports 0]] \
 	    -start master
 
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrforwardwrites on}
@@ -788,6 +803,8 @@ proc repmgr046_hdldead { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -807,7 +824,7 @@ proc repmgr046_hdldead { method niter tnum largs } {
 	# different site might be elected.
 	#
 	puts "\tRepmgr$tnum.hd.a: Start a master and two clients."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrelections off}
@@ -816,7 +833,7 @@ proc repmgr046_hdldead { method niter tnum largs } {
 	    -local [list $hoststr [lindex $ports 0]] \
 	    -start master
 
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrelections off}
@@ -827,7 +844,7 @@ proc repmgr046_hdldead { method niter tnum largs } {
 	    -start client
 	await_startup_done $clientenv
 
-	set cl2_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl2_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT2 -home $clientdir2 -txn -rep -thread"
 	set clientenv2 [eval $cl2_envcmd]
 	$clientenv2 rep_config {mgrelections off}

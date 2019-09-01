@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;dbbackup()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;dbbackup()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envcreate.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envdbbackup"></a>DB_ENV-&gt;dbbackup()</h2>
+            <h2 class="title" style="clear: both"><a id="envdbbackup"></a>
+        <span>DB_ENV-&gt;dbbackup()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -49,16 +55,25 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
     </p>
       <p>
         To back up an entire environment, use the
-        <a class="xref" href="envbackup.html" title="DB_ENV-&gt;backup()">DB_ENV-&gt;backup()</a>
+        <a class="xref" href="envbackup.html" title="DB_ENV-&gt;backup()">
+        <span>DB_ENV-&gt;backup()</span>
+        
+    </a>
         method.
     </p>
       <p>
         This method's default behavior can be changed by setting backup
         callbacks. See
-        <a class="xref" href="envset_backup_callbacks.html" title="DB_ENV-&gt;set_backup_callbacks()">DB_ENV-&gt;set_backup_callbacks()</a>
+        <a class="xref" href="envset_backup_callbacks.html" title="DB_ENV-&gt;set_backup_callbacks()">
+        <span>DB_ENV-&gt;set_backup_callbacks()</span>
+        
+    </a>
         for more information. Additional tuning parameters can also be set
         using the 
-        <a class="xref" href="envset_backup_config.html" title="DB_ENV-&gt;set_backup_config()">DB_ENV-&gt;set_backup_config()</a> method.
+        <a class="xref" href="envset_backup_config.html" title="DB_ENV-&gt;set_backup_config()">
+        <span>DB_ENV-&gt;set_backup_config()</span>
+        
+    </a> method.
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;dbbackup()</code> method may only be
@@ -76,7 +91,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234621968"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113487002896"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -84,7 +99,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234560288"></a>dbfile</h4>
+                <h4 class="title"><a id="idm140113487056176"></a>dbfile</h4>
               </div>
             </div>
           </div>
@@ -96,7 +111,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234525616"></a>target</h4>
+                <h4 class="title"><a id="idm140113486963168"></a>target</h4>
               </div>
             </div>
           </div>
@@ -117,7 +132,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234551984"></a>flags</h4>
+                <h4 class="title"><a id="idm140113486991936"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -144,7 +159,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234520928"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113486958480"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -160,7 +175,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234626240"></a>EEXIST</h4>
+                <h4 class="title"><a id="idm140113487002704"></a>EEXIST</h4>
               </div>
             </div>
           </div>
@@ -175,7 +190,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234508688"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140113486966576"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -187,7 +202,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234549904"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113486947600"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -200,7 +215,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234521920"></a>Class</h3>
+              <h3 class="title"><a id="idm140113486950096"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -212,7 +227,7 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234506352"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113486983728"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -232,11 +247,17 @@ DB_ENV-&gt;dbbackup(DB_ENV *dbenv, const char *dbfile, const char *target,
           <td width="40%" align="right"> <a accesskey="n" href="envdbremove.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">db_env_create </td>
+          <td width="40%" align="left" valign="top">
+        <span>db_env_create</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;dbremove()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;dbremove()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

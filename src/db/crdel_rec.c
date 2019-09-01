@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -31,17 +31,21 @@ __crdel_metasub_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__crdel_metasub_args *argp;
-	DB_THREAD_INFO *ip;
 	DB *file_dbp;
 	DBC *dbc;
 	DB_MPOOLFILE *mpf;
+	DB_THREAD_INFO *ip;
+	DB_TXN *txn;
+	DB_TXNHEAD *txnhead;
 	PAGE *pagep;
 	int cmp_p, ret, t_ret;
 
-	ip = ((DB_TXNHEAD *)info)->thread_info;
+	txnhead = info;
+	ip = txnhead->thread_info;
+	txn = txnhead->txn;
 	pagep = NULL;
 	REC_PRINT(__crdel_metasub_print);
-	REC_INTRO(__crdel_metasub_read, ip, 0);
+	REC_INTRO(__crdel_metasub_read, txnhead, 0);
 
 	/*
 	 * If we are undoing this operation, but the DB that we got back
@@ -52,14 +56,14 @@ __crdel_metasub_recover(env, dbtp, lsnp, op, info)
 	if (DB_UNDO(op) && !F_ISSET(file_dbp, DB_AM_OPEN_CALLED))
 		goto done;
 
-	if ((ret = __memp_fget(mpf, &argp->pgno, ip, NULL, 0, &pagep)) != 0) {
+	if ((ret = __memp_fget(mpf, &argp->pgno, ip, txn, 0, &pagep)) != 0) {
 		/*
 		 * If this is an in-memory file, this might be OK. Also, heap
 		 * can get there through a truncate and we have to redo page 1
 		 */
 		if ((file_dbp->type == DB_HEAP ||
 		    F_ISSET(file_dbp, DB_AM_INMEM)) &&
-		    (ret = __memp_fget(mpf, &argp->pgno, ip, NULL,
+		    (ret = __memp_fget(mpf, &argp->pgno, ip, txn,
 		    DB_MPOOL_CREATE | DB_MPOOL_DIRTY, &pagep)) == 0) {
 			if (F_ISSET(file_dbp, DB_AM_INMEM))
 				LSN_NOT_LOGGED(LSN(pagep));
@@ -74,7 +78,7 @@ __crdel_metasub_recover(env, dbtp, lsnp, op, info)
 	CHECK_LSN(env, op, cmp_p, &LSN(pagep), &argp->lsn);
 
 	if (cmp_p == 0 && DB_REDO(op)) {
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		memcpy(pagep, argp->page.data, argp->page.size);
 		LSN(pagep) = *lsnp;
 
@@ -101,7 +105,7 @@ __crdel_metasub_recover(env, dbtp, lsnp, op, info)
 		 * freed.  Opening the subdb will have reinitialized the
 		 * page, but not the lsn.
 		 */
-		REC_DIRTY(mpf, ip, file_dbp->priority, &pagep);
+		REC_DIRTY(mpf, txnhead, file_dbp->priority, &pagep);
 		LSN(pagep) = argp->lsn;
 	}
 
@@ -133,8 +137,10 @@ __crdel_inmem_create_recover(env, dbtp, lsnp, op, info)
 {
 	__crdel_inmem_create_args *argp;
 	DB *dbp;
+	DB_TXNHEAD *txnhead;
 	int do_close, ret, t_ret;
 
+	txnhead = info;
 	dbp = NULL;
 	do_close = 0;
 	REC_PRINT(__crdel_inmem_create_print);
@@ -147,7 +153,8 @@ __crdel_inmem_create_recover(env, dbtp, lsnp, op, info)
 		else
 			ret = 0;
 	} else
-		ret = __dbreg_id_to_db(env, argp->txnp, &dbp, argp->fileid, 0);
+		ret = __dbreg_id_to_db(env, txnhead->txn,
+		    &dbp, argp->fileid, 0);
 
 	if (DB_REDO(op)) {
 		/*
@@ -179,7 +186,7 @@ __crdel_inmem_create_recover(env, dbtp, lsnp, op, info)
 		dbp->preserve_fid = 1;
 		MAKE_INMEM(dbp);
 		if ((ret = __env_setup(dbp,
-		    NULL, NULL, argp->name.data, TXN_INVALID, 0)) != 0)
+		    txnhead->txn, NULL, argp->name.data, TXN_INVALID, 0)) != 0)
 			goto out;
 		ret = __env_mpool(dbp, argp->name.data, 0);
 
@@ -213,7 +220,6 @@ out:	if (dbp != NULL) {
 		if (t_ret != 0 && ret == 0)
 			ret = t_ret;
 	}
-	COMPQUIET(info, NULL);
 	REC_NOOP_CLOSE;
 }
 
@@ -233,9 +239,11 @@ __crdel_inmem_rename_recover(env, dbtp, lsnp, op, info)
 	void *info;
 {
 	__crdel_inmem_rename_args *argp;
+	DB_TXNHEAD *txnhead;
 	u_int8_t *fileid;
 	int ret;
 
+	txnhead = info;
 	REC_PRINT(__crdel_inmem_rename_print);
 	REC_NOOP_INTRO(__crdel_inmem_rename_read);
 	fileid = argp->fid.data;
@@ -256,7 +264,7 @@ __crdel_inmem_rename_recover(env, dbtp, lsnp, op, info)
 	*lsnp = argp->prev_lsn;
 	ret = 0;
 
-	COMPQUIET(info, NULL);
+	COMPQUIET(txnhead, NULL);
 	REC_NOOP_CLOSE;
 }
 

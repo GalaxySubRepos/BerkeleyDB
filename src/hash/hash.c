@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994
@@ -1871,7 +1871,7 @@ __ham_overwrite(dbc, nval, flags)
 				tmp_val2.size = hcp->dup_len;
 				if (dbp->dup_compare(
 				    dbp, nval, &tmp_val2, NULL) != 0) {
-					__db_errx(env, DB_STR("1131",
+					__db_errx(env, DB_STR("1004",
 			    "Existing data sorts differently from put data"));
 					return (EINVAL);
 				}

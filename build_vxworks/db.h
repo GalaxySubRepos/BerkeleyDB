@@ -1,8 +1,8 @@
 /* DO NOT EDIT: automatically built by dist/s_vxworks. */
 /*
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  *
@@ -42,13 +42,18 @@ extern "C" {
 /*
  * Berkeley DB version information.
  */
-#define	DB_VERSION_FAMILY	12
+#define	DB_VERSION_MAJOR	18
+#define	DB_VERSION_MINOR	1
+#define	DB_VERSION_PATCH	32
+#define	DB_VERSION_STRING	"Berkeley DB 18.1.32: (February 19, 2019)"
+#define	DB_VERSION_FULL_STRING	"Berkeley DB Release 18.1, library version 18.1.32: (February 19, 2019)"
+
+/*
+ * These two version numbers are deprecated and will be removed in a future
+ * release.  Until that time they are the same as the major and minor numbers.
+ */
+#define	DB_VERSION_FAMILY	18
 #define	DB_VERSION_RELEASE	1
-#define	DB_VERSION_MAJOR	6
-#define	DB_VERSION_MINOR	2
-#define	DB_VERSION_PATCH	38
-#define	DB_VERSION_STRING	"Berkeley DB 6.2.38: (January 30, 2019)"
-#define	DB_VERSION_FULL_STRING	"Berkeley DB 12c Release 1, library version 12.1.6.2.38: (January 30, 2019)"
 
 /*
  * !!!
@@ -976,7 +981,7 @@ struct __db_txn {
 	u_int32_t	xa_thr_status;
 
 #define	TXN_CHILDCOMMIT		0x00001	/* Txn has committed. */
-#define	TXN_COMPENSATE		0x00002	/* Compensating transaction. */
+#define	TXN_DISPATCH		0x00002	/* Internal; use for __db_dispatch(). */
 #define	TXN_DEADLOCK		0x00004	/* Txn has deadlocked. */
 #define	TXN_FAMILY		0x00008	/* Cursors/children are independent. */
 #define	TXN_IGNORE_LEASE	0x00010	/* Skip lease check at commit time. */
@@ -1109,6 +1114,14 @@ struct __db_txn_token {
 #define	DB_REPMGR_ACKS_ONE_PEER		6
 #define	DB_REPMGR_ACKS_QUORUM		7
 
+/* Configuration options for SSL support for Replication Manager */
+#define DB_REPMGR_SSL_CA_CERT			1 /* CA Cert Location */
+#define DB_REPMGR_SSL_CA_DIR			2 /* CA Cert Directory */
+#define DB_REPMGR_SSL_REPNODE_CERT		3 /* RepNode Cert for auth */
+#define DB_REPMGR_SSL_REPNODE_PRIVATE_KEY	4 /* Repnode Cert Private key */
+#define DB_REPMGR_SSL_REPNODE_KEY_PASSWD	5 /* Password for Private key */
+#define DB_REPMGR_SSL_VERIFY_DEPTH		6 /* SSL verification depth */
+
 /* Replication timeout configuration values. */
 #define	DB_REP_ACK_TIMEOUT		1	/* RepMgr acknowledgements. */
 #define	DB_REP_CHECKPOINT_DELAY		2	/* Master checkpoint delay. */
@@ -1128,43 +1141,57 @@ struct __db_txn_token {
 #define	DB_EVENT_PANIC			 0
 #define	DB_EVENT_REG_ALIVE		 1	/* int: pid which was in env */
 #define	DB_EVENT_REG_PANIC		 2	/* int: error causing the panic. */
-#define	DB_EVENT_REP_AUTOTAKEOVER_FAILED 3
-#define	DB_EVENT_REP_CLIENT		 4
-#define	DB_EVENT_REP_CONNECT_BROKEN	 5	/* DB_REPMGR_CONN_ERR */
-#define	DB_EVENT_REP_CONNECT_ESTD	 6	/* int: EID of remote site */
-#define	DB_EVENT_REP_CONNECT_TRY_FAILED	 7	/* DB_REPMGR_CONN_ERR */
-#define	DB_EVENT_REP_DUPMASTER		 8
-#define	DB_EVENT_REP_ELECTED		 9
-#define	DB_EVENT_REP_ELECTION_FAILED	10
-#define	DB_EVENT_REP_INIT_DONE		11
-#define	DB_EVENT_REP_INQUEUE_FULL	12
-#define	DB_EVENT_REP_JOIN_FAILURE	13
-#define	DB_EVENT_REP_LOCAL_SITE_REMOVED	14
-#define	DB_EVENT_REP_MASTER		15
-#define	DB_EVENT_REP_MASTER_FAILURE	16
-#define	DB_EVENT_REP_NEWMASTER		17	/* int: new master's site id */
-#define	DB_EVENT_REP_PERM_FAILED	18
-#define	DB_EVENT_REP_SITE_ADDED		19	/* int: eid */
-#define	DB_EVENT_REP_SITE_REMOVED	20	/* int: eid */
-#define	DB_EVENT_REP_STARTUPDONE	21
-#define	DB_EVENT_REP_WOULD_ROLLBACK	22	/* Undocumented; C API only. */
-#define	DB_EVENT_WRITE_FAILED		23
-#define	DB_EVENT_MUTEX_DIED		24	/* DB_EVENT_MUTEX_DIED_INFO */
-#define	DB_EVENT_FAILCHK_PANIC		25	/* DB_EVENT_FAILCHK_INFO */
+#define	DB_EVENT_REP_AUTOTAKEOVER	 3
+#define	DB_EVENT_REP_AUTOTAKEOVER_FAILED 4
+#define	DB_EVENT_REP_CLIENT		 5
+#define	DB_EVENT_REP_CONNECT_BROKEN	 6	/* DB_REPMGR_CONN_ERR */
+#define	DB_EVENT_REP_CONNECT_ESTD	 7	/* int: EID of remote site */
+#define	DB_EVENT_REP_CONNECT_TRY_FAILED	 8	/* DB_REPMGR_CONN_ERR */
+#define	DB_EVENT_REP_DUPMASTER		 9
+#define	DB_EVENT_REP_ELECTED		10
+#define	DB_EVENT_REP_ELECTION_FAILED	11
+#define	DB_EVENT_REP_INIT_DONE		12
+#define	DB_EVENT_REP_INQUEUE_FULL	13
+#define	DB_EVENT_REP_JOIN_FAILURE	14
+#define	DB_EVENT_REP_LOCAL_SITE_REMOVED	15
+#define	DB_EVENT_REP_MASTER		16
+#define	DB_EVENT_REP_MASTER_FAILURE	17
+#define	DB_EVENT_REP_NEWMASTER		18	/* int: new master's site id */
+#define	DB_EVENT_REP_PERM_FAILED	19
+#define	DB_EVENT_REP_SITE_ADDED		20	/* int: eid */
+#define	DB_EVENT_REP_SITE_REMOVED	21	/* int: eid */
+#define	DB_EVENT_REP_STARTUPDONE	22
+#define	DB_EVENT_REP_WOULD_ROLLBACK	23	/* Undocumented; C API only. */
+#define	DB_EVENT_WRITE_FAILED		24
+#define	DB_EVENT_MUTEX_DIED		25	/* DB_EVENT_MUTEX_DIED_INFO */
+#define	DB_EVENT_FAILCHK_PANIC		26	/* DB_EVENT_FAILCHK_INFO */
 #define	DB_EVENT_NO_SUCH_EVENT		 0xffffffff /* OOB sentinel value */
+
+/* Supported network event polling methods */
+typedef enum {
+	SELECT=1,
+	POLL=2,
+	EPOLL=3
+} poll_method_t;
+
+#if defined(HAVE_EPOLL_CREATE) && defined(HAVE_EPOLL_CTL) && defined(HAVE_EPOLL_WAIT)
+#define	HAVE_EPOLL	1
+#endif
 
 /* Replication Manager site status. */
 struct __db_repmgr_site {
 	int eid;
 	char *host;
 	u_int port;
+	DB_LSN max_ack_lsn;
 
 #define	DB_REPMGR_CONNECTED	1
 #define	DB_REPMGR_DISCONNECTED	2
 	u_int32_t status;
 
-#define	DB_REPMGR_ISPEER	0x01
-#define	DB_REPMGR_ISVIEW	0x02
+#define	DB_REPMGR_ISELECTABLE	0x01
+#define	DB_REPMGR_ISPEER	0x02
+#define	DB_REPMGR_ISVIEW	0x04
 	u_int32_t flags;
 };
 
@@ -1282,10 +1309,13 @@ struct __db_repmgr_stat { /* SHARED */
 	uintmax_t st_connection_drop;	/* Existing connections dropped. */
 	uintmax_t st_connect_fail;	/* Failed new connection attempts. */
 	u_int32_t st_elect_threads;	/* # of active election threads. */
+	u_int32_t st_group_stable_log_file;	/* Earliest log file still
+		  				   needed by repgroup. */
 	u_int32_t st_max_elect_threads;	/* Max concurrent e-threads ever. */
 	u_int32_t st_site_participants;	/* # of repgroup participant sites. */
 	u_int32_t st_site_total;	/* # of repgroup total sites. */
 	u_int32_t st_site_views;	/* # of repgroup view sites. */
+	u_int32_t st_polling_method;	/* 1=select, 2=poll, 3=epoll. */
 	uintmax_t st_takeovers;		/* # of automatic listener takeovers. */
 	uintmax_t st_write_ops_forwarded;	/* # of writes forwarded by
 		  				   this client. */
@@ -1472,20 +1502,22 @@ typedef enum {
 #define	DB_REP_HANDLE_DEAD	(-30983)/* Rolled back a commit. */
 #define	DB_REP_HOLDELECTION	(-30982)/* Time to hold an election. */
 #define	DB_REP_IGNORE		(-30981)/* This msg should be ignored.*/
-#define	DB_REP_ISPERM		(-30980)/* Cached not written perm written.*/
-#define	DB_REP_JOIN_FAILURE	(-30979)/* Unable to join replication group. */
-#define	DB_REP_LEASE_EXPIRED	(-30978)/* Master lease has expired. */
-#define	DB_REP_LOCKOUT		(-30977)/* API/Replication lockout now. */
-#define	DB_REP_NEWSITE		(-30976)/* New site entered system. */
-#define	DB_REP_NOTPERM		(-30975)/* Permanent log record not written. */
-#define	DB_REP_UNAVAIL		(-30974)/* Site cannot currently be reached. */
-#define	DB_REP_WOULDROLLBACK	(-30973)/* UNDOC: rollback inhibited by app. */
-#define	DB_RUNRECOVERY		(-30972)/* Panic return. */
-#define	DB_SECONDARY_BAD	(-30971)/* Secondary index corrupt. */
-#define	DB_SLICE_CORRUPT	(-30970)/* A part of a sliced env is corrupt. */
-#define	DB_TIMEOUT		(-30969)/* Timed out on read consistency. */
-#define	DB_VERIFY_BAD		(-30968)/* Verify failed; bad format. */
-#define	DB_VERSION_MISMATCH	(-30967)/* Environment version mismatch. */
+#define	DB_REP_INELECT		(-30980)/* Replication is in an election. */
+#define	DB_REP_ISPERM		(-30979)/* Cached not written perm written.*/
+#define	DB_REP_JOIN_FAILURE	(-30978)/* Unable to join replication group. */
+#define	DB_REP_LEASE_EXPIRED	(-30977)/* Master lease has expired. */
+#define	DB_REP_LOCKOUT		(-30976)/* API/Replication lockout now. */
+#define	DB_REP_NEWSITE		(-30975)/* New site entered system. */
+#define	DB_REP_NOTPERM		(-30974)/* Permanent log record not written. */
+#define	DB_REP_UNAVAIL		(-30973)/* Site cannot currently be reached. */
+#define	DB_REP_WOULDROLLBACK	(-30972)/* UNDOC: rollback inhibited by app. */
+#define	DB_RUNRECOVERY		(-30971)/* Panic return. */
+#define	DB_SECONDARY_BAD	(-30970)/* Secondary index corrupt. */
+#define	DB_SLICE_CORRUPT	(-30969)/* A part of a sliced env is corrupt. */
+#define	DB_TIMEOUT		(-30968)/* Timed out on read consistency. */
+#define	DB_VERIFY_BAD		(-30967)/* Verify failed; bad format. */
+#define	DB_VERSION_MISMATCH	(-30966)/* Environment version mismatch. */
+#define	DB_SYSTEM_MEM_MISSING	(-30965)/* Attach to shared memory failed. */
  
 /* DB (private) error return codes. */
 #define	DB_ALREADY_ABORTED	(-30899)
@@ -2426,12 +2458,16 @@ struct __db_qam_stat { /* SHARED */
  * Memory configuration types.
  */
 typedef enum {
-	DB_MEM_LOCK=1,
-	DB_MEM_LOCKOBJECT=2,
-	DB_MEM_LOCKER=3,
-	DB_MEM_LOGID=4,
-	DB_MEM_TRANSACTION=5,
-	DB_MEM_THREAD=6
+	DB_MEM_DATABASE=1,
+	DB_MEM_DATABASE_LENGTH=2,
+	DB_MEM_EXTFILE_DATABASE=3,
+	DB_MEM_LOCK=4,
+	DB_MEM_LOCKOBJECT=5,
+	DB_MEM_LOCKER=6,
+	DB_MEM_LOGID=7,
+	DB_MEM_REP_SITE=8,
+	DB_MEM_TRANSACTION=9,
+	DB_MEM_THREAD=10
 } DB_MEM_CONFIG;
 
 /*
@@ -2499,6 +2535,15 @@ struct __db_env {
 
 	u_int32_t	blob_threshold;	/* External file threshold size */
 
+	/* Database configuration */
+	u_int32_t	db_init_databases;	/* Number of databases. */
+	u_int32_t	db_init_db_len;		/* Database name length. */
+	u_int32_t	db_init_extfile_dbs;	/*
+						 * Number of additional
+						 * external file metadata
+						 * databases.
+						 */
+
 	/* Mutex configuration */
 	u_int32_t	mutex_align;	/* Mutex alignment */
 	u_int32_t	mutex_cnt;	/* Number of mutexes to configure */
@@ -2544,6 +2589,9 @@ struct __db_env {
 	u_int32_t	mp_mtxcount;	/* Number of mutexs */
 					/* Sleep after writing max buffers */
 	db_timeout_t	mp_maxwrite_sleep;
+
+	/* Replication configuration */
+	u_int32_t	rep_init_sites;	/* Number of replication sites. */
 
 	/* Transaction configuration */
 	u_int32_t	tx_init;	/* Initial number of transactions */
@@ -2777,6 +2825,7 @@ struct __db_env {
 		__P((DB_ENV *, u_int32_t, u_int32_t));
 	int  (*repmgr_set_socket) __P((DB_ENV *, int (*)(DB_ENV *,
 		DB_REPMGR_SOCKET, int *, u_int32_t)));
+	int (*repmgr_set_ssl_config) __P((DB_ENV *, int, char *));
 	int  (*repmgr_site)
 		__P((DB_ENV *, const char *, u_int, DB_SITE**, u_int32_t));
 	int  (*repmgr_site_by_eid) __P((DB_ENV *, int, DB_SITE**));
@@ -2889,12 +2938,16 @@ struct __db_distab {
  * Log verification configuration structure.
  */
 struct __db_logvrfy_config {
-	int continue_after_fail, verbose;
+	int continue_after_fail;
+	int verbose;
 	u_int32_t cachesize;
 	const char *temp_envhome;
-	const char *dbfile, *dbname;
-	DB_LSN start_lsn, end_lsn;
-	time_t start_time, end_time;
+	const char *dbfile;
+	const char *dbname;
+	DB_LSN start_lsn;
+	DB_LSN end_lsn;
+	time_t start_time;
+	time_t end_time;
 };
 
 struct __db_channel {
@@ -2979,16 +3032,19 @@ typedef struct {
  *
  * The global variables dbrdonly, dirf and pagf were not retained when 4BSD
  * replaced the dbm interface with ndbm, and are not supported here.
+ *
+ * Definition of 'store' interface will cause macro conflict for modern
+ * compiler with C++11 support, we will exclude this case here.
  */
 #define	dbminit(a)	__db_dbm_init(a)
 #define	dbmclose	__db_dbm_close
 #if !defined(__cplusplus)
 #define	delete(a)	__db_dbm_delete(a)
+#define	store(a, b)	__db_dbm_store(a, b)
 #endif
 #define	fetch(a)	__db_dbm_fetch(a)
 #define	firstkey	__db_dbm_firstkey
 #define	nextkey(a)	__db_dbm_nextkey(a)
-#define	store(a, b)	__db_dbm_store(a, b)
 
 /*******************************************************
  * Hsearch historic interface.
@@ -3021,10 +3077,11 @@ typedef struct entry {
 #define	DB_ARCH_REMOVE				0x00000008
 #define	DB_AUTO_COMMIT				0x00000100
 #define	DB_BACKUP_CLEAN				0x00000002
-#define	DB_BACKUP_FILES				0x00000008
-#define	DB_BACKUP_NO_LOGS			0x00000010
-#define	DB_BACKUP_SINGLE_DIR			0x00000020
-#define	DB_BACKUP_UPDATE			0x00000040
+#define	DB_BACKUP_DEEP_COPY			0x00000008
+#define	DB_BACKUP_FILES				0x00000010
+#define	DB_BACKUP_NO_LOGS			0x00000020
+#define	DB_BACKUP_SINGLE_DIR			0x00000040
+#define	DB_BACKUP_UPDATE			0x00000080
 #define	DB_BOOTSTRAP_HELPER			0x00000001
 #define	DB_CDB_ALLDB				0x00000040
 #define	DB_CHKSUM				0x00000008
@@ -3155,22 +3212,25 @@ typedef struct entry {
 #define	DB_REGISTER				0x00040000
 #define	DB_RENUMBER				0x00000080
 #define	DB_REPMGR_CONF_2SITE_STRICT		0x00000001
-#define	DB_REPMGR_CONF_ELECTIONS		0x00000002
-#define	DB_REPMGR_CONF_FORWARD_WRITES		0x00000004
-#define	DB_REPMGR_CONF_PREFMAS_CLIENT		0x00000008
-#define	DB_REPMGR_CONF_PREFMAS_MASTER		0x00000010
+#define	DB_REPMGR_CONF_DISABLE_POLL		0x00000002
+#define	DB_REPMGR_CONF_DISABLE_SSL		0x00000004
+#define	DB_REPMGR_CONF_ELECTIONS		0x00000008
+#define	DB_REPMGR_CONF_ENABLE_EPOLL		0x00000010
+#define	DB_REPMGR_CONF_FORWARD_WRITES		0x00000020
+#define	DB_REPMGR_CONF_PREFMAS_CLIENT		0x00000040
+#define	DB_REPMGR_CONF_PREFMAS_MASTER		0x00000080
 #define	DB_REPMGR_NEED_RESPONSE			0x00000001
 #define	DB_REPMGR_PEER				0x00000010
 #define	DB_REP_ANYWHERE				0x00000001
 #define	DB_REP_CLIENT				0x00000001
-#define	DB_REP_CONF_AUTOINIT			0x00000020
-#define	DB_REP_CONF_AUTOROLLBACK		0x00000040
-#define	DB_REP_CONF_BULK			0x00000080
-#define	DB_REP_CONF_DELAYCLIENT			0x00000100
-#define	DB_REP_CONF_ELECT_LOGLENGTH		0x00000200
-#define	DB_REP_CONF_INMEM			0x00000400
-#define	DB_REP_CONF_LEASE			0x00000800
-#define	DB_REP_CONF_NOWAIT			0x00001000
+#define	DB_REP_CONF_AUTOINIT			0x00000100
+#define	DB_REP_CONF_AUTOROLLBACK		0x00000200
+#define	DB_REP_CONF_BULK			0x00000400
+#define	DB_REP_CONF_DELAYCLIENT			0x00000800
+#define	DB_REP_CONF_ELECT_LOGLENGTH		0x00001000
+#define	DB_REP_CONF_INMEM			0x00002000
+#define	DB_REP_CONF_LEASE			0x00004000
+#define	DB_REP_CONF_NOWAIT			0x00008000
 #define	DB_REP_ELECTION				0x00000004
 #define	DB_REP_MASTER				0x00000002
 #define	DB_REP_NOBUFFER				0x00000002
@@ -3218,13 +3278,14 @@ typedef struct entry {
 #define	DB_TIME_NOTGRANTED			0x00040000
 #define	DB_TRUNCATE				0x00080000
 #define	DB_TXN_BULK				0x00000010
-#define	DB_TXN_FAMILY				0x00000040
+#define	DB_TXN_DISPATCH				0x00000040
+#define	DB_TXN_FAMILY				0x00000080
 #define	DB_TXN_NOSYNC				0x00000001
 #define	DB_TXN_NOT_DURABLE			0x00000004
 #define	DB_TXN_NOWAIT				0x00000002
 #define	DB_TXN_SNAPSHOT				0x00000004
 #define	DB_TXN_SYNC				0x00000008
-#define	DB_TXN_WAIT				0x00000080
+#define	DB_TXN_WAIT				0x00000100
 #define	DB_TXN_WRITE_NOSYNC			0x00000020
 #define	DB_UNREF				0x00020000
 #define	DB_UPGRADE				0x00000002
@@ -3240,15 +3301,18 @@ typedef struct entry {
 #define	DB_VERB_REPLICATION			0x00000080
 #define	DB_VERB_REPMGR_CONNFAIL			0x00000100
 #define	DB_VERB_REPMGR_MISC			0x00000200
-#define	DB_VERB_REP_ELECT			0x00000400
-#define	DB_VERB_REP_LEASE			0x00000800
-#define	DB_VERB_REP_MISC			0x00001000
-#define	DB_VERB_REP_MSGS			0x00002000
-#define	DB_VERB_REP_SYNC			0x00004000
-#define	DB_VERB_REP_SYSTEM			0x00008000
-#define	DB_VERB_REP_TEST			0x00010000
-#define	DB_VERB_SLICE				0x00020000
-#define	DB_VERB_WAITSFOR			0x00040000
+#define	DB_VERB_REPMGR_SSL_ALL			0x00000400
+#define	DB_VERB_REPMGR_SSL_CONN			0x00000800
+#define	DB_VERB_REPMGR_SSL_IO			0x00001000
+#define	DB_VERB_REP_ELECT			0x00002000
+#define	DB_VERB_REP_LEASE			0x00004000
+#define	DB_VERB_REP_MISC			0x00008000
+#define	DB_VERB_REP_MSGS			0x00010000
+#define	DB_VERB_REP_SYNC			0x00020000
+#define	DB_VERB_REP_SYSTEM			0x00040000
+#define	DB_VERB_REP_TEST			0x00080000
+#define	DB_VERB_SLICE				0x00100000
+#define	DB_VERB_WAITSFOR			0x00200000
 #define	DB_VERIFY				0x00000004
 #define	DB_VERIFY_PARTITION			0x00040000
 #define	DB_WRITECURSOR				0x00000010

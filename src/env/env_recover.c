@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -64,6 +64,7 @@ __db_apprec(env, ip, max_lsn, trunclsn, update, flags)
 	char *p, *pass;
 	char t1[CTIME_BUFLEN], t2[CTIME_BUFLEN], time_buf[CTIME_BUFLEN];
 
+	COMPQUIET(low, 0);
 	COMPQUIET(nfiles, (double)0.001);
 
 	dbenv = env->dbenv;
@@ -75,13 +76,13 @@ __db_apprec(env, ip, max_lsn, trunclsn, update, flags)
 	ZERO_LSN(lsn);
 
 	/*
-	 * XXX
 	 * Get the log size.  No locking required because we're single-threaded
 	 * during recovery.
 	 */
 	log_size = ((LOG *)env->lg_handle->reginfo.primary)->log_size;
 
-	/* When truly recovering (i.e., not replication) change the environment
+	/*
+	 * When truly recovering (i.e., not replication) change the environment
 	 * magic from 0 (newly created) to recovery-in-progress.
 	 */
 	renv = env->reginfo->primary;
@@ -240,7 +241,7 @@ __db_apprec(env, ip, max_lsn, trunclsn, update, flags)
 			/* We have a recent checkpoint.  This is LSN (1). */
 			if ((ret = __txn_ckp_read(env,
 			    data.data, &ckp_args)) != 0) {
-				__db_errx(env, DB_STR_A("1511",
+				__db_errx(env, DB_STR_A("4506",
 				    "Invalid checkpoint record at [%ld][%ld]",
 				    "%ld %ld"), (u_long)ckp_lsn.file,
 				    (u_long)ckp_lsn.offset);
@@ -565,7 +566,7 @@ done:
 			if (ret == DB_NOTFOUND)
 				ret = 0;
 			else
-				__db_errx(env, DB_STR("1516",
+				__db_errx(env, DB_STR("1510",
 				    "First log record not found"));
 			goto err;
 		}
@@ -574,7 +575,7 @@ done:
 			/* We have a recent checkpoint.  This is LSN (1). */
 			if ((ret = __txn_ckp_read(env,
 			    data.data, &ckp_args)) != 0) {
-				__db_errx(env, DB_STR_A("1517",
+				__db_errx(env, DB_STR_A("4506",
 				    "Invalid checkpoint record at [%ld][%ld]",
 				    "%ld %ld"), (u_long)first_lsn.file,
 				    (u_long)first_lsn.offset);

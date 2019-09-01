@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2013 November 25
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -13,8 +19,8 @@
 ** This file contains pre-processor directives related to operating system
 ** detection and/or setup.
 */
-#ifndef _OS_SETUP_H_
-#define _OS_SETUP_H_
+#ifndef SQLITE_OS_SETUP_H
+#define SQLITE_OS_SETUP_H
 
 /*
 ** Figure out if we are dealing with Unix, Windows, or some other operating
@@ -54,4 +60,4 @@
 #  endif
 #endif
 
-#endif /* _OS_SETUP_H_ */
+#endif /* SQLITE_OS_SETUP_H */

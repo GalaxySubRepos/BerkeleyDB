@@ -96,6 +96,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_bulk", "VS10\excxx_bu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_env", "VS10\excxx_env.vcxproj"", "{E790C029-341D-489B-B987-D35947AD78C3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_env_sql", "VS10\excxx_env_sql.vcxproj"", "{E790C029-341D-489B-B987-D35947AD78C4}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_example_database_load", "VS10\excxx_example_database_load.vcxproj"", "{A4F42222-FE02-431D-A046-B049E516DEB7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_example_database_read", "VS10\excxx_example_database_read.vcxproj"", "{81C97B03-193C-4021-A78E-F0A2A2AFAA87}"
@@ -105,6 +107,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_mpool", "VS10\excxx_mpool.vcxproj"", "{DAEDD51B-0FED-4779-A99A-C09E4D2ACB5E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_repquote", "VS10\excxx_repquote.vcxproj"", "{75046027-E052-4E8B-AE87-E27DE9C2BC21}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_order", "VS10\excxx_order.vcxproj"", "{4DA58A4B-5B2D-484F-A351-431A7D209355}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "excxx_sequence", "VS10\excxx_sequence.vcxproj"", "{D90AE774-03EF-4945-A3C3-AC76BF90825F}"
 EndProject
@@ -374,6 +378,14 @@ Global
 		{E790C029-341D-489B-B987-D35947AD78C3}.Release|Win32.Build.0 = Release|Win32
 		{E790C029-341D-489B-B987-D35947AD78C3}.Release|x64.ActiveCfg = Release|x64
 		{E790C029-341D-489B-B987-D35947AD78C3}.Release|x64.Build.0 = Release|x64
+		{E790C029-341D-489B-B987-D35947AD78C4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E790C029-341D-489B-B987-D35947AD78C4}.Debug|Win32.Build.0 = Debug|Win32
+		{E790C029-341D-489B-B987-D35947AD78C4}.Debug|x64.ActiveCfg = Debug|x64
+		{E790C029-341D-489B-B987-D35947AD78C4}.Debug|x64.Build.0 = Debug|x64
+		{E790C029-341D-489B-B987-D35947AD78C4}.Release|Win32.ActiveCfg = Release|Win32
+		{E790C029-341D-489B-B987-D35947AD78C4}.Release|Win32.Build.0 = Release|Win32
+		{E790C029-341D-489B-B987-D35947AD78C4}.Release|x64.ActiveCfg = Release|x64
+		{E790C029-341D-489B-B987-D35947AD78C4}.Release|x64.Build.0 = Release|x64
 		{A4F42222-FE02-431D-A046-B049E516DEB7}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A4F42222-FE02-431D-A046-B049E516DEB7}.Debug|Win32.Build.0 = Debug|Win32
 		{A4F42222-FE02-431D-A046-B049E516DEB7}.Debug|x64.ActiveCfg = Debug|x64

@@ -6,6 +6,13 @@
 
 . ./RELEASE
 
+# Detect XQilla
+which xqilla  > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+ 	echo "s_windows_dsp can not find xqilla command."
+    	exit 1
+fi
+
 create_projects()
 {
     # project name list
@@ -13,16 +20,15 @@ create_projects()
 
     # xquery script template
     TEMPLATE=genproject.template
-    TEMPLATE_VS2010_VS2012=vs2010.template
 
-    # vs2010 and vs2012 common properties template
+    # common properties template
     LIBTEMPLATE=library.props.template
     APPTEMPLATE=application.props.template
 
     # temporary script, post-sed-replacement
     TEMP_SCRIPT=genproject.script
 
-    # temporary common properties for vs2010 and vs2012
+    # temporary common properties
     TEMP_LIB=library.props
     TEMP_APP=application.props
 
@@ -39,43 +45,38 @@ create_projects()
     WinVersion=$4
 
     if [ $WinVersion = "WinCE" ]; then
-      VLoop=VS8
+      VLoop=VS15
     else 
-      VLoop="VS8 VS10 VS12"
+      VLoop="VS10 VS12 VS15"
     fi
 
     # for each project, substitute 2 variables in the XQuery script, then run it
-    # temporarily use only VS10 here to omit the generation of VS8
     for v in $VLoop
     do
 
-        if [ $v = "VS71" ]; then
-            VERSION="7.10"
-        elif [ $v = "VS8" ]; then
-    	    VERSION="9.00"
- 	elif [ $v = "VS10" ]; then
+ 	if [ $v = "VS10" ]; then
 	    VERSION="10.0"
  	elif [ $v = "VS12" ]; then
 	    VERSION="11.0"
+	elif [ $v = "VS15" ]; then
+	    VERSION="14.0"
         fi
 
 	PROJECT_OUTPUT_DIR="$PROJECT_OUTPUT_PARENT_DIR/$v"
 
     	# substitute some variables in the XML document template
-        if [[ $v = "VS10" || $v = "VS12" ]]; then
-    	    sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
-                -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
-                -e "s/$//" \
-                < $LIBTEMPLATE > $TEMP_LIB
+    	sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
+            -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
+            -e "s/$//" \
+            < $LIBTEMPLATE > $TEMP_LIB
 
-            sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
-                -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
-                -e "s/$//" \
-                < $APPTEMPLATE > $TEMP_APP
+        sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
+            -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
+            -e "s/$//" \
+            < $APPTEMPLATE > $TEMP_APP
 
-	    mv $TEMP_LIB $PROJECT_OUTPUT_DIR/$TEMP_LIB
-            mv $TEMP_APP $PROJECT_OUTPUT_DIR/$TEMP_APP
-	fi
+	mv $TEMP_LIB $PROJECT_OUTPUT_DIR/$TEMP_LIB
+        mv $TEMP_APP $PROJECT_OUTPUT_DIR/$TEMP_APP
     	sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
             -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
             < $CONFIG_INPUT > $CONFIG_OUTPUT
@@ -85,21 +86,9 @@ create_projects()
         echo "Building for Visual Studio version $VERSION"
         for i in `cat $PROJECTS`
         do
-	    if [[ $v = "VS10" || $v = "VS12" ]]; then
-            	sed -e "s!@PROJECT_NAME@!$i!g" -e "s!@PROJECT_INPUT@!$CONFIG_OUTPUT!g" -e "s!@VISUAL_STUDIO_VERSION@!$VERSION!g" < $TEMPLATE_VS2010_VS2012 > $TEMP_SCRIPT
-            else 
-            	sed -e "s!@PROJECT_NAME@!$i!g" -e "s!@PROJECT_INPUT@!$CONFIG_OUTPUT!g" -e "s!@VISUAL_STUDIO_VERSION@!$VERSION!g" < $TEMPLATE > $TEMP_SCRIPT
-	    fi 	
-            if [ $v = "VS7.1" ]; then
-            	TMP=$PROJECT_OUTPUT_DIR/$i.tmp.vcproj
-                TARG=$PROJECT_OUTPUT_DIR/${i}_vs71.vcproj
-            elif [ $v = "VS8" ]; then
-            	TMP=$PROJECT_OUTPUT_DIR/$i.tmp.vcproj
-		TARG=$PROJECT_OUTPUT_DIR/${i}.vcproj
-	    else
-            	TMP=$PROJECT_OUTPUT_DIR/$i.tmp.vcxproj
-                TARG=$PROJECT_OUTPUT_DIR/${i}.vcxproj
-            fi
+            sed -e "s!@PROJECT_NAME@!$i!g" -e "s!@PROJECT_INPUT@!$CONFIG_OUTPUT!g" -e "s!@VISUAL_STUDIO_VERSION@!$VERSION!g" < $TEMPLATE > $TEMP_SCRIPT
+            TMP=$PROJECT_OUTPUT_DIR/$i.tmp.vcxproj
+            TARG=$PROJECT_OUTPUT_DIR/${i}.vcxproj
             xqilla -o $TMP $TEMP_SCRIPT
             rm -f $TEMP_SCRIPT
             chmod 644 $TMP
@@ -131,17 +120,15 @@ create_projects_csharp()
     # temporary xml document, post-sed-replacement
     CONFIG_OUTPUT=projects.xml
     
-    VLoop="VS8 VS10 VS12"
+    VLoop="VS10 VS12 VS15"
     for v in $VLoop
     do
-        if [ $v = "VS71" ]; then
-            VERSION="7.10"
-        elif [ $v = "VS8" ]; then
-    	    VERSION="9.00"
- 	elif [ $v = "VS10" ]; then
+ 	if [ $v = "VS10" ]; then
 	    VERSION="10.0"
  	elif [ $v = "VS12" ]; then
 	    VERSION="11.0"
+	elif [ $v = "VS15" ]; then
+	    VERSION="14.0"
         fi
 
         # substitute some variables in the XML document template
@@ -186,11 +173,6 @@ cd win_projects
 echo "Building Visual Studio project files for Windows -- "
 echo "   output only for modified projects (this can take a while)"
 create_projects db.projects projects.template.xml ../../build_windows Win
-
-# Create/Update Windows CE project files
-echo "Building Visual Studio project files for Windows CE -- "
-echo "   output only for modified projects (this can take a while)"
-create_projects db_wince.projects projects_wince.template.xml ../../build_wince WinCE
 
 # Create/Update C Sharp project files
 echo "Building C Sharp project files -- "

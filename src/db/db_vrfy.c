@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1118,7 +1118,7 @@ __db_vrfy_structure(dbp, vdp, dbname, meta_pgno, lp, rp, flags)
 		    && i <= vdp->meta_last_pgno
 #endif
 		    ) {
-			EPRINT((env, DB_STR_A("0535",
+			EPRINT((env, DB_STR_A("0502",
 			    "Page %lu: totally zeroed page", "%lu"),
 			    (u_long)i));
 			isbad = 1;
@@ -1241,7 +1241,7 @@ __db_vrfy_common(dbp, vdp, h, pgno, flags)
 	case P_HEAPMETA:
 		break;
 	default:
-		EPRINT((env, DB_STR_A("0537", "Page %lu: bad page type %lu",
+		EPRINT((env, DB_STR_A("0528", "Page %lu: bad page type %lu",
 		    "%lu %lu"), (u_long)pgno, (u_long)h->type));
 		ret = DB_VERIFY_BAD;
 	}
@@ -1338,7 +1338,7 @@ __db_vrfy_datapage(dbp, vdp, h, pgno, flags)
 		}
 		if (!IS_VALID_PGNO(NEXT_PGNO(h)) || NEXT_PGNO(h) == pip->pgno) {
 			isbad = 1;
-			EPRINT((env, DB_STR_A("0540",
+			EPRINT((env, DB_STR_A("0538",
 			    "Page %lu: invalid next_pgno %lu", "%lu %lu"),
 			    (u_long)pip->pgno, (u_long)NEXT_PGNO(h)));
 		}
@@ -1530,7 +1530,7 @@ __db_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (meta->metaflags != 0) {
 		if (FLD_ISSET(meta->metaflags, ~DBMETA_ALLFLAGS)) {
 			isbad = 1;
-			EPRINT((env, DB_STR_A("0549",
+			EPRINT((env, DB_STR_A("0529",
 			    "Page %lu: bad meta-data flags value %#lx",
 			    "%lu %#lx"), (u_long)PGNO_BASE_MD,
 			    (u_long)meta->metaflags));

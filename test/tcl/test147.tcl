@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates. All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -22,9 +22,6 @@ proc test147 { method {tnum "147"} args } {
 		return
 	}
 
-	# hpargs will contain arguments for homedir and password.
-	set hpargs ""
-
 	# Set up environment and home folder.
 	set env NULL
 	set secenv 0
@@ -43,7 +40,10 @@ proc test147 { method {tnum "147"} args } {
 		append args " -cachesize {0 1048576 3} "
 		set testfile $testdir/test$tnum.db
 	}
+	# hpargs will contain arguments for homedir and password.
 	set hpargs "-h $testdir"
+	# rgargs will contain arguments for region directory and password.
+	set rgargs "-h $testdir -p ."
 	set testfilename test$tnum
 
 	cleanup $testdir $env
@@ -52,14 +52,24 @@ proc test147 { method {tnum "147"} args } {
 	# Append password arg.
 	if { $encrypt != 0 || $secenv != 0 } {
 		append hpargs " -P $passwd"
+		append rgargs " -P $passwd"
 	}
 
 	# stat_file_args contains arguments used in command 'db_stat -d file'.
 	set stat_file_args "-d test$tnum.db"
 
 	# Create db and fill it with data.
-	set db [eval {berkdb_open -create -mode 0644} $args\
-	    $omethod $testfile]
+	set ptindex [lsearch -exact $args "-partition"]
+	if { [is_hash $method] == 1 && $ptindex == -1 } {
+		set db [eval {berkdb_open -create -mode 0644} $args\
+		    $omethod $testfile $testfilename]
+	} elseif { [is_btree $method] == 1 && $ptindex == -1 } {
+		set db [eval {berkdb_open -create -mode 0644} $args\
+		    $omethod $testfile $testfilename]
+	} else {
+		set db [eval {berkdb_open -create -mode 0644} $args\
+		    $omethod $testfile]
+	}
 	error_check_good db_open [is_valid_db $db] TRUE
 
 	error_check_good db_fill [populate $db $method "" 1000 0 0] 0
@@ -83,12 +93,26 @@ proc test147 { method {tnum "147"} args } {
 	# Do not acquire shared region mutexes while running.
 	test147_execmd "$binname $stat_file_args -N $hpargs $std_redirect"
 
-	# Test verify
-	if { $eindex == -1 || ![is_repenv $env] } {
-		test147_execmd "$binname $stat_file_args \
-		    -S o $hpargs $std_redirect"
-		test147_execmd "$binname $stat_file_args \
-		    -S v $hpargs $std_redirect"
+	# Display statistics for the specified database.
+	if { [is_hash $method] == 1 && $ptindex == -1 } {
+		test147_execmd "$binname \
+		    $stat_file_args -s $testfilename $hpargs $std_redirect"
+		if { $eindex == -1 || ![is_repenv $env] } {
+			test147_execmd "$binname $stat_file_args \
+		    	    -s $testfilename -S o $hpargs $std_redirect"
+			test147_execmd "$binname $stat_file_args \
+		    	    -s $testfilename -S v $hpargs $std_redirect"
+		}
+	} 
+	if { [is_btree $method] == 1 && $ptindex == -1 } {
+		test147_execmd "$binname \
+		    $stat_file_args -s $testfilename $hpargs $std_redirect"
+		if { $eindex == -1 || ![is_repenv $env] } {
+			test147_execmd "$binname $stat_file_args \
+		    	    -s $testfilename -S o $hpargs $std_redirect"
+			test147_execmd "$binname $stat_file_args \
+		    	    -s $testfilename -S v $hpargs $std_redirect"
+		}
 	}
 
 	puts "Test$tnum: testing db_stat without -d arg."
@@ -99,23 +123,35 @@ proc test147 { method {tnum "147"} args } {
 	set end_flags [list "" "-a" "-N" "-Z"]
 
 	foreach stflag $flaglist {
-		if { $env != "NULL" && $stflag == "L A" && ![is_logenv $env] } {
+		if { $env != "NULL" && \
+		    $stflag == "L A" && ![is_logenv $env] } {
 			puts "\tTest$tnum: skip '-L A' in non-log env."
 			continue
 		}
 		foreach endflag $end_flags {
 			set combinearg $hpargs
 			if { $endflag != "" } {
-				set combinearg " $endflag $hpargs"
+				set combinearg "$endflag $hpargs"
 			}
 			test147_execmd\
 			    "$binname -$stflag $combinearg $std_redirect"
+
+			# Test for case '-p region_dir'.
+			# Skip the test if there is no environment.
+			set combinearg $rgargs
+			if { $endflag != "" } {
+				set combinearg "$endflag $rgargs"
+			}
+			if { $env == "NULL" } {
+				continue
+			}
+			test147_execmd "$binname\
+			    -$stflag $combinearg $std_redirect"
 		}
 	}
-
 	# Skip these flags when db is not in environment.
 	foreach stflag $flaglist_env {
-		if { $env == "NULL" } {
+		if { $env == "NULL" } { 
 			break
 		}
 		if { $stflag == "C A" && ![is_lockenv $env] } {
@@ -125,10 +161,22 @@ proc test147 { method {tnum "147"} args } {
 		foreach endflag $end_flags {
 			set combinearg $hpargs
 			if { $endflag != "" } {
-				set combinearg " $endflag $hpargs"
+				set combinearg "$endflag $hpargs"
 			}
 			test147_execmd\
 			    "$binname -$stflag $combinearg $std_redirect"
+
+			set combinearg $rgargs
+			if { $endflag != "" } {
+				set combinearg "$endflag $rgargs"
+			}
+			# Test for case '-p region_dir'.
+			# Skip the test if there is no environment.
+			if { $env == "NULL" } {
+				continue
+			}
+			test147_execmd "$binname\
+			    -$stflag $combinearg $std_redirect"
 		}
 	}
 
@@ -143,8 +191,14 @@ proc test147 { method {tnum "147"} args } {
 			continue
 		}
 		test147_execmd "$binname -$stflag $hpargs $std_redirect"
-	}
 
+		# Test for case '-p region_dir'.
+		# Skip the test if there is no environment.
+		if { $env == "NULL" } {
+			continue
+		}
+		test147_execmd "$binname -$stflag $rgargs $std_redirect"
+	}
 	foreach stflag $flaglist2_env {
 		if { $env == "NULL" } {
 			break
@@ -170,6 +224,22 @@ proc test147 { method {tnum "147"} args } {
 			continue
 		}
 		test147_execmd "$binname -$stflag $hpargs $std_redirect"
+
+		# Test for case '-p region_dir'.
+		# Skip the test if there is no environment.
+		if { $env == "NULL" } {
+			continue
+		}
+		test147_execmd "$binname -$stflag $rgargs $std_redirect"
+	}
+
+	# Test for the case '-M h'.
+	# Display buffers within hash chains.
+	# Skip the test if there is no environment.
+	set stflag "M h"
+	if { $env != "NULL" } {
+		test147_execmd "$binname -$stflag $hpargs $std_redirect"
+		test147_execmd "$binname -$stflag $rgargs $std_redirect"
 	}
 
 	# Check usage info is contained in error message.
@@ -190,11 +260,11 @@ proc test147 { method {tnum "147"} args } {
 		append binname $EXE
 	}
 
-	set flaglist [list "-N" "-r" "-V" ""]
+	set flaglist [list "-N" "-r" "-V" "-D 100" ""]
 	foreach lgpflag $flaglist {
 		set combinearg $hpargs
 		if { $lgpflag != "" } {
-			set combinearg " $lgpflag $hpargs"
+			set combinearg "$lgpflag $hpargs"
 		}
 		test147_execmd "$binname $combinearg $std_redirect"
 		# Test with given start and end LSN.

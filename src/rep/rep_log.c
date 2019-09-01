@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -14,7 +14,7 @@
 static int __rep_chk_newfile __P((ENV *, DB_LOGC *, REP *,
     __rep_control_args *, int));
 static int __rep_log_split __P((ENV *, DB_THREAD_INFO *,
-    __rep_control_args *, DBT *, DB_LSN *, DB_LSN *, DB_LSN *));
+    __rep_control_args *, DBT *, DB_LSN *, DB_LSN *));
 
 /*
  * __rep_allreq --
@@ -230,10 +230,10 @@ err:
  *      Handle a REP_LOG/REP_LOG_MORE message.
  *
  * PUBLIC: int __rep_log __P((ENV *, DB_THREAD_INFO *,
- * PUBLIC:     __rep_control_args *, DBT *, int, time_t, DB_LSN *, DB_LSN *));
+ * PUBLIC:     __rep_control_args *, DBT *, int, time_t, DB_LSN *));
  */
 int
-__rep_log(env, ip, rp, rec, eid, savetime, ret_lsnp, ckp_lsnp)
+__rep_log(env, ip, rp, rec, eid, savetime, ret_lsnp)
 	ENV *env;
 	DB_THREAD_INFO *ip;
 	__rep_control_args *rp;
@@ -241,7 +241,6 @@ __rep_log(env, ip, rp, rec, eid, savetime, ret_lsnp, ckp_lsnp)
 	int eid;
 	time_t savetime;
 	DB_LSN *ret_lsnp;
-	DB_LSN *ckp_lsnp;
 {
 	DB_LOG *dblp;
 	DB_LSN last_lsn, lsn;
@@ -257,8 +256,7 @@ __rep_log(env, ip, rp, rec, eid, savetime, ret_lsnp, ckp_lsnp)
 	dblp = env->lg_handle;
 	lp = dblp->reginfo.primary;
 
-	ret = __rep_apply(env, ip, rp, rec, ret_lsnp, &is_dup, &last_lsn,
-	    ckp_lsnp);
+	ret = __rep_apply(env, ip, rp, rec, ret_lsnp, &is_dup, &last_lsn);
 	switch (ret) {
 	/*
 	 * We're in an internal backup and we've gotten
@@ -350,17 +348,16 @@ out:
  *      Handle a REP_BULK_LOG message.
  *
  * PUBLIC: int __rep_bulk_log __P((ENV *, DB_THREAD_INFO *,
- * PUBLIC:     __rep_control_args *, DBT *, time_t, DB_LSN *, DB_LSN *));
+ * PUBLIC:     __rep_control_args *, DBT *, time_t, DB_LSN *));
  */
 int
-__rep_bulk_log(env, ip, rp, rec, savetime, ret_lsnp, ckp_lsnp)
+__rep_bulk_log(env, ip, rp, rec, savetime, ret_lsnp)
 	ENV *env;
 	DB_THREAD_INFO *ip;
 	__rep_control_args *rp;
 	DBT *rec;
 	time_t savetime;
 	DB_LSN *ret_lsnp;
-	DB_LSN *ckp_lsnp;
 {
 	DB_LSN last_lsn;
 	DB_REP *db_rep;
@@ -370,7 +367,7 @@ __rep_bulk_log(env, ip, rp, rec, savetime, ret_lsnp, ckp_lsnp)
 	db_rep = env->rep_handle;
 	rep = db_rep->region;
 
-	ret = __rep_log_split(env, ip, rp, rec, ret_lsnp, &last_lsn, ckp_lsnp);
+	ret = __rep_log_split(env, ip, rp, rec, ret_lsnp, &last_lsn);
 	switch (ret) {
 	/*
 	 * We're in an internal backup and we've gotten
@@ -396,14 +393,13 @@ __rep_bulk_log(env, ip, rp, rec, savetime, ret_lsnp, ckp_lsnp)
  * master and convert it into individual __rep_apply requests.
  */
 static int
-__rep_log_split(env, ip, rp, rec, ret_lsnp, last_lsnp, ckp_lsnp)
+__rep_log_split(env, ip, rp, rec, ret_lsnp, last_lsnp)
 	ENV *env;
 	DB_THREAD_INFO *ip;
 	__rep_control_args *rp;
 	DBT *rec;
 	DB_LSN *ret_lsnp;
 	DB_LSN *last_lsnp;
-	DB_LSN *ckp_lsnp;
 {
 	DBT logrec;
 	DB_LSN next_new_lsn, save_lsn, tmp_lsn;
@@ -467,7 +463,7 @@ __rep_log_split(env, ip, rp, rec, ret_lsnp, last_lsnp, ckp_lsnp)
 		}
 		is_dup = 0;
 		ret = __rep_apply(env, ip,
-		    &tmprp, &logrec, &tmp_lsn, &is_dup, last_lsnp, ckp_lsnp);
+		    &tmprp, &logrec, &tmp_lsn, &is_dup, last_lsnp);
 		VPRINT(env, (env, DB_VERB_REP_MISC,
 		    "log_split: rep_apply ret %d, dup %d, tmp_lsn [%lu][%lu]",
 		    ret, is_dup, (u_long)tmp_lsn.file, (u_long)tmp_lsn.offset));

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -86,7 +86,6 @@ BEGIN child		42	12
 ARG	child	u_int32_t	lx
 POINTER	c_lsn	DB_LSN *	lu
 END
-
 
 /*
  * This is the standard log operation for prepare.

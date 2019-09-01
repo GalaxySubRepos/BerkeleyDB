@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include "sqliteInt.h"
@@ -13,6 +13,7 @@
 
 extern int __log_current_lsn(ENV *, DB_LSN *, u_int32_t *, u_int32_t *);
 static sqlite3_file nullfile;
+static sqlite3_vfs nullvfs;
 
 int sqlite3PagerIsMemdb(Pager *pPager) { return 0; }
 int sqlite3PagerJournalMode(Pager *pPager, int mode) { return 0; }
@@ -55,6 +56,29 @@ int sqlite3PagerPagecount(Pager *pPager, int *pCount) {
 
 sqlite3_file *sqlite3PagerFile(Pager *pPager) {
 	return &nullfile;
+}
+
+sqlite3_file *sqlite3PagerJrnlFile(Pager *pPager) {
+	return &nullfile;
+}
+
+sqlite3_vfs *sqlite3PagerVfs(Pager *pPager) {
+	return &nullvfs;
+}
+
+/*
+** Flush all unreferenced dirty pages to disk.
+*/
+int sqlite3PagerFlush(Pager *pPager) {
+	int ret;
+	Btree *p = (Btree *)pPager;
+	BtShared *pBt = p->pBt;
+
+	if (pBt->dbStorage == DB_STORE_INMEM)
+		return SQLITE_OK;
+	if ((ret = pDbEnv->memp_sync(pDbEnv, 0)) != SQLITE_OK)
+		return ret;
+	return SQLITE_OK;
 }
 
 /*
@@ -200,7 +224,7 @@ int sqlite3PagerCheckpoint(Pager *pPager) {
 ** error (SQLITE_BUSY) is returned and the log connection is not closed.
 ** If successful, the EXCLUSIVE lock is not released before returning.
 */
-int sqlite3PagerCloseWal(Pager *pPager) {
+int sqlite3PagerCloseWal(Pager *pPager, sqlite3 *db) {
 	/*
 	 * TODO: Should we checkpoint here, or return SQLITE_BUSY?
 	 * Berkeley DB always operates in WAL mode, so it's not a useful op.
@@ -275,9 +299,9 @@ int *sqlite3PagerStats(Pager *pPager) {
 	count++;
 	return a;
 }
+#endif
 
-/* SQLite redefines sqlite3PagerAcquire for this implementation. */
-int sqlite3PagerGet(Pager *pPager, Pgno pgno, DbPage **ppPage)
+int sqlite3PagerGet(Pager *pPager, Pgno pgno, DbPage **ppPage, int flags)
 {
 	return SQLITE_NOMEM;
 }
@@ -287,7 +311,6 @@ void *sqlite3PagerGetData(DbPage *pPg)
 }
 void sqlite3PagerUnref(DbPage *pPg)
 {}
-#endif
 
 #ifdef ANDROID
 SQLITE_API void sqlite3_get_pager_stats(sqlite3_int64 *totalBytesOut,

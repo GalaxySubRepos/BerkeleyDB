@@ -1,4 +1,11 @@
-/* The author disclaims copyright to this source code.
+/*
+ * Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+ * reserved.
+ * 
+ * This copyrighted work includes portions of SQLite received 
+ * with the following notice:
+ * 
+ *The author disclaims copyright to this source code.
  *
  * This is an SQLite module implementing full-text search.
  */

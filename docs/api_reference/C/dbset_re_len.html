@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;set_re_len()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;set_re_len()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_re_delim.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_re_len"></a>DB-&gt;set_re_len()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_re_len"></a>
+        <span>DB-&gt;set_re_len()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -55,7 +61,10 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
     </p>
       <p>
          Any records added to the database that are less than <span class="bold"><strong>re_len</strong></span> bytes long are automatically padded (see
-         <a class="xref" href="dbset_re_pad.html" title="DB-&gt;set_re_pad()">DB-&gt;set_re_pad()</a>  for
+         <a class="xref" href="dbset_re_pad.html" title="DB-&gt;set_re_pad()">
+        <span>DB-&gt;set_re_pad()</span>
+        
+    </a>  for
          more information).
     </p>
       <p>
@@ -70,9 +79,15 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
     </p>
       <p>
          The <code class="methodname">DB-&gt;set_re_len()</code> method may not be called after the 
-         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method is called. If
+         <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method is called. If
          the database already exists when 
-         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  is called, the
+         <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  is called, the
          information specified to <code class="methodname">DB-&gt;set_re_len()</code> will be ignored.
     </p>
       <p>
@@ -87,7 +102,7 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235982032"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488436736"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -95,7 +110,7 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235965040"></a>re_len</h4>
+                <h4 class="title"><a id="idm140113488417328"></a>re_len</h4>
               </div>
             </div>
           </div>
@@ -109,7 +124,7 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235990720"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113488443632"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -125,12 +140,15 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235952784"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113488403232"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -139,7 +157,7 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235961872"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488405312"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -151,7 +169,7 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236140752"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113488413984"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -171,11 +189,17 @@ DB-&gt;set_re_len(DB *db, u_int32_t re_len);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_re_pad.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;set_re_delim() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;set_re_delim()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_re_pad()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_re_pad()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

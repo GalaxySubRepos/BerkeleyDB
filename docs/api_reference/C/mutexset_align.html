@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;mutex_set_align()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;mutex_set_align()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mutexlock.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mutexset_align"></a>DB_ENV-&gt;mutex_set_align()</h2>
+            <h2 class="title" style="clear: both"><a id="mutexset_align"></a>
+        <span>DB_ENV-&gt;mutex_set_align()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -67,9 +73,15 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;mutex_set_align()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is
          called. If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  is called, the
          information specified to <code class="methodname">DB_ENV-&gt;mutex_set_align()</code> will be ignored.
     </p>
       <p>
@@ -84,7 +96,7 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230015648"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113482341936"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -92,7 +104,7 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230063232"></a>align</h4>
+                <h4 class="title"><a id="idm140113482341200"></a>align</h4>
               </div>
             </div>
           </div>
@@ -106,7 +118,7 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229998352"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113482381360"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -122,12 +134,15 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229988320"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113482311296"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -136,7 +151,7 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230031104"></a>Class</h3>
+              <h3 class="title"><a id="idm140113482313376"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -148,7 +163,7 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230008096"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113482340240"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -168,11 +183,17 @@ DB_ENV-&gt;mutex_set_align(DB_ENV *dbenv, u_int32_t align);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="mutexset_increment.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;mutex_lock() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;mutex_lock()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;mutex_set_increment()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;mutex_set_increment()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

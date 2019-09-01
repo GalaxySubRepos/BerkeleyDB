@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -213,7 +213,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	GET_BLOB_FILE_ID(env, meta, blob_id, t_ret);
 	if (t_ret != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1187",
+		EPRINT((env, DB_STR_A("1173",
 		    "Page %lu: external file id overflow.", "%lu"),
 		    (u_long)pgno));
 		if (ret == 0)
@@ -221,7 +221,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	}
 	if (blob_id < 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("5502",
+		EPRINT((env, DB_STR_A("5503",
 		    "Page %lu: invalid external file id.", "%lu"),
 		    (u_long)pgno));
 	}
@@ -229,7 +229,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	GET_BLOB_SDB_ID(env, meta, blob_id, t_ret);
 	if (t_ret != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1188",
+		EPRINT((env, DB_STR_A("1179",
 		    "Page %lu: external file subdatabase id overflow.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
@@ -237,7 +237,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	}
 	if (blob_id < 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("5503",
+		EPRINT((env, DB_STR_A("5504",
 		    "Page %lu: invalid external file subdatabase id.", "%lu"),
 		    (u_long)pgno));
 	}
@@ -259,7 +259,7 @@ __bam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	GET_BLOB_SDB_ID(env, meta, blob_id, t_ret);
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1201",
+		EPRINT((env, DB_STR_A("1200",
 	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
@@ -539,8 +539,8 @@ __ram_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 	memset(pagelayout, 0, dbp->pgsize);
 	inp = P_INP(dbp, h);
 	for (i = 0; i < NUM_ENT(h); i++) {
-		if ((u_int8_t *)inp + i >= (u_int8_t *)h + himark) {
-			EPRINT((env, DB_STR_A("1046",
+		if ((u_int8_t *)(inp + i) >= (u_int8_t *)h + himark) {
+			EPRINT((env, DB_STR_A("0563",
 			    "Page %lu: entries listing %lu overlaps data",
 			    "%lu %lu"), (u_long)pgno, (u_long)i));
 			ret = DB_VERIFY_BAD;
@@ -552,7 +552,7 @@ __ram_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 		 * somewhere after the inp array and before the end of the
 		 * page.
 		 */
-		if (offset <= (u_int32_t)((u_int8_t *)inp + i -
+		if (offset <= (u_int32_t)((u_int8_t *)(inp + i) -
 		    (u_int8_t *)h) ||
 		    offset > (u_int32_t)(dbp->pgsize - RINTERNAL_SIZE)) {
 			isbad = 1;
@@ -650,6 +650,7 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 	isbad = isdupitem = 0;
 	nentries = 0;
 	file_id = sdb_id = 0;
+	pagelayout = NULL;
 	memset(&child, 0, sizeof(VRFY_CHILDINFO));
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
@@ -757,10 +758,6 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 			break;
 		case B_BLOB:
 			endoff = offset + BBLOB_SIZE - 1;
-			if (endoff >= dbp->pgsize) {
-				isbad = 1;
-				goto err;
-			}
 			break;
 		case B_DUPLICATE:
 			/*
@@ -789,12 +786,17 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 			break;
 		}
 
+		if (endoff >= dbp->pgsize) {
+			isbad = 1;
+			goto err;
+		}
+
 		/*
 		 * If this is an onpage duplicate key we've seen before,
 		 * the end had better coincide too.
 		 */
 		if (isdupitem && pagelayout[endoff] != VRFY_ITEM_END) {
-			EPRINT((env, DB_STR_A("1052",
+			EPRINT((env, DB_STR_A("1051",
 			    "Page %lu: duplicated item %lu",
 			    "%lu %lu"), (u_long)pgno, (u_long)i));
 			isbad = 1;
@@ -864,8 +866,8 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 			}
 			file_id = (db_seq_t)bl.file_id;
 			sdb_id = (db_seq_t)bl.sdb_id;
-			if (file_id < 0 || sdb_id < 0 
-			    || (file_id == 0 && sdb_id == 0)) {
+			if (file_id < 0 || sdb_id < 0 ||
+			    (file_id == 0 && sdb_id == 0)) {
 				isbad = 1;
 				EPRINT((dbp->env, DB_STR_A("1195",
 		    "Page %lu: invalid external dir ids %lld %lld at item %lu",
@@ -963,7 +965,7 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 					continue;
 
 				isbad = 1;
-				EPRINT((env, DB_STR_A("1059",
+				EPRINT((env, DB_STR_A("1049",
 				    "Page %lu: gap between items at offset %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 				/* Find the end of the gap */
@@ -1010,24 +1012,24 @@ __bam_vrfy_inp(dbp, vdp, h, pgno, nentriesp, flags)
 				 * end.  Overlap.
 				 */
 				isbad = 1;
-				EPRINT((env, DB_STR_A("1062",
+				EPRINT((env, DB_STR_A("1061",
 				    "Page %lu: overlapping items at offset %lu",
 				    "%lu %lu"), (u_long)pgno, (u_long)i));
 				break;
 			}
 
-	__os_free(env, pagelayout);
-
 	/* Verify HOFFSET. */
 	if ((db_indx_t)himark != HOFFSET(h)) {
-		EPRINT((env, DB_STR_A("1063",
+		EPRINT((env, DB_STR_A("1050",
 		    "Page %lu: bad HOFFSET %lu, appears to be %lu",
 		    "%lu %lu %lu"), (u_long)pgno, (u_long)HOFFSET(h),
 		    (u_long)himark));
 		isbad = 1;
 	}
 
-err:	if (nentriesp != NULL)
+err:	__os_free(env, pagelayout);
+
+	if (nentriesp != NULL)
 		*nentriesp = nentries;
 
 	if ((t_ret = __db_vrfy_putpageinfo(env, vdp, pip)) != 0 && ret == 0)
@@ -1745,10 +1747,9 @@ bad_prev:				isbad = 1;
 			    (ret = __db_vrfy_ovfl_structure(dbp, vdp,
 			    child->pgno, child->tlen,
 			    flags | DB_ST_OVFL_LEAF)) != 0) {
-				if (ret == DB_VERIFY_BAD) {
+				if (ret == DB_VERIFY_BAD)
 					isbad = 1;
-					break;
-				} else
+				else
 					goto done;
 			}
 
@@ -1841,7 +1842,7 @@ bad_prev:				isbad = 1;
 				if (F_ISSET(pip, VRFY_DUPS_UNSORTED) &&
 				    LF_ISSET(DB_ST_DUPSORT)) {
 					isbad = 1;
-					EPRINT((env, DB_STR_A("1080",
+					EPRINT((env, DB_STR_A("0569",
 		    "Page %lu: unsorted duplicate set in sorted-dup database",
 					    "%lu"), (u_long)pgno));
 				}
@@ -1903,9 +1904,10 @@ bad_prev:				isbad = 1;
 			if ((ret = __bam_vrfy_subtree(dbp, vdp, child->pgno,
 			    NULL, NULL, flags, &child_level, &child_nrecs,
 			    &child_relen)) != 0) {
-				if (ret == DB_VERIFY_BAD)
+				if (ret == DB_VERIFY_BAD) {
 					isbad = 1;
-				else
+					break;
+				} else
 					goto done;
 			}
 

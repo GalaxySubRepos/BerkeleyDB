@@ -1,49 +1,32 @@
 @echo off
 ::  Helper script to build BDB products for binary release
 ::  Assumes current directory is <product>/dist
-::  Current version of Visual Studio for binaries is 2008.
+::  Current version of Visual Studio for binaries is 2010.
 ::  This is enforced but if testing is desired for other releases
 ::  it's possible to edit.
 ::
 
 :: Try to find different versions of Visual Studio
-
-::call :TryBat "%VS80COMNTOOLS%\vsvars32.bat" && goto VS80
-call :TryBat "%VS90COMNTOOLS%\vsvars32.bat" && goto VS90
+call :TryBat "%VS100COMNTOOLS%\..\..\VC\vcvarsall.bat" && goto VS100
 
 :: no luck
 goto batnotfound
 
-:VS80
-echo Using Visual Studio format 8.0 (Visual Studio 2005)
-@echo "" > winbld.out
-@echo devenv /build Release|%1 ..\build_windows\Berkeley_DB.sln
-@devenv /build Release ..\build_windows\Berkeley_DB.sln >> winbld.out
-@echo devenv /build Release|%1 ..\build_windows\Berkeley_DB.sln /project VS8\db_java.vcproj
-@devenv /build Release|%1 ..\build_windows\Berkeley_DB.sln /project VS8\db_java.vcproj >> winbld.out
-@echo devenv /build Release|%1 ..\build_windows\BDB_dotNet.sln
-@devenv /build Release|%1 ..\build_windows\BDB_dotNet.sln >> winbld.out
-goto :eof
-
-:VS90
+:VS100
 @echo Note these build commands will not work with the express 
-@echo editions of VS2008 which do not appear to include "devenv."
+@echo editions of VS2010 which do not appear to include "devenv."
 @echo Express editions can be built with lines like:
-@echo "VCExpress Berkeley_DB.sln /build" or
-@echo "VCSExpress BDB_dotNet.sln /build"
+@echo "VCExpress Berkeley_DB_vs2010.sln /build" or
+@echo "VCSExpress BDB_dotNet_vs2010.sln /build"
 ::goto :batnotfound
-@echo Using Visual Studio format 9.0 (Visual Studio 2008)
+@echo Using Visual Studio format 10.0 (Visual Studio 2010)
 @echo "" > winbld.out
-@echo devenv /upgrade ..\build_windows\Berkeley_DB.sln
-@devenv /upgrade ..\build_windows\Berkeley_DB.sln >> winbld.out
-@echo devenv /build "Release|%1" ..\build_windows\Berkeley_DB.sln
-@devenv /build "Release|%1" ..\build_windows\Berkeley_DB.sln >> winbld.out
-@echo devenv /build "Release|%1" ..\build_windows\Berkeley_DB.sln /project VS8\db_java.vcproj
-@devenv /build "Release|%1" ..\build_windows\Berkeley_DB.sln /project VS8\db_java.vcproj >> winbld.out
-@echo devenv /upgrade ..\build_windows\BDB_dotNet.sln
-@devenv /upgrade ..\build_windows\BDB_dotNet.sln >> winbld.out
-@echo devenv /build "Release|%1" ..\build_windows\BDB_dotNet.sln
-@devenv /build "Release|%1" ..\build_windows\BDB_dotNet.sln >> winbld.out
+@echo devenv /build "Release|x64" ..\build_windows\Berkeley_DB_vs2010.sln
+@devenv /build "Release|x64" ..\build_windows\Berkeley_DB_vs2010.sln >> winbld.out
+@echo devenv ..\build_windows\Berkeley_DB_vs2010.sln /build "Release|x64" /project VS10\db_java.vcxproj
+@devenv ..\build_windows\Berkeley_DB_vs2010.sln /build "Release|x64" /project VS10\db_java.vcxproj >> winbld.out
+@echo devenv /build "Release|x64" ..\build_windows\BDB_dotNet_vs2010.sln
+@devenv /build "Release|x64" ..\build_windows\BDB_dotNet_vs2010.sln >> winbld.out
 goto :eof
 
 :batnotfound
@@ -58,7 +41,7 @@ goto end
 :TryBat
 :: Filename = "%1"
 if not exist %1 exit /b 1
-call %1
+call %1 x64
 exit /b 0
 goto :eof
 

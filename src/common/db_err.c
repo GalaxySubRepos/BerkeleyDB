@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -343,7 +343,7 @@ db_strerror(error)
 		return (DB_STR("0247",
 "DB_META_CHKSUM_FAIL: Checksum mismatch detected on a database metadata page"));
 	case DB_NOSERVER:
-		return (DB_STR("0072",
+		return (DB_STR("3655",
     "DB_NOSERVER: No message dispatch call-back function has been configured"));
 	case DB_NOTFOUND:
 		return (DB_STR("0073",
@@ -366,6 +366,9 @@ db_strerror(error)
 	case DB_REP_IGNORE:
 		return (DB_STR("0079",
 		    "DB_REP_IGNORE: Replication record/operation ignored"));
+	case DB_REP_INELECT:
+		return (DB_STR("0252",
+		    "DB_REP_INELECT: Replication election in progress"));
 	case DB_REP_ISPERM:
 		return (DB_STR("0080",
 		    "DB_REP_ISPERM: Permanent record written"));
@@ -407,6 +410,9 @@ db_strerror(error)
 	case DB_VERSION_MISMATCH:
 		return (DB_STR("0091",
 	    "DB_VERSION_MISMATCH: Database environment version mismatch"));
+	case DB_SYSTEM_MEM_MISSING:
+		return (DB_STR("5509",
+    "DB_SYSTEM_MEM_MISSING: A required shared memory segment was not found"));
 	default:
 		break;
 	}
@@ -554,7 +560,7 @@ __db_errcall(dbenv, error, error_set, fmt, ap)
 	if ((deferred_mb = __db_deferred_get()) != NULL &&
 	    (len = deferred_mb->cur - deferred_mb->buf) != 0) {
 		p += snprintf(p,
-		    (size_t)(end - p), "\nErrors during this API call:");
+		    (size_t)(end - p), "\nErrors during this API call: ");
 		if (len > (end - p))
 			len = end - p;
 		if (len != 0) {
@@ -629,7 +635,7 @@ __db_errfile(dbenv, error, error_set, fmt, ap)
 	    deferred_mb->cur != deferred_mb->buf) {
 		defmsgs =
 		    __db_fmt_quote(deferred_mb->buf, deferred_mb->len, NULL);
-		defintro = "\nErrors during this API call:";
+		defintro = "\nErrors during this API call: ";
 		/*
 		 * If there are more deferred messages than will be displayed
 		 * change the introductory message to warn of the truncation.
@@ -638,7 +644,7 @@ __db_errfile(dbenv, error, error_set, fmt, ap)
 		    strlen(fmt) + strlen(sep2) + strlen(error_str));
 		if (deferred_mb->len + strlen(defintro) > room) {
 			defintro =
-			    "\nFirst recorded errors during this API call:";
+			    "\nFirst recorded errors during this API call: ";
 			memmove(defmsgs + room - 4, "...\n", 4);
 		}
 
@@ -1031,7 +1037,7 @@ __db_check_txn(dbp, txn, assoc_locker, read_op)
 open_err:
 	ret = USR_ERR(env, EINVAL);
 	if (F2_ISSET(dbp, DB2_AM_EXCL))
-	    __db_errx(env, DB_STR("0209",
+	    __db_errx(env, DB_STR("0749",
 "Exclusive database handles can only have one active transaction at a time."));
 	else
 		__db_errx(env, DB_STR("0101",
@@ -1266,7 +1272,7 @@ __db_space_err(dbp)
 	int ret;
 
 	ret = USR_ERR(dbp->env, ENOSPC);
-	__db_errx(dbp->env, DB_STR_A("0112",
+	__db_errx(dbp->env, DB_STR_A("3023",
 	    "%s: file limited to %lu pages", "%s %lu"),
 	    dbp->fname, (u_long)dbp->mpf->mfp->maxpgno);
 	return (ret);
@@ -1303,9 +1309,11 @@ __db_failed(env, msg, pid, tid)
 /*
  * __env_failure_remember --
  *	If this failure of a process in the environment is about to set panic
- *	for the first time, record that a crashed thread was thw culprit.
- *	Do nothing if panic has already been set. There are no mutexes here;
- *	in order to avoid hanging on any crashed threads.
+ *     for the first time, record that a crashed thread was thw culprit.  Do
+ *     nothing if panic has already been set, or if the shared environment
+ *     region is no longer the one which we opened (i.e., our env handle is
+ *     "stale".  It does not get any mutexes; to avoid hanging on any crashed
+ *	threads.
  *
  * PUBLIC: int __env_failure_remember __P((const ENV *, const char *));
  */
@@ -1317,8 +1325,13 @@ __env_failure_remember(env, reason)
 	REGENV *renv;
 
 	renv = env->reginfo->primary;
-	if (renv == NULL || renv->panic || renv->failure_panic)
+	if (renv == NULL || renv->envid != env->envid || renv->failure_panic) {
+		if (renv->envid != env->envid)
+			DB_DEBUG_MSG(env,
+			    "failure_remember envid panic %u != %u",
+			    renv->envid, env->envid);
 		return (0);
+	}
 	renv->failure_panic = 1;
 	if (renv->failure_symptom[0] == '\0') {
 		(void)strncpy(renv->failure_symptom,
@@ -1459,6 +1472,7 @@ __db_deferred_discard()
 {
 	DB_ENV *dbenv;
 	LOG *lp;
+	REGENV *renv;
 	db_timespec now;
 	pid_t pid;
 	db_threadid_t tid;
@@ -1469,6 +1483,7 @@ __db_deferred_discard()
 		return (0);
 
 	lp = NULL;
+	renv = NULL;
 	if (env == NULL) {
 		dbenv = NULL;
 		threadid[0] = '\0';
@@ -1476,6 +1491,8 @@ __db_deferred_discard()
 		dbenv = env->dbenv;
 		dbenv->thread_id(dbenv, &pid, &tid);
 		(void)dbenv->thread_id_string(dbenv, pid, tid, threadid);
+		if (env->reginfo != NULL)
+			renv = env->reginfo->primary;
 		if (LOGGING_ON(env) && !IS_RECOVERING(env))
 			lp = env->lg_handle->reginfo.primary;
 	}
@@ -1487,6 +1504,19 @@ __db_deferred_discard()
 	if (lp != NULL)
 		__db_msgadd(env, mb, " lsn [%lu][%lu]",
 		    (u_long)lp->lsn.file, (u_long)lp->lsn.offset);
+       if (renv != NULL) {
+	       __db_msgadd(env, mb, " envid %x", renv->envid);
+		if (renv->magic != DB_REGION_MAGIC)
+		       __db_msgadd(env, mb, " bad magic %x", renv->magic);
+		if (renv->envid != env->envid ||
+		   renv->reg_panic || renv->failure_panic)
+		       __db_msgadd(env, mb,
+			   " panic ids %x : %x; reg %d fail %d", renv->envid,
+			   env->envid, renv->reg_panic, renv->failure_panic);
+		if (renv->failure_symptom[0] != '\0')
+		       __db_msgadd(env, mb, " symptom %s",
+			   renv->failure_symptom);
+       }
 
 #if defined(HAVE_BACKTRACE) && defined(HAVE_BACKTRACE_SYMBOLS)
 	/*

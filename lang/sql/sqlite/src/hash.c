@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2001 September 22
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -55,8 +61,12 @@ void sqlite3HashClear(Hash *pH){
 static unsigned int strHash(const char *z){
   unsigned int h = 0;
   unsigned char c;
-  while( (c = (unsigned char)*z++)!=0 ){
-    h = (h<<3) ^ h ^ sqlite3UpperToLower[c];
+  while( (c = (unsigned char)*z++)!=0 ){     /*OPTIMIZATION-IF-TRUE*/
+    /* Knuth multiplicative hashing.  (Sorting & Searching, p. 510).
+    ** 0x9e3779b1 is 2654435761 which is the closest prime number to
+    ** (2**32)*golden_ratio, where golden_ratio = (sqrt(5) - 1)/2. */
+    h += sqlite3UpperToLower[c];
+    h *= 0x9e3779b1;
   }
   return h;
 }
@@ -148,7 +158,7 @@ static HashElem *findElementWithHash(
   int count;                     /* Number of elements left to test */
   unsigned int h;                /* The computed hash */
 
-  if( pH->ht ){
+  if( pH->ht ){   /*OPTIMIZATION-IF-TRUE*/
     struct _ht *pEntry;
     h = strHash(pKey) % pH->htsize;
     pEntry = &pH->ht[h];

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;get_type()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;get_type()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbget_slices.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbget_type"></a>DB-&gt;get_type()</h2>
+            <h2 class="title" style="clear: both"><a id="dbget_type"></a>
+        <span>DB-&gt;get_type()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -46,12 +52,18 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
          The <code class="methodname">DB-&gt;get_type()</code> method returns the type of the underlying access
          method (and file format).  The type value is one of DB_BTREE, DB_HASH,
          DB_RECNO, or DB_QUEUE.  This value may be used to determine the type
-         of the database after a return from <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  
+         of the database after a return from <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  
          with the <span class="bold"><strong>type</strong></span> parameter set to DB_UNKNOWN.
     </p>
       <p>
              The <code class="methodname">DB-&gt;get_type()</code> method may not be called before the 
-             <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method is called.
+             <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DB-&gt;get_type()</code> <span>
@@ -65,7 +77,7 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815237355744"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113489826880"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -73,7 +85,7 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815237356992"></a>type</h4>
+                <h4 class="title"><a id="idm140113489825728"></a>type</h4>
               </div>
             </div>
           </div>
@@ -87,7 +99,7 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815237383904"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113489835472"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -103,12 +115,15 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815237345152"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113489813920"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called before <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> 
+                If the method was called before <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -117,7 +132,7 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815237357408"></a>Class</h3>
+              <h3 class="title"><a id="idm140113489826560"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -129,7 +144,7 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815237340928"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113489810016"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -149,11 +164,17 @@ DB-&gt;get_type(DB *db, DBTYPE *type);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbjoin.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;get_slices() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;get_slices()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;join()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;join()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

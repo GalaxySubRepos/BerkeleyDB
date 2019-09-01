@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
+ * See the file LICENSE for license information.
+ *
  * The following provides the information necessary to build Berkeley
  * DB on native Windows, and other Windows environments such as MinGW.
  */

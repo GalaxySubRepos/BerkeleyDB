@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -128,9 +128,13 @@ static const CFG_DESC config_descs[] = {
  * Here are the option-name to option-value mappings used by complex commands.
  */
 static const FN config_mem_init[] = {
+	{ (u_int32_t) DB_MEM_DATABASE,		"DB_MEM_DATABASE" },
+	{ (u_int32_t) DB_MEM_DATABASE_LENGTH,	"DB_MEM_DATABASE_LENGTH" },
+	{ (u_int32_t) DB_MEM_EXTFILE_DATABASE,	"DB_MEM_EXTFILE_DATABASE" },
 	{ (u_int32_t) DB_MEM_LOCK,		"DB_MEM_LOCK" },
 	{ (u_int32_t) DB_MEM_LOCKER,		"DB_MEM_LOCKER" },
 	{ (u_int32_t) DB_MEM_LOCKOBJECT,	"DB_MEM_LOCKOBJECT" },
+	{ (u_int32_t) DB_MEM_REP_SITE,		"DB_MEM_REP_SITE" },
 	{ (u_int32_t) DB_MEM_TRANSACTION,	"DB_MEM_TRANSACTION" },
 	{ (u_int32_t) DB_MEM_THREAD,		"DB_MEM_THREAD" },
 	{ (u_int32_t) DB_MEM_LOGID,		"DB_MEM_LOGID" },
@@ -147,7 +151,12 @@ static const FN config_rep_config[] = {
 	{ DB_REP_CONF_LEASE,		"db_rep_conf_lease" },
 	{ DB_REP_CONF_NOWAIT,		"db_rep_conf_nowait" },
 	{ DB_REPMGR_CONF_2SITE_STRICT,	"db_repmgr_conf_2site_strict" },
+	{ DB_REPMGR_CONF_DISABLE_POLL,
+		"db_repmgr_conf_disable_poll" },
+	{ DB_REPMGR_CONF_DISABLE_SSL,	"db_repmgr_conf_disable_ssl" },
 	{ DB_REPMGR_CONF_ELECTIONS,	"db_repmgr_conf_elections" },
+	{ DB_REPMGR_CONF_ENABLE_EPOLL,
+		"db_repmgr_conf_enable_epoll" },
 	{ DB_REPMGR_CONF_FORWARD_WRITES,
 		"db_repmgr_conf_forward_writes" },
 	{ DB_REPMGR_CONF_PREFMAS_CLIENT,
@@ -179,6 +188,18 @@ static const FN config_repmgr_ack_policy[] = {
 	{ DB_REPMGR_ACKS_ONE,		"db_repmgr_acks_one" },
 	{ DB_REPMGR_ACKS_ONE_PEER,	"db_repmgr_acks_one_peer" },
 	{ DB_REPMGR_ACKS_QUORUM,	"db_repmgr_acks_quorum" },
+	{ 0, NULL }
+};
+
+static const FN config_repmgr_ssl[] = {
+	{ DB_REPMGR_SSL_CA_CERT,	"db_repmgr_ssl_ca_cert"		},
+	{ DB_REPMGR_SSL_CA_DIR,		"db_repmgr_ssl_ca_dir"		},
+	{ DB_REPMGR_SSL_REPNODE_CERT,	"db_repmgr_ssl_repnode_cert" 	},
+	{ DB_REPMGR_SSL_REPNODE_PRIVATE_KEY,
+		"db_repmgr_ssl_repnode_private_key" 			},
+	{ DB_REPMGR_SSL_REPNODE_KEY_PASSWD,
+		"db_repmgr_ssl_repnode_key_passwd" 			},
+	{ DB_REPMGR_SSL_VERIFY_DEPTH,	"db_repmgr_ssl_verify_depth"	},
 	{ 0, NULL }
 };
 
@@ -273,6 +294,9 @@ static const FN config_set_verbose[] = {
 	{ DB_VERB_REP_TEST,	"db_verb_rep_test" },
 	{ DB_VERB_REPMGR_CONNFAIL,	"db_verb_repmgr_connfail" },
 	{ DB_VERB_REPMGR_MISC,	"db_verb_repmgr_misc" },
+	{ DB_VERB_REPMGR_SSL_ALL,	"db_verb_repmgr_ssl_all" },
+	{ DB_VERB_REPMGR_SSL_CONN,	"db_verb_repmgr_ssl_conn" },
+	{ DB_VERB_REPMGR_SSL_IO,	"db_verb_repmgr_ssl_io" },
 	{ DB_VERB_SLICE,	"db_verb_slice" },
 	{ DB_VERB_WAITSFOR,	"db_verb_waitsfor" },
 	{ 0, NULL}
@@ -426,9 +450,12 @@ __config_set_param(dbenv, desc, nf, argv, lc)
 	u_long uv1, uv2;
 	long lv1, lv2;
 	u_int port;
-	int i, onoff, bad, ret, t_ret;
-
+	int i, onoff, ret, t_ret;
+	
+#ifdef HAVE_REPLICATION_THREADS
+	int bad;
 	bad = 0;
+#endif
 	env = dbenv->env;
 	/* Handle simple configuration lines here. */
 	if (desc != NULL) {
@@ -534,6 +561,18 @@ __config_set_param(dbenv, desc, nf, argv, lc)
 		    __db_name_to_val(config_repmgr_ack_policy, argv[1])) == -1)
 			goto format;
 		return (__repmgr_set_ack_policy(dbenv, lv1));
+	}
+
+	/* repmgr_set_ssl_config db_repmgr_ssl_XXX */
+	if (strcasecmp(argv[0], "repmgr_set_ssl_config") == 0) {
+		if (nf != 3)
+			goto format;
+
+		if ((lv1 =
+		    __db_name_to_val(config_repmgr_ssl, argv[1])) == -1)
+			goto format;
+
+		return (__repmgr_set_ssl_config_pp(dbenv, lv1, argv[2]));
 	}
 
 	if (strcasecmp(argv[0], "repmgr_set_incoming_queue_max") == 0) {

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 
@@ -143,7 +143,8 @@ if { [is_substr $conf "heap"] } {
 global valid_releases
 array set valid_releases [list 44 "db-4.4.20" 45 "db-4.5.20" 46 "db-4.6.21" \
     47 "db-4.7.25" 48 "db-4.8.30" 50 "db-5.0.32" 51 "db-5.1.29" \
-    52 "db-5.2.42" 53 "db-5.3.28" 60 "db-6.0.30" 61 "db-6.1.26"]
+    52 "db-5.2.42" 53 "db-5.3.28" 60 "db-6.0.30" 61 "db-6.1.36" \
+    62 "db-6.2.32" 181 "db-18.1.25" ]
 
 # The variable test_recopts controls whether we open envs in
 # replication tests with the -recover flag.   The default is
@@ -437,6 +438,118 @@ proc run_std { { testname ALL } args } {
 	close $o
 }
 
+proc run_ssl { { testname ALL } args } {
+	global test_names
+	global one_test
+	global has_crypto
+	global valid_methods
+	source ./include.tcl
+
+	set one_test $testname
+	if { $one_test != "ALL" } {
+		# Source testparams again to adjust test_names.
+		source $test_path/testparams.tcl
+	}
+
+	set exflgs [eval extractflags $args]
+	set args [lindex $exflgs 0]
+	set flags [lindex $exflgs 1]
+
+	set display 1
+	set run 1
+	set am_only 0
+	set no_am 0
+	set std_only 1
+	set rflags {--}
+	foreach f $flags {
+		switch $f {
+			A {
+				set std_only 0
+			}
+			M {
+				set no_am 1
+				puts "run_std: all but access method tests."
+			}
+			m {
+				set am_only 1
+				puts "run_std: access method tests only."
+			}
+			n {
+				set display 1
+				set run 0
+				set rflags [linsert $rflags 0 "-n"]
+			}
+		}
+	}
+
+	if { $std_only == 1 } {
+		fileremove -f ALL.OUT
+
+		set o [open ALL.OUT a]
+		if { $run == 1 } {
+			puts -nonewline "Test suite run started at: "
+			puts [clock format [clock seconds] -format "%H:%M %D"]
+			puts [berkdb version -string]
+
+			puts -nonewline $o "Test suite run started at: "
+			puts $o [clock format [clock seconds] -format "%H:%M %D"]
+			puts $o [berkdb version -string]
+		}
+		close $o
+	}
+
+	set test_list {
+	{"automated repmgr tests" 	"repmgr_auto"}
+	{"repmgr multi-process"	"repmgr_multiproc"}
+	{"other repmgr tests" 	"repmgr_other"}
+	}
+
+	if { $am_only == 0 } {
+		foreach pair $test_list {
+			set msg [lindex $pair 0]
+			set cmd [lindex $pair 1]
+			puts "Running $msg tests"
+			if [catch {exec $tclsh_path << \
+			    "global one_test; set one_test $one_test; \
+			    global ssl_test_enabled; \
+			    set ssl_test_enabled 1; \
+			    source $test_path/test.tcl; \
+			    r $rflags $cmd" \
+			    >>& ALL.OUT } res] {
+				set o [open ALL.OUT a]
+				puts $o "FAIL: $cmd test: $res"
+				close $o
+			}
+		}
+	}
+
+	# If not actually running, no need to check for failure.
+	# If running in the context of the larger 'run_all' we don't
+	# check for failure here either.
+	if { $run == 0 || $std_only == 0 } {
+		return
+	}
+
+	set failed [check_output ALL.OUT]
+
+	set o [open ALL.OUT a]
+	if { $failed == 0 } {
+		puts "Regression Tests Succeeded"
+		puts $o "Regression Tests Succeeded"
+	} else {
+		puts "Regression Tests Failed"
+		puts "Check UNEXPECTED OUTPUT lines."
+		puts "Review ALL.OUT.x for details."
+		puts $o "Regression Tests Failed"
+	}
+
+	puts -nonewline "Test suite run completed at: "
+	puts [clock format [clock seconds] -format "%H:%M %D"]
+	puts -nonewline $o "Test suite run completed at: "
+	puts $o [clock format [clock seconds] -format "%H:%M %D"]
+	close $o
+}
+
 proc check_output { file } {
 	# These are all the acceptable patterns.
 	set pattern {(?x)
@@ -465,6 +578,7 @@ proc check_output { file } {
 		^r\sdbm\s*|
 		^r\shsearch\s*|
 		^r\sndbm\s*|
+		^run_ipv4\s.*|
 		^run_recd:\s.*|
 		^run_reptest\s.*|
 		^run_secenv:\s.*|
@@ -493,9 +607,11 @@ proc check_output { file } {
 		^run_with_slices .*|
 		^Script\swatcher\sprocess\s.*|
 		^Secondary\sindex\sjoin\s.*|
+		^SSL\stesting\s.*|
 		^Test\ssuite\srun\s.*|
                 ^Test\s.*rep.*|
 		^To\sreproduce\sthis\scase:.*|
+		^Turning\sSSL\stesting\sON*|
 		^Unlinking\slog:\serror\smessage\sOK$|
 		^Verifying\s.*|
 		^\t*\.\.\.dbc->get.*$|
@@ -688,6 +804,11 @@ proc r { args } {
 					eval run_compressed\
 					     btree $test $display $run
 				}
+			}
+			failchk {
+				env012
+				env030
+				repmgr150
 			}
 			join {
 				eval r $saveflags join1
@@ -943,6 +1064,16 @@ proc r { args } {
 				foreach test $test_names(test) {
 					eval run_method [lindex $args 0] $test \
 					    $display $run stdout [lrange $args 1 end]
+				}
+			}
+			ipv4 {
+				if { $one_test == "ALL" } {
+					if { $display } {
+						run_ipv4_tests 1 0
+					}
+					if { $run } {
+						run_ipv4_tests 0 1
+					}
 				}
 			}
 
@@ -2518,7 +2649,7 @@ proc run_all { { testname ALL } args } {
 	# Add a few more tests that are suitable for run_all but not run_std.
 	set test_list {
 		{"testNNN under replication"	"repmethod"}
-		{"IPv4"			"run_ipv4_tests"}}
+		{"IPv4"			"ipv4"}}
 
 	# If we're on Windows, Linux, FreeBSD, or Solaris, run the
 	# bigfile tests.  These create files larger than 4 GB.

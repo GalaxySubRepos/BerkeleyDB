@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -74,6 +74,13 @@ proc z3 {} {
 	file mkdir $clientdir3
 	file mkdir $clientdir4
 	file mkdir $clientdir5
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+	setup_repmgr_ssl $clientdir3
+	setup_repmgr_ssl $clientdir4
+	setup_repmgr_ssl $clientdir5
 
 	puts "\tRepmgr029.z3.a: Primordial creation, Start Master site 0"
 	set env1 [berkdb env -create -errpfx MASTER -home $masterdir -txn \
@@ -286,6 +293,11 @@ proc z6 { } {
 	file mkdir $dirC
 	file mkdir $dirV
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirV
+
 	puts -nonewline "\tRepmgr029.z6.a: Build 4-site group with one view."
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -verbose [list rep $rv] -event]
@@ -354,6 +366,10 @@ proc z8 { } {
 	file mkdir $dirB
 	file mkdir $dirC
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+
 	puts "\tRepmgr029.z8: Create primordial site"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -verbose [list rep $rv] -event]
@@ -420,6 +436,10 @@ proc z7 { } {
 	file mkdir $dirB
 	file mkdir $dirC
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+
 	puts -nonewline "\tRepmgr029.z7: Set up a group of 3, A (master), B, C"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -recover -verbose [list rep $rv] -event]
@@ -480,6 +500,10 @@ proc z4 {} {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
 
 	puts -nonewline "\tRepmgr029.z4.a: Start the master."
 	set env1 [berkdb_env -create -errpfx MASTER -home $masterdir \
@@ -561,6 +585,10 @@ proc z5 {} {
 	file mkdir $clientdir
 	file mkdir $clientdir2
 
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+
 	puts -nonewline "\tRepmgr029.z5.a: Set up a group of 3, one master and two clients."
 	set env1 [berkdb env -create -errpfx MASTER -home $masterdir \
 	    -txn -rep -thread -recover -verbose [list rep $rv]]
@@ -637,6 +665,12 @@ proc z2 { } {
 	file mkdir $dirC
 	file mkdir $dirD
 	file mkdir $dirE
+
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirD
+	setup_repmgr_ssl $dirE
 
 	puts -nonewline "\tRepmgr029.z2.a: Set up a group of 5: A, B, C, D, E"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
@@ -763,6 +797,10 @@ proc z1 { } {
 	file mkdir $dirB
 	file mkdir $dirC
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+
 	puts -nonewline "\tRepmgr029.z1.a: Set up a group of 3: A, B, C"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -recover -verbose [list rep $rv]]
@@ -859,7 +897,14 @@ proc z9 { } {
 	file mkdir $dirD
 	file mkdir $dirE
 	file mkdir $dirF
-    
+
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+    setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirD
+	setup_repmgr_ssl $dirE
+	setup_repmgr_ssl $dirF
+
 	puts -nonewline "\tRepmgr029.z9: Set up a group of 6"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -recover -verbose [list rep $rv]]
@@ -965,6 +1010,11 @@ proc z10 { } {
 	file mkdir $dirB
 	file mkdir $dirC
 	file mkdir $dirD
+
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirD
 
 	set pagesize 4096
 	set log_max [expr $pagesize * 8]
@@ -1083,6 +1133,11 @@ proc z11 { } {
 	file mkdir $dirC
 	file mkdir $dirD
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirD
+
 	set pagesize 4096
 	set log_max [expr $pagesize * 8]
 
@@ -1165,6 +1220,9 @@ proc z12 { } {
 	file mkdir $dirA
 	file mkdir $dirB
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	
 	puts "\tRepmgr029.z12: Start primordial master site A"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -recover -verbose [list rep $rv] -event]
@@ -1253,6 +1311,10 @@ proc z13 { } {
 	file mkdir $dirB
 	file mkdir $dirC
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC	
+
 	puts -nonewline "\tRepmgr029.z13: Create first 2 sites"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 		      -recover -verbose [list rep $rv] -event]
@@ -1307,6 +1369,10 @@ proc z14 { } {
 		file mkdir $dirA
 		file mkdir $dirB
 		file mkdir $dirC
+
+		setup_repmgr_ssl $dirA
+		setup_repmgr_ssl $dirB
+		setup_repmgr_ssl $dirC	
 
 		puts "\tRepmgr029.z14: Using \"$policy\" ack policy"
 		puts "\tRepmgr029.z14: Create first site A"
@@ -1365,6 +1431,12 @@ proc z15 { } {
 	file mkdir $dirC
 	file mkdir $dirD
 	file mkdir $dirE
+
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+	setup_repmgr_ssl $dirD
+	setup_repmgr_ssl $dirE
 
 	puts -nonewline "\tRepmgr029.z15: Create initial group of 4 sites"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
@@ -1493,6 +1565,10 @@ proc z16 { } {
 	file mkdir $dirB
 	file mkdir $dirC
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+
 	puts -nonewline "\tRepmgr029.z16: Create a group of 3 sites"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -verbose [list rep $rv]]
@@ -1556,6 +1632,10 @@ proc z17 { } {
 		file mkdir $dirB
 		file mkdir $dirC
 
+		setup_repmgr_ssl $dirA
+		setup_repmgr_ssl $dirB
+		setup_repmgr_ssl $dirC
+
 		puts -nonewline "\tRepmgr029.z17: Create a group of 3 sites using\
 		    `$policy' ack policy"
 		set envA [berkdb env -create -errpfx A -home $dirA -txn \
@@ -1611,6 +1691,8 @@ proc z18 { } {
 		set rv on
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	foreach {portA portB portC} [available_ports 3] {}
@@ -1624,7 +1706,7 @@ proc z18 { } {
 	file mkdir $dirC
 
 	puts -nonewline "\tRepmgr029.z18.a: Start site A as master."
-	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
+	set envA [berkdb env {*}$sslargs -create -errpfx A -home $dirA -txn -rep -thread \
 	    -recover -verbose [list rep $rv]]
 	$envA repmgr -local [list $hoststr $portA creator] \
 	    -start master
@@ -1632,7 +1714,7 @@ proc z18 { } {
 	puts "." ; flush stdout
 
 	puts -nonewline "\tRepmgr029.z18.b. Start site B"
-	set envB [berkdb env -create -errpfx B -home $dirB -txn -rep -thread \
+	set envB [berkdb env {*}$sslargs -create -errpfx B -home $dirB -txn -rep -thread \
 	    -verbose [list rep $rv]]
 	$envB repmgr -local [list $hoststr $portB] \
 	    -remote [list $hoststr $portA] -start client
@@ -1648,7 +1730,7 @@ proc z18 { } {
 	eval exec $util_path/db_hotbackup -vh $dirB -b $dirC
 
 	puts "\tRepmgr029.z18.c.2: Start up site C in $dirC."
-	set envC [berkdb env -create -errpfx C -home $dirC -txn -rep -thread \
+	set envC [berkdb env {*}$sslargs -create -errpfx C -home $dirC -txn -rep -thread \
 	    -recover -verbose [list rep $rv]]
 	$envC repmgr -local [list $hoststr $portC] \
 	    -remote [list $hoststr $portA] -start client
@@ -1697,6 +1779,9 @@ proc z19 {} {
 	file mkdir $dirA
 	file mkdir $dirB
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	
 	puts "\tRepmgr029.z19.a: Start up site A as master "
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
 	    -recover -verbose [list rep $rv]]
@@ -1769,10 +1854,13 @@ proc z20 {} {
 	set dirB $testdir/dirB
 	file mkdir $dirA
 	file mkdir $dirB
+
+	set sslargs [setup_repmgr_sslargs]
+	
 	set envA_cmd "berkdb env -create -home $dirA -txn -rep \
-	    -thread -recover"
+	    -thread -recover $sslargs"
 	set envB_cmd "berkdb env -create -home $dirB -txn -rep \
-	    -thread -recover"
+	    -thread -recover $sslargs"
 
 	puts "\tRepmgr029.z20.a: Set local site"
 	make_dbconfig $dirA \
@@ -1858,19 +1946,21 @@ proc z21 {} {
 	file mkdir $dirC
 	file mkdir $dirD
 
+	set sslargs [setup_repmgr_sslargs]
+
 	set SITE_ADDING 1
 	set SITE_DELETING 2
 	set SITE_PRESENT 4
 
 	puts -nonewline "\tRepmgr029.z21.a: Start A, B, C"
 	set envA [berkdb env -create -errpfx A -home $dirA -txn -rep -thread \
-	    -recover -verbose [list rep $rv] -event]
+	    -recover -verbose [list rep $rv] -event {*}$sslargs]
 	$envA repmgr -local [list $hoststr $portA creator] -start master
 	error_check_good nsites_A [$envA rep_get_nsites] 1
 	puts -nonewline "." ; flush stdout
 
 	set envB [berkdb env -create -errpfx B -home $dirB -txn -rep -thread \
-	    -verbose [list rep $rv] -event]
+	    -verbose [list rep $rv] -event {*}$sslargs]
 	$envB repmgr -local [list $hoststr $portB] \
 	    -remote [list $hoststr $portA] -start client
 	await_startup_done $envB
@@ -1878,7 +1968,7 @@ proc z21 {} {
 	puts -nonewline "." ; flush stdout
 
 	set envC [berkdb env -create -errpfx C -home $dirC -txn -rep -thread \
-	    -verbose [list rep $rv] -event]
+	    -verbose [list rep $rv] -event {*}$sslargs]
 	$envC repmgr -local [list $hoststr $portC] \
 	    -remote [list $hoststr $portA] -start client
 	await_startup_done $envC
@@ -1888,7 +1978,7 @@ proc z21 {} {
 	foreach status [list $SITE_ADDING $SITE_DELETING] {
 		puts "\tRepmgr029.z21.$status.a: Start D"
 		set envD [berkdb env -create -home $dirD -txn \
-		    -rep -thread -verbose [list rep $rv] -event]
+		    -rep -thread -verbose [list rep $rv] -event {*}$sslargs]
 		$envD repmgr -local [list $hoststr $portD] \
 		    -remote [list $hoststr $portA] -start client
 		await_startup_done $envD
@@ -1971,6 +2061,9 @@ proc z22 {} {
 	file mkdir $masterdir
 	file mkdir $clientdir
 
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+
 	set SITE_ADDING 1
 	set SITE_PRESENT 4
 
@@ -2041,6 +2134,9 @@ proc z23 {} {
 
 	file mkdir $masterdir
 	file mkdir $clientdir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
 
 	set SITE_PRESENT 4
 

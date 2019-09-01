@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr112
 # TEST Multi-process repmgr ack policies.
@@ -38,6 +38,7 @@ proc repmgr112 { } {
 	fconfigure $master -buffering line
 	puts $master "home $masterdir"
 	make_dbconfig $masterdir {}
+	setup_repmgr_ssl $masterdir
 	puts $master "output $testdir/m1output"
 	puts $master "open_env"
 	puts $master "local $hoststr $master_port"
@@ -55,6 +56,7 @@ proc repmgr112 { } {
 	puts $client "home $clientdir"
 	puts $client "local $hoststr $client_port"
 	make_dbconfig $clientdir {}
+	setup_repmgr_ssl $clientdir
 	puts $client "output $testdir/coutput"
 	puts $client "open_env"
 	puts $client "remote $hoststr $master_port"
@@ -74,6 +76,7 @@ proc repmgr112 { } {
 	puts $client2 "home $clientdir2"
 	puts $client2 "local $hoststr $client2_port"
 	make_dbconfig $clientdir2 {}
+	setup_repmgr_ssl $clientdir2
 	puts $client2 "output $testdir/c2output"
 	puts $client2 "open_env"
 	puts $client2 "remote $hoststr $master_port"

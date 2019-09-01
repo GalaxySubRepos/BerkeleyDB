@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::put()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::put()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbopen.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbput"></a>Db::put()</h2>
+            <h2 class="title" style="clear: both"><a id="dbput"></a>
+        
+        <span>Db::put()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -69,7 +75,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703828493792"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176773713584"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -77,7 +83,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703828496496"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176776330560"></a>txnid</h4>
               </div>
             </div>
           </div>
@@ -85,11 +91,17 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
                   If the operation is part of an application-specified
                   transaction, the <span class="bold"><strong>txnid</strong></span>
                   parameter is a transaction handle returned from 
-                  <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; if
+                  <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; if
                   the operation is part of a Berkeley DB Concurrent Data
                   Store group, the <span class="bold"><strong>txnid</strong></span>
                   parameter is a handle returned from 
-                  <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>; 
+                  <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>; 
                   otherwise NULL.  If no transaction handle is specified,
                   but the operation occurs in a transactional database, the
                   operation will be implicitly transaction protected.
@@ -99,7 +111,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816585664"></a>key</h4>
+                <h4 class="title"><a id="idm140176784340464"></a>key</h4>
               </div>
             </div>
           </div>
@@ -119,7 +131,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703817684704"></a>data</h4>
+                <h4 class="title"><a id="idm140176777590848"></a>data</h4>
               </div>
             </div>
           </div>
@@ -131,7 +143,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703825880032"></a>flags</h4>
+                <h4 class="title"><a id="idm140176775430720"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -244,7 +256,10 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
                 <p>
                         A successful bulk operation is logically equivalent
                         to a loop through each key/data pair, performing a
-                        <a class="xref" href="dbput.html" title="Db::put()">Db::put()</a> for each one.
+                        <a class="xref" href="dbput.html" title="Db::put()">
+        
+        <span>Db::put()</span>
+    </a> for each one.
                     </p>
                 <p>
                         See 
@@ -331,7 +346,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818766496"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176784519952"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -349,7 +364,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703820336336"></a>DB_FOREIGN_CONFLICT</h4>
+                <h4 class="title"><a id="idm140176784440544"></a>DB_FOREIGN_CONFLICT</h4>
               </div>
             </div>
           </div>
@@ -383,7 +398,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819795680"></a>DB_HEAP_FULL</h4>
+                <h4 class="title"><a id="idm140176779430656"></a>DB_HEAP_FULL</h4>
               </div>
             </div>
           </div>
@@ -391,7 +406,10 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
                 An attempt was made to add or update a record in a Heap
                 database. However, the size of the database was constrained
                 using the
-                <a class="xref" href="dbset_heapsize.html" title="Db::set_heapsize()">Db::set_heapsize()</a>
+                <a class="xref" href="dbset_heapsize.html" title="Db::set_heapsize()">
+        
+        <span>Db::set_heapsize()</span>
+    </a>
                 method, and that limit has been reached.
             </p>
         </div>
@@ -399,7 +417,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818871232"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176784848112"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -417,7 +435,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703824974304"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176778606416"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -429,7 +447,10 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">Db::set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">
+        
+        <span>Db::set_lk_exclusive()</span>
+    </a>
                 for more information.
             </p>
           <p>
@@ -442,7 +463,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818772144"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176779431728"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -465,7 +486,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703817349472"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176783287760"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -482,7 +503,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703823903296"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140176776185504"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -494,7 +515,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703829634336"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176782315984"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -512,7 +533,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703820293312"></a>ENOSPC</h4>
+                <h4 class="title"><a id="idm140176786902656"></a>ENOSPC</h4>
               </div>
             </div>
           </div>
@@ -525,7 +546,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703821878752"></a>Class</h3>
+              <h3 class="title"><a id="idm140176786962640"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -537,7 +558,7 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703822133504"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176779142496"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -557,11 +578,17 @@ Db::put(DbTxn *txnid, Dbt *key, Dbt *data, u_int32_t flags);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbremove.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::open() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::open()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::remove()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::remove()</span>
+    </td>
         </tr>
       </table>
     </div>

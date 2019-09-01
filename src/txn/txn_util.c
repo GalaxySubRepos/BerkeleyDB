@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -478,7 +478,7 @@ __txn_record_fname(env, txn, fname)
 }
 
 /*
- * __txn_dref_fnam --
+ * __txn_dref_fname --
  *	Either pass the fname to our parent txn or decrement the refcount
  * and close the fileid if it goes to zero.
  *

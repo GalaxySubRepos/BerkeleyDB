@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -769,7 +769,7 @@ typedef struct _hblob {
 		(o) = (off_t)(p).size;					\
 	} else {							\
 		if ((p).size > INT_MAX) {				\
-			__db_errx((e), DB_STR("0769",			\
+			__db_errx((e), DB_STR("0767",			\
 			    "External file size overflow."));		\
 			(ret) = EINVAL;					\
 		}							\

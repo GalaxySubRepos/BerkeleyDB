@@ -66,7 +66,7 @@ function transfer {
             if [[ $f == *.original ]] ; then
                 DEL_LICENSE='1,6 d'
             else
-                DEL_LICENSE='1,42 d'
+                DEL_LICENSE='1,12 d'
             fi
             sed -e "$E1" -e "$E2" -e "$E3" -e "$E4" -e "$E5" -e "$E6" -e "$E7" -e "$COPY_LICENSE" -e "$DEL_LICENSE" < $f \
                 > $1/$f.sed.out

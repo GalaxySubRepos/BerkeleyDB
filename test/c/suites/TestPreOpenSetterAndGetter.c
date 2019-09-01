@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -413,10 +413,14 @@ int TestEnvPreOpenSetterAndGetter(CuTest *ct) {
 		DB_LOG_ZERO
 	};
 	DB_MEM_CONFIG mem_configs[] = {
+		DB_MEM_DATABASE,
+		DB_MEM_DATABASE_LENGTH,
+		DB_MEM_EXTFILE_DATABASE,
 		DB_MEM_LOCK,
 		DB_MEM_LOCKOBJECT,
 		DB_MEM_LOCKER,
 		DB_MEM_LOGID,
+		DB_MEM_REP_SITE,
 		DB_MEM_TRANSACTION,
 		DB_MEM_THREAD
 	};
@@ -460,6 +464,9 @@ int TestEnvPreOpenSetterAndGetter(CuTest *ct) {
 		DB_VERB_REP_SYSTEM,
 		DB_VERB_REPMGR_CONNFAIL,
 		DB_VERB_REPMGR_MISC,
+		DB_VERB_REPMGR_SSL_ALL,
+		DB_VERB_REPMGR_SSL_CONN,
+		DB_VERB_REPMGR_SSL_IO,
 		DB_VERB_WAITSFOR
 	};
 	u_int32_t encrypt_flags;

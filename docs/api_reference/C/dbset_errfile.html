@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;set_errfile()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;set_errfile()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_errcall.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_errfile"></a>DB-&gt;set_errfile()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_errfile"></a>
+        <span>DB-&gt;set_errfile()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -54,7 +60,10 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
          during initial application debugging.
     </p>
       <p>
-         The <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">DB_ENV-&gt;set_errfile()</a>  and
+         The <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">
+        <span>DB_ENV-&gt;set_errfile()</span>
+        
+    </a>  and
          <code class="methodname">DB-&gt;set_errfile()</code> methods are used to enhance the mechanism for
          reporting error messages to the application by setting a C library
          FILE * to be used for displaying additional Berkeley DB error
@@ -65,8 +74,14 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
          Alternatively, you can use the
             
 
-         <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">DB_ENV-&gt;set_errcall()</a>  or
-         <a class="xref" href="dbset_errcall.html" title="DB-&gt;set_errcall()">DB-&gt;set_errcall()</a>
+         <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">
+        <span>DB_ENV-&gt;set_errcall()</span>
+        
+    </a>  or
+         <a class="xref" href="dbset_errcall.html" title="DB-&gt;set_errcall()">
+        <span>DB-&gt;set_errcall()</span>
+        
+    </a>
          methods to capture the additional error information in a way that does
          not use C library FILE *'s. 
          
@@ -75,19 +90,31 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
          The error message will consist of the prefix string and a colon
          ("<span class="bold"><strong>:</strong></span>") (if a prefix string was
          previously specified using 
-         <a class="xref" href="dbset_errpfx.html" title="DB-&gt;set_errpfx()">DB-&gt;set_errpfx()</a>  or 
-         <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">DB_ENV-&gt;set_errpfx()</a> ), an
+         <a class="xref" href="dbset_errpfx.html" title="DB-&gt;set_errpfx()">
+        <span>DB-&gt;set_errpfx()</span>
+        
+    </a>  or 
+         <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">
+        <span>DB_ENV-&gt;set_errpfx()</span>
+        
+    </a> ), an
          error string, and a trailing &lt;newline&gt; character.
     </p>
       <p>
          The default configuration when applications first create 
          <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a>  or 
          <a class="link" href="env.html" title="Chapter 5.  The DB_ENV Handle">DB_ENV</a>  handles is as if the
-         <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">DB_ENV-&gt;set_errfile()</a>  or
+         <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">
+        <span>DB_ENV-&gt;set_errfile()</span>
+        
+    </a>  or
          <code class="methodname">DB-&gt;set_errfile()</code> methods were called with the standard error output
          (stderr) specified as the FILE * argument.  Applications wanting no
          output at all can turn off this default configuration by calling the
-         <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">DB_ENV-&gt;set_errfile()</a>  or
+         <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">
+        <span>DB_ENV-&gt;set_errfile()</span>
+        
+    </a>  or
          <code class="methodname">DB-&gt;set_errfile()</code> methods with NULL as the FILE * argument. 
          Additionally, explicitly configuring the error output channel using
          any of the following methods will also turn off this default output for the application:
@@ -101,17 +128,26 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
           </li>
           <li>
             <p>
-                <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">DB_ENV-&gt;set_errfile()</a>
+                <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">
+        <span>DB_ENV-&gt;set_errfile()</span>
+        
+    </a>
              </p>
           </li>
           <li>
             <p>
-                <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">DB_ENV-&gt;set_errcall()</a>
+                <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">
+        <span>DB_ENV-&gt;set_errcall()</span>
+        
+    </a>
              </p>
           </li>
           <li>
             <p>
-                <a class="xref" href="dbset_errcall.html" title="DB-&gt;set_errcall()">DB-&gt;set_errcall()</a>
+                <a class="xref" href="dbset_errcall.html" title="DB-&gt;set_errcall()">
+        <span>DB-&gt;set_errcall()</span>
+        
+    </a>
              </p>
           </li>
         </ul>
@@ -126,7 +162,10 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
          inside of Berkeley DB environments, calling the 
          <code class="methodname">DB-&gt;set_errfile()</code>
          method affects the entire environment and is equivalent to calling the
-         <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">DB_ENV-&gt;set_errfile()</a> 
+         <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">
+        <span>DB_ENV-&gt;set_errfile()</span>
+        
+    </a> 
          method.
     </p>
       <p>
@@ -144,7 +183,7 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236504464"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488965472"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -152,7 +191,7 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236504080"></a>errfile</h4>
+                <h4 class="title"><a id="idm140113488965088"></a>errfile</h4>
               </div>
             </div>
           </div>
@@ -167,7 +206,7 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236512000"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488972752"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -179,7 +218,7 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236517488"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113489018688"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -199,11 +238,17 @@ DB-&gt;set_errfile(DB *db, FILE *errfile);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_errpfx.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;set_errcall() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;set_errcall()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_errpfx()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_errpfx()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

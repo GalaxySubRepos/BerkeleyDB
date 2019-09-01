@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_tx_max()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_tx_max()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envget_tx_timestamp.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_tx_max"></a>DB_ENV-&gt;set_tx_max()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_tx_max"></a>
+        <span>DB_ENV-&gt;set_tx_max()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -58,7 +64,10 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
       <p>
          When all of the memory available in the database environment for
          transactions is in use, calls to 
-         <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>  will fail
+         <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>  will fail
          (until some active transactions complete).  If 
          <code class="classname">DB_ENV-&gt;set_tx_max()</code> is never called,
          the database environment is configured to support at least 100
@@ -80,9 +89,15 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_tx_max()</code> method may not be called after the 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is called.
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is called.
          If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  is called, the
          information specified to <code class="methodname">DB_ENV-&gt;set_tx_max()</code> will be ignored.
     </p>
       <p>
@@ -97,7 +112,7 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227983008"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113480220096"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -105,7 +120,7 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227984256"></a>max</h4>
+                <h4 class="title"><a id="idm140113480221760"></a>max</h4>
               </div>
             </div>
           </div>
@@ -120,7 +135,7 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228017440"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113480232208"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -136,12 +151,15 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227965632"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113480201760"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -150,7 +168,7 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227979392"></a>Class</h3>
+              <h3 class="title"><a id="idm140113480221440"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -163,7 +181,7 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227961408"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113480197536"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -183,11 +201,17 @@ DB_ENV-&gt;set_tx_max(DB_ENV *dbenv, u_int32_t max);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_tx_timestamp.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;get_tx_timestamp() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;get_tx_timestamp()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_tx_timestamp()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_tx_timestamp()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

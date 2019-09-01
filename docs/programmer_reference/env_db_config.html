@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -41,9 +41,13 @@
       <p>
         Almost all of the configuration information that can be
         specified to <a href="../api_reference/C/env.html" class="olink">DB_ENV class</a> methods can also be specified using
-        a configuration file. If a file named DB_CONFIG exists in the
-        database home directory, it will be read for lines of the
-        format <span class="bold"><strong>NAME VALUE</strong></span>.
+        a configuration file. <code class="literal">DB_ENV-&gt;open()</code> checks for 
+        a readable <code class="literal">DB_CONFIG</code> file in the environment home 
+        directory. If it can be opened it will be read for lines 
+        of the format <span class="bold"><strong>NAME VALUE</strong></span> or 
+        <span class="bold"><strong>NAME SUBNAME VALUE</strong></span>. Any settings 
+        found there will override configuration settings by the 
+        corresponding <code class="literal">DB_ENV</code> API calls.
     </p>
       <p> 
         One or more whitespace characters are used to delimit the

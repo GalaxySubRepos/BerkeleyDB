@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include "db_config.h"
@@ -371,7 +371,7 @@ err:	if (blob_seq != NULL)
 #else /*HAVE_64BIT_TYPES*/
 	COMPQUIET(dbp, NULL);
 	COMPQUIET(txn, NULL);
-	__db_errx(dbp->env, DB_STR("0218",
+	__db_errx(dbp->env, DB_STR("0217",
 	    "library build did not include support for external files"));
 	return (DB_OPNOTSUP);
 #endif
@@ -419,7 +419,7 @@ __blob_generate_id(dbp, txn, blob_id)
 err:	return (ret);
 #else /*HAVE_64BIT_TYPES*/
 	COMPQUIET(blob_id, NULL);
-	__db_errx(dbp->env, DB_STR("0219",
+	__db_errx(dbp->env, DB_STR("0217",
 	    "library build did not include support for external files"));
 	return (DB_OPNOTSUP);
 #endif
@@ -465,7 +465,7 @@ err:
 	return (ret);
 #else /*HAVE_64BIT_TYPES*/
 	COMPQUIET(id, NULL);
-	__db_errx(dbp->env, DB_STR("0245",
+	__db_errx(dbp->env, DB_STR("0217",
 	    "library build did not include support for external files"));
 	return (DB_OPNOTSUP);
 #endif
@@ -697,7 +697,7 @@ __blob_salvage(env, blob_id, offset, size, file_id, sdb_id, dbt)
 	blob_sub_dir = dir = path = NULL;
 	fhp = NULL;
 
-	if (blob_id < 1 || file_id < 0 || 
+	if (blob_id < 1 || file_id < 0 ||
 	    sdb_id < 0 || (file_id == 0 && sdb_id == 0)) {
 		ret = USR_ERR(env, ENOENT);
 		goto err;
@@ -705,7 +705,7 @@ __blob_salvage(env, blob_id, offset, size, file_id, sdb_id, dbt)
 
 	if ((ret = __blob_make_sub_dir(env, &blob_sub_dir,
 	    file_id, sdb_id)) != 0 || blob_sub_dir == NULL) {
-	  	if (ret == 0)
+		if (ret == 0)
 			ret = USR_ERR(env, ENOENT);
 		goto err;
 	}
@@ -717,8 +717,8 @@ __blob_salvage(env, blob_id, offset, size, file_id, sdb_id, dbt)
 		goto err;
 
 	if ((__os_exists(env, path, &isdir)) != 0 || isdir != 0) {
-	  	ret = USR_ERR(env, ENOENT);
-	    	goto err;
+		ret = USR_ERR(env, ENOENT);
+		goto err;
 	}
 
 	if ((ret = __os_open(env, path, 0, DB_OSO_RDONLY, 0, &fhp)) != 0)
@@ -789,7 +789,7 @@ __blob_vrfy(env, blob_id, blob_size, file_id, sdb_id, pgno, flags)
 		goto err;
 	}
 	if (__db_appname(env, DB_APP_BLOB, dir, NULL, &path) != 0) {
-		EPRINT((env, DB_STR_A("0223",
+		EPRINT((env, DB_STR_A("0222",
 		    "Page %lu: Error getting path to external file for %llu",
 		    "%lu %llu"), (u_long)pgno, (unsigned long long)blob_id));
 		goto err;
@@ -938,7 +938,7 @@ err:	if (path != NULL)
 	return (ret);
 
 #else /*HAVE_64BIT_TYPES*/
-	__db_errx(dbp->env, DB_STR("0220",
+	__db_errx(dbp->env, DB_STR("0217",
 	    "library build did not include support for external files"));
 	return (DB_OPNOTSUP);
 #endif

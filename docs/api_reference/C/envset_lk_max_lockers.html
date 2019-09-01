@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_lk_max_lockers()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_lk_max_lockers()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_lk_detect.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_lk_max_lockers"></a>DB_ENV-&gt;set_lk_max_lockers()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_lk_max_lockers"></a>
+        <span>DB_ENV-&gt;set_lk_max_lockers()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -44,14 +50,26 @@ int
 DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
       <p>
         This method is deprecated. Instead, use 
-        <a class="xref" href="envset_memory_init.html" title="DB_ENV-&gt;set_memory_init()">DB_ENV-&gt;set_memory_init()</a>,
-        <a class="xref" href="envset_memory_max.html" title="DB_ENV-&gt;set_memory_max()">DB_ENV-&gt;set_memory_max()</a>, and
-        <a class="xref" href="envset_lk_tablesize.html" title="DB_ENV-&gt;set_lk_tablesize()">DB_ENV-&gt;set_lk_tablesize()</a>.
+        <a class="xref" href="envset_memory_init.html" title="DB_ENV-&gt;set_memory_init()">
+        <span>DB_ENV-&gt;set_memory_init()</span>
+        
+    </a>,
+        <a class="xref" href="envset_memory_max.html" title="DB_ENV-&gt;set_memory_max()">
+        <span>DB_ENV-&gt;set_memory_max()</span>
+        
+    </a>, and
+        <a class="xref" href="envset_lk_tablesize.html" title="DB_ENV-&gt;set_lk_tablesize()">
+        <span>DB_ENV-&gt;set_lk_tablesize()</span>
+        
+    </a>.
     </p>
       <p>
          Sets the maximum number of locking entities supported by the Berkeley
          DB environment.  This value is used by 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  to estimate how
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  to estimate how
          much space to allocate for various lock-table data structures.  The
          default value is 1000 lockers.  For specific information on
          configuring the size of the lock subsystem, see 
@@ -73,9 +91,15 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_lk_max_lockers()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is
          called. If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  is called, the
          information specified to <code class="methodname">DB_ENV-&gt;set_lk_max_lockers()</code> will be
          ignored.
     </p>
@@ -91,7 +115,7 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232312880"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113484676704"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -99,7 +123,7 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815232310736"></a>max</h4>
+                <h4 class="title"><a id="idm140113484674560"></a>max</h4>
               </div>
             </div>
           </div>
@@ -114,7 +138,7 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232288032"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113484679552"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -130,12 +154,15 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815232262272"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113484626000"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -144,7 +171,7 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232280112"></a>Class</h3>
+              <h3 class="title"><a id="idm140113484674144"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -157,7 +184,7 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232258048"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113484621776"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -177,11 +204,17 @@ DB_ENV-&gt;set_lk_max_lockers(DB_ENV *dbenv, u_int32_t max);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_lk_max_locks.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_lk_detect() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_lk_detect()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_lk_max_locks()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_lk_max_locks()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

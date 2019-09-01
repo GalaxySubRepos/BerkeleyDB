@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -66,6 +66,12 @@ proc repmgr030_sub { method niter tnum largs } {
 	file mkdir $clientdir2
 	file mkdir $clientdir3
 	file mkdir $viewdir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+	setup_repmgr_ssl $clientdir3
+	setup_repmgr_ssl $viewdir
 
 	#
 	# Use longer ack timeout, shorter rep_request and heartbeats to 

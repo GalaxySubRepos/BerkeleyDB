@@ -1,24 +1,49 @@
 --- src/test1.c
 +++ src/test1.c
-@@ -3602,7 +3602,7 @@
+@@ -4109,17 +4109,17 @@ static int SQLITE_TCLAPI test_prepare(
+ 
+   rc = sqlite3_prepare(db, zSql, bytes, &pStmt, objc>=5 ? &zTail : 0);
+   Tcl_ResetResult(interp);
+   if( sqlite3TestErrCode(interp, db, rc) ) return TCL_ERROR;
+   if( zTail && objc>=5 ){
      if( bytes>=0 ){
        bytes = bytes - (int)(zTail-zSql);
      }
 -    if( (int)strlen(zTail)<bytes ){
-+    if(bytes>-1 && (int)strlen(zTail)<(unsigned int)bytes ){
++    if( bytes>-1 && (int)strlen(zTail)<(unsigned int)bytes ){
        bytes = (int)strlen(zTail);
      }
      Tcl_ObjSetVar2(interp, objv[4], 0, Tcl_NewStringObj(zTail, bytes), 0);
-@@ -6696,8 +6696,6 @@
+   }
+   if( rc!=SQLITE_OK ){
+     assert( pStmt==0 );
+     sqlite3_snprintf(sizeof(zBuf), zBuf, "(%d) ", rc);
+     Tcl_AppendResult(interp, zBuf, sqlite3_errmsg(db), 0);
+@@ -7424,18 +7424,16 @@ int Sqlitetest1_Init(Tcl_Interp *interp)
+   extern int sqlite3_interrupt_count;
+   extern int sqlite3_open_file_count;
+   extern int sqlite3_sort_count;
+   extern int sqlite3_current_time;
+ #if SQLITE_OS_UNIX && defined(__APPLE__) && SQLITE_ENABLE_LOCKING_STYLE
    extern int sqlite3_hostid_num;
  #endif
    extern int sqlite3_max_blobsize;
--  extern int sqlite3BtreeSharedCacheReport(void*,
+-  extern int SQLITE_TCLAPI sqlite3BtreeSharedCacheReport(void*,
 -                                          Tcl_Interp*,int,Tcl_Obj*CONST*);
    static int iZero = 0;
    static struct {
       char *zName;
-@@ -6891,7 +6891,6 @@
+      Tcl_CmdProc *xProc;
+   } aCmd[] = {
+      { "db_enter",                      (Tcl_CmdProc*)db_enter               },
+      { "db_leave",                      (Tcl_CmdProc*)db_leave               },
+      { "sqlite3_mprintf_int",           (Tcl_CmdProc*)sqlite3_mprintf_int    },
+@@ -7631,17 +7629,16 @@ int Sqlitetest1_Init(Tcl_Interp *interp)
+      { "add_test_collate_needed", test_collate_needed, 0     },
+      { "add_test_function",       test_function, 0           },
+      { "add_test_utf16bin_collate",    test_utf16bin_collate, 0        },
+ #endif
+      { "sqlite3_test_errstr",     test_errstr, 0             },
       { "tcl_variable_type",       tcl_variable_type, 0       },
  #ifndef SQLITE_OMIT_SHARED_CACHE
       { "sqlite3_enable_shared_cache", test_enable_shared, 0  },
@@ -26,10 +51,20 @@
  #endif
       { "sqlite3_libversion_number", test_libversion_number, 0  },
       { "sqlite3_table_column_metadata", test_table_column_metadata, 0  },
+ #ifndef SQLITE_OMIT_INCRBLOB
+      { "sqlite3_blob_reopen", test_blob_reopen, 0  },
+ #endif
+      { "pcache_stats",       test_pcache_stats, 0  },
+ #ifdef SQLITE_ENABLE_UNLOCK_NOTIFY
 --- src/test2.c
 +++ src/test2.c
-@@ -21,475 +21,14 @@
-
+@@ -20,485 +20,24 @@
+ #  include "tcl.h"
+ #endif
+ #include <stdlib.h>
+ #include <string.h>
+ #include <ctype.h>
+ 
  extern const char *sqlite3ErrName(int);
  
 +#ifndef SQLITE_OMIT_DISKIO
@@ -51,7 +86,7 @@
 -**
 -** Open a new pager
 -*/
--static int pager_open(
+-static int SQLITE_TCLAPI pager_open(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -88,7 +123,7 @@
 -**
 -** Close the given pager.
 -*/
--static int pager_close(
+-static int SQLITE_TCLAPI pager_close(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -102,7 +137,7 @@
 -    return TCL_ERROR;
 -  }
 -  pPager = sqlite3TestTextToPtr(argv[1]);
--  rc = sqlite3PagerClose(pPager);
+-  rc = sqlite3PagerClose(pPager, 0);
 -  if( rc!=SQLITE_OK ){
 -    Tcl_AppendResult(interp, sqlite3ErrName(rc), 0);
 -    return TCL_ERROR;
@@ -115,7 +150,7 @@
 -**
 -** Rollback changes
 -*/
--static int pager_rollback(
+-static int SQLITE_TCLAPI pager_rollback(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -142,7 +177,7 @@
 -**
 -** Commit all changes
 -*/
--static int pager_commit(
+-static int SQLITE_TCLAPI pager_commit(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -174,7 +209,7 @@
 -**
 -** Start a new checkpoint.
 -*/
--static int pager_stmt_begin(
+-static int SQLITE_TCLAPI pager_stmt_begin(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -201,7 +236,7 @@
 -**
 -** Rollback changes to a checkpoint
 -*/
--static int pager_stmt_rollback(
+-static int SQLITE_TCLAPI pager_stmt_rollback(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -229,7 +264,7 @@
 -**
 -** Commit changes to a checkpoint
 -*/
--static int pager_stmt_commit(
+-static int SQLITE_TCLAPI pager_stmt_commit(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -256,7 +291,7 @@
 -**
 -** Return pager statistics.
 -*/
--static int pager_stats(
+-static int SQLITE_TCLAPI pager_stats(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -289,7 +324,7 @@
 -**
 -** Return the size of the database file.
 -*/
--static int pager_pagecount(
+-static int SQLITE_TCLAPI pager_pagecount(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -315,7 +350,7 @@
 -**
 -** Return a pointer to a page from the database.
 -*/
--static int page_get(
+-static int SQLITE_TCLAPI page_get(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -335,7 +370,7 @@
 -  if( Tcl_GetInt(interp, argv[2], &pgno) ) return TCL_ERROR;
 -  rc = sqlite3PagerSharedLock(pPager);
 -  if( rc==SQLITE_OK ){
--    rc = sqlite3PagerGet(pPager, pgno, &pPage);
+-    rc = sqlite3PagerGet(pPager, pgno, &pPage, 0);
 -  }
 -  if( rc!=SQLITE_OK ){
 -    Tcl_AppendResult(interp, sqlite3ErrName(rc), 0);
@@ -352,7 +387,7 @@
 -** Return a pointer to a page if the page is already in cache.
 -** If not in cache, return an empty string.
 -*/
--static int page_lookup(
+-static int SQLITE_TCLAPI page_lookup(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -380,7 +415,7 @@
 -/*
 -** Usage:   pager_truncate ID PGNO
 -*/
--static int pager_truncate(
+-static int SQLITE_TCLAPI pager_truncate(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -405,7 +440,7 @@
 -**
 -** Drop a pointer to a page.
 -*/
--static int page_unref(
+-static int SQLITE_TCLAPI page_unref(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -427,7 +462,7 @@
 -**
 -** Return the content of a page
 -*/
--static int page_read(
+-static int SQLITE_TCLAPI page_read(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -451,7 +486,7 @@
 -**
 -** Return the page number for a page.
 -*/
--static int page_number(
+-static int SQLITE_TCLAPI page_number(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -475,7 +510,7 @@
 -**
 -** Write something into a page.
 -*/
--static int page_write(
+-static int SQLITE_TCLAPI page_write(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -506,54 +541,23 @@
  ** Usage:   fake_big_file  N  FILENAME
  **
  ** Write a few bytes at the N megabyte point of FILENAME.  This will
-@@ -518,6 +57,12 @@
-   }
-   if( Tcl_GetInt(interp, argv[1], &n) ) return TCL_ERROR;
- 
-+  /*
-+   * This does not work with Berkeley DB. Making a large file does not cause
-+   * DB to skip the existing pages.
-+   */
-+  return TCL_ERROR;
-+
-   pVfs = sqlite3_vfs_find(0);
-   nFile = (int)strlen(argv[2]);
-   zFile = sqlite3_malloc( nFile+2 );
-@@ -547,30 +92,6 @@
- 
- 
- /*
--** test_control_pending_byte  PENDING_BYTE
--**
--** Set the PENDING_BYTE using the sqlite3_test_control() interface.
--*/
--static int testPendingByte(
--  void *NotUsed,
--  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
--  int argc,              /* Number of arguments */
--  const char **argv      /* Text of each argument */
--){
--  int pbyte;
--  int rc;
--  if( argc!=2 ){
--    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
--                     " PENDING-BYTE\"", (void*)0);
--    return TCL_ERROR;
--  }
--  if( Tcl_GetInt(interp, argv[1], &pbyte) ) return TCL_ERROR;
--  rc = sqlite3_test_control(SQLITE_TESTCTRL_PENDING_BYTE, pbyte);
--  Tcl_SetObjResult(interp, Tcl_NewIntObj(rc));
--  return TCL_OK;
--}
--
--/*
- ** The sqlite3FaultSim() callback:
+ ** create a large file.  If the file was a valid SQLite database, then
+ ** the next time the database is opened, SQLite will begin allocating
+ ** new pages after N.  If N is 2096 or bigger, this will test the
+ ** ability of SQLite to write to large files.
  */
- static Tcl_Interp *faultSimInterp = 0;
-@@ -687,59 +208,50 @@
+@@ -684,69 +223,60 @@ static int SQLITE_TCLAPI testBitvecBuilt
+     if( *z==0 ) break;
+     aProg[nProg++] = atoi(z);
+     while( sqlite3Isdigit(*z) ){ z++; }
+   }
+   aProg[nProg] = 0;
+   rc = sqlite3_test_control(SQLITE_TESTCTRL_BITVEC_TEST, sz, aProg);
+   Tcl_SetObjResult(interp, Tcl_NewIntObj(rc));
    return TCL_OK;
- }  
- 
+-}  
++}
++
 +static int t2_tcl_function_stub(
 +  void *NotUsed,
 +  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
@@ -562,7 +566,7 @@
 +){
 +  return TCL_OK;
 +}
-+
+ 
  /*
  ** Register commands with the TCL interpreter.
  */
@@ -614,7 +618,7 @@
  #endif
      { "sqlite3BitvecBuiltinTest",(Tcl_CmdProc*)testBitvecBuiltinTest     },
 -    { "sqlite3_test_control_pending_byte",  (Tcl_CmdProc*)testPendingByte },
-+    { "sqlite3_test_control_pending_byte", (Tcl_CmdProc*)t2_tcl_function_stub },
++    { "sqlite3_test_control_pending_byte",  (Tcl_CmdProc*)t2_tcl_function_stub },
      { "sqlite3_test_control_fault_install", (Tcl_CmdProc*)faultInstallCmd },
    };
    int i;
@@ -636,9 +640,17 @@
  #ifndef SQLITE_OMIT_WSD
    Tcl_LinkVar(interp, "sqlite_pending_byte",
       (char*)&sqlite3PendingByte, TCL_LINK_INT | TCL_LINK_READ_ONLY);
+ #endif
+   return TCL_OK;
+ }
 --- src/test3.c
 +++ src/test3.c
-@@ -19,6 +19,15 @@
+@@ -18,16 +18,25 @@
+ #if defined(INCLUDE_SQLITE_TCL_H)
+ #  include "sqlite_tcl.h"
+ #else
+ #  include "tcl.h"
+ #endif
  #include <stdlib.h>
  #include <string.h>
  
@@ -654,7 +666,17 @@
  extern const char *sqlite3ErrName(int);
  
  /*
-@@ -339,36 +348,6 @@
+ ** A bogus sqlite3 connection structure for use in the btree
+ ** tests.
+ */
+ static sqlite3 sDb;
+ static int nRefSqlite3 = 0;
+@@ -348,46 +357,16 @@ static int SQLITE_TCLAPI btree_first(
+     return TCL_ERROR;
+   }
+   sqlite3_snprintf(sizeof(zBuf),zBuf,"%d",res);
+   Tcl_AppendResult(interp, zBuf, 0);
+   return SQLITE_OK;
  }
  
  /*
@@ -663,7 +685,7 @@
 -** Return TRUE if the given cursor is not pointing at a valid entry.
 -** Return FALSE if the cursor does point to a valid entry.
 -*/
--static int btree_eof(
+-static int SQLITE_TCLAPI btree_eof(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -691,30 +713,15 @@
  ** Usage:   btree_payload_size ID
  **
  ** Return the number of bytes of payload
-@@ -380,8 +359,7 @@
-   const char **argv      /* Text of each argument */
- ){
-   BtCursor *pCur;
--  int n2;
--  u64 n1;
-+  int n1;
-   char zBuf[50];
- 
-   if( argc!=2 ){
-@@ -394,108 +372,13 @@
- 
-   /* The cursor may be in "require-seek" state. If this is the case, the
-   ** call to BtreeDataSize() will fix it. */
--  sqlite3BtreeDataSize(pCur, (u32*)&n2);
--  if( pCur->apPage[pCur->iPage]->intKey ){
--    n1 = 0;
--  }else{
--    sqlite3BtreeKeySize(pCur, (i64*)&n1);
--  }
--  sqlite3BtreeLeave(pCur->pBtree);
--  sqlite3_snprintf(sizeof(zBuf),zBuf, "%d", (int)(n1+n2));
-+  sqlite3BtreeDataSize(pCur, (u32*)&n1);
-+  sqlite3_snprintf(sizeof(zBuf),zBuf, "%d", (int)n1);
+ */
+ static int SQLITE_TCLAPI btree_payload_size(
+   void *NotUsed,
+   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
+   int argc,              /* Number of arguments */
+@@ -407,105 +386,16 @@ static int SQLITE_TCLAPI btree_payload_s
+   n = sqlite3BtreePayloadSize(pCur);
+   sqlite3BtreeLeave(pCur->pBtree);
+   sqlite3_snprintf(sizeof(zBuf),zBuf, "%u", n);
    Tcl_AppendResult(interp, zBuf, 0);
    return SQLITE_OK;
  }
@@ -733,7 +740,7 @@
 -** This command returns nothing if it works.  It returns an error message
 -** if something goes wrong.
 -*/
--static int btree_varint_test(
+-static int SQLITE_TCLAPI btree_varint_test(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -812,16 +819,25 @@
  ** usage:   btree_from_db  DB-HANDLE
  **
  ** This command returns the btree handle for the main database associated
-@@ -539,66 +422,6 @@
+ ** with the database-handle passed as the argument. Example usage:
+ **
+ ** sqlite3 db test.db
+ ** set bt [btree_from_db db]
+ */
+@@ -540,77 +430,16 @@ static int SQLITE_TCLAPI btree_from_db(
+ 
+   pBt = db->aDb[iDb].pBt;
+   sqlite3_snprintf(sizeof(zBuf), zBuf, "%p", pBt);
+   Tcl_SetResult(interp, zBuf, TCL_VOLATILE);
    return TCL_OK;
  }
  
--/*
+ /*
 -** Usage:   btree_ismemdb ID
 -**
--** Return true if the B-Tree is in-memory.
+-** Return true if the B-Tree is currently stored entirely in memory.
 -*/
--static int btree_ismemdb(
+-static int SQLITE_TCLAPI btree_ismemdb(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -829,6 +845,7 @@
 -){
 -  Btree *pBt;
 -  int res;
+-  sqlite3_file *pFile;
 -
 -  if( argc!=2 ){
 -    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -838,7 +855,8 @@
 -  pBt = sqlite3TestTextToPtr(argv[1]);
 -  sqlite3_mutex_enter(pBt->db->mutex);
 -  sqlite3BtreeEnter(pBt);
--  res = sqlite3PagerIsMemdb(sqlite3BtreePager(pBt));
+-  pFile = sqlite3PagerFile(sqlite3BtreePager(pBt));
+-  res = (pFile->pMethods==0);
 -  sqlite3BtreeLeave(pBt);
 -  sqlite3_mutex_leave(pBt->db->mutex);
 -  Tcl_SetObjResult(interp, Tcl_NewBooleanObj(res));
@@ -850,7 +868,7 @@
 -**
 -** Set the size of the cache used by btree $ID.
 -*/
--static int btree_set_cache_size(
+-static int SQLITE_TCLAPI btree_set_cache_size(
 -  void *NotUsed,
 -  Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
 -  int argc,              /* Number of arguments */
@@ -875,11 +893,21 @@
 -  return TCL_OK;
 -}      
 -
--
- 
- /*
- ** Register commands with the TCL interpreter.
-@@ -615,13 +438,13 @@
+-/*
+ ** usage:   btree_insert CSR ?KEY? VALUE
+ **
+ ** Set the size of the cache used by btree $ID.
+ */
+ static int SQLITE_TCLAPI btree_insert(
+   ClientData clientData,
+   Tcl_Interp *interp,
+   int objc,
+@@ -661,23 +490,23 @@ int Sqlitetest3_Init(Tcl_Interp *interp)
+   } aCmd[] = {
+      { "btree_open",               (Tcl_CmdProc*)btree_open               },
+      { "btree_close",              (Tcl_CmdProc*)btree_close              },
+      { "btree_begin_transaction",  (Tcl_CmdProc*)btree_begin_transaction  },
+      { "btree_pager_stats",        (Tcl_CmdProc*)btree_pager_stats        },
       { "btree_cursor",             (Tcl_CmdProc*)btree_cursor             },
       { "btree_close_cursor",       (Tcl_CmdProc*)btree_close_cursor       },
       { "btree_next",               (Tcl_CmdProc*)btree_next               },
@@ -896,15 +924,29 @@
 +     { "btree_set_cache_size",     (Tcl_CmdProc*)t3_tcl_function_stub     }
    };
    int i;
-
+ 
+   for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
+   }
+ 
+   Tcl_CreateObjCommand(interp, "btree_insert", btree_insert, 0, 0);
 --- src/test_btree.c
 +++ src/test_btree.c
-@@ -13,50 +13,3 @@
+@@ -8,59 +8,8 @@
+ **    May you find forgiveness for yourself and forgive others.
+ **    May you share freely, never taking more than you give.
+ **
+ *************************************************************************
+ ** Code for testing the btree.c module in SQLite.  This code
  ** is not included in the SQLite library.  It is used for automated
  ** testing of the SQLite library.
  */
 -#include "btreeInt.h"
--#include <tcl.h>
+-#if defined(INCLUDE_SQLITE_TCL_H)
+-#  include "sqlite_tcl.h"
+-#else
+-#  include "tcl.h"
+-#endif
 -
 -/*
 -** Usage: sqlite3_shared_cache_report
@@ -912,7 +954,7 @@
 -** Return a list of file that are shared and the number of
 -** references to each file.
 -*/
--int sqlite3BtreeSharedCacheReport(
+-int SQLITE_TCLAPI sqlite3BtreeSharedCacheReport(
 -  void * clientData,
 -  Tcl_Interp *interp,
 -  int objc,
@@ -952,7 +994,12 @@
 -}
 --- src/test_malloc.c
 +++ src/test_malloc.c
-@@ -756,7 +756,7 @@
+@@ -756,17 +756,17 @@ struct MallocLog {
+ #ifdef SQLITE_MEMDEBUG
+ static void test_memdebug_callback(int nByte, int nFrame, void **aFrame){
+   if( mallocLogEnabled ){
+     MallocLog *pLog;
+     Tcl_HashEntry *pEntry;
      int isNew;
  
      int aKey[MALLOC_LOG_KEYINTS];
@@ -961,3 +1008,8 @@
  
      memset(aKey, 0, nKey);
      if( (sizeof(void*)*nFrame)<nKey ){
+       nKey = nFrame*sizeof(void*);
+     }
+     memcpy(aKey, aFrame, nKey);
+ 
+     pEntry = Tcl_CreateHashEntry(&aMallocLog, (const char *)aKey, &isNew);

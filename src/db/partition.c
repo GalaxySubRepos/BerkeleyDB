@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1967,7 +1967,7 @@ __part_rr(dbp, ip, txn, name, subdb, newname, flags)
 		__os_free(env, np);
 
 	if (!F_ISSET(dbp, DB_AM_OPEN_CALLED)) {
-err:		
+err:
 		/* We need to remove the lock event we associated with this. */
 		if (txn != NULL)
 			__txn_remlock(env, txn, NULL, tmpdbp->locker);

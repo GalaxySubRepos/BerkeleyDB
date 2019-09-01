@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::memp_stat()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::memp_stat()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mempregister.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mempstat"></a>DbEnv::memp_stat()</h2>
+            <h2 class="title" style="clear: both"><a id="mempstat"></a>
+        
+        <span>DbEnv::memp_stat()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -57,7 +63,10 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
       <p>
          Statistical structures are stored in allocated memory.  If
          application-specific allocation routines have been declared (see
-         <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">DbEnv::set_alloc()</a> 
+         <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">
+        
+        <span>DbEnv::set_alloc()</span>
+    </a> 
          for more information), they are used to allocate the memory;
          otherwise, the standard C library <span class="bold"><strong>malloc</strong></span>(3) is used.  The caller is responsible
          for deallocating the memory.  To deallocate the memory, free the
@@ -102,7 +111,10 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
                 </p>
             <p>
                         Maximum number of caches, as configured with the 
-                        <a class="xref" href="envset_cache_max.html" title="DbEnv::set_cache_max()">DbEnv::set_cache_max()</a> 
+                        <a class="xref" href="envset_cache_max.html" title="DbEnv::set_cache_max()">
+        
+        <span>DbEnv::set_cache_max()</span>
+    </a> 
                          method.
                 </p>
           </li>
@@ -124,7 +136,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           </li>
           <li>
             <p>
-                         <span class="bold"><strong>size_t st_mmapsize;</strong></span>
+                         <span class="bold"><strong>db_size_t st_mmapsize;</strong></span>
                 </p>
             <p>
                         Maximum memory-mapped file size.
@@ -132,7 +144,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           </li>
           <li>
             <p>
-                         <span class="bold"><strong>int st_maxopenfd;</strong></span>
+                         <span class="bold"><strong>int32_t st_maxopenfd;</strong></span>
                 </p>
             <p>
                         Maximum number of open file descriptors.
@@ -140,7 +152,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           </li>
           <li>
             <p>
-                         <span class="bold"><strong>int st_maxwrite;</strong></span>
+                         <span class="bold"><strong>int32_t st_maxwrite;</strong></span>
                 </p>
             <p>
                         The maximum number of sequential write operations scheduled by the
@@ -229,7 +241,10 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
                 </p>
             <p>
                         Dirty pages written using the 
-                        <a class="xref" href="memptrickle.html" title="DbEnv::memp_trickle()">DbEnv::memp_trickle()</a> 
+                        <a class="xref" href="memptrickle.html" title="DbEnv::memp_trickle()">
+        
+        <span>DbEnv::memp_trickle()</span>
+    </a> 
                          method.
                 </p>
           </li>
@@ -243,7 +258,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           </li>
           <li>
             <p>
-                         <span class="bold"><strong>size_t st_pagesize;</strong></span>
+                         <span class="bold"><strong>u_int32_t st_pagesize;</strong></span>
                 </p>
             <p>
                         Page size in bytes.
@@ -475,7 +490,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           </li>
           <li>
             <p>
-                         <span class="bold"><strong>size_t st_pagesize;</strong></span>
+                         <span class="bold"><strong>u_int32_t st_pagesize;</strong></span>
                 </p>
             <p>
                         Page size in bytes.
@@ -541,7 +556,10 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
       </div>
       <p>
               The <code class="methodname">DbEnv::memp_stat()</code> method may not be called before the 
-              <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+              <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DbEnv::memp_stat()</code> <span>
@@ -557,7 +575,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809396432"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176766658016"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -565,7 +583,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809385776"></a>gsp</h4>
+                <h4 class="title"><a id="idm140176766646768"></a>gsp</h4>
               </div>
             </div>
           </div>
@@ -579,7 +597,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809390480"></a>fsp</h4>
+                <h4 class="title"><a id="idm140176766730656"></a>fsp</h4>
               </div>
             </div>
           </div>
@@ -593,7 +611,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809376032"></a>flags</h4>
+                <h4 class="title"><a id="idm140176766678704"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -619,7 +637,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809367264"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176766629312"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -637,7 +655,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809351904"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176766614720"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -650,7 +668,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809353984"></a>Class</h3>
+              <h3 class="title"><a id="idm140176766616800"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -662,7 +680,7 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809475152"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176766632512"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -682,11 +700,17 @@ DbEnv::memp_stat(DB_MPOOL_STAT **gsp,
           <td width="40%" align="right"> <a accesskey="n" href="mempstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::memp_register() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::memp_register()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::memp_stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::memp_stat_print()</span>
+    </td>
         </tr>
       </table>
     </div>

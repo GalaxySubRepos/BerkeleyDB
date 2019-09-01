@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -204,6 +204,7 @@ __repmgr_new_connection(env, connp, s, state)
 	c->fd = s;
 	c->state = state;
 	c->type = UNKNOWN_CONN_TYPE;
+	c->env = env;
 #ifdef DB_WIN32
 	c->event_object = WSA_INVALID_EVENT;
 #endif
@@ -309,6 +310,7 @@ __repmgr_new_site(env, sitep, host, port)
 
 	site->max_ack_gen = 0;
 	ZERO_LSN(site->max_ack);
+	ZERO_LSN(site->max_ckp_lsn);
 	site->ack_policy = 0;
 	site->alignment = 0;
 	site->flags = 0;
@@ -1628,7 +1630,7 @@ __repmgr_make_site_readonly_master(env, eid, gen, sync_lsnp)
 	DB_REP *db_rep;
 	REPMGR_CONNECTION *conn;
 	repmgr_netaddr_t addr;
-	__repmgr_permlsn_args permlsn;
+	__repmgr_readonly_response_args response;
 	u_int32_t type;
 	size_t len;
 	u_int8_t any_value, *response_buf;
@@ -1663,11 +1665,11 @@ __repmgr_make_site_readonly_master(env, eid, gen, sync_lsnp)
 		goto err;
 
 	if (type == REPMGR_READONLY_RESPONSE) {
-		if ((ret = __repmgr_permlsn_unmarshal(env,
-		    &permlsn, response_buf, len, NULL)) != 0)
+		if ((ret = __repmgr_readonly_response_unmarshal(env,
+		    &response, response_buf, len, NULL)) != 0)
 			goto err;
-		*gen = permlsn.generation;
-		*sync_lsnp = permlsn.lsn;
+		*gen = response.generation;
+		*sync_lsnp = response.lsn;
 	} else {
 		RPRINT(env, (env, DB_VERB_REPMGR_MISC,
 		    "make_site_readonly_master got unexpected message type %d",
@@ -2340,7 +2342,7 @@ __repmgr_refresh_membership(env, buf, len, version)
 	if (FLD_ISSET(rep->config,
 	    REP_C_PREFMAS_MASTER | REP_C_PREFMAS_CLIENT) &&
 	    rep->config_nsites > 2)
-		__db_errx(env, DB_STR("3703",
+		__db_errx(env, DB_STR("3701",
 	    "More than two sites in preferred master replication group"));
 
 	/* Scan "touched" flags so as to notice sites that have been removed. */

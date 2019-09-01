@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::open()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::open()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbmsg.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbopen"></a>Db::open()</h2>
+            <h2 class="title" style="clear: both"><a id="dbopen"></a>
+        
+        <span>Db::open()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -77,7 +83,10 @@ Db::open(DbTxn *txnid, const char *file,
             </span>
         </span>
          If <code class="methodname">Db::open()</code> fails, the 
-         <a class="xref" href="dbclose.html" title="Db::close()">Db::close()</a>  method must be
+         <a class="xref" href="dbclose.html" title="Db::close()">
+        
+        <span>Db::close()</span>
+    </a>  method must be
          called to discard the <a class="link" href="db.html" title="Chapter 2.  The Db Handle">Db</a> 
          handle.
     </p>
@@ -85,7 +94,7 @@ Db::open(DbTxn *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703817622416"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176779662688"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -93,7 +102,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703827576048"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176779856240"></a>txnid</h4>
               </div>
             </div>
           </div>
@@ -101,12 +110,18 @@ Db::open(DbTxn *txnid, const char *file,
                   If the operation is part of an application-specified
                   transaction, the <span class="bold"><strong>txnid</strong></span>
                   parameter is a transaction handle returned from 
-                  <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; if
+                  <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; if
                   the operation is part of a Berkeley DB Concurrent Data
                   Store group, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a
                   handle returned from 
-                  <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>; 
+                  <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>; 
                   otherwise NULL.  If no transaction handle is specified,
                   but the DB_AUTO_COMMIT flag is specified, the operation
                   will be implicitly transaction protected. Note that
@@ -124,7 +139,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819719264"></a>file</h4>
+                <h4 class="title"><a id="idm140176781778192"></a>file</h4>
               </div>
             </div>
           </div>
@@ -150,7 +165,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818399776"></a>database</h4>
+                <h4 class="title"><a id="idm140176777533312"></a>database</h4>
               </div>
             </div>
           </div>
@@ -188,7 +203,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703826628832"></a>type</h4>
+                <h4 class="title"><a id="idm140176782551104"></a>type</h4>
               </div>
             </div>
           </div>
@@ -202,7 +217,10 @@ Db::open(DbTxn *txnid, const char *file,
                   database must already exist and
                   <code class="methodname">Db::open()</code> will automatically
                   determine its type.  The
-                  <a class="xref" href="dbget_type.html" title="Db::get_type()">Db::get_type()</a>  method
+                  <a class="xref" href="dbget_type.html" title="Db::get_type()">
+        
+        <span>Db::get_type()</span>
+    </a>  method
                   may be used to determine the underlying type of databases opened using
                   DB_UNKNOWN.
              </p>
@@ -215,7 +233,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819718848"></a>flags</h4>
+                <h4 class="title"><a id="idm140176783801424"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -285,7 +303,10 @@ Db::open(DbTxn *txnid, const char *file,
                         </p>
                 <p>
                             Do not map this database into process memory (see the
-                            <a class="xref" href="envset_mp_mmapsize.html" title="DbEnv::set_mp_mmapsize()">DbEnv::set_mp_mmapsize()</a>  
+                            <a class="xref" href="envset_mp_mmapsize.html" title="DbEnv::set_mp_mmapsize()">
+        
+        <span>DbEnv::set_mp_mmapsize()</span>
+    </a>  
                             method for further information).
                         </p>
               </li>
@@ -410,7 +431,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703821490944"></a>mode</h4>
+                <h4 class="title"><a id="idm140176785227744"></a>mode</h4>
               </div>
             </div>
           </div>
@@ -434,7 +455,7 @@ Db::open(DbTxn *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703817195136"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140176786971120"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -446,7 +467,10 @@ Db::open(DbTxn *txnid, const char *file,
         <p>
             <code class="methodname">Db::open()</code> is affected by any
             database directory specified using the 
-            <a class="xref" href="envadd_data_dir.html" title="DbEnv::add_data_dir()">DbEnv::add_data_dir()</a> 
+            <a class="xref" href="envadd_data_dir.html" title="DbEnv::add_data_dir()">
+        
+        <span>DbEnv::add_data_dir()</span>
+    </a> 
             method, or by setting the "add_data_dir" string in the
             environment's <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file.
         </p>
@@ -472,7 +496,7 @@ Db::open(DbTxn *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703828043488"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176776931152"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -490,7 +514,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816641728"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176774743056"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -508,7 +532,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703817835680"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176784474224"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -520,7 +544,10 @@ Db::open(DbTxn *txnid, const char *file,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">Db::set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">
+        
+        <span>Db::set_lk_exclusive()</span>
+    </a>
                 for more information.
             </p>
           <p>
@@ -533,7 +560,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819166640"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140176785825952"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -545,7 +572,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818850128"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140176775944336"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -557,7 +584,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818664704"></a>DB_OLD_VERSION</h4>
+                <h4 class="title"><a id="idm140176776300016"></a>DB_OLD_VERSION</h4>
               </div>
             </div>
           </div>
@@ -569,7 +596,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703820465040"></a>DB_META_CHKSUM_FAIL</h4>
+                <h4 class="title"><a id="idm140176774637296"></a>DB_META_CHKSUM_FAIL</h4>
               </div>
             </div>
           </div>
@@ -583,7 +610,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703820414432"></a>EEXIST</h4>
+                <h4 class="title"><a id="idm140176774674896"></a>EEXIST</h4>
               </div>
             </div>
           </div>
@@ -596,7 +623,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703820206016"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176785565264"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -617,10 +644,16 @@ Db::open(DbTxn *txnid, const char *file,
                <a class="link" href="envopen.html#envopen_DB_THREAD">DB_THREAD</a> 
                flag or the provided database environment supports
                transaction processing; a Heap database is in use and 
-               <a class="xref" href="dbset_heapsize.html" title="Db::set_heapsize()">Db::set_heapsize()</a>
+               <a class="xref" href="dbset_heapsize.html" title="Db::set_heapsize()">
+        
+        <span>Db::set_heapsize()</span>
+    </a>
                was used to set a heap size that is different from the value
                used to create the database or an invalid heap region size was
-	       set using <a class="xref" href="dbset_heap_regionsize.html" title="Db::set_heap_regionsize()">Db::set_heap_regionsize()</a>; 
+	       set using <a class="xref" href="dbset_heap_regionsize.html" title="Db::set_heap_regionsize()">
+        
+        <span>Db::set_heap_regionsize()</span>
+    </a>; 
 	       or if an invalid flag value or parameter was specified.
          </p>
         </div>
@@ -628,7 +661,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703824955376"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176778205904"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -650,7 +683,7 @@ Db::open(DbTxn *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703826105632"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176773711888"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -668,7 +701,7 @@ Db::open(DbTxn *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703829446560"></a>Class</h3>
+              <h3 class="title"><a id="idm140176781945152"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -680,7 +713,7 @@ Db::open(DbTxn *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703829252064"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176779358848"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -700,11 +733,17 @@ Db::open(DbTxn *txnid, const char *file,
           <td width="40%" align="right"> <a accesskey="n" href="dbput.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::msg() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::msg()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::put()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::put()</span>
+    </td>
         </tr>
       </table>
     </div>

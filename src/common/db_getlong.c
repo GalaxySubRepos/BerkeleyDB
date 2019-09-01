@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -44,7 +44,7 @@ __db_getlong(dbenv, progname, p, min, max, storep)
 			    "%s: %s: Invalid numeric argument\n",
 			    "%s %s\n"), progname, p);
 		else
-			dbenv->errx(dbenv, DB_STR_A("0043",
+			dbenv->errx(dbenv, DB_STR_A("0042",
 			    "%s: Invalid numeric argument", "%s"), p);
 		return (EINVAL);
 	}
@@ -54,7 +54,7 @@ __db_getlong(dbenv, progname, p, min, max, storep)
 			    "%s: %s: Less than minimum value (%ld)\n",
 			    "%s %s %ld\n"), progname, p, min);
 		else
-			dbenv->errx(dbenv, DB_STR_A("0045",
+			dbenv->errx(dbenv, DB_STR_A("0044",
 			    "%s: Less than minimum value (%ld)",
 			    "%s %ld"), p, min);
 		return (ERANGE);
@@ -65,7 +65,7 @@ __db_getlong(dbenv, progname, p, min, max, storep)
 			    "%s: %s: Greater than maximum value (%ld)\n",
 			    "%s %s %ld\n"), progname, p, max);
 		else
-			dbenv->errx(dbenv, DB_STR_A("0047",
+			dbenv->errx(dbenv, DB_STR_A("0046",
 			    "%s: Greater than maximum value (%ld)",
 			    "%s %ld"), p, max);
 		return (ERANGE);
@@ -103,22 +103,22 @@ __db_getulong(dbenv, progname, p, min, max, storep)
 	}
 	if (p[0] == '\0' || (end[0] != '\0' && end[0] != '\n')) {
 		if (dbenv == NULL)
-			fprintf(stderr, DB_STR_A("0048",
+			fprintf(stderr, DB_STR_A("0042",
 			    "%s: %s: Invalid numeric argument\n",
 			    "%s %s\n"), progname, p);
 		else
-			dbenv->errx(dbenv, DB_STR_A("0049",
+			dbenv->errx(dbenv, DB_STR_A("0042",
 			    "%s: Invalid numeric argument",
 			    "%s"), p);
 		return (EINVAL);
 	}
 	if (val < min) {
 		if (dbenv == NULL)
-			fprintf(stderr, DB_STR_A("0050",
+			fprintf(stderr, DB_STR_A("0044",
 			    "%s: %s: Less than minimum value (%lu)\n",
 			    "%s %s %lu\n"), progname, p, min);
 		else
-			dbenv->errx(dbenv, DB_STR_A("0051",
+			dbenv->errx(dbenv, DB_STR_A("0044",
 			    "%s: Less than minimum value (%lu)",
 			    "%s %lu"), p, min);
 		return (ERANGE);
@@ -132,11 +132,11 @@ __db_getulong(dbenv, progname, p, min, max, storep)
 	 */
 	if (max != 0 && val > max) {
 		if (dbenv == NULL)
-			fprintf(stderr, DB_STR_A("0052",
+			fprintf(stderr, DB_STR_A("0046",
 			    "%s: %s: Greater than maximum value (%lu)\n",
 			    "%s %s %lu\n"), progname, p, max);
 		else
-			dbenv->errx(dbenv, DB_STR_A("0053",
+			dbenv->errx(dbenv, DB_STR_A("0046",
 			    "%s: Greater than maximum value (%lu)",
 			    "%s %lu"), p, max);
 		return (ERANGE);

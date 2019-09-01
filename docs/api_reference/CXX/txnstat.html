@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::txn_stat()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::txn_stat()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="txncheckpoint.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txnstat"></a>DbEnv::txn_stat()</h2>
+            <h2 class="title" style="clear: both"><a id="txnstat"></a>
+        
+        <span>DbEnv::txn_stat()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -54,7 +60,10 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
       <p>
          Statistical structures are stored in allocated memory.  If
          application-specific allocation routines have been declared (see
-         <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">DbEnv::set_alloc()</a> 
+         <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">
+        
+        <span>DbEnv::set_alloc()</span>
+    </a> 
          for more information), they are used to allocate the memory;
          otherwise, the standard C library <span class="bold"><strong>malloc</strong></span>(3) is used.  The caller is responsible
          for deallocating the memory.  To deallocate the memory, free the
@@ -221,7 +230,10 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
                             </p>
                   <p>
                               If the transaction was prepared using 
-                              <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">DbTxn::prepare()</a>, then
+                              <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">
+        
+        <span>DbTxn::prepare()</span>
+    </a>, then
                               <span class="bold"><strong>gid</strong></span> contains the
                               transaction's Global ID. Otherwise,
                               <span class="bold"><strong>gid's</strong></span> contents are undefined.
@@ -290,7 +302,10 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
                                 <span class="bold"><strong>DB_TXN_ACTIVE_SLICE *slice_txns;</strong></span>
                         </p>
                   <p>
-                            Either NULL, or a <a class="xref" href="envget_slice_count.html" title="DbEnv::get_slice_count()">DbEnv::get_slice_count()</a> sized
+                            Either NULL, or a <a class="xref" href="envget_slice_count.html" title="DbEnv::get_slice_count()">
+        
+        <span>DbEnv::get_slice_count()</span>
+    </a> sized
                             array. If the entry for a slice is non-zero,
                             then that slice is participating in the
                             transaction, and the value of the entry is the
@@ -373,7 +388,10 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
       </div>
       <p>
            The <code class="methodname">DbEnv::txn_stat()</code> method may not be called before the 
-           <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+           <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DbEnv::txn_stat()</code> <span>
@@ -389,7 +407,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806241008"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176763321280"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -397,7 +415,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806230832"></a>statp</h4>
+                <h4 class="title"><a id="idm140176763408240"></a>statp</h4>
               </div>
             </div>
           </div>
@@ -410,7 +428,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806191728"></a>flags</h4>
+                <h4 class="title"><a id="idm140176763384608"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -436,7 +454,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806201056"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176763397600"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -454,7 +472,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806155632"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176763306656"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -467,7 +485,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806166208"></a>Class</h3>
+              <h3 class="title"><a id="idm140176763308736"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -479,7 +497,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806194144"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176763459744"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -499,11 +517,17 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="txnstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::txn_checkpoint() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::txn_checkpoint()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::txn_stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::txn_stat_print()</span>
+    </td>
         </tr>
       </table>
     </div>

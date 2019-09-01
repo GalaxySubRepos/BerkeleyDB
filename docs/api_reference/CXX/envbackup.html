@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::backup()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::backup()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envadd_data_dir.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envbackup"></a>DbEnv::backup()</h2>
+            <h2 class="title" style="clear: both"><a id="envbackup"></a>
+        
+        <span>DbEnv::backup()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -64,23 +70,35 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
         actions performed by the <code class="literal">db_hotbackup</code> utility.
         In particular, you may want to run a checkpoint before calling this
         method. To run a checkpoint, use the 
-        <a class="xref" href="txncheckpoint.html" title="DbEnv::txn_checkpoint()">DbEnv::txn_checkpoint()</a>
+        <a class="xref" href="txncheckpoint.html" title="DbEnv::txn_checkpoint()">
+        
+        <span>DbEnv::txn_checkpoint()</span>
+    </a>
         method. For more information on checkpoints, see
         <a href="../../programmer_reference/transapp_checkpoint.html" class="olink">Checkpoints</a> in the <em class="citetitle">Berkeley DB Programmer's Reference Guide</em>.
     </p>
       <p>
         To back up a single database file contained within the environment,
         use the
-        <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">DbEnv::dbbackup()</a>
+        <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">
+        
+        <span>DbEnv::dbbackup()</span>
+    </a>
         method.
     </p>
       <p>
         This method's default behavior can be changed by setting backup
         callbacks. See 
-        <a class="xref" href="envset_backup_callbacks.html" title="DbEnv::set_backup_callbacks()">DbEnv::set_backup_callbacks()</a> 
+        <a class="xref" href="envset_backup_callbacks.html" title="DbEnv::set_backup_callbacks()">
+        
+        <span>DbEnv::set_backup_callbacks()</span>
+    </a> 
         for more information.  Additional tuning parameters can also be set
         using the
-        <a class="xref" href="envset_backup_config.html" title="DbEnv::set_backup_config()">DbEnv::set_backup_config()</a> method.
+        <a class="xref" href="envset_backup_config.html" title="DbEnv::set_backup_config()">
+        
+        <span>DbEnv::set_backup_config()</span>
+    </a> method.
     </p>
       <p>
          The <code class="methodname">DbEnv::backup()</code> method may only be
@@ -100,7 +118,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703813377120"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176770732016"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -108,7 +126,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703813376384"></a>target</h4>
+                <h4 class="title"><a id="idm140176770732304"></a>target</h4>
               </div>
             </div>
           </div>
@@ -135,7 +153,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703813774896"></a>flags</h4>
+                <h4 class="title"><a id="idm140176770829360"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -154,6 +172,15 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
                 <p>
                         Before performing the backup, first remove all
                         files from the target backup directory tree.
+                    </p>
+              </li>
+              <li>
+                <p>
+                        <code class="literal">DB_BACKUP_DEEP_COPY</code>
+                    </p>
+                <p>
+                        Copy databases in any sub-directories in the
+		        environment home and any supplied data directories.
                     </p>
               </li>
               <li>
@@ -224,7 +251,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703813340064"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176770694464"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -242,7 +269,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703813345728"></a>EEXIST</h4>
+                <h4 class="title"><a id="idm140176770700128"></a>EEXIST</h4>
               </div>
             </div>
           </div>
@@ -257,7 +284,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703813325536"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140176770681120"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -271,7 +298,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703813360128"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176770716752"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -284,7 +311,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703813358048"></a>Class</h3>
+              <h3 class="title"><a id="idm140176770712592"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -296,7 +323,7 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703813368320"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176770724880"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -316,11 +343,17 @@ DbEnv::backup(const char *target, u_int32_t flags);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="envclose.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::add_data_dir() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::add_data_dir()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::close()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::close()</span>
+    </td>
         </tr>
       </table>
     </div>

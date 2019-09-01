@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;dbrename()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;dbrename()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envdbremove.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envdbrename"></a>DB_ENV-&gt;dbrename()</h2>
+            <h2 class="title" style="clear: both"><a id="envdbrename"></a>
+        <span>DB_ENV-&gt;dbrename()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -71,7 +77,10 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
     </p>
       <p>
         <code class="methodname">DB_ENV-&gt;dbrename()</code> is affected by any database directory specified using the
-        <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">DB_ENV-&gt;add_data_dir()</a>
+        <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">
+        <span>DB_ENV-&gt;add_data_dir()</span>
+        
+    </a>
         method, or by setting the <code class="literal">add_data_dir</code> string in the environment's
         <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file.
     </p>
@@ -79,7 +88,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234451344"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113486889072"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -87,17 +96,23 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234450960"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113486888688"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; if the
+                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; if the
                           operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           <code class="literal">DB_AUTO_COMMIT</code> flag is specified to either this method or the
                           environment handle, the operation will be implicitly
@@ -108,7 +123,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234485488"></a>file</h4>
+                <h4 class="title"><a id="idm140113486886544"></a>file</h4>
               </div>
             </div>
           </div>
@@ -127,7 +142,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234750992"></a>database</h4>
+                <h4 class="title"><a id="idm140113486906064"></a>database</h4>
               </div>
             </div>
           </div>
@@ -140,7 +155,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234456448"></a>newname</h4>
+                <h4 class="title"><a id="idm140113486915968"></a>newname</h4>
               </div>
             </div>
           </div>
@@ -153,7 +168,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234461056"></a>flags</h4>
+                <h4 class="title"><a id="idm140113486893472"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -182,7 +197,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234457312"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113486894960"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -195,7 +210,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234446704"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113486885984"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -211,7 +226,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234423952"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140113486861888"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -224,7 +239,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234446160"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140113486927664"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -236,7 +251,10 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -244,12 +262,15 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234443968"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113486881648"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called before <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called before <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -257,7 +278,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234419536"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140113486857472"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -269,7 +290,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234444784"></a>DB_META_CHKSUM_FAIL</h4>
+                <h4 class="title"><a id="idm140113486875776"></a>DB_META_CHKSUM_FAIL</h4>
               </div>
             </div>
           </div>
@@ -284,7 +305,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234428112"></a>Class</h3>
+              <h3 class="title"><a id="idm140113486866048"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -296,7 +317,7 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234448112"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113486855216"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -316,11 +337,17 @@ DB_ENV-&gt;dbrename(DB_ENV *dbenv, DB_TXN *txnid, const char *file,
           <td width="40%" align="right"> <a accesskey="n" href="enverr.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;dbremove() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;dbremove()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;err()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;err()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

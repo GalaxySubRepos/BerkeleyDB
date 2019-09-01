@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2008 Jan 22
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -26,7 +32,7 @@
 
 #include "sqliteInt.h"
 
-#ifndef SQLITE_OMIT_BUILTIN_TEST
+#ifndef SQLITE_UNTESTABLE
 
 /*
 ** Global variables.
@@ -84,4 +90,4 @@ void sqlite3EndBenignMalloc(void){
   }
 }
 
-#endif   /* #ifndef SQLITE_OMIT_BUILTIN_TEST */
+#endif   /* #ifndef SQLITE_UNTESTABLE */

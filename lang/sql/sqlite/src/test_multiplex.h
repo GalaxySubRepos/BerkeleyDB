@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2011 March 18
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -20,8 +26,8 @@
 **
 */
 
-#ifndef _TEST_MULTIPLEX_H
-#define _TEST_MULTIPLEX_H
+#ifndef SQLITE_TEST_MULTIPLEX_H
+#define SQLITE_TEST_MULTIPLEX_H
 
 /*
 ** CAPI: File-control Operations Supported by Multiplex VFS
@@ -96,4 +102,4 @@ extern int sqlite3_multiplex_shutdown(int eForce);
 }  /* End of the 'extern "C"' block */
 #endif
 
-#endif /* _TEST_MULTIPLEX_H */
+#endif /* SQLITE_TEST_MULTIPLEX_H */

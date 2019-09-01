@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package persist;
@@ -48,12 +47,12 @@ public class PersonExample {
         String parentSsn;
 
         @SecondaryKey(relate=ONE_TO_MANY)
-        Set<String> emailAddresses = new HashSet<String>();
+        Set<String> emailAddresses = new HashSet<>();
 
         @SecondaryKey(relate=MANY_TO_MANY,
                       relatedEntity=Employer.class,
                       onRelatedEntityDelete=NULLIFY)
-        Set<Long> employerIds = new HashSet<Long>();
+        Set<Long> employerIds = new HashSet<>();
 
         Person(String name, String ssn, String parentSsn) {
             this.name = name;

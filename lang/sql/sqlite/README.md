@@ -4,6 +4,52 @@ This repository contains the complete source code for the SQLite database
 engine.  Some test scripts are also include.  However, many other test scripts
 and most of the documentation are managed separately.
 
+If you are reading this on a Git mirror someplace, you are doing it wrong.
+The [official repository](https://www.sqlite.org/src/) is better.  Go there
+now.
+
+## Obtaining The Code
+
+SQLite sources are managed using the
+[Fossil](https://www.fossil-scm.org/), a distributed version control system
+that was specifically designed to support SQLite development.
+If you do not want to use Fossil, you can download tarballs or ZIP
+archives as follows:
+
+  *  Lastest trunk check-in:
+     <https://www.sqlite.org/src/tarball/sqlite.tar.gz> or
+     <https://www.sqlite.org/src/zip/sqlite.zip>.
+
+  *  Latest release:
+     <https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release> or
+     <https://www.sqlite.org/src/zip/sqlite.zip?r=release>.
+
+  *  For other check-ins, substitute an appropriate branch name or
+     tag or hash prefix for "release" in the URLs of the previous
+     bullet.  Or browse the [timeline](https://www.sqlite.org/src/timeline)
+     to locate the check-in desired, click on its information page link,
+     then click on the "Tarball" or "ZIP Archive" links on the information
+     page.
+
+If you do want to use Fossil to check out the source tree, 
+first install Fossil version 2.0 or later.
+(Source tarballs and precompiled binaries available
+[here](https://www.fossil-scm.org/fossil/uv/download.html).)
+Then run commands like this:
+
+        mkdir ~/sqlite
+        cd ~/sqlite
+        fossil clone https://www.sqlite.org/src sqlite.fossil
+        fossil open sqlite.fossil
+    
+After setting up a repository using the steps above, you can always
+update to the lastest version using:
+
+        fossil update trunk   ;# latest trunk check-in
+        fossil update release ;# latest official release
+
+Or type "fossil ui" to get a web-based user interface.
+
 ## Compiling
 
 First create a directory in which to place
@@ -14,13 +60,13 @@ script found at the root of the source tree.  Then run "make".
 
 For example:
 
-    tar xzf sqlite.tar.gz    ;#  Unpack the source tree into "sqlite"
-    mkdir bld                ;#  Build will occur in a sibling directory
-    cd bld                   ;#  Change to the build directory
-    ../sqlite/configure      ;#  Run the configure script
-    make                     ;#  Run the makefile.
-    make sqlite3.c           ;#  Build the "amalgamation" source file
-    make test                ;#  Run some tests (requires Tcl)
+        tar xzf sqlite.tar.gz    ;#  Unpack the source tree into "sqlite"
+        mkdir bld                ;#  Build will occur in a sibling directory
+        cd bld                   ;#  Change to the build directory
+        ../sqlite/configure      ;#  Run the configure script
+        make                     ;#  Run the makefile.
+        make sqlite3.c           ;#  Build the "amalgamation" source file
+        make test                ;#  Run some tests (requires Tcl)
 
 See the makefile for additional targets.
 
@@ -39,13 +85,13 @@ with the provided "Makefile.msc" to build one of the supported targets.
 
 For example:
 
-    mkdir bld
-    cd bld
-    nmake /f Makefile.msc TOP=..\sqlite
-    nmake /f Makefile.msc sqlite3.c TOP=..\sqlite
-    nmake /f Makefile.msc sqlite3.dll TOP=..\sqlite
-    nmake /f Makefile.msc sqlite3.exe TOP=..\sqlite
-    nmake /f Makefile.msc test TOP=..\sqlite
+        mkdir bld
+        cd bld
+        nmake /f Makefile.msc TOP=..\sqlite
+        nmake /f Makefile.msc sqlite3.c TOP=..\sqlite
+        nmake /f Makefile.msc sqlite3.dll TOP=..\sqlite
+        nmake /f Makefile.msc sqlite3.exe TOP=..\sqlite
+        nmake /f Makefile.msc test TOP=..\sqlite
 
 There are several build options that can be set via the NMAKE command
 line.  For example, to build for WinRT, simply add "FOR_WINRT=1" argument
@@ -174,7 +220,7 @@ complex code.  So there is a lot of complexity in the SQLite implementation.
 
 Key files:
 
-  *  **sqlite3.h** - This file defines the public interface to the SQLite
+  *  **sqlite.h.in** - This file defines the public interface to the SQLite
      library.  Readers will need to be familiar with this interface before
      trying to understand how the library works internally.
 
@@ -182,7 +228,7 @@ Key files:
      used internally by SQLite.
 
   *  **parse.y** - This file describes the LALR(1) grammer that SQLite uses
-     to parse SQL statements, and the actions that are taken at each stop
+     to parse SQL statements, and the actions that are taken at each step
      in the parsing process.
 
   *  **vdbe.c** - This file implements the virtual machine that runs
@@ -205,6 +251,17 @@ Key files:
   *  **os_unix.c** and **os_win.c** - These two files implement the interface
      between SQLite and the underlying operating system using the run-time
      pluggable VFS interface.
+
+  *  **shell.c** - This file is not part of the core SQLite library.  This
+     is the file that, when linked against sqlite3.a, generates the
+     "sqlite3.exe" command-line shell.
+
+  *  **tclsqlite.c** - This file implements the Tcl bindings for SQLite.  It
+     is not part of the core SQLite library.  But as most of the tests in this
+     repository are written in Tcl, the Tcl language bindings are important.
+
+There are many other source files.  Each has a suscinct header comment that
+describes its purpose and role within the larger system.
 
 
 ## Contacts

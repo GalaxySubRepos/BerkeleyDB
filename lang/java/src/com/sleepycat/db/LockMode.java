@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -62,6 +62,7 @@ public final class LockMode {
     @deprecated This has been replaced by {@link #READ_UNCOMMITTED} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public static final LockMode DIRTY_READ = READ_UNCOMMITTED;
     /**
         Read committed isolation provides for cursor stability but not repeatable
@@ -76,6 +77,7 @@ public final class LockMode {
     @deprecated This has been replaced by {@link #READ_COMMITTED} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public static final LockMode DEGREE_2 = READ_COMMITTED;
 
     /**

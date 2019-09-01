@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -260,7 +260,7 @@ __env_alloc(infop, len, retp)
 		/* Check if we're over the limit. */
 		if (envinfop->max_alloc != 0 &&
 		     envinfop->allocated + len > envinfop->max_alloc)
-			return (ENOMEM);
+			return (USR_ERR(env, ENOMEM));
 
 		/* Allocate the space. */
 		if ((ret = __os_malloc(env, len, &p)) != 0)
@@ -344,10 +344,10 @@ retry:
 
 	/*
 	 * If we don't find an element of the right size, try to extend
-	 * the region, if not then we are done.
+	 * the region; if that does not work then we are done.
 	 */
 	if (elp == NULL) {
-		ret = ENOMEM;
+		ret = USR_ERR(env, ENOMEM);
 #ifdef HAVE_MMAP_EXTEND
 		if (infop->rp->size < infop->rp->max &&
 		     (ret = __env_region_extend(env, infop)) == 0)
@@ -633,7 +633,7 @@ __env_region_extend(env, infop)
 	ret = 0;
 	rp = infop->rp;
 	if (rp->size >= rp->max)
-		return (ENOMEM);
+		return (USR_ERR(env, ENOMEM));
 	elp = (ALLOC_ELEMENT *)((u_int8_t *)infop->addr + rp->size);
 	if (rp->size + rp->alloc > rp->max)
 		rp->alloc = rp->max - rp->size;

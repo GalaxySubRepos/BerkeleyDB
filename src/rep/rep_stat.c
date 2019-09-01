@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -486,8 +486,11 @@ __rep_print_all(env, flags)
 		{ REP_C_AUTOTAKEOVER,		"REP_C_AUTOTAKEOVER" },
 		{ REP_C_BULK,			"REP_C_BULK" },
 		{ REP_C_DELAYCLIENT,		"REP_C_DELAYCLIENT" },
+		{ REP_C_DISABLE_POLL,		"REP_C_DISABLE_POLL" },
+		{ REP_C_DISABLE_SSL,		"REP_C_DISABLE_SSL" },
 		{ REP_C_ELECT_LOGLENGTH,	"REP_C_ELECT_LOGLENGTH" },
 		{ REP_C_ELECTIONS,		"REP_C_ELECTIONS" },
+		{ REP_C_ENABLE_EPOLL,		"REP_C_ENABLE_EPOLL" },
 		{ REP_C_FORWARD_WRITES,		"REP_C_FORWARD_WRITES" },
 		{ REP_C_INMEM,			"REP_C_INMEM" },
 		{ REP_C_LEASE,			"REP_C_LEASE" },
@@ -501,6 +504,7 @@ __rep_print_all(env, flags)
 		{ REP_E_PHASE1,		"REP_E_PHASE1" },
 		{ REP_E_PHASE2,		"REP_E_PHASE2" },
 		{ REP_E_TALLY,		"REP_E_TALLY" },
+		{ REP_E_PEER_CONN_WAIT, "REP_E_PEER_CONN_WAIT" },
 		{ 0,			NULL }
 	};
 	static const FN rep_fn[] = {

@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2001 September 15
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -106,7 +112,7 @@ void sqlite3_randomness(int N, void *pBuf){
   sqlite3_mutex_leave(mutex);
 }
 
-#ifndef SQLITE_OMIT_BUILTIN_TEST
+#ifndef SQLITE_UNTESTABLE
 /*
 ** For testing purposes, we sometimes want to preserve the state of
 ** PRNG and restore the PRNG to its saved state at a later time, or
@@ -131,4 +137,4 @@ void sqlite3PrngRestoreState(void){
     sizeof(sqlite3Prng)
   );
 }
-#endif /* SQLITE_OMIT_BUILTIN_TEST */
+#endif /* SQLITE_UNTESTABLE */

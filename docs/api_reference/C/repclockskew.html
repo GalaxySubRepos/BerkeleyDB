@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;rep_set_clockskew()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;rep_set_clockskew()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repmessage.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repclockskew"></a>DB_ENV-&gt;rep_set_clockskew()</h2>
+            <h2 class="title" style="clear: both"><a id="repclockskew"></a>
+        <span>DB_ENV-&gt;rep_set_clockskew()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -50,12 +56,21 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
          leases.
          Calling this method is optional; the default values for clock skew
          assume no skew.  The application must also configure leases via the 
-         <a class="xref" href="repconfig.html" title="DB_ENV-&gt;rep_set_config()">DB_ENV-&gt;rep_set_config()</a> 
+         <a class="xref" href="repconfig.html" title="DB_ENV-&gt;rep_set_config()">
+        <span>DB_ENV-&gt;rep_set_config()</span>
+        
+    </a> 
          method and set the master lease timeout via the 
-         <a class="xref" href="repset_timeout.html" title="DB_ENV-&gt;rep_set_timeout()">DB_ENV-&gt;rep_set_timeout()</a> 
+         <a class="xref" href="repset_timeout.html" title="DB_ENV-&gt;rep_set_timeout()">
+        <span>DB_ENV-&gt;rep_set_timeout()</span>
+        
+    </a> 
          method. Base API applications must also set the
          number of sites in the replication group via the 
-         <a class="xref" href="repnsites.html" title="DB_ENV-&gt;rep_set_nsites()">DB_ENV-&gt;rep_set_nsites()</a> 
+         <a class="xref" href="repnsites.html" title="DB_ENV-&gt;rep_set_nsites()">
+        <span>DB_ENV-&gt;rep_set_nsites()</span>
+        
+    </a> 
          method.  These methods may be called in any order.  For a description
          of the clock skew values, see 
          <a href="../../programmer_reference/rep_clock_skew.html" class="olink">Clock skew</a>
@@ -88,8 +103,14 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;rep_set_clockskew()</code> method may not be called after the
-         <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">DB_ENV-&gt;repmgr_start()</a>  or
-         <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a> 
+         <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">
+        <span>DB_ENV-&gt;repmgr_start()</span>
+        
+    </a>  or
+         <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a> 
          methods are called.
     </p>
       <p>
@@ -104,7 +125,7 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229426176"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113481734672"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -112,7 +133,7 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229441600"></a>fast_clock</h4>
+                <h4 class="title"><a id="idm140113481709232"></a>fast_clock</h4>
               </div>
             </div>
           </div>
@@ -125,7 +146,7 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229442464"></a>slow_clock</h4>
+                <h4 class="title"><a id="idm140113481703472"></a>slow_clock</h4>
               </div>
             </div>
           </div>
@@ -138,7 +159,7 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229451440"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113481759040"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -154,15 +175,21 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229358480"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113481666800"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
                 If the method was called after replication is started with a
                 call to the 
-                <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">DB_ENV-&gt;repmgr_start()</a> or the 
-                <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a> method; or if
+                <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">
+        <span>DB_ENV-&gt;repmgr_start()</span>
+        
+    </a> or the 
+                <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a> method; or if
                 an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -171,7 +198,7 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229375024"></a>Class</h3>
+              <h3 class="title"><a id="idm140113481668880"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -183,7 +210,7 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229489664"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113481683968"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -203,11 +230,17 @@ DB_ENV-&gt;rep_set_clockskew(DB_ENV *env,
           <td width="40%" align="right"> <a accesskey="n" href="repconfig.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;rep_process_message() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;rep_process_message()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;rep_set_config()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;rep_set_config()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

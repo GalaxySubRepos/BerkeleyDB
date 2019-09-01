@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">db_create</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">db_create</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="db_copy.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbcreate"></a>db_create</h2>
+            <h2 class="title" style="clear: both"><a id="dbcreate"></a>
+        <span>db_create</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -46,23 +52,50 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
         structure that is the handle for a Berkeley DB database. This function allocates memory for the
         structure, returning a pointer to the structure in the memory to which 
         <span class="bold"><strong>dbp</strong></span> refers.  To release the allocated memory and 
-        discard the handle, call the <a class="xref" href="dbclose.html" title="DB-&gt;close()">DB-&gt;close()</a>, 
-        <a class="xref" href="dbremove.html" title="DB-&gt;remove()">DB-&gt;remove()</a>, 
-        <a class="xref" href="dbrename.html" title="DB-&gt;rename()">DB-&gt;rename()</a>, or 
-        <a class="xref" href="dbverify.html" title="DB-&gt;verify()">DB-&gt;verify()</a> methods.
+        discard the handle, call the <a class="xref" href="dbclose.html" title="DB-&gt;close()">
+        <span>DB-&gt;close()</span>
+        
+    </a>, 
+        <a class="xref" href="dbremove.html" title="DB-&gt;remove()">
+        <span>DB-&gt;remove()</span>
+        
+    </a>, 
+        <a class="xref" href="dbrename.html" title="DB-&gt;rename()">
+        <span>DB-&gt;rename()</span>
+        
+    </a>, or 
+        <a class="xref" href="dbverify.html" title="DB-&gt;verify()">
+        <span>DB-&gt;verify()</span>
+        
+    </a> methods.
     </p>
       <p>
         DB handles are free-threaded if the 
         <a class="link" href="envopen.html#envopen_DB_THREAD">DB_THREAD</a> flag is specified to 
-        the <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> method when the database is opened or 
+        the <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> method when the database is opened or 
         if the database environment in which the database is opened is free-threaded. The handle 
         should not be closed while any other handle that refers to the database is in use; for 
         example, database handles must not be closed while cursor handles into the database remain 
         open, or transactions that include operations on the database have not yet been committed 
-        or aborted.  Once the <a class="xref" href="dbclose.html" title="DB-&gt;close()">DB-&gt;close()</a>, 
-        <a class="xref" href="dbremove.html" title="DB-&gt;remove()">DB-&gt;remove()</a>, 
-        <a class="xref" href="dbrename.html" title="DB-&gt;rename()">DB-&gt;rename()</a>, or
-        <a class="xref" href="dbverify.html" title="DB-&gt;verify()">DB-&gt;verify()</a> 
+        or aborted.  Once the <a class="xref" href="dbclose.html" title="DB-&gt;close()">
+        <span>DB-&gt;close()</span>
+        
+    </a>, 
+        <a class="xref" href="dbremove.html" title="DB-&gt;remove()">
+        <span>DB-&gt;remove()</span>
+        
+    </a>, 
+        <a class="xref" href="dbrename.html" title="DB-&gt;rename()">
+        <span>DB-&gt;rename()</span>
+        
+    </a>, or
+        <a class="xref" href="dbverify.html" title="DB-&gt;verify()">
+        <span>DB-&gt;verify()</span>
+        
+    </a> 
         methods are called, the handle may not be accessed again, regardless of the method's return.
     </p>
       <p>
@@ -79,7 +112,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238063504"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113490552400"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -87,7 +120,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238063056"></a>dbp</h4>
+                <h4 class="title"><a id="idm140113490574768"></a>dbp</h4>
               </div>
             </div>
           </div>
@@ -100,7 +133,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238091232"></a>dbenv</h4>
+                <h4 class="title"><a id="idm140113490565584"></a>dbenv</h4>
               </div>
             </div>
           </div>
@@ -108,7 +141,8 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
                 <span>If the <span class="bold"><strong>dbenv</strong></span> parameter is NULL,</span> 
                  
                 the database is standalone; that is, it is not part of any Berkeley DB
-                environment.
+                environment. Since it is not part of any environment, any DB_CONFIG file in the application’s 
+                current working directory is ignored.
             </p>
           <p>
                 <span>
@@ -127,7 +161,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238057200"></a>flags</h4>
+                <h4 class="title"><a id="idm140113490545776"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -157,7 +191,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238141648"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113490505728"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -169,7 +203,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238033728"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113490548080"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -182,7 +216,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238035104"></a>Class</h3>
+              <h3 class="title"><a id="idm140113490544864"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -194,7 +228,7 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238059872"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113490861216"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -218,7 +252,10 @@ int db_create(DB **dbp, DB_ENV *dbenv, u_int32_t flags);  </pre>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;del()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;del()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -116,6 +116,11 @@ __log_open(env)
 		 */
 		lp->ready_lsn = lp->lsn;
 		if (IS_ENV_REPLICATED(env)) {
+			/*
+			 * The space for bulk_buf is accounted for in
+			 * env_attach() because it depends on whether
+			 * the DB_INIT_REP flag is set.
+			 */
 			if ((ret =
 			    __env_alloc(&dblp->reginfo, MEGABYTE, &bulk)) != 0)
 				goto err;
@@ -1705,11 +1710,11 @@ __log_get_oldversion(env, ver)
 	}
 	firstfnum = lsn.file;
 	/*
- 	 * Get the last on-disk lsn.
- 	 */
- 	LOG_SYSTEM_LOCK(env);
- 	lsn = lp->s_lsn;
- 	LOG_SYSTEM_UNLOCK(env);
+	 * Get the last on-disk lsn.
+	 */
+	LOG_SYSTEM_LOCK(env);
+	lsn = lp->s_lsn;
+	LOG_SYSTEM_UNLOCK(env);
 	if ((ret = __log_valid(dblp, firstfnum, 0, NULL, 0,
 	    NULL, &oldver)) != 0)
 		goto err;

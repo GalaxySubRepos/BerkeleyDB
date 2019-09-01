@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.entity;
@@ -34,11 +33,12 @@ import com.sleepycat.db.DatabaseException;
  */
 public class Sample {
 
-    private SampleDatabase db;
-    private SampleViews views;
+    private final SampleDatabase db;
+    private final SampleViews views;
 
     /**
      * Run the sample program.
+     * @param args
      */
     public static void main(String[] args) {
 
@@ -120,6 +120,7 @@ public class Sample {
      */
     private class PopulateDatabase implements TransactionWorker {
 
+        @Override
         public void doWork()
             throws Exception {
             addSuppliers();
@@ -138,6 +139,7 @@ public class Sample {
     private class PrintDatabase implements TransactionWorker {
 
 
+        @Override
         public void doWork()
             throws Exception {
             printValues("Parts",
@@ -164,7 +166,7 @@ public class Sample {
      */
     private void addParts() {
 
-        Set parts = views.getPartSet();
+        Set<Part> parts = views.getPartSet();
         if (parts.isEmpty()) {
             System.out.println("Adding Parts");
             parts.add(new Part("P1", "Nut", "Red",
@@ -188,7 +190,7 @@ public class Sample {
      */
     private void addSuppliers() {
 
-        Set suppliers = views.getSupplierSet();
+        Set<Supplier> suppliers = views.getSupplierSet();
         if (suppliers.isEmpty()) {
             System.out.println("Adding Suppliers");
             suppliers.add(new Supplier("S1", "Smith", 20, "London"));
@@ -205,7 +207,7 @@ public class Sample {
      */
     private void addShipments() {
 
-        Set shipments = views.getShipmentSet();
+        Set<Shipment> shipments = views.getShipmentSet();
         if (shipments.isEmpty()) {
             System.out.println("Adding Shipments");
             shipments.add(new Shipment("P1", "S1", 300));

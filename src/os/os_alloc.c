@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -266,7 +266,7 @@ __os_malloc(env, size, storep)
 		}
 		else
 			(void)USR_ERR(env, ret);
-		__db_err(env, ret, DB_STR_A("0147", "malloc: %lu", "%lu"),
+		__db_err(env, ret, DB_STR_A("0143", "malloc: %lu", "%lu"),
 		    (u_long)size);
 		return (ret);
 	}
@@ -350,7 +350,7 @@ __os_realloc(env, size, storep)
 			ret = USR_ERR(env, ENOMEM);
 			__os_set_errno(ENOMEM);
 		}
-		__db_err(env, ret, DB_STR_A("0148", "realloc: %lu", "%lu"),
+		__db_err(env, ret, DB_STR_A("0145", "realloc: %lu", "%lu"),
 		    (u_long)size);
 		return (ret);
 	}

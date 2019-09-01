@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -105,10 +105,16 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
                  <a class="link" href="envopen.html#envopen_DB_INIT_MPOOL">DB_INIT_MPOOL</a>,
                  <a class="link" href="envopen.html#envopen_DB_INIT_TXN">DB_INIT_TXN</a>, and
                  <a class="link" href="envopen.html#envopen_DB_USE_ENVIRON">DB_USE_ENVIRON</a>
-                 flags to <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>
+                 flags to <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>
                  (This means that <span class="command"><strong>db_load</strong></span> can be used to load data into databases while
                  they are in use by other processes.) If the 
-                 <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> call fails, or if
+                 <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> call fails, or if
                  no home directory is specified, the database is still updated, but the
                  environment is ignored; for example, no locking is done.
             </p>
@@ -268,7 +274,7 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815226930560"></a>Examples</h3>
+              <h3 class="title"><a id="idm140113479218240"></a>Examples</h3>
             </div>
           </div>
         </div>
@@ -290,7 +296,7 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227061872"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113479163344"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -298,7 +304,7 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815226881968"></a>DB_HOME</h4>
+                <h4 class="title"><a id="idm140113479096656"></a>DB_HOME</h4>
               </div>
             </div>
           </div>
@@ -306,7 +312,10 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
                           If the <span class="bold"><strong>-h</strong></span> option is not specified and
                           the environment variable DB_HOME is set, it is used as the path of the
                           database home, as described in the
-                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method.
+                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method.
                      </p>
         </div>
       </div>
@@ -314,14 +323,17 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815226889024"></a>Supported Keywords</h3>
+              <h3 class="title"><a id="idm140113479345280"></a>Supported Keywords</h3>
             </div>
           </div>
         </div>
         <p>
             The following keywords are supported for the <span class="bold"><strong>-c</strong></span> command-line 
             option to the <span class="command"><strong>db_load</strong></span> utility. See the
-            <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method
+            <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method
             for further discussion of these keywords and what values should be
             specified.
         </p>
@@ -435,7 +447,10 @@ db_load [-r lsn | fileid] [-h home] [-P password] file  </pre>
                     Specify the length for fixed-length records. This
                     number represents different things, depending on the
                     access method the database is using. See the
-                    <a class="xref" href="dbset_re_len.html" title="DB-&gt;set_re_len()">DB-&gt;set_re_len()</a>
+                    <a class="xref" href="dbset_re_len.html" title="DB-&gt;set_re_len()">
+        <span>DB-&gt;set_re_len()</span>
+        
+    </a>
                     method for details on what this number represents.
                 </p>
             </li>

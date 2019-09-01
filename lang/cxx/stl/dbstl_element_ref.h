@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -827,10 +827,12 @@ public:
 		}
 
 		slen = sizeof(char) * (strlen(src) + 1);
-		if (slen > holder->dbstl_str_buf_len_)
+		if (slen > holder->dbstl_str_buf_len_) {
+			(u_int32_t)(holder->dbstl_str_buf_len_ = slen);
 			holder->dbstl_str_buf_ = DbstlReAlloc(
 			    holder->dbstl_str_buf_, 
-			    (u_int32_t)(holder->dbstl_str_buf_len_ = slen));
+			    slen);
+		}
 
 		strcpy((char*)holder->dbstl_str_buf_, src);
 		holder->dbstl_my_value_ = (char*)holder->dbstl_str_buf_;
@@ -859,10 +861,12 @@ public:
 		}
 
 		slen = sizeof(wchar_t) * (wcslen(src) + 1);
-		if (slen > holder->dbstl_str_buf_len_)
+		if (slen > holder->dbstl_str_buf_len_) {
+			holder->dbstl_str_buf_len_ = slen;
 			holder->dbstl_str_buf_ = DbstlReAlloc(
 			    holder->dbstl_str_buf_, 
-			    holder->dbstl_str_buf_len_ = slen);
+			    slen);
+		}
 
 		wcscpy((wchar_t*)holder->dbstl_str_buf_, src);
 		holder->dbstl_my_value_ = (wchar_t*)holder->dbstl_str_buf_;

@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -48,10 +48,14 @@
                 If the optional string is omitted, the default is
                 <code class="literal">on</code>; for example, 
                 <code class="literal">set_open_flags DB_INIT_REP</code> or
-                <code class="literal">set_open_flags DB_INIT_REP on</code>.  Because
+                <code class="literal">set_open_flags DB_INIT_REP on</code>. Because
                 the DB_CONFIG file is read when the database environment is
                 opened, it will silently overrule configuration done before
                 that time.
+            </p>
+      <p>
+            <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a>’s <code class="literal">set_open_flags</code> command also 
+            supports <code class="literal">DB_REGISTER</code>.
             </p>
       <p>
             The method flag parameters are as follows:
@@ -82,6 +86,14 @@
 			shared memory that is accessible to more than a single process. Second, mutexes are only
 			configured to work between threads.
 			This setting overwrites the DB_PRIVATE flag passed from the application's DB_ENV-&gt;open method.
+            </p></li>
+          <li>
+            DB_REGISTER
+            <p>
+             Check to see if recovery needs to be performed before opening the database 
+             environment. Since this check has to be performed by all processes in order 
+             to be accurate, DB_CONFIG is a good place to specify it. This setting overwrites 
+             the DB_REGISTER flag passed from the application's DB_ENV-&gt;open method.
             </p></li>
           <li>
             DB_THREAD

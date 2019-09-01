@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994
@@ -202,9 +202,9 @@ __ham_metachk(dbp, name, hashm)
 		F_SET(dbp, DB_AM_DUP);
 	else
 		if (F_ISSET(dbp, DB_AM_DUP)) {
-			__db_errx(env, DB_STR_A("1127",
-	    "%s: DB_DUP specified to open method but not set in database",
-			    "%s"), name);
+			__db_errx(env, DB_STR_A("1010",
+	    "%s: %s specified to open method but not set in database",
+			    "%s %s"), name, "DB_DUP");
 			return (EINVAL);
 		}
 
@@ -241,14 +241,14 @@ __ham_metachk(dbp, name, hashm)
 		return (ret);
 	/* Blob databases must be upgraded. */
 	if (vers == 9 && (dbp->blob_file_id != 0 || dbp->blob_sdb_id != 0)) {
-	    __db_errx(env, DB_STR_A("1208",
+	    __db_errx(env, DB_STR_A("1207",
 "%s: databases that support external files must be upgraded.", "%s"),
 		    name);
 		return (EINVAL);
 	}
 #ifndef HAVE_64BIT_TYPES
 	if (dbp->blob_file_id != 0 || dbp->blob_sdb_id != 0) {
-		__db_errx(env, DB_STR_A("1202",
+		__db_errx(env, DB_STR_A("1199",
 		    "%s: external files require 64 integer compiler support.",
 		    "%s"),
 		    name);

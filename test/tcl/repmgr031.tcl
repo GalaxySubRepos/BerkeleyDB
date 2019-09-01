@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 # Test for ack policies that vary throughout the group, and that change
@@ -51,9 +51,15 @@ proc repmgr031_sub { method niter tnum viewopt } {
 	file mkdir $dirB
 	file mkdir $dirC
 
+	setup_repmgr_ssl $dirA
+	setup_repmgr_ssl $dirB
+	setup_repmgr_ssl $dirC
+
 	if { $viewopt == "view" } {
 		set dirV $testdir/V
 		file mkdir $dirV
+
+		setup_repmgr_ssl $dirV
 	}
 
 	puts -nonewline "\tRepmgr$tnum: Set up a group of 3:"

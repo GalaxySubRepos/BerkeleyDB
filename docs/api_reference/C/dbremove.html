@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;remove()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;remove()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbput.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbremove"></a>DB-&gt;remove()</h2>
+            <h2 class="title" style="clear: both"><a id="dbremove"></a>
+        <span>DB-&gt;remove()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -61,20 +67,32 @@ DB-&gt;remove(DB *db,
       <p>
          The <code class="methodname">DB-&gt;remove()</code> method should not be called if the remove is
          intended to be transactionally safe; the 
-         <a class="xref" href="envdbremove.html" title="DB_ENV-&gt;dbremove()">DB_ENV-&gt;dbremove()</a> method
+         <a class="xref" href="envdbremove.html" title="DB_ENV-&gt;dbremove()">
+        <span>DB_ENV-&gt;dbremove()</span>
+        
+    </a> method
          should be used instead.
     </p>
       <p>
          The <code class="methodname">DB-&gt;remove()</code> method can not be
          called for sliced databases; the 
-         <a class="xref" href="envdbremove.html" title="DB_ENV-&gt;dbremove()">DB_ENV-&gt;dbremove()</a> 
+         <a class="xref" href="envdbremove.html" title="DB_ENV-&gt;dbremove()">
+        <span>DB_ENV-&gt;dbremove()</span>
+        
+    </a> 
          method should be used instead.
     </p>
       <p>
         The <code class="methodname">DB-&gt;remove()</code> method may not be called after calling the 
-        <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method on any 
+        <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method on any 
         <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a>  handle.  If the 
-         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> method has already
+         <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> method has already
          been called on a <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a> 
          handle, close the existing handle and create a new one before calling
          <code class="methodname">DB-&gt;remove.
@@ -96,7 +114,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815237060432"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113489533088"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -104,7 +122,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815237065488"></a>file</h4>
+                <h4 class="title"><a id="idm140113489621904"></a>file</h4>
               </div>
             </div>
           </div>
@@ -117,7 +135,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815237002960"></a>database</h4>
+                <h4 class="title"><a id="idm140113489666656"></a>database</h4>
               </div>
             </div>
           </div>
@@ -130,7 +148,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815237063216"></a>flags</h4>
+                <h4 class="title"><a id="idm140113489488800"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -144,7 +162,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236967392"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113489505968"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -155,7 +173,10 @@ DB-&gt;remove(DB *db,
                     </p>
         <p>
                             <code class="methodname">DB-&gt;remove()</code> is affected by any database directory specified using the
-                            <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">DB_ENV-&gt;add_data_dir()</a>
+                            <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">
+        <span>DB_ENV-&gt;add_data_dir()</span>
+        
+    </a>
                             method, or by setting the "add_data_dir" string
                             in the environment's <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file.
                     </p>
@@ -164,7 +185,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236964416"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113489430864"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -180,12 +201,15 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236955632"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113489422080"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                            If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>
+                            If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>
                             was called; if this method was called on a sliced database;
                             or if an invalid flag value or parameter was specified.
                         </p>
@@ -194,7 +218,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236953888"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140113489420336"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -206,7 +230,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236955376"></a>DB_META_CHKSUM_FAIL</h4>
+                <h4 class="title"><a id="idm140113489421824"></a>DB_META_CHKSUM_FAIL</h4>
               </div>
             </div>
           </div>
@@ -221,7 +245,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236958112"></a>Class</h3>
+              <h3 class="title"><a id="idm140113489424560"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -233,7 +257,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236952224"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113489436240"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -253,11 +277,17 @@ DB-&gt;remove(DB *db,
           <td width="40%" align="right"> <a accesskey="n" href="dbrename.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;put() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;put()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;rename()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;rename()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_thread_count()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_thread_count()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_shm_key.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_thread_count"></a>DB_ENV-&gt;set_thread_count()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_thread_count"></a>
+        <span>DB_ENV-&gt;set_thread_count()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -59,22 +65,40 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
          The <code class="methodname">DB_ENV-&gt;set_thread_count()</code> method must be called 
          prior to opening the database environment. In addition, this method must be
          used with the
-         <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a>  method.
+         <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a>  method.
     </p>
       <p>
         If a process invokes this method without the use of 
-         <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a>
+         <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a>
         the program may be unable to allocate a thread
         control block. This is true of the standalone Berkeley DB utility
         programs.
     </p>
       <p>
          If a process has not configured an <span class="bold"><strong>is_alive</strong></span> function from the 
-         <a class="xref" href="envset_isalive.html" title="DB_ENV-&gt;set_isalive()">DB_ENV-&gt;set_isalive()</a> 
+         <a class="xref" href="envset_isalive.html" title="DB_ENV-&gt;set_isalive()">
+        <span>DB_ENV-&gt;set_isalive()</span>
+        
+    </a> 
          method, and then attempts to join a database environment configured
-         for failure checking with the <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a>, 
-         <a class="xref" href="envset_thread_id.html" title="DB_ENV-&gt;set_thread_id()">DB_ENV-&gt;set_thread_id()</a>,
-         <a class="xref" href="envset_isalive.html" title="DB_ENV-&gt;set_isalive()">DB_ENV-&gt;set_isalive()</a>  and
+         for failure checking with the <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a>, 
+         <a class="xref" href="envset_thread_id.html" title="DB_ENV-&gt;set_thread_id()">
+        <span>DB_ENV-&gt;set_thread_id()</span>
+        
+    </a>,
+         <a class="xref" href="envset_isalive.html" title="DB_ENV-&gt;set_isalive()">
+        <span>DB_ENV-&gt;set_isalive()</span>
+        
+    </a>  and
          <code class="methodname">DB_ENV-&gt;set_thread_count()</code> methods, the program may be unable to
          allocate a thread control block and fail to join the environment.
          <span class="bold"><strong>This is true of the standalone Berkeley DB
@@ -82,7 +106,10 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
          standalone Berkeley DB utility programs with environments configured
          for failure checking, incorporate the utility's functionality directly
          in the application, or call the 
-         <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a>  method
+         <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a>  method
          before running the utility.
     </p>
       <p>
@@ -101,7 +128,10 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_thread_count()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is
          called.
     </p>
       <p>
@@ -116,7 +146,7 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232818448"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113485193904"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -124,7 +154,7 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815232813520"></a>count</h4>
+                <h4 class="title"><a id="idm140113485192544"></a>count</h4>
               </div>
             </div>
           </div>
@@ -138,7 +168,7 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232814192"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113485176912"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -154,12 +184,15 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815232770464"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113485147408"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -168,7 +201,7 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232772544"></a>Class</h3>
+              <h3 class="title"><a id="idm140113485149488"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -180,7 +213,7 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815232766432"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113485143376"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -200,11 +233,17 @@ DB_ENV-&gt;set_thread_count(DB_ENV *dbenv, u_int32_t count);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_thread_id.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_shm_key() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_shm_key()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_thread_id()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_thread_id()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

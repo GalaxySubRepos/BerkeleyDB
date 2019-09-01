@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -17,7 +17,7 @@
  * STEAL_NAME -- name of stat to track steals.
  * STEAL_EVENT -- name of event to track steals.
  */
-#define __lock_alloc() /* for ctags */
+#define	__lock_alloc() /* for ctags */
 {
 	struct STRUCT_NAME *sh_thing;
 	DB_LOCKPART *end_p, *cur_p, *orig_p;
@@ -96,11 +96,11 @@ alloc:		locked = 0;
 		F_SET(&lt->reginfo, REGION_TRACKED);
 		while (__env_alloc(&lt->reginfo,
 		    nobjs * sizeof(struct STRUCT_NAME), &sh_thing) != 0)
-		    	if ((nobjs >>= 1) == 0)
+			if ((nobjs >>= 1) == 0)
 				break;
 		F_CLR(&lt->reginfo, REGION_TRACKED);
 		region->stat.CURRENT_COUNT += nobjs;
-		if (region->part_t_size != 1) 
+		if (region->part_t_size != 1)
 			LOCK_REGION_UNLOCK(lt->env);
 
 		if (nobjs == 0)
@@ -120,13 +120,13 @@ alloc:		locked = 0;
 				cur_p = lt->part_array;
 			sh_thing++;
 		}
-		if (region->part_t_size != 1) 
+		if (region->part_t_size != 1)
 			MUTEX_LOCK(lt->env, orig_p->mtx_part);
 		locked = 1;
-	} else 
+	} else
 		LOCK_REGION_UNLOCK(lt->env);
 
-	if (SH_TAILQ_FIRST(&orig_p->FREE_LIST_HEAD, STRUCT_NAME) != NULL) 
+	if (SH_TAILQ_FIRST(&orig_p->FREE_LIST_HEAD, STRUCT_NAME) != NULL)
 		return (0);
 	/* Somone stole all the locks! */
 	if (nobjs > 0)

@@ -1,7 +1,7 @@
 /*-
-* See the file LICENSE for redistribution information.
-*
 * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+*
+* See the file LICENSE for license information.
 */
 /*
 ** This file contains the implementation of the sqlite3_backup_XXX()
@@ -227,7 +227,7 @@ sqlite3_backup *sqlite3_backup_init(sqlite3* pDestDb, const char *zDestDb,
 	 * read transaction.
 	 */
 	if ((p->rc = btreeGetPageCount(p->pSrc,
-	    &p->tables, &p->nPagecount, p->srcTxn)) != SQLITE_OK) {
+	    &p->tables, &p->nPagecount, NULL, p->srcTxn)) != SQLITE_OK) {
 		sqlite3Error(pSrcDb, p->rc);
 		goto err;
 	}
@@ -325,8 +325,6 @@ int btreeDeleteEnvironment(Btree *p, const char *home, int rename)
 	tmp_env = NULL;
 
 	if (p != NULL) {
-		if ((rc = btreeUpdateBtShared(p, 1)) != SQLITE_OK)
-			goto err;
 		pBt = p->pBt;
 		if (pBt->nRef > 1)
 			return SQLITE_BUSY;
@@ -709,7 +707,7 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage) {
 	 */
 	if (!p->tables) {
 		if ((p->rc = btreeGetPageCount(p->pSrc,
-		    &p->tables, &p->nPagecount, p->srcTxn)) != SQLITE_OK) {
+		    &p->tables, &p->nPagecount, NULL, p->srcTxn)) != SQLITE_OK) {
 			sqlite3Error(p->pSrcDb, p->rc);
 			goto err;
 		}
@@ -826,7 +824,7 @@ int sqlite3_backup_pagecount(sqlite3_backup *p) {
  *          btreeGetTables().
  * p->currentTable - Index in tables of the current table being copied.
  * p->srcCur -  Cursor on the current source table being copied.
- * p->pDest - Destiniation Btree.
+ * p->pDest - Destination Btree.
  * p->destCur - BtCursor on the destination table being copied into.
  * pages - Number of pages worth of data to copy.
  */
@@ -989,6 +987,10 @@ static int btreeCopyPages(sqlite3_backup *p, int *pages)
 			if ((ret = dbp->put(dbp, p->pDest->savepoint_txn,
 			    &dataIn, 0, DB_MULTIPLE_KEY)) != 0)
 				goto err;
+			if (p->pSrcDb->mallocFailed != 0) {
+				ret = ENOMEM;
+				goto err;
+			}
 			dbp = NULL;
 			copied += MULTI_BUFSIZE/SQLITE_DEFAULT_PAGE_SIZE;
 		}

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -18,6 +18,18 @@ proc repmgr035scr_starttest { role oplist envid mydir markerdir\
 		set repmemargs "-rep_inmem_files "
 	}
 
+	set bdbver [berkdb version]
+	set vermaj [lindex $bdbver 0]
+	set vermin [lindex $bdbver 1]
+	set verpatch [lindex $bdbver 2]
+
+	if { $vermaj > 18 || [expr $vermaj == 18 && $vermin > 1] \
+	    || [expr $vermaj == 18 && $vermin == 1 && $verpatch >= 20] } {
+		set sslargs [setup_repmgr_sslargs]
+	} else {
+		set sslargs ""
+	}
+
 	puts "set up env cmd"
 	set lockmax 40000
 	set logbuf [expr 16 * 1024]
@@ -30,7 +42,7 @@ proc repmgr035scr_starttest { role oplist envid mydir markerdir\
 		puts "FAIL: unrecognized replication role $role"
 		return
 	}
-	set rep_env_cmd "berkdb_env_noerr -create -home $mydir \
+	set rep_env_cmd "berkdb_env_noerr -create -home $mydir $sslargs\
 	    -log_max $logmax -log_buffer $logbuf $repmemargs \
 	    -lock_max_objects $lockmax -lock_max_locks $lockmax \
 	    -errpfx $role -txn -data_dir DATADIR \
@@ -64,6 +76,16 @@ proc repmgr035scr_starttest { role oplist envid mydir markerdir\
 	}
 	set repmgr_conf " -start $rolearg $nsites_str \
 	    -local { $hoststr $local_port $legacy_str }"
+	# Reduce connection retry time so that environmental connection
+	# issues are less likely to cause intermittent failures.  In
+	# particular, make sure there is time for a few connection retries
+	# within the 20 second await_startup_done time.  Note that the tcl
+	# name of the connection retry timeout changed between BDB 5.0 and 5.1.
+	if { $vermaj == 5 && $vermin == 0 } {
+		append repmgr_conf " -timeout { conn_retry 5000000 }"
+	} else {
+		append repmgr_conf " -timeout { connection_retry 5000000 }"
+	}
 	# Append each remote site.  This is required for group membership
 	# legacy startups, and doesn't hurt the other cases.
 	foreach rmport $remote_ports {
@@ -169,8 +191,19 @@ proc repmgr035scr_starttest { role oplist envid mydir markerdir\
 
 proc repmgr035scr_verify { oplist mydir } {
 	global util_path
+	set bdbver [berkdb version]
+	set vermaj [lindex $bdbver 0]
+	set vermin [lindex $bdbver 1]
+	set verpatch [lindex $bdbver 2]
 
-	set rep_env_cmd "berkdb_env_noerr -home $mydir -txn \
+	if { $vermaj > 18 || [expr $vermaj == 18 && $vermin > 1] \
+	    || [expr $vermaj == 18 && $vermin == 1 && $verpatch >= 20] } {
+		set sslargs [setup_repmgr_sslargs]
+	} else {
+		set sslargs ""
+	}
+
+	set rep_env_cmd "berkdb_env_noerr -home $mydir -txn $sslargs\
 	    -data_dir DATADIR"
 
 	upgradescr_verify $oplist $mydir $rep_env_cmd
@@ -237,7 +270,6 @@ source $reputils_path/reputils.tcl
 set markerdir $ctldir/TESTDIR/MARKER
 
 puts "Calling proc for type $type"
-puts "PBDEBUG: mydir before $type is $mydir"
 if { $type == "START" } {
 	# VERIFY directory is needed in advance for diskandinmem so that
 	# in-memory database can be dumped while it still exists inside

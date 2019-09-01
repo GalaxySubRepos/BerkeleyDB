@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -18,6 +18,11 @@ static int __log_print_dbreg_setup __P((ENV *, DBT *, DB_LOG *));
 /*
  * PUBLIC: int __log_print_record  __P((ENV *,
  * PUBLIC:      DBT *, DB_LSN *, char *, DB_LOG_RECSPEC *, void *));
+ *
+ * Parameters:
+ *	info -  The final parameter of __db_dispatch(), usually a DB_TXNHEAD,
+ *		rarely DB_LOG or DB_LOG_VERIFY.  This function is not really
+ *		told which it is.
  */
 int
 __log_print_record(env, recbuf, lsnp, name, spec, info)
@@ -84,10 +89,8 @@ __log_print_record(env, recbuf, lsnp, name, spec, info)
 #endif
 	__db_msgadd(env, &msgbuf,
 	    "[%lu][%lu]%s%s: rec: %lu txnp %lx prevlsn [%lu][%lu]\n",
-	    (u_long)lsnp->file, (u_long)lsnp->offset,
-	    name, (type & DB_debug_FLAG) ? "_debug" : "",
-	    (u_long)type,
-	    (u_long)txnid,
+	    (u_long)lsnp->file, (u_long)lsnp->offset, name,
+	    (type & DB_debug_FLAG) ? "_debug" : "", (u_long)type, (u_long)txnid,
 	    (u_long)prev_lsn.file, (u_long)prev_lsn.offset);
 
 	for (sp = spec; sp->type != LOGREC_Done; sp++) {

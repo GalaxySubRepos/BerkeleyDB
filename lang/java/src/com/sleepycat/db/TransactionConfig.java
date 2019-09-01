@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -85,6 +85,7 @@ public class TransactionConfig implements Cloneable {
     @deprecated This has been replaced by {@link #setReadCommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public void setDegree2(final boolean degree2) {
         setReadCommitted(degree2);
     }
@@ -98,6 +99,7 @@ public class TransactionConfig implements Cloneable {
     @deprecated This has been replaced by {@link #getReadCommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public boolean getDegree2() {
         return getReadCommitted();
     }
@@ -137,6 +139,7 @@ public class TransactionConfig implements Cloneable {
     @deprecated This has been replaced by {@link #setReadUncommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public void setDirtyRead(final boolean dirtyRead) {
         setReadUncommitted(dirtyRead);
     }
@@ -152,6 +155,7 @@ public class TransactionConfig implements Cloneable {
     @deprecated This has been replaced by {@link #getReadUncommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public boolean getDirtyRead() {
         return getReadUncommitted();
     }

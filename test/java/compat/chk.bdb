@@ -21,8 +21,8 @@
 	exit 1
 }
 
-case `uname` in
-	*CYGWIN*WOW64*)
+case `uname -ms` in
+	*CYGWIN*WOW* | *CYGWIN*64)
 	d=../../../build_windows/x64/Debug
 	DB_LIB_DIR="$d"
 	JUNIT_JAR="`cygpath -m $JUNIT_JAR`"

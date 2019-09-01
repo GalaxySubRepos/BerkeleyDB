@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates. All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -82,7 +82,7 @@ proc env022_subtest { env } {
 	}
 
 	# All remaining db_archive options.
-	set flaglist [list "-a" "-d" "-l" "-s" ""]
+	set flaglist [list "-a" "-d" "-l" "-m env022" "-s" ""]
 	
 	foreach flag $flaglist {
 		if { $flag == "" } {
@@ -106,7 +106,8 @@ proc env022_subtest { env } {
 	}
 
 	# All remaining db_checkpoint options.
-	set flaglist [list "-k 512" "-L $testdir/chkpt.tmp" "-p 1" ""]
+	set flaglist [list "-k 512" "-L $testdir/chkpt.tmp" "-m env022" "-p 1"\
+	    ""]
 	
 	foreach flag $flaglist {
 		if { $flag == "" } {
@@ -118,7 +119,7 @@ proc env022_subtest { env } {
 		env022_execmd "$binname $flag -v $chkpt_args $std_redirect"\
 		    [list "checkpoint begin" "checkpoint complete"]
 	}
-
+	
 	# Print version number.
 	env022_execmd "$binname -V $std_redirect"
 

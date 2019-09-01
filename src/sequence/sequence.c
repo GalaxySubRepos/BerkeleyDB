@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -506,7 +506,7 @@ __seq_initial_value(seq, value)
 	rp = seq->seq_rp;
 	if (F_ISSET(rp, DB_SEQ_RANGE_SET) &&
 	     (value > rp->seq_max || value < rp->seq_min)) {
-		__db_errx(env, DB_STR("4008",
+		__db_errx(env, DB_STR("4003",
 		    "Sequence value out of range"));
 		return (EINVAL);
 	}
@@ -622,7 +622,7 @@ retry:	if ((ret = __db_get(dbp, ip,
 
 	if (data->size < sizeof(seq->seq_record)) {
 		ret = USR_ERR(env, EINVAL);
-		__db_errx(env, DB_STR("4010",
+		__db_errx(env, DB_STR("4005",
 		    "Bad sequence record format"));
 		goto err;
 	}
@@ -780,7 +780,7 @@ __seq_get(seq, txn, delta, retp, flags)
 
 	if (rp->seq_min + delta > rp->seq_max) {
 		ret = USR_ERR(env, EINVAL);
-		__db_errx(env, DB_STR("4013", "Sequence overflow"));
+		__db_errx(env, DB_STR("4011", "Sequence overflow"));
 		goto err;
 	}
 

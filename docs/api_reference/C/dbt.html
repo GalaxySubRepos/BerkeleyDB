@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -116,7 +116,10 @@
                     through Berkeley DB API calls into user-defined
                     callback functions. For example, this field may be
                     accessed to pass user-defined content when implementing
-                    the callback used by <a class="xref" href="dbset_dup_compare.html" title="DB-&gt;set_dup_compare()">DB-&gt;set_dup_compare()</a>.
+                    the callback used by <a class="xref" href="dbset_dup_compare.html" title="DB-&gt;set_dup_compare()">
+        <span>DB-&gt;set_dup_compare()</span>
+        
+    </a>.
                 </p>
           </li>
           <li>
@@ -328,11 +331,17 @@
                             will succeed.
                     </p><p>
                             It is an error to attempt a partial put using the
-                            <a class="xref" href="dbput.html" title="DB-&gt;put()">DB-&gt;put()</a>
+                            <a class="xref" href="dbput.html" title="DB-&gt;put()">
+        <span>DB-&gt;put()</span>
+        
+    </a>
                             method in a database that supports duplicate
                             records. Partial puts in databases supporting duplicate
                             records must be done using a 
-                            <a class="xref" href="dbcput.html" title="DBcursor-&gt;put()">DBcursor-&gt;put()</a>
+                            <a class="xref" href="dbcput.html" title="DBcursor-&gt;put()">
+        <span>DBcursor-&gt;put()</span>
+        
+    </a>
                             method.
                     </p><p>
                             It is an error to attempt a partial put with differing
@@ -363,9 +372,15 @@
                     </p><p>
                             After an application-supplied callback routine passed to
                             either 
-                            <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">DB-&gt;associate()</a>
+                            <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">
+        <span>DB-&gt;associate()</span>
+        
+    </a>
                             or 
-                            <a class="xref" href="dbset_append_recno.html" title="DB-&gt;set_append_recno()">DB-&gt;set_append_recno()</a>
+                            <a class="xref" href="dbset_append_recno.html" title="DB-&gt;set_append_recno()">
+        <span>DB-&gt;set_append_recno()</span>
+        
+    </a>
                             is executed, the 
                             <span class="bold"><strong>data</strong></span> 
                             field of a DBT may refer to memory allocated with 
@@ -385,7 +400,10 @@
                     </p><p>
                             Set in a secondary key creation callback routine passed
                             to 
-                            <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">DB-&gt;associate()</a>
+                            <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">
+        <span>DB-&gt;associate()</span>
+        
+    </a>
                             to indicate that multiple secondary
                             keys should be associated with the given primary
                             key/data pair. If set, the 
@@ -434,7 +452,10 @@
             <tbody>
               <tr>
                 <td>
-                  <a class="xref" href="dbsort_multiple.html" title="DB-&gt;sort_multiple()">DB-&gt;sort_multiple()</a>
+                  <a class="xref" href="dbsort_multiple.html" title="DB-&gt;sort_multiple()">
+        <span>DB-&gt;sort_multiple()</span>
+        
+    </a>
                 </td>
                 <td>Sort a set of DBTs</td>
               </tr>
@@ -524,7 +545,10 @@
           <td width="40%" align="right"> <a accesskey="n" href="DB_MULTIPLE_INIT.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DBcursor-&gt;set_priority() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DBcursor-&gt;set_priority()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>

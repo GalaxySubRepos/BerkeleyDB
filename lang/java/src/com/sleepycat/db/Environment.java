@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -2217,6 +2217,7 @@ The release patch number.
     <p>
     @throws DatabaseException if a failure occurs.
     */
+	@Deprecated
     public void setBlobThreshold(int value) throws DatabaseException {
         setExternalFileThreshold(value);
     }

@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2008 October 07
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -107,7 +113,7 @@ static int debugMutexEnd(void){ return SQLITE_OK; }
 ** that means that a mutex could not be allocated. 
 */
 static sqlite3_mutex *debugMutexAlloc(int id){
-  static sqlite3_debug_mutex aStatic[SQLITE_MUTEX_STATIC_APP3 - 1];
+  static sqlite3_debug_mutex aStatic[SQLITE_MUTEX_STATIC_VFS3 - 1];
   sqlite3_debug_mutex *pNew = 0;
   switch( id ){
     case SQLITE_MUTEX_FAST:

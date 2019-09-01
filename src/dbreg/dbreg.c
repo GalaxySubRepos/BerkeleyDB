@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -939,13 +939,11 @@ __dbreg_pluck_id(env, id)
 
 /*
  * __dbreg_log_id --
- *	Used for in-memory named files.  They are created in mpool and
- * are given id's early in the open process so that we can read and
- * create pages in the mpool for the files.  However, at the time that
- * the mpf is created, the file may not be fully created and/or its
- * meta-data may not be fully known, so we can't do a full dbregister.
- * This is a routine exported that will log a complete dbregister
- * record that will allow for both recovery and replication.
+ *	Log some kind of open of a file in a dbreg_register record.  In-memory
+ * named files are created in mpool and get a fileid early in the open process
+ * so that we can find and make pages for them.  However, at the time that the
+ * mpf is created, the file may not be fully created and/or its meta-data may
+ * not be fully known, so we can't do a full dbregister.
  *
  * PUBLIC: int __dbreg_log_id __P((DB *, DB_TXN *, int32_t, int));
  */
@@ -972,15 +970,14 @@ __dbreg_log_id(dbp, txn, id, needlock)
 	fnp = dbp->log_filename;
 
 	/*
-	 * Verify that the fnp has been initialized, by seeing if it
-	 * has any non-zero bytes in it.
+	 * Detect when certain fields of the FNAME are not yet set; get them
+	 * from the dbp if necessary.  This is for replication of inmem dbs.
 	 */
 	for (i = 0; i < DB_FILE_ID_LEN; i++)
 		if (fnp->ufid[i] != 0)
 			break;
 	if (i == DB_FILE_ID_LEN)
 		memcpy(fnp->ufid, dbp->fileid, DB_FILE_ID_LEN);
-
 	if (fnp->s_type == DB_UNKNOWN)
 		fnp->s_type = dbp->type;
 

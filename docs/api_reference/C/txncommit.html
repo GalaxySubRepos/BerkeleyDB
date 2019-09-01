@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_TXN-&gt;commit()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_TXN-&gt;commit()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="txnabort.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txncommit"></a>DB_TXN-&gt;commit()</h2>
+            <h2 class="title" style="clear: both"><a id="txncommit"></a>
+        <span>DB_TXN-&gt;commit()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -86,7 +92,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227751904"></a>DB_LOCK_DEADLOCK</h4>
+              <h4 class="title"><a id="idm140113479940576"></a>DB_LOCK_DEADLOCK</h4>
             </div>
           </div>
         </div>
@@ -99,7 +105,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227692000"></a>DB_LOCK_NOTGRANTED</h4>
+              <h4 class="title"><a id="idm140113479923968"></a>DB_LOCK_NOTGRANTED</h4>
             </div>
           </div>
         </div>
@@ -111,7 +117,10 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
       </div>
@@ -119,7 +128,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227731168"></a>DB_REP_LEASE_EXPIRED</h4>
+              <h4 class="title"><a id="idm140113479930512"></a>DB_REP_LEASE_EXPIRED</h4>
             </div>
           </div>
         </div>
@@ -131,7 +140,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227712176"></a>EINVAL</h4>
+              <h4 class="title"><a id="idm140113479930064"></a>EINVAL</h4>
             </div>
           </div>
         </div>
@@ -144,7 +153,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227671680"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113479905024"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -152,7 +161,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227671296"></a>flags</h4>
+                <h4 class="title"><a id="idm140113479904640"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -175,9 +184,15 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a> 
                  method or for a single transaction using the 
-                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>  method. 
+                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>  method. 
                  Any value specified to this method overrides both of those settings.
             </p>
               </li>
@@ -194,9 +209,15 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
                  This behavior is the default for Berkeley DB environments unless the
                  <a class="link" href="envset_flags.html#envset_flags_DB_TXN_NOSYNC">DB_TXN_NOSYNC</a> 
                  flag was specified to the 
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a>  method.
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a>  method.
                   This behavior may also be set for a single transaction using the
-                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a> 
+                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a> 
                  method.  Any value specified to this method overrides both of those
                  settings.
             </p>
@@ -226,9 +247,15 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a> 
                  method or for a single transaction using the 
-                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>  method. 
+                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>  method. 
                  Any value specified to this method overrides both of those settings.
             </p>
               </li>
@@ -240,7 +267,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227663920"></a>Class</h3>
+              <h3 class="title"><a id="idm140113479897040"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -252,7 +279,7 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227693024"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113479917120"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -272,11 +299,17 @@ DB_TXN-&gt;commit(DB_TXN *tid, u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="txndiscard.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_TXN-&gt;abort() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_TXN-&gt;abort()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_TXN-&gt;discard()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_TXN-&gt;discard()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.marshal;
@@ -27,15 +26,16 @@ import com.sleepycat.util.RuntimeExceptionWrapper;
  */
 public class SampleViews {
 
-    private StoredSortedMap partMap;
-    private StoredSortedMap supplierMap;
-    private StoredSortedMap shipmentMap;
-    private StoredSortedMap shipmentByPartMap;
-    private StoredSortedMap shipmentBySupplierMap;
-    private StoredSortedMap supplierByCityMap;
+    private final StoredSortedMap<PartKey, Part> partMap;
+    private final StoredSortedMap<SupplierKey, Supplier> supplierMap;
+    private final StoredSortedMap<ShipmentKey, Shipment> shipmentMap;
+    private final StoredSortedMap<PartKey, Shipment> shipmentByPartMap;
+    private final StoredSortedMap<SupplierKey, Shipment> shipmentBySupplierMap;
+    private final StoredSortedMap<String, Supplier> supplierByCityMap;
 
     /**
      * Create the data bindings and collection views.
+     * @param db
      */
     public SampleViews(SampleDatabase db) {
 
@@ -47,19 +47,19 @@ public class SampleViews {
         // EntryBinding classes to bind the stored tuple entry to a key Object.
         //
         ClassCatalog catalog = db.getClassCatalog();
-        EntryBinding partKeyBinding =
-            new MarshalledKeyBinding(PartKey.class);
-        EntityBinding partDataBinding =
-            new MarshalledEntityBinding(catalog, Part.class);
-        EntryBinding supplierKeyBinding =
-            new MarshalledKeyBinding(SupplierKey.class);
-        EntityBinding supplierDataBinding =
-            new MarshalledEntityBinding(catalog, Supplier.class);
-        EntryBinding shipmentKeyBinding =
-            new MarshalledKeyBinding(ShipmentKey.class);
-        EntityBinding shipmentDataBinding =
-            new MarshalledEntityBinding(catalog, Shipment.class);
-        EntryBinding cityKeyBinding =
+        EntryBinding<PartKey> partKeyBinding =
+            new MarshalledKeyBinding<>(PartKey.class);
+        EntityBinding<Part> partDataBinding =
+            new MarshalledEntityBinding<>(catalog, Part.class);
+        EntryBinding<SupplierKey> supplierKeyBinding =
+            new MarshalledKeyBinding<>(SupplierKey.class);
+        EntityBinding<Supplier> supplierDataBinding =
+            new MarshalledEntityBinding<>(catalog, Supplier.class);
+        EntryBinding<ShipmentKey> shipmentKeyBinding =
+            new MarshalledKeyBinding<>(ShipmentKey.class);
+        EntityBinding<Shipment> shipmentDataBinding =
+            new MarshalledEntityBinding<>(catalog, Shipment.class);
+        EntryBinding<String> cityKeyBinding =
             TupleBinding.getPrimitiveBinding(String.class);
 
         // Create map views for all stores and indices.
@@ -67,22 +67,22 @@ public class SampleViews {
         // (they use the DB_BTREE access method).
         //
         partMap =
-            new StoredSortedMap(db.getPartDatabase(),
+            new StoredSortedMap<>(db.getPartDatabase(),
 				partKeyBinding, partDataBinding, true);
         supplierMap =
-            new StoredSortedMap(db.getSupplierDatabase(),
+            new StoredSortedMap<>(db.getSupplierDatabase(),
 				supplierKeyBinding, supplierDataBinding, true);
         shipmentMap =
-            new StoredSortedMap(db.getShipmentDatabase(),
+            new StoredSortedMap<>(db.getShipmentDatabase(),
 				shipmentKeyBinding, shipmentDataBinding, true);
         shipmentByPartMap =
-            new StoredSortedMap(db.getShipmentByPartDatabase(),
+            new StoredSortedMap<>(db.getShipmentByPartDatabase(),
                                 partKeyBinding, shipmentDataBinding, true);
         shipmentBySupplierMap =
-            new StoredSortedMap(db.getShipmentBySupplierDatabase(),
+            new StoredSortedMap<>(db.getShipmentBySupplierDatabase(),
                                 supplierKeyBinding, shipmentDataBinding, true);
         supplierByCityMap =
-            new StoredSortedMap(db.getSupplierByCityDatabase(),
+            new StoredSortedMap<>(db.getSupplierByCityDatabase(),
                                 cityKeyBinding, supplierDataBinding, true);
     }
 
@@ -95,72 +95,81 @@ public class SampleViews {
 
     /**
      * Return a map view of the part storage container.
+     * @return 
      */
-    public StoredSortedMap getPartMap() {
+    public StoredSortedMap<PartKey, Part> getPartMap() {
 
         return partMap;
     }
 
     /**
      * Return a map view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedMap getSupplierMap() {
+    public StoredSortedMap<SupplierKey, Supplier> getSupplierMap() {
 
         return supplierMap;
     }
 
     /**
      * Return a map view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedMap getShipmentMap() {
+    public StoredSortedMap<ShipmentKey, Shipment> getShipmentMap() {
 
         return shipmentMap;
     }
 
     /**
      * Return an entity set view of the part storage container.
+     * @return 
      */
-    public StoredSortedValueSet getPartSet() {
+    public StoredSortedValueSet<Part> getPartSet() {
 
-        return (StoredSortedValueSet) partMap.values();
+        return (StoredSortedValueSet<Part>) partMap.values();
     }
 
     /**
      * Return an entity set view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedValueSet getSupplierSet() {
+    public StoredSortedValueSet<Supplier> getSupplierSet() {
 
-        return (StoredSortedValueSet) supplierMap.values();
+        return (StoredSortedValueSet<Supplier>) supplierMap.values();
     }
 
     /**
      * Return an entity set view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedValueSet getShipmentSet() {
+    public StoredSortedValueSet<Shipment> getShipmentSet() {
 
-        return (StoredSortedValueSet) shipmentMap.values();
+        return (StoredSortedValueSet<Shipment>) shipmentMap.values();
     }
 
     /**
      * Return a map view of the shipment-by-part index.
+     * @return 
      */
-    public StoredSortedMap getShipmentByPartMap() {
+    public StoredSortedMap<PartKey, Shipment> getShipmentByPartMap() {
 
         return shipmentByPartMap;
     }
 
     /**
      * Return a map view of the shipment-by-supplier index.
+     * @return 
      */
-    public StoredSortedMap getShipmentBySupplierMap() {
+    public StoredSortedMap<SupplierKey, Shipment> getShipmentBySupplierMap() {
 
         return shipmentBySupplierMap;
     }
 
     /**
      * Return a map view of the supplier-by-city index.
+     * @return 
      */
-    public final StoredSortedMap getSupplierByCityMap() {
+    public final StoredSortedMap<String, Supplier> getSupplierByCityMap() {
 
         return supplierByCityMap;
     }
@@ -170,36 +179,29 @@ public class SampleViews {
      * object representation.  To do this, it calls the MarshalledKey interface
      * implemented by the key class.
      */
-    private static class MarshalledKeyBinding extends TupleBinding {
+    private static class MarshalledKeyBinding<E extends MarshalledKey> extends TupleBinding<E> {
 
-        private Class keyClass;
+        private Class<E> keyClass;
 
         /**
          * Construct the binding object.
          */
-        private MarshalledKeyBinding(Class keyClass) {
+        private MarshalledKeyBinding(Class<E> keyClass) {
 
-            // The key class will be used to instantiate the key object.
-            //
-            if (!MarshalledKey.class.isAssignableFrom(keyClass)) {
-                throw new IllegalArgumentException(keyClass.toString() +
-                                       " does not implement MarshalledKey");
-            }
             this.keyClass = keyClass;
         }
 
         /**
          * Create the key object from the stored key tuple entry.
          */
-        public Object entryToObject(TupleInput input) {
+        @Override
+        public E entryToObject(TupleInput input) {
 
             try {
-                MarshalledKey key = (MarshalledKey) keyClass.newInstance();
+                E key = keyClass.newInstance();
                 key.unmarshalKey(input);
                 return key;
-            } catch (IllegalAccessException e) {
-                throw new RuntimeExceptionWrapper(e);
-            } catch (InstantiationException e) {
+            } catch (IllegalAccessException | InstantiationException e) {
                 throw new RuntimeExceptionWrapper(e);
             }
         }
@@ -207,10 +209,10 @@ public class SampleViews {
         /**
          * Create the stored key tuple entry from the key object.
          */
-        public void objectToEntry(Object object, TupleOutput output) {
+        @Override
+        public void objectToEntry(E object, TupleOutput output) {
 
-            MarshalledKey key = (MarshalledKey) object;
-            key.marshalKey(output);
+            object.marshalKey(output);
         }
     }
 
@@ -225,22 +227,16 @@ public class SampleViews {
      * data object has been deserialized. This avoids the use of a "data" class
      * completely. </p>
      */
-    private static class MarshalledEntityBinding extends TupleSerialBinding {
+    private static class MarshalledEntityBinding
+            <E extends MarshalledEnt> extends TupleSerialBinding<E,E> {
 
         /**
          * Construct the binding object.
          */
         private MarshalledEntityBinding(ClassCatalog classCatalog,
-                                        Class entityClass) {
+                                        Class<E> entityClass) {
 
             super(classCatalog, entityClass);
-
-            // The entity class will be used to instantiate the entity object.
-            //
-            if (!MarshalledEnt.class.isAssignableFrom(entityClass)) {
-                throw new IllegalArgumentException(entityClass.toString() +
-                                       " does not implement MarshalledEnt");
-            }
         }
 
         /**
@@ -248,27 +244,28 @@ public class SampleViews {
          * This "tricky" binding returns the stored data as the entity, but
          * first it sets the transient key fields from the stored key.
          */
-        public Object entryToObject(TupleInput tupleInput, Object javaInput) {
+        @Override
+        public E entryToObject(TupleInput tupleInput, E javaInput) {
 
-            MarshalledEnt entity = (MarshalledEnt) javaInput;
-            entity.unmarshalPrimaryKey(tupleInput);
-            return entity;
+            javaInput.unmarshalPrimaryKey(tupleInput);
+            return javaInput;
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public void objectToKey(Object object, TupleOutput output) {
+        @Override
+        public void objectToKey(E object, TupleOutput output) {
 
-            MarshalledEnt entity = (MarshalledEnt) object;
-            entity.marshalPrimaryKey(output);
+            object.marshalPrimaryKey(output);
         }
 
         /**
          * Return the entity as the stored data.  There is nothing to do here
          * since the entity's key fields are transient.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public E objectToData(E object) {
 
             return object;
         }

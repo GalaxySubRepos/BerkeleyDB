@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -432,6 +432,95 @@ namespace BerkeleyDB {
                 threadCntIsSet = true;
                 threadCnt = value;
             }
+        }
+
+        private uint _initdatabasecount;
+        internal bool initDatabaseCountIsSet;
+        /// <summary>
+        /// The initial number of databases catered for by the Berkeley
+        /// DB environment 
+        /// </summary>
+        /// <remarks>
+        /// The value is used by <see cref="DatabaseEnvironment.Open"/> to 
+        /// force Berkeley DB to allocate a certain number of databases 
+        /// when the environment is created. This can be useful to calculate
+        /// the initial amount of space needed for the replication objects
+        /// in the main environment region.
+        /// </remarks>
+        public uint InitDatabaseCount {
+                get { return _initdatabasecount; }
+                set {
+                        initDatabaseCountIsSet = true;
+                        _initdatabasecount = value; 
+                }
+        }
+
+        private uint _initdatabaselength;
+        internal bool initDatabaseLengthIsSet;
+        /// <summary>
+        /// The initial maximum combined length of a database's directory 
+        /// and name catered for by the Berkeley DB environment
+        /// </summary>
+        /// <remarks>
+        /// The value is used by <see cref="DatabaseEnvironment.Open"/> to
+        /// force Berkeley DB to allocate the maximum combined length of a
+        /// database's directory and name strings when the environment is
+        /// created. This can be useful to calculate the initial amount of
+        /// space needed for the replication objects in the main environment
+        /// region.
+        /// </remarks>
+        public uint InitDatabaseLength
+        {
+                get { return _initdatabaselength; }
+                set { 
+                        initDatabaseLengthIsSet = true;
+                        _initdatabaselength = value;
+                }
+        }
+
+        private uint _initextfiledatabasecount;
+        internal bool initExtFileDatabaseCountIsSet;
+        /// <summary>
+        /// The initial number of databases and subdatabases using external
+        /// files catered for by the Berkeley DB environment
+        /// </summary>
+        /// <remarks>
+        /// The value is used by <see cref="DatabaseEnvironment.Open"/> to
+        /// force Berkeley DB to allocate the initial number of databases
+        /// and subdatabases using external files when the environment is 
+        /// created. This can be useful to calculate the initial amount
+        /// of space needed for the replication objects in the main 
+        /// environment region.
+        /// </remarks>
+        public uint InitExtFileDatabaseCount
+        {
+                get { return _initextfiledatabasecount; }
+                set {
+                        initExtFileDatabaseCountIsSet = true;
+                        _initextfiledatabasecount = value;
+                }
+        }
+
+        private uint _initrepsitescount;
+        internal bool initRepSitesCountIsSet;
+        /// <summary>
+        /// The initial maximum number of sites in the replication group
+        /// catered for by the Berkeley DB environment.
+        /// </summary>
+        /// <remarks>
+        /// The value is used by <see cref="DatabaseEnvironment.Open"/> to
+        /// to allocate the initial maximum number of sites when the 
+        /// environment is created. This can be useful to calculate the 
+        /// initial amount of space needed for the replication objects
+        /// in the main environment region.
+        /// </remarks>
+        public uint InitRepSitesCount
+        {
+                get { return _initrepsitescount; }
+                set {
+                        initRepSitesCountIsSet = true;
+                        _initrepsitescount = value;
+                }
         }
 
         private uint _initthreadcount;

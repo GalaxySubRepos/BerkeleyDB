@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File TxnGuide.java
@@ -27,8 +26,8 @@ import java.io.FileNotFoundException;
 public class TxnGuide {
 
     private static String myEnvPath = "./";
-    private static String dbName = "mydb.db";
-    private static String cdbName = "myclassdb.db";
+    private static final String dbName = "mydb.db";
+    private static final String cdbName = "myclassdb.db";
 
     // DB handles
     private static Database myDb = null;
@@ -63,7 +62,8 @@ public class TxnGuide {
             for (int i = 0; i < NUMTHREADS; i++) {
                 threadArray[i].join();
             }
-        } catch (Exception e) {
+        } catch (DatabaseException
+                | IllegalArgumentException | InterruptedException e) {
             System.err.println("TxnGuide: " + e.toString());
             e.printStackTrace();
         } finally {
@@ -170,7 +170,7 @@ public class TxnGuide {
             if (args[i].startsWith("-")) {
                 switch(args[i].charAt(1)) {
                     case 'h':
-                        myEnvPath = new String(args[++i]);
+                        myEnvPath = args[++i];
                         break;
                     default:
                         usage();

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr032
 # TEST	The (undocumented) AUTOROLLBACK config feature.
@@ -61,6 +61,8 @@ proc repmgr032_sub { method tnum test_case largs } {
 	if { $repfiles_in_memory } {
 		set repmemargs "-rep_inmem_files "
 	}
+	
+	set sslargs [setup_repmgr_sslargs]
 
 	env_cleanup $testdir
 	file mkdir [set dira $testdir/SITE_A]
@@ -69,7 +71,7 @@ proc repmgr032_sub { method tnum test_case largs } {
 	foreach { porta portb portc } [available_ports 3] {}
 	set hoststr [get_hoststr $ipversion]
 
-	set common "-create -txn $verbargs $repmemargs \
+	set common "-create -txn $verbargs $repmemargs $sslargs \
 	    -rep -thread -event "
 	set common_mgr "-msgth 2"
 

@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2008, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package persist.gettingStarted;
@@ -21,7 +20,7 @@ import java.io.FileNotFoundException;
 
 public class SimpleStorePut {
 
-    private static File envHome = new File("./JEDB");
+    private static final File envHome = new File("./JEDB");
 
     private Environment envmnt;
     private EntityStore store;

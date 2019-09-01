@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2009 August 17
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -27,7 +33,11 @@
 
 #include "sqliteInt.h"
 #include <string.h>
-#include <tcl.h>
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#endif
 
 static struct Wrapped {
   sqlite3_pcache_methods2 pcache;
@@ -184,7 +194,7 @@ static void installInitWrappers(void){
   sqlite3_config(SQLITE_CONFIG_PCACHE2, &pcachemethods);
 }
 
-static int init_wrapper_install(
+static int SQLITE_TCLAPI init_wrapper_install(
   ClientData clientData, /* Unused */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
@@ -208,7 +218,7 @@ static int init_wrapper_install(
   return TCL_OK;
 }
 
-static int init_wrapper_uninstall(
+static int SQLITE_TCLAPI init_wrapper_uninstall(
   ClientData clientData, /* Unused */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
@@ -226,7 +236,7 @@ static int init_wrapper_uninstall(
   return TCL_OK;
 }
 
-static int init_wrapper_clear(
+static int SQLITE_TCLAPI init_wrapper_clear(
   ClientData clientData, /* Unused */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */
@@ -243,7 +253,7 @@ static int init_wrapper_clear(
   return TCL_OK;
 }
 
-static int init_wrapper_query(
+static int SQLITE_TCLAPI init_wrapper_query(
   ClientData clientData, /* Unused */
   Tcl_Interp *interp,    /* The TCL interpreter that invoked this command */
   int objc,              /* Number of arguments */

@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2008, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package persist.txn;
@@ -18,17 +17,14 @@ import com.sleepycat.persist.EntityCursor;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 
-import java.util.Iterator;
 import java.util.Random;
-import java.io.UnsupportedEncodingException;
 
 public class StoreWriter extends Thread 
 {
     private EntityStore myStore = null;
     private Environment myEnv = null;
-    private PrimaryIndex<Integer,PayloadDataEntity> pdKey;
-    private Random generator = new Random();
-    private boolean passTxn = false;
+    private final PrimaryIndex<Integer,PayloadDataEntity> pdKey;
+    private final Random generator;
 
 
     private static final int MAX_RETRY = 20;
@@ -37,6 +33,7 @@ public class StoreWriter extends Thread
     StoreWriter(Environment env, EntityStore store) 
 
         throws DatabaseException {
+        this.generator = new Random();
         myStore = store;
         myEnv = env;
         
@@ -49,6 +46,7 @@ public class StoreWriter extends Thread
     // Thread method that writes a series of objects
     // to the store using transaction protection.
     // Deadlock handling is demonstrated here.
+    @Override
     public void run () {
         Transaction txn = null;
 

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -115,6 +115,8 @@ class BytecodeEnhancer extends ClassVisitor {
     private String superclassName;
     private boolean isPersistent;
     private boolean isAbstract;
+    private boolean isInterface;
+    private boolean superIsInterface;
     private boolean hasDefaultConstructor;
     private boolean hasPersistentSuperclass;
     private boolean isCompositeKey;
@@ -146,6 +148,18 @@ class BytecodeEnhancer extends ClassVisitor {
         isAbstract = ((access & ACC_ABSTRACT) != 0);
         hasPersistentSuperclass =
             (superName != null && !superName.equals("java/lang/Object"));
+        try {
+            Class myClass = Class.forName(className);
+            isInterface = myClass.isInterface();
+            if (superclassName != null) {
+                Class supClass = Class.forName(superclassName);
+                superIsInterface = supClass.isInterface();
+            } else
+                superIsInterface = false;
+        } catch (ClassNotFoundException e) {
+            throw abort();
+        }
+
         super.visit(version, access, name, sig, superName, interfaces);
     }
 
@@ -297,7 +311,7 @@ class BytecodeEnhancer extends ClassVisitor {
         mv.visitCode();
         if (staticBlockMethod != null) {
             mv.visitMethodInsn
-                (INVOKESTATIC, className, staticBlockMethod, "()V");
+                (INVOKESTATIC, className, staticBlockMethod, "()V", isInterface);
         }
         mv.visitLdcInsn(className.replace('/', '.'));
         if (isAbstract) {
@@ -305,12 +319,12 @@ class BytecodeEnhancer extends ClassVisitor {
         } else {
             mv.visitTypeInsn(NEW, className);
             mv.visitInsn(DUP);
-            mv.visitMethodInsn(INVOKESPECIAL, className, "<init>", "()V");
+            mv.visitMethodInsn(INVOKESPECIAL, className, "<init>", "()V", isInterface);
         }
         mv.visitMethodInsn
             (INVOKESTATIC, "com/sleepycat/persist/impl/EnhancedAccessor",
              "registerClass",
-             "(Ljava/lang/String;Lcom/sleepycat/persist/impl/Enhanced;)V");
+             "(Ljava/lang/String;Lcom/sleepycat/persist/impl/Enhanced;)V", false);
         mv.visitInsn(RETURN);
         mv.visitMaxs(3, 0);
         mv.visitEnd();
@@ -334,7 +348,7 @@ class BytecodeEnhancer extends ClassVisitor {
         } else {
             mv.visitTypeInsn(NEW, className);
             mv.visitInsn(DUP);
-            mv.visitMethodInsn(INVOKESPECIAL, className, "<init>", "()V");
+            mv.visitMethodInsn(INVOKESPECIAL, className, "<init>", "()V", isInterface);
             mv.visitInsn(ARETURN);
             mv.visitMaxs(2, 1);
         }
@@ -398,7 +412,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitMethodInsn
                 (INVOKESPECIAL, superclassName, "bdbIsPriKeyFieldNullOrZero",
-                 "()Z");
+                 "()Z", superIsInterface);
         } else {
             mv.visitInsn(ICONST_0);
         }
@@ -437,7 +451,7 @@ class BytecodeEnhancer extends ClassVisitor {
                      "com/sleepycat/persist/impl/EntityOutput",
                      "writeKeyObject",
                      "(Ljava/lang/Object;" +
-                      "Lcom/sleepycat/persist/impl/Format;)V");
+                      "Lcom/sleepycat/persist/impl/Format;)V", true);
             }
         } else if (hasPersistentSuperclass) {
             mv.visitVarInsn(ALOAD, 0);
@@ -446,7 +460,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitMethodInsn
                 (INVOKESPECIAL, superclassName, "bdbWritePriKeyField",
                  "(Lcom/sleepycat/persist/impl/EntityOutput;" +
-                  "Lcom/sleepycat/persist/impl/Format;)V");
+                  "Lcom/sleepycat/persist/impl/Format;)V", superIsInterface);
         }
         mv.visitInsn(RETURN);
         mv.visitMaxs(3, 3);
@@ -479,7 +493,7 @@ class BytecodeEnhancer extends ClassVisitor {
                     (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
                      "readKeyObject",
                      "(Lcom/sleepycat/persist/impl/Format;)" +
-                     "Ljava/lang/Object;");
+                     "Ljava/lang/Object;", true);
                 mv.visitTypeInsn(CHECKCAST, getTypeInstName(priKeyField.type));
                 mv.visitFieldInsn
                     (PUTFIELD, className, priKeyField.name,
@@ -492,7 +506,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitMethodInsn
                 (INVOKESPECIAL, superclassName, "bdbReadPriKeyField",
                  "(Lcom/sleepycat/persist/impl/EntityInput;" +
-                  "Lcom/sleepycat/persist/impl/Format;)V");
+                  "Lcom/sleepycat/persist/impl/Format;)V", superIsInterface);
         }
         mv.visitInsn(RETURN);
         mv.visitMaxs(3, 3);
@@ -528,7 +542,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitVarInsn(ALOAD, 1);
             mv.visitMethodInsn
                 (INVOKESPECIAL, superclassName, "bdbWriteSecKeyFields",
-                 "(Lcom/sleepycat/persist/impl/EntityOutput;)V");
+                 "(Lcom/sleepycat/persist/impl/EntityOutput;)V", superIsInterface);
         }
         for (FieldInfo field : secKeyFields) {
             genWriteField(mv, field);
@@ -597,7 +611,7 @@ class BytecodeEnhancer extends ClassVisitor {
              priKeyField.type.getDescriptor());
         mv.visitMethodInsn
             (INVOKEINTERFACE, entityInputOrOutputClass, "registerPriKeyObject",
-             "(Ljava/lang/Object;)V");
+             "(Ljava/lang/Object;)V", true);
     }
     
     /**
@@ -613,7 +627,7 @@ class BytecodeEnhancer extends ClassVisitor {
              priKeyField.type.getDescriptor());
         mv.visitMethodInsn
             (INVOKEINTERFACE, entityInputOrOutputClass, 
-             "registerPriStringKeyObject", "(Ljava/lang/Object;)V");
+             "registerPriStringKeyObject", "(Ljava/lang/Object;)V", true);
     }
 
     /**
@@ -632,7 +646,7 @@ class BytecodeEnhancer extends ClassVisitor {
                 mv.visitVarInsn(ALOAD, 1);
                 mv.visitMethodInsn
                     (INVOKESPECIAL, superclassName, "bdbWriteNonKeyFields",
-                     "(Lcom/sleepycat/persist/impl/EntityOutput;)V");
+                     "(Lcom/sleepycat/persist/impl/EntityOutput;)V", superIsInterface);
             }
             for (FieldInfo field : nonKeyFields) {
                 genWriteField(mv, field);
@@ -702,7 +716,7 @@ class BytecodeEnhancer extends ClassVisitor {
                          "com/sleepycat/persist/impl/EntityOutput",
                          "writeKeyObject",
                          "(Ljava/lang/Object;" +
-                          "Lcom/sleepycat/persist/impl/Format;)V");
+                          "Lcom/sleepycat/persist/impl/Format;)V", true);
                 }
             }
         }
@@ -745,7 +759,7 @@ class BytecodeEnhancer extends ClassVisitor {
                          "com/sleepycat/persist/impl/EntityInput",
                          "readKeyObject",
                          "(Lcom/sleepycat/persist/impl/Format;)" +
-                         "Ljava/lang/Object;");
+                         "Ljava/lang/Object;", true);
                     mv.visitTypeInsn(CHECKCAST, getTypeInstName(field.type));
                     mv.visitFieldInsn
                         (PUTFIELD, className, field.name,
@@ -778,14 +792,14 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeString",
-                 "(Ljava/lang/String;)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "(Ljava/lang/String;)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             mv.visitInsn(POP);
         } else if (sort == Type.OBJECT || sort == Type.ARRAY) {
             mv.visitInsn(ACONST_NULL);
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeObject",
-                 "(Ljava/lang/Object;Lcom/sleepycat/persist/impl/Format;)V");
+                 "(Ljava/lang/Object;Lcom/sleepycat/persist/impl/Format;)V", true);
         } else {
             genWritePrimitive(mv, sort);
         }
@@ -818,25 +832,25 @@ class BytecodeEnhancer extends ClassVisitor {
             genWritePrimitive(mv, sort);
         } else if (fieldClassName.equals(Date.class.getName())) {
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/util/Date", "getTime", "()J");
+                (INVOKEVIRTUAL, "java/util/Date", "getTime", "()J", false);
             genWritePrimitive(mv, Type.LONG);
         } else if (fieldClassName.equals(String.class.getName())) {
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeString",
-                 "(Ljava/lang/String;)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "(Ljava/lang/String;)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             mv.visitInsn(POP);
         } else if (fieldClassName.equals(BigInteger.class.getName())) {
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeBigInteger",
-             "(Ljava/math/BigInteger;)Lcom/sleepycat/bind/tuple/TupleOutput;");
+             "(Ljava/math/BigInteger;)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             mv.visitInsn(POP);
         } else if (fieldClassName.equals(BigDecimal.class.getName())) {
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeSortedBigDecimal",
-             "(Ljava/math/BigDecimal;)Lcom/sleepycat/bind/tuple/TupleOutput;");
+             "(Ljava/math/BigDecimal;)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             mv.visitInsn(POP);
         } else {
             throw DbCompat.unexpectedState(fieldClassName);
@@ -880,7 +894,7 @@ class BytecodeEnhancer extends ClassVisitor {
                                           : "bdbReadNonKeyFields";
             mv.visitMethodInsn
                 (INVOKESPECIAL, superclassName, name,
-                 "(Lcom/sleepycat/persist/impl/EntityInput;III)V");
+                 "(Lcom/sleepycat/persist/impl/EntityInput;III)V", superIsInterface);
             mv.visitLabel(next);
         }
     }
@@ -970,12 +984,12 @@ class BytecodeEnhancer extends ClassVisitor {
              */
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readStringObject", "()Ljava/lang/Object;");
+                 "readStringObject", "()Ljava/lang/Object;", true);
             mv.visitTypeInsn(CHECKCAST, getTypeInstName(field.type));
         } else if (isRefType(field.type)) {
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readObject", "()Ljava/lang/Object;");
+                 "readObject", "()Ljava/lang/Object;", true);
             mv.visitTypeInsn(CHECKCAST, getTypeInstName(field.type));
         } else {
             genReadPrimitive(mv, field.type.getSort());
@@ -1015,25 +1029,25 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitVarInsn(ALOAD, 1);
             genReadPrimitive(mv, Type.LONG);
             mv.visitMethodInsn
-                (INVOKESPECIAL, "java/util/Date", "<init>", "(J)V");
+                (INVOKESPECIAL, "java/util/Date", "<init>", "(J)V", false);
         } else if (fieldClassName.equals(String.class.getName())) {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 1);
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readString", "()Ljava/lang/String;");
+                 "readString", "()Ljava/lang/String;", true);
         } else if (fieldClassName.equals(BigInteger.class.getName())) {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 1);
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readBigInteger", "()Ljava/math/BigInteger;");
+                 "readBigInteger", "()Ljava/math/BigInteger;", true);
         } else if (fieldClassName.equals(BigDecimal.class.getName())) {
             mv.visitVarInsn(ALOAD, 0);
             mv.visitVarInsn(ALOAD, 1);
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readSortedBigDecimal", "()Ljava/math/BigDecimal;");
+                 "readSortedBigDecimal", "()Ljava/math/BigDecimal;", true);
         } else {
             throw DbCompat.unexpectedState(fieldClassName);
         }
@@ -1105,7 +1119,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitVarInsn(ILOAD, 4);
             mv.visitMethodInsn
                 (INVOKESPECIAL, className, "bdbGetField",
-                 "(Ljava/lang/Object;IIZ)Ljava/lang/Object;");
+                 "(Ljava/lang/Object;IIZ)Ljava/lang/Object;", isInterface);
             mv.visitInsn(ARETURN);
         } else {
             mv.visitJumpInsn(GOTO, l1);
@@ -1134,7 +1148,7 @@ class BytecodeEnhancer extends ClassVisitor {
      *  mv.visitVarInsn(ALOAD, 0);
      *  mv.visitFieldInsn(GETFIELD, TheClassName, "f2", "I");
      *  mv.visitMethodInsn(INVOKESTATIC, "java/lang/Integer", "valueOf",
-     *                     "(I)Ljava/lang/Integer;");
+     *                     "(I)Ljava/lang/Integer;", false);
      *  mv.visitInsn(ARETURN);
      *  mv.visitLabel(l1);
      *  mv.visitVarInsn(ALOAD, 0);
@@ -1222,7 +1236,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitVarInsn(ALOAD, 5);
             mv.visitMethodInsn
                 (INVOKESPECIAL, className, "bdbSetField",
-                 "(Ljava/lang/Object;IIZLjava/lang/Object;)V");
+                 "(Ljava/lang/Object;IIZLjava/lang/Object;)V", isInterface);
         }
         mv.visitInsn(RETURN);
         mv.visitLabel(l0);
@@ -1275,7 +1289,7 @@ class BytecodeEnhancer extends ClassVisitor {
             mv.visitVarInsn(ALOAD, 2);
             mv.visitMethodInsn
                 (INVOKESPECIAL, superclassName, "bdbSetPriField",
-                 "(Ljava/lang/Object;Ljava/lang/Object;)V");
+                 "(Ljava/lang/Object;Ljava/lang/Object;)V", superIsInterface);
         }
         mv.visitInsn(RETURN);
         mv.visitMaxs(3, 3);
@@ -1293,7 +1307,7 @@ class BytecodeEnhancer extends ClassVisitor {
      *  mv.visitVarInsn(ALOAD, 5);
      *  mv.visitTypeInsn(CHECKCAST, "java/lang/Integer");
      *  mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Integer", "intValue",
-     *                     "()I");
+     *                     "()I", false);
      *  mv.visitFieldInsn(PUTFIELD, TheClassName, "f2", "I");
      *  mv.visitLabel(l1);
      *  mv.visitVarInsn(ALOAD, 0);
@@ -1345,44 +1359,44 @@ class BytecodeEnhancer extends ClassVisitor {
         case Type.BOOLEAN:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
-                 "writeBoolean", "(Z)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "writeBoolean", "(Z)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.CHAR:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
-                 "writeChar", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "writeChar", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.BYTE:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
-                 "writeByte", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "writeByte", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.SHORT:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
-                 "writeShort", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "writeShort", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.INT:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
-                 "writeInt", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "writeInt", "(I)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.LONG:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
-                 "writeLong", "(J)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "writeLong", "(J)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.FLOAT:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeSortedFloat",
-                 "(F)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "(F)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         case Type.DOUBLE:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityOutput",
                  "writeSortedDouble",
-                 "(D)Lcom/sleepycat/bind/tuple/TupleOutput;");
+                 "(D)Lcom/sleepycat/bind/tuple/TupleOutput;", true);
             break;
         default:
             throw DbCompat.unexpectedState(String.valueOf(sort));
@@ -1396,42 +1410,42 @@ class BytecodeEnhancer extends ClassVisitor {
         case Type.BOOLEAN:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readBoolean", "()Z");
+                 "readBoolean", "()Z", true);
             break;
         case Type.CHAR:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readChar", "()C");
+                 "readChar", "()C", true);
             break;
         case Type.BYTE:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readByte", "()B");
+                 "readByte", "()B", true);
             break;
         case Type.SHORT:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readShort", "()S");
+                 "readShort", "()S", true);
             break;
         case Type.INT:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readInt", "()I");
+                 "readInt", "()I", true);
             break;
         case Type.LONG:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readLong", "()J");
+                 "readLong", "()J", true);
             break;
         case Type.FLOAT:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readSortedFloat", "()F");
+                 "readSortedFloat", "()F", true);
             break;
         case Type.DOUBLE:
             mv.visitMethodInsn
                 (INVOKEINTERFACE, "com/sleepycat/persist/impl/EntityInput",
-                 "readSortedDouble", "()D");
+                 "readSortedDouble", "()D", true);
             break;
         default:
             throw DbCompat.unexpectedState(String.valueOf(sort));
@@ -1443,42 +1457,42 @@ class BytecodeEnhancer extends ClassVisitor {
         case Type.BOOLEAN:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Boolean", "valueOf",
-                 "(Z)Ljava/lang/Boolean;");
+                 "(Z)Ljava/lang/Boolean;", false);
             break;
         case Type.CHAR:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Character", "valueOf",
-                 "(C)Ljava/lang/Character;");
+                 "(C)Ljava/lang/Character;", false);
             break;
         case Type.BYTE:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Byte", "valueOf",
-                 "(B)Ljava/lang/Byte;");
+                 "(B)Ljava/lang/Byte;", false);
             break;
         case Type.SHORT:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Short", "valueOf",
-                 "(S)Ljava/lang/Short;");
+                 "(S)Ljava/lang/Short;", false);
             break;
         case Type.INT:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Integer", "valueOf",
-                 "(I)Ljava/lang/Integer;");
+                 "(I)Ljava/lang/Integer;", false);
             break;
         case Type.LONG:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Long", "valueOf",
-                 "(J)Ljava/lang/Long;");
+                 "(J)Ljava/lang/Long;", false);
             break;
         case Type.FLOAT:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Float", "valueOf",
-                 "(F)Ljava/lang/Float;");
+                 "(F)Ljava/lang/Float;", false);
             break;
         case Type.DOUBLE:
             mv.visitMethodInsn
                 (INVOKESTATIC, "java/lang/Double", "valueOf",
-                 "(D)Ljava/lang/Double;");
+                 "(D)Ljava/lang/Double;", false);
             break;
         default:
             throw DbCompat.unexpectedState(String.valueOf(sort));
@@ -1489,35 +1503,35 @@ class BytecodeEnhancer extends ClassVisitor {
         switch (sort) {
         case Type.BOOLEAN:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z");
+                (INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue", "()Z", false);
             break;
         case Type.CHAR:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C");
+                (INVOKEVIRTUAL, "java/lang/Character", "charValue", "()C", false);
             break;
         case Type.BYTE:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B");
+                (INVOKEVIRTUAL, "java/lang/Byte", "byteValue", "()B", false);
             break;
         case Type.SHORT:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S");
+                (INVOKEVIRTUAL, "java/lang/Short", "shortValue", "()S", false);
             break;
         case Type.INT:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I");
+                (INVOKEVIRTUAL, "java/lang/Integer", "intValue", "()I", false);
             break;
         case Type.LONG:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J");
+                (INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
             break;
         case Type.FLOAT:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F");
+                (INVOKEVIRTUAL, "java/lang/Float", "floatValue", "()F", false);
             break;
         case Type.DOUBLE:
             mv.visitMethodInsn
-                (INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D");
+                (INVOKEVIRTUAL, "java/lang/Double", "doubleValue", "()D", false);
             break;
         default:
             throw DbCompat.unexpectedState(String.valueOf(sort));

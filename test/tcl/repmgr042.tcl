@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2014, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -45,6 +45,8 @@ proc repmgr042_sub { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -57,7 +59,7 @@ proc repmgr042_sub { method niter tnum largs } {
 
 	puts "\tRepmgr$tnum.a: Primordial start of client as temporary\
 	    master (error)."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}
@@ -70,14 +72,14 @@ proc repmgr042_sub { method niter tnum largs } {
 	env_cleanup $clientdir
 
 	puts "\tRepmgr$tnum.b: Start preferred master and client sites."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrprefmasmaster on}
 	$masterenv repmgr -ack all \
 	    -local [list $hoststr [lindex $ports 0]] -start client
 	await_expected_master $masterenv
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}

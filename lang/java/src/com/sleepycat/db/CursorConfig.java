@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -73,6 +73,7 @@ public class CursorConfig implements Cloneable {
     @deprecated This has been replaced by {@link #READ_UNCOMMITTED} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public static final CursorConfig DIRTY_READ = READ_UNCOMMITTED;
 
     /**
@@ -84,6 +85,7 @@ public class CursorConfig implements Cloneable {
     <p>
     @deprecated This has been replaced by {@link #READ_COMMITTED} to conform to ANSI database isolation terminology.
     */
+	@Deprecated
     public static final CursorConfig DEGREE_2 = READ_COMMITTED;
 
     private boolean bulkCursor = false;
@@ -165,6 +167,7 @@ public class CursorConfig implements Cloneable {
     @deprecated This has been replaced by {@link #setReadCommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public void setDegree2(final boolean degree2) {
         setReadCommitted(degree2);
     }
@@ -178,6 +181,7 @@ public class CursorConfig implements Cloneable {
     @deprecated This has been replaced by {@link #getReadCommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public boolean getDegree2() {
         return getReadCommitted();
     }
@@ -217,6 +221,7 @@ public class CursorConfig implements Cloneable {
     @deprecated This has been replaced by {@link #setReadUncommitted} to
     conform to ANSI database isolation terminology.
     */
+	@Deprecated
     public void setDirtyRead(final boolean dirtyRead) {
         setReadUncommitted(dirtyRead);
     }
@@ -232,6 +237,7 @@ public class CursorConfig implements Cloneable {
     @deprecated This has been replaced by {@link #getReadUncommitted} to
     conform to ANSI database isolation terminology.
     */
+	@Deprecated
     public boolean getDirtyRead() {
         return getReadUncommitted();
     }

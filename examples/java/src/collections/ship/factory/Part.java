@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.factory;
@@ -33,10 +32,10 @@ import com.sleepycat.bind.tuple.TupleOutput;
 public class Part implements Serializable, MarshalledTupleKeyEntity {
 
     private transient String number;
-    private String name;
-    private String color;
-    private Weight weight;
-    private String city;
+    private final String name;
+    private final String color;
+    private final Weight weight;
+    private final String city;
 
     public Part(String number, String name, String color, Weight weight,
                 String city) {
@@ -73,6 +72,7 @@ public class Part implements Serializable, MarshalledTupleKeyEntity {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[Part: number=" + number +
@@ -84,21 +84,33 @@ public class Part implements Serializable, MarshalledTupleKeyEntity {
 
     // --- MarshalledTupleKeyEntity implementation ---
 
+    @Override
     public void marshalPrimaryKey(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.number);
     }
 
+    @Override
     public void unmarshalPrimaryKey(TupleInput keyInput) {
 
         this.number = keyInput.readString();
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean marshalSecondaryKey(String keyName, TupleOutput keyOutput) {
 
         throw new UnsupportedOperationException(keyName);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean nullifyForeignKey(String keyName) {
 
         throw new UnsupportedOperationException(keyName);

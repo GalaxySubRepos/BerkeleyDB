@@ -1,9 +1,9 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file LICENSE for license information.
+ *
+ * $Id: db_upgrade.c,v a79fcece62a1 2016/06/06 14:15:33 yong $
  */
 
 #include "db_config.h"
@@ -53,7 +53,7 @@ db_upgrade_main(argc, argv)
 		return (ret);
 
 	dbenv = NULL;
-	flags = nflag = verbose = 0;
+	flags = nflag = verbose = vflag = 0;
 	exitval = EXIT_SUCCESS;
 	home = msgpfx = passwd = vopt = NULL;
 	__db_getopt_reset = 1;
@@ -70,8 +70,8 @@ db_upgrade_main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'S':
 			vopt = optarg;

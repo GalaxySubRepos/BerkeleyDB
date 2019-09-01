@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -71,6 +71,11 @@ proc repmgr010_sub { method niter tnum viewopt largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $masterdir	
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+	
 	if { $viewopt == "view" } {
 		set viewdir1 $testdir/VIEWDIR1
 		set viewdir2 $testdir/VIEWDIR2
@@ -80,6 +85,11 @@ proc repmgr010_sub { method niter tnum viewopt largs } {
 		file mkdir $viewdir2
 		file mkdir $viewdir3
 		file mkdir $viewdir4
+
+		setup_repmgr_ssl $viewdir1
+		setup_repmgr_ssl $viewdir2
+		setup_repmgr_ssl $viewdir3
+		setup_repmgr_ssl $viewdir4
 	}
 
 	puts "\tRepmgr$tnum.a: Start master, clients$viewstr, acks quorum."
@@ -281,6 +291,11 @@ proc repmgr010_joinunelect { method niter tnum largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+
 	puts "\tRepmgr$tnum.ju.a: Start master and client, acks allpeers."
 	set ma_envcmd "berkdb_env_noerr -create $verbargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"

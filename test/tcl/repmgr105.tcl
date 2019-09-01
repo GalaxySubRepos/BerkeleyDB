@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr105
 # TEST Repmgr recognition of peer setting, across processes.
@@ -38,6 +38,7 @@ proc repmgr105_sub { config } {
 
 	puts "\tRepmgr$tnum.a: Start master, write some data."
 	make_dbconfig $masterdir {}
+	setup_repmgr_ssl $masterdir
 	set cmds {
 		"home $masterdir"
 		"local $hoststr $mport"
@@ -57,6 +58,7 @@ proc repmgr105_sub { config } {
 	# detail doesn't matter.
 	# 
 	make_dbconfig $testdir/A {}
+	setup_repmgr_ssl $testdir/A
 	set a [open_site_prog [list \
 			       "home $testdir/A" \
 			       "local $hoststr $portA" \
@@ -69,6 +71,7 @@ proc repmgr105_sub { config } {
 	$env close
 
 	make_dbconfig $testdir/B {}
+	setup_repmgr_ssl $testdir/B
 	set b [open_site_prog [list  \
 			       "home $testdir/B" \
 			       "local $hoststr $portB" \
@@ -89,7 +92,7 @@ proc repmgr105_sub { config } {
 	#
 	puts "\tRepmgr$tnum.c: Start client under test."
 	make_dbconfig $testdir/C {}
-
+	setup_repmgr_ssl $testdir/C
 	set c2 [list \
 		    "home $testdir/C" \
 		    "local $hoststr [lindex $ports 3]" \

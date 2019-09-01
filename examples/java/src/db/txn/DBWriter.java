@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db.txn;
@@ -24,15 +23,14 @@ import com.sleepycat.db.LockMode;
 import com.sleepycat.db.OperationStatus;
 import com.sleepycat.db.Transaction;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 public class DBWriter extends Thread
 {
     private Database myDb = null;
     private Environment myEnv = null;
-    private EntryBinding dataBinding = null;
-    private Random generator = new Random();
+    private EntryBinding<PayloadData> dataBinding = null;
+    private final Random generator;
     private boolean passTxn = false;
 
 
@@ -51,9 +49,10 @@ public class DBWriter extends Thread
         boolean passtxn)
 
         throws DatabaseException {
+        this.generator = new Random();
         myDb = db;
         myEnv = env;
-        dataBinding = new SerialBinding(scc, PayloadData.class);
+        dataBinding = new SerialBinding<>(scc, PayloadData.class);
 
         passTxn = passtxn;
     }
@@ -62,14 +61,17 @@ public class DBWriter extends Thread
     DBWriter(Environment env, Database db, StoredClassCatalog scc)
 
         throws DatabaseException {
+        this.generator = new Random();
         myDb = db;
         myEnv = env;
-        dataBinding = new SerialBinding(scc, PayloadData.class);
+        dataBinding = new SerialBinding<>(scc, PayloadData.class);
     }
 
     // Thread method that writes a series of records
     // to the database using transaction protection.
     // Deadlock handling is demonstrated here.
+
+    @Override
     public void run () {
         Transaction txn = null;
 

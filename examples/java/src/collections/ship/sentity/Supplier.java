@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.sentity;
@@ -31,9 +30,9 @@ import java.io.Serializable;
 public class Supplier implements Serializable {
 
     private transient String number;
-    private String name;
-    private int status;
-    private String city;
+    private final String name;
+    private final int status;
+    private final String city;
 
     public Supplier(String number, String name, int status, String city) {
 
@@ -72,6 +71,7 @@ public class Supplier implements Serializable {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[Supplier: number=" + number +

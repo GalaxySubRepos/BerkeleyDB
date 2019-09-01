@@ -2,6 +2,8 @@
 /*
  * Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
+ * See the file LICENSE for license information.
+ *
  * apitrace - Display DB API calls and return values
  *
  * The path to the DB library is required to be the first argument.

@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2007 May 7
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -87,7 +93,7 @@
 ** Not currently enforced.
 */
 #ifndef SQLITE_MAX_VDBE_OP
-# define SQLITE_MAX_VDBE_OP 25000
+# define SQLITE_MAX_VDBE_OP 250000000
 #endif
 
 /*
@@ -101,13 +107,13 @@
 ** The suggested maximum number of in-memory pages to use for
 ** the main database table and for temporary tables.
 **
-** IMPLEMENTATION-OF: R-31093-59126 The default suggested cache size
-** is 2000 pages.
+** IMPLEMENTATION-OF: R-30185-15359 The default suggested cache size is -2000,
+** which means the cache size is limited to 2048000 bytes of memory.
 ** IMPLEMENTATION-OF: R-48205-43578 The default suggested cache size can be
 ** altered using the SQLITE_DEFAULT_CACHE_SIZE compile-time options.
 */
 #ifndef SQLITE_DEFAULT_CACHE_SIZE
-# define SQLITE_DEFAULT_CACHE_SIZE  5000
+# define SQLITE_DEFAULT_CACHE_SIZE   5000
 #endif
 
 /*
@@ -115,14 +121,15 @@
 ** checkpointing the database in WAL mode.
 */
 #ifndef SQLITE_DEFAULT_WAL_AUTOCHECKPOINT
-#define SQLITE_DEFAULT_WAL_AUTOCHECKPOINT \
-	SQLITE_DEFAULT_JOURNAL_SIZE_LIMIT / SQLITE_DEFAULT_PAGE_SIZE
+# define SQLITE_DEFAULT_WAL_AUTOCHECKPOINT \
+        SQLITE_DEFAULT_JOURNAL_SIZE_LIMIT / SQLITE_DEFAULT_PAGE_SIZE
 #endif
 
 /*
 ** The maximum number of attached databases.  This must be between 0
-** and 62.  The upper bound on 62 is because a 64-bit integer bitmap
-** is used internally to track attached databases.
+** and 125.  The upper bound of 125 is because the attached databases are
+** counted using a signed 8-bit integer which has a maximum value of 127
+** and we have to allow 2 extra counts for the "main" and "temp" databases.
 */
 #ifndef SQLITE_MAX_ATTACHED
 # define SQLITE_MAX_ATTACHED 10

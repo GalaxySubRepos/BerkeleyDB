@@ -1,7 +1,7 @@
 /*
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -10,6 +10,9 @@
 #define	_DB_ATOMIC_H_
 
 #if defined(__cplusplus)
+#if __cplusplus >= 201103L
+#include <atomic>
+#endif
 extern "C" {
 #endif
 
@@ -32,6 +35,16 @@ extern "C" {
  *	    If the db_atomic_t's value is still oldval, set it to newval.
  *	    It returns 1 for success or 0 for failure.
  *
+ *	 atomic_init(valueptr, val)
+ *	    Initializes an existing atomic object. It should be used before
+ *	    read or write operations.
+ *
+ *	 atomic_read(valueptr)
+ *	    Reads a value from an atomic object.
+ *
+ *	 atomic_write(valueptr, val)
+ *	    Stores a value in an atomic object.
+ *
  * The ENV * parameter is used only when HAVE_ATOMIC_SUPPORT is undefined.
  *
  * If the platform does not natively support any one of these operations,
@@ -42,6 +55,20 @@ extern "C" {
  * Uses where mutexes are not available (e.g. the environment has not yet
  * attached to the mutex region) must be avoided.
  */
+#ifdef HAVE_ATOMIC_SUPPORT
+
+/*
+ * If the compiler supports C11/C++11 atomic operations, use its support in
+ * preference to any other implementation.
+ */
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
+#include <stdatomic.h>
+typedef int32_t atomic_value_t;
+typedef volatile _Atomic(atomic_value_t) db_atomic_t;
+#elif defined(__cplusplus) && (__cplusplus >= 201103L)
+typedef int32_t atomic_value_t;
+typedef volatile std::atomic<atomic_value_t> db_atomic_t;
+#else
 #if defined(DB_WIN32)
 typedef DWORD	atomic_value_t;
 #else
@@ -65,6 +92,14 @@ typedef struct {
 	volatile atomic_value_t value;
 } db_atomic_t;
 #endif
+#endif
+
+#else
+typedef int32_t	 atomic_value_t;
+typedef struct {
+	volatile atomic_value_t value;
+} db_atomic_t;
+#endif
 
 /*
  * These macro hide the db_atomic_t structure layout and help detect
@@ -72,10 +107,76 @@ typedef struct {
  * aligned 32-bit reads to be atomic even outside of explicit 'atomic' calls.
  * These have no memory barriers; the caller must include them when necessary.
  */
+#ifdef HAVE_ATOMIC_SUPPORT
+
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
+static inline atomic_value_t atomic_read(db_atomic_t *p) {
+	return atomic_load(p);
+}
+static inline void atomic_write(db_atomic_t *p, atomic_value_t val) {
+	atomic_store(p, val);
+}
+#elif defined(__cplusplus) && (__cplusplus >= 201103L)
+static inline atomic_value_t atomic_read(db_atomic_t *p) {
+	return p->load();
+}
+static inline void atomic_write(db_atomic_t *p, atomic_value_t val) {
+	p->store(val);
+}
+#else
 #define	atomic_read(p)		((p)->value)
-#define	atomic_init(p, val)	((p)->value = (val))
+static inline void atomic_init(db_atomic_t *p, atomic_value_t val) {
+	p->value = val;
+}
+#define atomic_write(p, val) atomic_init(p, val)
+#endif
+
+#else
+#define	atomic_read(p)		((p)->value)
+static inline void atomic_init(db_atomic_t *p, atomic_value_t val) {
+	p->value = val;
+}
+#define atomic_write(p, val) atomic_init(p, val)
+#endif
 
 #ifdef HAVE_ATOMIC_SUPPORT
+
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
+#define atomic_inc(env, p) __atomic_fetch_add_int(p, 1)
+#define atomic_dec(env, p) __atomic_fetch_sub_int(p, 1)
+#define atomic_add(env, p, val) __atomic_fetch_add_int(p, val)
+#define atomic_compare_exchange(env, p, oval, nval) __atomic_compare_exchange_int(p, oval, nval)
+static inline int __atomic_fetch_add_int(db_atomic_t *p, int val)
+{
+	return (atomic_fetch_add(p, val) + val);
+}
+static inline int __atomic_fetch_sub_int(db_atomic_t *p, int val)
+{
+	return (atomic_fetch_sub(p, val) - val);
+}
+static inline int __atomic_compare_exchange_int(db_atomic_t *p, atomic_value_t oldval, atomic_value_t newval)
+{
+	atomic_value_t expected;
+	int ret;
+
+	expected = oldval;
+	ret = atomic_compare_exchange_strong(p, &expected, newval);
+	return (ret);
+}
+#elif defined(__cplusplus) && (__cplusplus >= 201103L)
+#define atomic_inc(env, p) __atomic_fetch_add_int(p, 1)
+#define atomic_dec(env, p) __atomic_fetch_sub_int(p, 1)
+#define atomic_add(env, p, val) __atomic_fetch_add_int(p, val)
+#define atomic_compare_exchange(env, p, oval, nval) (p)->compare_exchange_strong(oval, nval)
+static inline int __atomic_fetch_add_int(db_atomic_t *p, int val)
+{
+	return ((p)->fetch_add(val) + val);
+}
+static inline int __atomic_fetch_sub_int(db_atomic_t *p, int val)
+{
+	return ((p)->fetch_sub(val) - val);
+}
+#else
 
 #if defined(DB_WIN32)
 #if defined(DB_WINCE)
@@ -208,6 +309,7 @@ static inline int __atomic_compare_exchange_int(
 	    :"memory", "cc");
 	return (was == oldval);
 }
+#endif
 #endif
 
 #else

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file EXAMPLES-LICENSE for license information.
  *
  * ex_lock---
  *  This example demonstrates how to use the lock manager for non-Berkeley DB data.

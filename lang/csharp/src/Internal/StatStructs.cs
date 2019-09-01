@@ -1,9 +1,9 @@
 /*-
  * Automatically built by dist/s_java_csharp.
  *
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 using System;
@@ -302,10 +302,12 @@ namespace BerkeleyDB.Internal {
 	internal ulong st_connection_drop;
 	internal ulong st_connect_fail;
 	internal uint st_elect_threads;
+	internal uint st_group_stable_log_file;	
 	internal uint st_max_elect_threads;
 	internal uint st_site_participants;
 	internal uint st_site_total;
 	internal uint st_site_views;
+	internal uint st_polling_method;
 	internal ulong st_takeovers;
 	internal ulong st_write_ops_forwarded;	
 	internal ulong st_write_ops_received;	

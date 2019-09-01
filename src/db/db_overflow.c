@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -266,6 +266,8 @@ __db_poff(dbc, dbt, pgnop)
 	u_int32_t space, sz, tlen;
 	u_int8_t *p;
 	int ret, t_ret;
+
+	COMPQUIET(tlen, 0);
 
 	/*
 	 * Allocate pages and copy the key/data item into them.  Calculate the

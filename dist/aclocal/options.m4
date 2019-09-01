@@ -216,6 +216,13 @@ AC_ARG_ENABLE(java,
 	[db_cv_java="$enable_java"], [db_cv_java="no"])
 AC_MSG_RESULT($db_cv_java)
 
+AC_MSG_CHECKING(if --enable-gui option specified)
+AC_ARG_ENABLE(gui,
+	[AC_HELP_STRING([--enable-gui],
+			[Build the BDB Graphical User Interface.])],
+	[db_cv_gui="$enable_gui"], [db_cv_gui="no"])
+AC_MSG_RESULT($db_cv_gui)
+
 AC_MSG_CHECKING(if --enable-server option specified)
 AC_ARG_ENABLE(server,
 	[AC_HELP_STRING([--enable-server],
@@ -301,13 +308,6 @@ AC_ARG_ENABLE(amalgamation,
 	[db_cv_sql_amalgamation="$enable_amalgamation"],
 	[db_cv_sql_amalgamation="no"])
 AC_MSG_RESULT($db_cv_sql_amalgamation)
-
-AC_MSG_CHECKING(if --enable-sql_codegen option specified)
-AC_ARG_ENABLE(sql_codegen,
-	[AC_HELP_STRING([--enable-sql_codegen],
-			[Build the SQL-to-C code generation tool.])],
-	[db_cv_sql_codegen="$enable_sql_codegen"], [db_cv_sql_codegen="no"])
-AC_MSG_RESULT($db_cv_sql_codegen)
 
 AC_MSG_CHECKING(if --enable-stl option specified)
 AC_ARG_ENABLE(stl,
@@ -479,7 +479,8 @@ else
 	AC_MSG_RESULT($DB_VERSION_UNIQUE_NAME)
 fi
 
-# Undocumented option used for the dbsql command line tool (to match SQLite).
+# Undocumented options used for the dbsql command line tool (to match SQLite).
+AC_ARG_ENABLE(editline, [], [with_editline=$enableval], [with_editline=no])
 AC_ARG_ENABLE(readline, [], [with_readline=$enableval], [with_readline=no])
 
 # --enable-sql_compat implies --enable-sql
@@ -495,6 +496,11 @@ fi
 # --enable-server implies --enable-java
 if test "$db_cv_server" = "yes" -a "$db_cv_java" = "no"; then
 	db_cv_java=$db_cv_server
+fi
+
+# --enable-gui implies --enable-java
+if test "$db_cv_gui" = "yes" -a "$db_cv_java" = "no"; then
+	db_cv_java=$db_cv_gui
 fi
 
 # Cryptography support.
@@ -530,6 +536,27 @@ else
 	db_cv_build_cryptography="no"
 	AC_MSG_WARN(Ignoring --with-cryptography flag value. The NC package builds a Berkeley DB library that does not support encryption.)
 fi
+
+#SSL support for Replication Manager
+AC_MSG_CHECKING(if --with-repmgr-ssl option specified)
+build_repmgr_ssl="default";
+AC_ARG_WITH([repmgr-ssl],
+	AC_HELP_STRING([--with-repmgr-ssl=yes|no|default], [Build SSL support for Replication Manager. The default value is "default", unless not building the replication support.]),
+	[with_repmgr_ssl=$withval], [with_repmgr_ssl=$build_repmgr_ssl])
+
+case "$with_repmgr_ssl" in
+yes|no|default) ;;
+*) AC_MSG_ERROR([unknown --with-repmgr-ssl argument \'$with_repmgr_ssl\']) ;;
+esac
+
+if test "$with_repmgr_ssl" = "default" -a "$db_cv_build_replication" = "no"; then
+	with_repmgr_ssl="no";
+fi
+
+AC_MSG_RESULT($with_repmgr_ssl)
+
+db_cv_build_repmgr_ssl="$with_repmgr_ssl"
+
 
 # Testing requires Tcl.
 if test "$db_cv_test" = "yes" -a "$db_cv_tcl" = "no"; then

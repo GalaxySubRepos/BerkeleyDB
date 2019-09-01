@@ -9,23 +9,26 @@
     <link rel="start" href="index.html" title="Berkeley DB C++ API Reference" />
     <link rel="up" href="rep.html" title="Chapter 11.  Replication Methods" />
     <link rel="prev" href="repmgr_site_by_eid.html" title="DbEnv::repmgr_site_by_eid()" />
-    <link rel="next" href="repmgrstart.html" title="DbEnv::repmgr_start()" />
+    <link rel="next" href="repmgrset_ssl.html" title="DbEnv::repmgr_set_ssl_config()" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::repmgr_site_list()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::repmgr_site_list()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repmgr_site_by_eid.html">Prev</a> </td>
           <th width="60%" align="center">Chapter 11. 
                 Replication Methods
         </th>
-          <td width="20%" align="right"> <a accesskey="n" href="repmgrstart.html">Next</a></td>
+          <td width="20%" align="right"> <a accesskey="n" href="repmgrset_ssl.html">Next</a></td>
         </tr>
       </table>
       <hr />
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repmgrsite_list"></a>DbEnv::repmgr_site_list()</h2>
+            <h2 class="title" style="clear: both"><a id="repmgrsite_list"></a>
+        
+        <span>DbEnv::repmgr_site_list()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -53,7 +59,10 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
     </p>
       <p>
             Statistical structures are stored in allocated memory. If application-specific allocation routines have been
-            declared (see <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">DbEnv::set_alloc()</a> for more information), 
+            declared (see <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">
+        
+        <span>DbEnv::set_alloc()</span>
+    </a> for more information), 
             they are used to allocate the memory; otherwise, the standard C library 
             <span class="bold"><strong>malloc</strong></span>(3) is used. The caller is responsible for deallocating 
             the memory. To deallocate the memory, free the memory reference; references inside the returned 
@@ -93,6 +102,17 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
           </li>
           <li>
             <p>
+                            <span class="bold"><strong>DB_LSN max_ack_lsn;</strong></span>
+                    </p>
+            <p>
+                            The LSN of the most recent transaction
+                            acknowledged as durable by this remote client
+                            site.  This information is maintained only in
+                            the site list on the master site.
+                    </p>
+          </li>
+          <li>
+            <p>
                             <span class="bold"><strong>u_int32_t status;</strong></span>
                     </p>
             <p>
@@ -106,21 +126,32 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
                             <span class="bold"><strong>u_int32_t flags;</strong></span>
                     </p>
             <p>
-                        Zero or a bitwise inclusive OR of the
-                        <code class="literal">DB_REPMGR_ISPEER</code> and the
-                        <code class="literal">DB_REPMGR_ISVIEW</code> constants. 
-                        The <code class="literal">DB_REPMGR_ISPEER</code>
-                        value means that the site is a possible
-                        client-to-client peer.
-                        The <code class="literal">DB_REPMGR_ISVIEW</code>
-                        value means that the site is a view.
-                   </p>
+                            Zero or a bitwise inclusive OR of the
+                            following constants:
+                    </p>
+            <div class="itemizedlist">
+              <ul type="circle">
+                <li><code class="literal">DB_REPMGR_ISPEER</code>:
+                                    The site is a possible client-to-client
+                                    peer.
+                            </li>
+                <li><code class="literal">DB_REPMGR_ISVIEW</code>:
+                                    The site is a view.
+                            </li>
+                <li><code class="literal">DB_REPMGR_ISELECTABLE</code>:
+                                    The site can potentially be elected master.
+                            </li>
+              </ul>
+            </div>
           </li>
         </ul>
       </div>
       <p>
         The <code class="methodname">DbEnv::repmgr_site_list()</code> method may be called only after the
-        <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a> method
+        <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a> method
         has been called with a <code class="literal">0</code> return code.
     </p>
       <p>
@@ -137,7 +168,7 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807047632"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176764259760"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -145,7 +176,7 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807042384"></a>countp</h4>
+                <h4 class="title"><a id="idm140176764244304"></a>countp</h4>
               </div>
             </div>
           </div>
@@ -158,7 +189,7 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807032320"></a>listp</h4>
+                <h4 class="title"><a id="idm140176764256608"></a>listp</h4>
               </div>
             </div>
           </div>
@@ -172,7 +203,7 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807030848"></a>Class</h3>
+              <h3 class="title"><a id="idm140176764260528"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -184,7 +215,7 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807029296"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176764248608"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -201,14 +232,20 @@ DbEnv::repmgr_site_list(u_int *countp, DB_REPMGR_SITE **listp);</pre>
           <td width="20%" align="center">
             <a accesskey="u" href="rep.html">Up</a>
           </td>
-          <td width="40%" align="right"> <a accesskey="n" href="repmgrstart.html">Next</a></td>
+          <td width="40%" align="right"> <a accesskey="n" href="repmgrset_ssl.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::repmgr_site_by_eid() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::repmgr_site_by_eid()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::repmgr_start()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::repmgr_set_ssl_config()</span>
+    </td>
         </tr>
       </table>
     </div>

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::associate()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::associate()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="db.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbassociate"></a>Db::associate()</h2>
+            <h2 class="title" style="clear: both"><a id="dbassociate"></a>
+        
+        <span>Db::associate()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -81,7 +87,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703819605728"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176776900992"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -89,17 +95,23 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819608352"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176776904496"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; 
+                          handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; 
                           if the operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected.
@@ -109,7 +121,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819695536"></a>secondary</h4>
+                <h4 class="title"><a id="idm140176777074608"></a>secondary</h4>
               </div>
             </div>
           </div>
@@ -132,7 +144,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819782432"></a>callback</h4>
+                <h4 class="title"><a id="idm140176777108112"></a>callback</h4>
               </div>
             </div>
           </div>
@@ -300,7 +312,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703819839184"></a>flags</h4>
+                <h4 class="title"><a id="idm140176777163664"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -369,7 +381,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703819495744"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176777043104"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -387,7 +399,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703821630224"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176778972000"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -409,7 +421,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703821720352"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176779060912"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -426,7 +438,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703821836320"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176779171424"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -442,7 +454,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703821598912"></a>Class</h3>
+              <h3 class="title"><a id="idm140176778922224"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -454,7 +466,7 @@ Db::associate(DbTxn *txnid, Db *secondary,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703821981456"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176779296960"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -480,7 +492,10 @@ Db::associate(DbTxn *txnid, Db *secondary,
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::associate_foreign()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::associate_foreign()</span>
+    </td>
         </tr>
       </table>
     </div>

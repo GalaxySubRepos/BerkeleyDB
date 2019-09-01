@@ -1,9 +1,14 @@
 --- src/shell.c
 +++ src/shell.c
-@@ -42,6 +42,12 @@
+@@ -37,16 +37,22 @@
+ #ifndef SQLITE_DISABLE_LFS
+ # define _LARGE_FILE       1
+ # ifndef _FILE_OFFSET_BITS
+ #   define _FILE_OFFSET_BITS 64
+ # endif
  # define _LARGEFILE_SOURCE 1
  #endif
-
+ 
 +#ifdef ANDROID
 +#ifndef NO_ANDROID_FUNCS
 +#include<sqlite3_android.h>
@@ -13,10 +18,20 @@
  /*
  ** Include the configuration header output by 'configure' if we're using the
  ** autoconf-based build
-@@ -1931,6 +1937,12 @@
-       sqlite3_create_function(p->db, "shellstatic", 0, SQLITE_UTF8, 0,
-           shellstaticFunc, 0, 0);
-     }
+ */
+ #ifdef _HAVE_SQLITE_CONFIG_H
+ #include "config.h"
+ #endif
+ 
+@@ -3369,16 +3375,22 @@ static int session_filter(void *pCtx, co
+ ** Make sure the database is open.  If it is not, then open it.  If
+ ** the database fails to open, print an error message and exit.
+ */
+ static void open_db(ShellState *p, int keepAlive){
+   if( p->db==0 ){
+     sqlite3_initialize();
+     sqlite3_open(p->zDbFilename, &p->db);
+     globalDb = p->db;
 +#ifdef ANDROID
 +#ifndef NO_ANDROID_FUNCS
 +    register_android_functions(p->db, 0);
@@ -24,5 +39,10 @@
 +#endif
 +#endif
      if( p->db==0 || SQLITE_OK!=sqlite3_errcode(p->db) ){
-       fprintf(stderr,"Error: unable to open database \"%s\": %s\n",
+       utf8_printf(stderr,"Error: unable to open database \"%s\": %s\n",
            p->zDbFilename, sqlite3_errmsg(p->db));
+       if( keepAlive ) return;
+       exit(1);
+     }
+ #ifndef SQLITE_OMIT_LOAD_EXTENSION
+     sqlite3_enable_load_extension(p->db, 1);

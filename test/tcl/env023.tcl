@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates. All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -10,11 +10,13 @@
 proc env023 { } {
 	source ./include.tcl
 	global EXE
+	global passwd
 
-	set envargs " -log -txn -txn_timeout 15000000"
+	set envargs " -encryptaes $passwd -log -txn -txn_timeout 15000000 "
 	puts "Env023: test with args:($envargs)."
 	
 	set deadlock_args "-h $testdir"
+	append deadlock_args " -P $passwd"
 	
 	set binname db_deadlock
 	set std_redirect "> /dev/null"
@@ -36,10 +38,21 @@ proc env023 { } {
 		env023_test_deadlock $envargs \
 		    "$binname -L dl.log $flag $std_redirect"
 	}
-}
 
+	# Test db_deadlock with flag 't'
+	set execmd "$binname -t 0.100000 -v $deadlock_args"
+	env023_test_deadlock $envargs $execmd
+
+	# Print version.
+	set execmd "$binname -V $std_redirect"
+	puts "\tEnv023: Test '$util_path/$execmd'"
+	puts "\t\tEnv023: Printing version."
+	env023_execmd $execmd
+}
 proc env023_test_deadlock { envargs execmd {allowed_msgs ""} } {
 	source ./include.tcl
+	global passwd
+
 	puts "\tEnv023: Test '$util_path/$execmd'"
 
 	# Set up environment and home folder.
@@ -75,26 +88,36 @@ proc env023_test_deadlock { envargs execmd {allowed_msgs ""} } {
 
 	# Execute db_deadlock
 	puts "\t\tEnv023.c: Executing db_deadlock."
-	env023_execmd $execmd $allowed_msgs
+	if { [is_substr $execmd "-t"] } {
+		set dpid [exec $util_path/db_deadlock -t 0.100000 -v \
+		    -h $testdir -P $passwd >& $testdir/dd.out &]
+	} else {
+		env023_execmd $execmd $allowed_msgs
+	}
 
 	puts "\t\tEnv023.d: Wait for child processes to exit."
 	watch_procs $pidlist 2 10
 	# Wait for a while to make sure child processes are finished.
 	tclsleep 10
 
-	# Execute db_deadlock with no deadlock present.
-	puts "\t\tEnv023.e: Executing db_deadlock again."
-	env023_execmd $execmd $allowed_msgs
+	if { [is_substr $execmd "-t"] } {
+		puts "\t\tEnv023.e: Kill db_deadlock process $dpid."
+		tclkill $dpid
+	} else {
+		# Execute db_deadlock with no deadlock present.
+		puts "\t\tEnv023.e: Executing db_deadlock again."
+		env023_execmd $execmd $allowed_msgs
 
-	# Wait for a while to make sure db_deadlock exit, so all test files
-	# are not hold by any process on Windows.
-	tclsleep 2
+		# Wait for a while to make sure db_deadlock exit, 
+		# so all test files are not hold by any process on Windows.
+		tclsleep 2
+	}
+
 	puts "\t\tEnv023.f: Cleaning up."
 	error_check_good db_close [$dba close] 0
 	error_check_good db_close [$dbb close] 0
 	error_check_good env_close [$env close] 0
 }
-
 proc env023_gen_deadlock {} {
 	source ./include.tcl
 	set pidlist {}

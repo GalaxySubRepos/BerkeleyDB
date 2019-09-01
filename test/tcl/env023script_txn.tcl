@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -8,6 +8,8 @@
 
 source ./include.tcl
 source $test_path/test.tcl
+
+global passwd
 
 set order [lindex $argv 0]
 set dir [lindex $argv 1]
@@ -17,7 +19,8 @@ if { $order != "dba_first" && $order != "dbb_first" } {
 }
 
 puts "Env023: opening env and databases."
-set targetenv [berkdb_env -home $testdir -txn_timeout 15000000]
+set targetenv [berkdb_env -home $testdir -txn_timeout 15000000\
+    -encryptaes $passwd]
 
 set dba [eval {berkdb_open -env $targetenv -auto_commit "env023dba.db"} ]
 error_check_good dbopen [is_valid_db $dba] TRUE

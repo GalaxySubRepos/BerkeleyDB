@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -33,7 +33,7 @@ proc repmgr013_sub { method niter tnum largs } {
 	global rep_verbose
 	global verbose_type
 	global ipversion
-	set nsites 3
+	set nsites 4
 
 	set small_iter [expr $niter / 10]
 
@@ -49,10 +49,17 @@ proc repmgr013_sub { method niter tnum largs } {
 	set masterdir $testdir/MASTERDIR
 	set clientdir $testdir/CLIENTDIR
 	set clientdir2 $testdir/CLIENTDIR2
+	set clientdir3 $testdir/CLIENTDIR3
 
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+	file mkdir $clientdir3
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
+	setup_repmgr_ssl $clientdir3
 
 	puts "\tRepmgr$tnum.a: Start a master."
 	set ma_envcmd "berkdb_env_noerr -create $verbargs \
@@ -84,19 +91,37 @@ proc repmgr013_sub { method niter tnum largs } {
 	    -start client
 	await_startup_done $clientenv2
 
-	puts "\tRepmgr$tnum.d: Verify repmgr site lists."
-	verify_sitelist $masterenv $nsites {}
-	verify_sitelist $clientenv $nsites {}
-	verify_sitelist $clientenv2 $nsites [list [lindex $ports 1]]
+	puts "\tRepmgr$tnum.d: Start third unelectable client."
+	set cl3_envcmd "berkdb_env_noerr -create $verbargs \
+	    -errpfx CLIENT3 -home $clientdir3 -txn -rep -thread"
+	set clientenv3 [eval $cl3_envcmd]
+	$clientenv3 repmgr -ack all -pri 0 \
+	    -local [list $hoststr [lindex $ports 3]] \
+	    -remote [list $hoststr [lindex $ports 0]] \
+	    -start client
+	await_startup_done $clientenv3
 
+	puts "\tRepmgr$tnum.e: Verify repmgr site lists."
+	verify_sitelist $masterenv $nsites {} [list [lindex $ports 3]] \
+	    [list [lindex $ports 1] [lindex $ports 2]]
+	verify_sitelist $clientenv $nsites {} [list [lindex $ports 3]] {}
+	verify_sitelist $clientenv2 $nsites \
+	    [list [lindex $ports 1]] [list [lindex $ports 3]] {}
+	verify_sitelist $clientenv3 $nsites {} {} {}
+
+	error_check_good client3_close [$clientenv3 close] 0
 	error_check_good client2_close [$clientenv2 close] 0
 	error_check_good client_close [$clientenv close] 0
 	error_check_good masterenv_close [$masterenv close] 0
 }
 
+#
 # For numsites, supply the nsites value defined for the test.
 # For peervec, supply a list of ports whose sites should be considered peers.
-proc verify_sitelist { env numsites peervec } {
+# For unelectvec, supply a list of ports for unelectable sites.
+# For maxackvec on master site, supply a list of ports for sites sending acks.
+#
+proc verify_sitelist { env numsites peervec unelectvec maxackvec } {
 	global ipversion
 	set hoststr [get_hoststr $ipversion]
 	set sitelist [$env repmgr_site_list]
@@ -118,6 +143,26 @@ proc verify_sitelist { env numsites peervec } {
 			error_check_good peerchk [lindex $tuple 4] peer
 		} else {
 			error_check_good npeerchk [lindex $tuple 4] non-peer
+		}
+		if { [lsearch $unelectvec $port] >= 0 } {
+			error_check_good nunelchk \
+			    [lindex $tuple 6] non-electable
+		} else {
+			error_check_good unelchk [lindex $tuple 6] electable
+		}
+		# Master site gets acks from electable other sites.
+		if { [lsearch $maxackvec $port] >= 0 } {
+			error_check_good mafchk \
+			    [string is integer -strict [lindex $tuple 7]] 1
+			error_check_good maochk \
+			    [string is integer -strict [lindex $tuple 8]] 1
+		# Master site gets no ack from unelectable other site.  Cannot
+		# check all clients for [0,0] acks because they broadcast
+		# their first ack to all sites because it is a new file number.
+		# But we can check a master's unelectable site for [0,0].
+		} elseif {[llength $maxackvec] > 0} {
+			error_check_good zmafchk [lindex $tuple 7] 0
+			error_check_good zmaochk [lindex $tuple 8] 0
 		}
 		incr pvind
 	}

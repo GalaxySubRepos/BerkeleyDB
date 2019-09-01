@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Dbc::del()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Dbc::del()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbccount.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbcdel"></a>Dbc::del()</h2>
+            <h2 class="title" style="clear: both"><a id="dbcdel"></a>
+        
+        <span>Dbc::del()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -49,8 +55,14 @@ Dbc::del(u_int32_t flags);</pre>
       <p>
          When called on a cursor opened on a database that has been made into a
          secondary index using the 
-         <a class="xref" href="dbassociate.html" title="Db::associate()">Db::associate()</a>  method, the
-         <a class="xref" href="dbdel.html" title="Db::del()">Db::del()</a>  method deletes
+         <a class="xref" href="dbassociate.html" title="Db::associate()">
+        
+        <span>Db::associate()</span>
+    </a>  method, the
+         <a class="xref" href="dbdel.html" title="Db::del()">
+        
+        <span>Db::del()</span>
+    </a>  method deletes
          the key/data pair from the primary database and all secondary indices.
     </p>
       <p>
@@ -74,7 +86,7 @@ Dbc::del(u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814151392"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176771549872"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -82,7 +94,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814215952"></a>flags</h4>
+                <h4 class="title"><a id="idm140176771577232"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -110,7 +122,7 @@ Dbc::del(u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814140432"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176771499616"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -128,7 +140,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814124720"></a>DB_FOREIGN_CONFLICT</h4>
+                <h4 class="title"><a id="idm140176771483904"></a>DB_FOREIGN_CONFLICT</h4>
               </div>
             </div>
           </div>
@@ -162,7 +174,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814217920"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176771492528"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -180,7 +192,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814150672"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176771524400"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -192,7 +204,10 @@ Dbc::del(u_int32_t flags);</pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">Db::set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">
+        
+        <span>Db::set_lk_exclusive()</span>
+    </a>
                 for more information.
             </p>
           <p>
@@ -205,7 +220,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814187280"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176771488144"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -227,7 +242,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814118000"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176771476800"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -244,7 +259,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814115920"></a>DB_SECONDARY_BAD</h4>
+                <h4 class="title"><a id="idm140176771475136"></a>DB_SECONDARY_BAD</h4>
               </div>
             </div>
           </div>
@@ -256,7 +271,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814143168"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140176771475520"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -268,7 +283,7 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814119536"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176771477792"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -281,14 +296,17 @@ Dbc::del(u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814149824"></a>EPERM</h4>
+                <h4 class="title"><a id="idm140176771508944"></a>EPERM</h4>
               </div>
             </div>
           </div>
           <p>
                Write attempted on read-only cursor when the
                <a class="link" href="envopen.html#envopen_DB_INIT_CDB">DB_INIT_CDB</a>
-               flag was specified to <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>. 
+               flag was specified to <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>. 
             </p>
         </div>
       </div>
@@ -296,7 +314,7 @@ Dbc::del(u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814113840"></a>Class</h3>
+              <h3 class="title"><a id="idm140176771473888"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -308,7 +326,7 @@ Dbc::del(u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814114224"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176771498176"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -328,11 +346,17 @@ Dbc::del(u_int32_t flags);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbcdup.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Dbc::count() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Dbc::count()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Dbc::dup()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Dbc::dup()</span>
+    </td>
         </tr>
       </table>
     </div>

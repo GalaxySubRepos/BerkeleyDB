@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -53,7 +53,7 @@ __qam_vrfy_meta(dbp, vdp, meta, pgno, flags)
 		    "%lu %u %s"), (u_long)pgno, TYPE(meta),
 		    __db_dbtype_to_string(dbp->type)));
 		return DB_VERIFY_FATAL;
-	}	
+	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
 		return (ret);
@@ -570,7 +570,7 @@ begin:	for (; i <= stop; i++) {
 			if (F_ISSET(pip, VRFY_IS_ALLZEROES))
 				goto put;
 			if (pip->type != P_QAMDATA) {
-				EPRINT((env, DB_STR_A("1154",
+				EPRINT((env, DB_STR_A("1153",
 		    "Page %lu: queue database page of incorrect type %lu",
 				    "%lu %lu"), (u_long)i, (u_long)pip->type));
 				isbad = 1;

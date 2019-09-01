@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -39,7 +39,7 @@ __os_truncate(env, fhp, pgno, pgsize, relative)
 
 	if (dbenv != NULL &&
 	    FLD_ISSET(dbenv->verbose, DB_VERB_FILEOPS | DB_VERB_FILEOPS_ALL))
-		__db_msg(env, DB_STR_A("0141",
+		__db_msg(env, DB_STR_A("0021",
 		    "fileops: truncate %s to %lu", "%s %lu"),
 		    fhp->name, (u_long)offset);
 

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -55,6 +55,7 @@ namespace BerkeleyDB {
                 case ErrorCodes.DB_REP_DUPMASTER:
                 case ErrorCodes.DB_REP_HOLDELECTION:
                 case ErrorCodes.DB_REP_IGNORE:
+                case ErrorCodes.DB_REP_INELECT:
                 case ErrorCodes.DB_REP_ISPERM:
                 case ErrorCodes.DB_REP_JOIN_FAILURE:
                 case ErrorCodes.DB_REP_NEWSITE:

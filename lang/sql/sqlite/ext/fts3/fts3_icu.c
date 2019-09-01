@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2007 June 22
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -240,12 +246,13 @@ static int icuNext(
 ** The set of routines that implement the simple tokenizer
 */
 static const sqlite3_tokenizer_module icuTokenizerModule = {
-  0,                           /* iVersion */
-  icuCreate,                   /* xCreate  */
-  icuDestroy,                  /* xCreate  */
-  icuOpen,                     /* xOpen    */
-  icuClose,                    /* xClose   */
-  icuNext,                     /* xNext    */
+  0,                           /* iVersion    */
+  icuCreate,                   /* xCreate     */
+  icuDestroy,                  /* xCreate     */
+  icuOpen,                     /* xOpen       */
+  icuClose,                    /* xClose      */
+  icuNext,                     /* xNext       */
+  0,                           /* xLanguageid */
 };
 
 /*

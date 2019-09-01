@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::mutex_set_increment()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::mutex_set_increment()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mutexset_align.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mutexset_increment"></a>DbEnv::mutex_set_increment()</h2>
+            <h2 class="title" style="clear: both"><a id="mutexset_increment"></a>
+        
+        <span>DbEnv::mutex_set_increment()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -52,7 +58,10 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
     </p>
       <p>
          Calling the <code class="methodname">DbEnv::mutex_set_increment()</code> method discards any value
-         previously set using the <a class="xref" href="mutexset_max.html" title="DbEnv::mutex_set_max()">DbEnv::mutex_set_max()</a> method.
+         previously set using the <a class="xref" href="mutexset_max.html" title="DbEnv::mutex_set_max()">
+        
+        <span>DbEnv::mutex_set_max()</span>
+    </a> method.
     </p>
       <p>
          The database environment's number of additional mutexes may also be
@@ -70,9 +79,15 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
     </p>
       <p>
          The <code class="methodname">DbEnv::mutex_set_increment()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is
          called. If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  is called, the
          information specified to <code class="methodname">DbEnv::mutex_set_increment()</code> will be
          ignored.
     </p>
@@ -90,7 +105,7 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808485808"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176765726496"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -98,7 +113,7 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703808486096"></a>increment</h4>
+                <h4 class="title"><a id="idm140176765726784"></a>increment</h4>
               </div>
             </div>
           </div>
@@ -112,7 +127,7 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808516144"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176765735248"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -130,12 +145,15 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703808470336"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176765710768"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -144,7 +162,7 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808467776"></a>Class</h3>
+              <h3 class="title"><a id="idm140176765708208"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -156,7 +174,7 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808491008"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176765748960"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -176,11 +194,17 @@ DbEnv::mutex_set_increment(u_int32_t increment); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="mutexset_init.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::mutex_set_align() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::mutex_set_align()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::mutex_set_init()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::mutex_set_init()</span>
+    </td>
         </tr>
       </table>
     </div>

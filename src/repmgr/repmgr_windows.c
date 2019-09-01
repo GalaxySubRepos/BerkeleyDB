@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -760,6 +760,13 @@ out:
 	return (ret);
 }
 
+int
+__repmgr_network_event_handler(env)
+	ENV *env;
+{
+	return (__repmgr_select_loop(env));
+}
+
 static int
 prepare_io(env, conn, info_)
 	ENV *env;
@@ -813,8 +820,19 @@ handle_completion(env, conn)
 	ENV *env;
 	REPMGR_CONNECTION *conn;
 {
-	int error, ret;
+	int error, ret, ssl_read_possible, ssl_write_possible;
+	int read_event_allowed, write_event_allowed;
+	int use_ssl_api;
 	WSANETWORKEVENTS events;
+
+	read_event_allowed = 0;
+	write_event_allowed = 0;
+	use_ssl_api = 0;
+
+#if defined(HAVE_REPMGR_SSL)
+	if (IS_REPMGR_SSL_ENABLED(env))
+		use_ssl_api = 1;
+#endif
 
 	if ((ret = WSAEnumNetworkEvents(conn->fd, conn->event_object, &events))
 	    == SOCKET_ERROR) {
@@ -823,8 +841,24 @@ handle_completion(env, conn)
 		goto report;
 	}
 
+	read_event_allowed = events.lNetworkEvents & (FD_CLOSE | FD_READ);
+	write_event_allowed = events.lNetworkEvents & FD_WRITE;
+
+	if (use_ssl_api) {
+#if defined(HAVE_REPMGR_SSL)
+		ssl_read_possible = __repmgr_ssl_read_possible(conn,
+		    read_event_allowed, write_event_allowed);
+
+		ssl_write_possible = __repmgr_ssl_write_possible(conn,
+		    read_event_allowed, write_event_allowed);
+#endif
+	} else {
+		ssl_read_possible = read_event_allowed;
+		ssl_write_possible = write_event_allowed;
+	}
+
 	/* Check both writing and reading. */
-	if (events.lNetworkEvents & FD_CLOSE) {
+	if (ssl_read_possible && (events.lNetworkEvents & FD_CLOSE)) {
 		error = events.iErrorCode[FD_CLOSE_BIT];
 
 		/*
@@ -838,7 +872,7 @@ handle_completion(env, conn)
 			goto err;
 	}
 
-	if (events.lNetworkEvents & FD_WRITE) {
+	if (ssl_write_possible && (events.lNetworkEvents & FD_WRITE)) {
 		if (events.iErrorCode[FD_WRITE_BIT] != 0) {
 			error = events.iErrorCode[FD_WRITE_BIT];
 			goto report;
@@ -847,13 +881,36 @@ handle_completion(env, conn)
 			goto err;
 	}
 
-	if (events.lNetworkEvents & FD_READ) {
+	if (use_ssl_api) {
+#if defined(HAVE_REPMGR_SSL)
+		if (ssl_write_possible && !(events.lNetworkEvents & FD_WRITE)) {
+			if ((ret = __repmgr_write_some(env, conn)) != 0)
+				goto err;
+
+			return (ret);
+		}
+#endif
+	}
+
+	if (ssl_read_possible && events.lNetworkEvents & FD_READ) {
 		if (events.iErrorCode[FD_READ_BIT] != 0) {
 			error = events.iErrorCode[FD_READ_BIT];
 			goto report;
 		} else if ((ret =
 		    __repmgr_read_from_site(env, conn)) != 0)
 			goto err;
+	}
+
+	if (use_ssl_api) {
+#if defined(HAVE_REPMGR_SSL)
+		if (ssl_read_possible && !(events.lNetworkEvents
+		    & (FD_READ | FD_CLOSE))) {
+			if ((ret = __repmgr_read_from_site(env, conn)) != 0)
+				goto err;
+
+			return (ret);
+		}
+#endif
 	}
 
 	if (0) {

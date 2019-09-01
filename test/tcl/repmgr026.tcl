@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr026
 # TEST	Test of "full election" timeouts.
@@ -46,6 +46,8 @@ proc repmgr026_sub { tnum client_down use_leases } {
 		set repmemargs "-rep_inmem_files "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	file mkdir [set dira $testdir/SITE_A]
 	file mkdir [set dirb $testdir/SITE_B]
@@ -57,7 +59,7 @@ proc repmgr026_sub { tnum client_down use_leases } {
 
 	# First, just create/establish the group.
 	puts -nonewline "Repmgr$tnum: Create a group of 5 sites: "
-	set common "-create -txn $verbargs $repmemargs \
+	set common "-create -txn $verbargs $repmemargs $sslargs \
 	    -rep -thread -event"
 	if { $use_leases } {
 		append common " -rep_lease {[list 3000000]} "

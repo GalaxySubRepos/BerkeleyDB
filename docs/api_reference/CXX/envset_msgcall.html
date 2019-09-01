@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_msgcall()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_msgcall()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_message_stream.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_msgcall"></a>DbEnv::set_msgcall()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_msgcall"></a>
+        
+        <span>DbEnv::set_msgcall()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -47,12 +53,21 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
          There are interfaces in the Berkeley DB library which either directly
          output informational messages or statistical information, or configure
          the library to output such messages when performing other operations,
-         for example, <a class="xref" href="envset_verbose.html" title="DbEnv::set_verbose()">DbEnv::set_verbose()</a>  and
-         <a class="xref" href="envstat.html" title="DbEnv::stat_print()">DbEnv::stat_print()</a>.
+         for example, <a class="xref" href="envset_verbose.html" title="DbEnv::set_verbose()">
+        
+        <span>DbEnv::set_verbose()</span>
+    </a>  and
+         <a class="xref" href="envstat.html" title="DbEnv::stat_print()">
+        
+        <span>DbEnv::stat_print()</span>
+    </a>.
     </p>
       <p>
          The <code class="methodname">DbEnv::set_msgcall()</code> and 
-         <a class="xref" href="dbset_msgcall.html" title="Db::set_msgcall()">Db::set_msgcall()</a>
+         <a class="xref" href="dbset_msgcall.html" title="Db::set_msgcall()">
+        
+        <span>Db::set_msgcall()</span>
+    </a>
          methods are used to pass these messages to the application, and Berkeley DB will call
          <span class="bold"><strong>db_msgcall_fcn</strong></span> with each message.  It
          is up to the <span class="bold"><strong>db_msgcall_fcn</strong></span> function
@@ -70,8 +85,14 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
                 <a class="xref" href="dbset_error_stream.html" title="Db::set_error_stream()">Db::set_error_stream()</a>
                 methods to display the messages via an output stream, or the
             </span>
-         <a class="xref" href="dbset_msgfile.html" title="Db::set_msgfile()">Db::set_msgfile()</a>  or
-         <a class="xref" href="envset_msgfile.html" title="DbEnv::set_msgfile()">Db::set_msgfile()</a>
+         <a class="xref" href="dbset_msgfile.html" title="Db::set_msgfile()">
+        
+        <span>Db::set_msgfile()</span>
+    </a>  or
+         <a class="xref" href="envset_msgfile.html" title="DbEnv::set_msgfile()">
+        
+        <span>Db::set_msgfile()</span>
+    </a>
          methods to display the messages via a C library FILE *.
          <span>You should not mix these approaches.</span>
     </p>
@@ -96,7 +117,7 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811537968"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176768831808"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -104,7 +125,7 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811537584"></a>db_msgcall_fcn</h4>
+                <h4 class="title"><a id="idm140176768831424"></a>db_msgcall_fcn</h4>
               </div>
             </div>
           </div>
@@ -132,7 +153,13 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
                          The <span class="bold"><strong>msgpfx</strong></span> parameter is the message
                          prefix string that appears before informational messages.
                          This value is the environmental default, and can be
-                         changed at any time using <a class="xref" href="envset_msgpfx.html" title="DbEnv::set_msgpfx()">DbEnv::set_msgpfx()</a> or <a class="xref" href="dbset_msgpfx.html" title="Db::set_msgpfx()">Db::set_msgpfx()</a>.
+                         changed at any time using <a class="xref" href="envset_msgpfx.html" title="DbEnv::set_msgpfx()">
+        
+        <span>DbEnv::set_msgpfx()</span>
+    </a> or <a class="xref" href="dbset_msgpfx.html" title="Db::set_msgpfx()">
+        
+        <span>Db::set_msgpfx()</span>
+    </a>.
                     </p>
               </li>
               <li>
@@ -152,7 +179,7 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811528640"></a>Class</h3>
+              <h3 class="title"><a id="idm140176768822480"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -164,7 +191,7 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811544464"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176768838464"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -188,7 +215,10 @@ void DbEnv::set_msgcall(void (*db_msgcall_fcn)(const DbEnv *dbenv,
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_msgfile()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_msgfile()</span>
+    </td>
         </tr>
       </table>
     </div>

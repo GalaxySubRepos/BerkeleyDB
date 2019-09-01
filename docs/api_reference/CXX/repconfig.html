@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::rep_set_config()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::rep_set_config()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repclockskew.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repconfig"></a>DbEnv::rep_set_config()</h2>
+            <h2 class="title" style="clear: both"><a id="repconfig"></a>
+        
+        <span>DbEnv::rep_set_config()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -68,11 +74,20 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
          The <code class="methodname">DbEnv::rep_set_config()</code> method may not be
          called to set in-memory replication after the environment is
          opened using the 
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> method. 
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> method. 
          This method should not be called to set preferred master mode or
          master leases after the
-         <a class="xref" href="repstart.html" title="DbEnv::rep_start()">DbEnv::rep_start()</a> or 
-         <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a> methods
+         <a class="xref" href="repstart.html" title="DbEnv::rep_start()">
+        
+        <span>DbEnv::rep_start()</span>
+    </a> or 
+         <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a> methods
          are called.  For all other <span class="bold"><strong>which</strong></span>
          parameters, this method may be called at any time during the life
          of the application.
@@ -91,7 +106,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807838272"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176765065568"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -99,7 +114,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807837536"></a>which</h4>
+                <h4 class="title"><a id="idm140176765064416"></a>which</h4>
               </div>
             </div>
           </div>
@@ -135,7 +150,10 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
                         The client should delay synchronizing to a newly declared master.  
                         Clients configured in this way will remain
                         unsynchronized until the application calls the 
-                        <a class="xref" href="repsync.html" title="DbEnv::rep_sync()">DbEnv::rep_sync()</a>  method.
+                        <a class="xref" href="repsync.html" title="DbEnv::rep_sync()">
+        
+        <span>DbEnv::rep_sync()</span>
+    </a>  method.
                     </p>
               </li>
               <li>
@@ -200,7 +218,10 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
                 <p>
                         This configuration flag can only be turned on
                         before the environment is opened with the 
-                        <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>
+                        <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>
                         method. Its value cannot be changed while the
                         environment is open.  All sites in the replication
                         group should have the same value for this
@@ -217,15 +238,27 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
                 <p>
                         Configuring this option may result in
                         <code class="literal">DB_REP_LEASE_EXPIRED</code> error returns
-                        from the <a class="xref" href="dbget.html" title="Db::get()">Db::get()</a>  and
-                        <a class="xref" href="dbcget.html" title="Dbc::get()">Dbc::get()</a>  methods
+                        from the <a class="xref" href="dbget.html" title="Db::get()">
+        
+        <span>Db::get()</span>
+    </a>  and
+                        <a class="xref" href="dbcget.html" title="Dbc::get()">
+        
+        <span>Dbc::get()</span>
+    </a>  methods
                         when attempting to read entries from a database after the site's
                         master lease has expired.
                     </p>
                 <p>
                         This configuration flag may not be set after the
-                        <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a>  method or the
-                        <a class="xref" href="repstart.html" title="DbEnv::rep_start()">DbEnv::rep_start()</a> 
+                        <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a>  method or the
+                        <a class="xref" href="repstart.html" title="DbEnv::rep_start()">
+        
+        <span>DbEnv::rep_start()</span>
+    </a> 
                         method is called. All sites in the replication
                         group should have the same value for this
                         configuration flag.
@@ -316,7 +349,10 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
                         Preferred master mode </a>
                         section in the <em class="citetitle">Berkeley DB Programmer's Reference Guide</em>
                         for more information.) This configuration flag may
-                        not be set after the <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a> method is called.
+                        not be set after the <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a> method is called.
                     </p>
                 <p>
                         The other site in the replication group should
@@ -344,7 +380,10 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
                         Preferred master mode </a>
                         section in the <em class="citetitle">Berkeley DB Programmer's Reference Guide</em>
                         for more information.) This configuration flag may not
-                        be set after the <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a> method is called.
+                        be set after the <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a> method is called.
                     </p>
                 <p>
                         The other site in the replication group should
@@ -375,6 +414,44 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
                         be turned off.
                     </p>
               </li>
+              <li>
+                <p><a id="config_DB_REPMGR_CONF_ENABLE_EPOLL"></a>
+                        <code class="literal">DB_REPMGR_CONF_ENABLE_EPOLL</code>
+                    </p>
+                <p>
+                        Epoll will be used for network input/output event notification for this site. 
+                        Epoll should be used on Linux if the number of sites in the replication group is 
+                        more than 1000. 
+                    </p>
+                <p>
+                        Note that, Epoll is available only on a Linux environment, 
+                        and if you try to enable this flag on other platforms, it would result 
+                        in error 3727 - "DB_ENV-&gt;rep_set_config: cannot use EPOLL on 
+                        this system. OS support not available for epoll()".
+                    </p>
+              </li>
+              <li>
+                <p><a id="config_DB_REPMGR_CONF_DISABLE_POLL"></a>
+                        <code class="literal">DB_REPMGR_CONF_DISABLE_POLL</code>
+                    </p>
+                <p>
+                        Poll will not be used for network input/output event notification for this site.
+                    </p>
+                <p>
+                         If the system call poll() is not available on the target platform, and you try 
+                        to set this flag, it would result in error 3728 - "DB_ENV-&gt;rep_set_config: POLL 
+                        support not available on this system. Ignoring this flag".
+                    </p>
+              </li>
+              <li>
+                <p><a id="config_DB_REPMGR_CONF_DISABLE_SSL"></a>
+                        <code class="literal">DB_REPMGR_CONF_DISABLE_SSL</code>
+                    </p>
+                <p>
+                        Secure Sockets Layer (SSL) will not be used for securing messages for the 
+                        replication manager on this replication site.
+                    </p>
+              </li>
             </ul>
           </div>
         </div>
@@ -382,7 +459,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807816208"></a>onoff</h4>
+                <h4 class="title"><a id="idm140176765041584"></a>onoff</h4>
               </div>
             </div>
           </div>
@@ -398,7 +475,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807827584"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176765000912"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -416,7 +493,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807817904"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176765001952"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -433,7 +510,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807806976"></a>Class</h3>
+              <h3 class="title"><a id="idm140176765020352"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -445,7 +522,7 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807794864"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176765002080"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -465,11 +542,17 @@ DbEnv::rep_set_config(u_int32_t which, int onoff); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="repset_limit.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::rep_set_clockskew() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::rep_set_clockskew()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::rep_set_limit()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::rep_set_limit()</span>
+    </td>
         </tr>
       </table>
     </div>

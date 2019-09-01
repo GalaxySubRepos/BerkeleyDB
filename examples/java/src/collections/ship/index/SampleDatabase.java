@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.index;
@@ -41,17 +40,20 @@ public class SampleDatabase {
 	"shipment_supplier_index";
     private static final String SUPPLIER_CITY_INDEX = "supplier_city_index";
 
-    private Environment env;
-    private Database partDb;
-    private Database supplierDb;
-    private Database shipmentDb;
-    private SecondaryDatabase supplierByCityDb;
-    private SecondaryDatabase shipmentByPartDb;
-    private SecondaryDatabase shipmentBySupplierDb;
-    private StoredClassCatalog javaCatalog;
+    private final Environment env;
+    private final Database partDb;
+    private final Database supplierDb;
+    private final Database shipmentDb;
+    private final SecondaryDatabase supplierByCityDb;
+    private final SecondaryDatabase shipmentByPartDb;
+    private final SecondaryDatabase shipmentBySupplierDb;
+    private final StoredClassCatalog javaCatalog;
 
     /**
      * Open all storage containers, indices, and catalogs.
+     * @param homeDirectory
+     * @throws com.sleepycat.db.DatabaseException
+     * @throws java.io.FileNotFoundException
      */
     public SampleDatabase(String homeDirectory)
         throws DatabaseException, FileNotFoundException {
@@ -140,6 +142,7 @@ public class SampleDatabase {
 
     /**
      * Return the storage environment for the database.
+     * @return 
      */
     public final Environment getEnvironment() {
 
@@ -148,6 +151,7 @@ public class SampleDatabase {
 
     /**
      * Return the class catalog.
+     * @return 
      */
     public final StoredClassCatalog getClassCatalog() {
 
@@ -156,6 +160,7 @@ public class SampleDatabase {
 
     /**
      * Return the part storage container.
+     * @return 
      */
     public final Database getPartDatabase() {
 
@@ -164,6 +169,7 @@ public class SampleDatabase {
 
     /**
      * Return the supplier storage container.
+     * @return 
      */
     public final Database getSupplierDatabase() {
 
@@ -172,6 +178,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment storage container.
+     * @return 
      */
     public final Database getShipmentDatabase() {
 
@@ -180,6 +187,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment-by-part index.
+     * @return 
      */
     public final SecondaryDatabase getShipmentByPartDatabase() {
 
@@ -188,6 +196,7 @@ public class SampleDatabase {
 
     /**
      * Return the shipment-by-supplier index.
+     * @return 
      */
     public final SecondaryDatabase getShipmentBySupplierDatabase() {
 
@@ -196,6 +205,7 @@ public class SampleDatabase {
 
     /**
      * Return the supplier-by-city index.
+     * @return 
      */
     public final SecondaryDatabase getSupplierByCityDatabase() {
 
@@ -204,6 +214,7 @@ public class SampleDatabase {
 
     /**
      * Close all stores (closing a store automatically closes its indices).
+     * @throws com.sleepycat.db.DatabaseException
      */
     public void close()
         throws DatabaseException {
@@ -227,7 +238,7 @@ public class SampleDatabase {
      * of the serial format.
      */
     private static class SupplierByCityKeyCreator
-        extends SerialSerialKeyCreator {
+        extends SerialSerialKeyCreator<SupplierKey, SupplierData, String> {
 
         /**
          * Construct the city key extractor.
@@ -237,9 +248,9 @@ public class SampleDatabase {
          * @param indexKeyClass is the city key class.
          */
         private SupplierByCityKeyCreator(ClassCatalog catalog,
-                                         Class primaryKeyClass,
-                                         Class valueClass,
-                                         Class indexKeyClass) {
+                                         Class<SupplierKey> primaryKeyClass,
+                                         Class<SupplierData> valueClass,
+                                         Class<String> indexKeyClass) {
 
             super(catalog, primaryKeyClass, valueClass, indexKeyClass);
         }
@@ -248,11 +259,11 @@ public class SampleDatabase {
          * Extract the city key from a supplier key/value pair.  The city key
          * is stored in the supplier value, so the supplier key is not used.
          */
-        public Object createSecondaryKey(Object primaryKeyInput,
-                                         Object valueInput) {
+        @Override
+        public String createSecondaryKey(SupplierKey primaryKeyInput,
+                                         SupplierData valueInput) {
 
-            SupplierData supplierData = (SupplierData) valueInput;
-            return supplierData.getCity();
+            return valueInput.getCity();
         }
     }
 
@@ -263,7 +274,7 @@ public class SampleDatabase {
      * of the serial format.
      */
     private static class ShipmentByPartKeyCreator
-        extends SerialSerialKeyCreator {
+        extends SerialSerialKeyCreator<ShipmentKey, ShipmentData, PartKey> {
 
         /**
          * Construct the part key extractor.
@@ -273,9 +284,9 @@ public class SampleDatabase {
          * @param indexKeyClass is the part key class.
          */
         private ShipmentByPartKeyCreator(ClassCatalog catalog,
-                                         Class primaryKeyClass,
-                                         Class valueClass,
-                                         Class indexKeyClass) {
+                                         Class<ShipmentKey> primaryKeyClass,
+                                         Class<ShipmentData> valueClass,
+                                         Class<PartKey> indexKeyClass) {
 
             super(catalog, primaryKeyClass, valueClass, indexKeyClass);
         }
@@ -284,11 +295,11 @@ public class SampleDatabase {
          * Extract the part key from a shipment key/value pair.  The part key
          * is stored in the shipment key, so the shipment value is not used.
          */
-        public Object createSecondaryKey(Object primaryKeyInput,
-                                         Object valueInput) {
+        @Override
+        public PartKey createSecondaryKey(ShipmentKey primaryKeyInput,
+                                         ShipmentData valueInput) {
 
-            ShipmentKey shipmentKey = (ShipmentKey) primaryKeyInput;
-            return new PartKey(shipmentKey.getPartNumber());
+            return new PartKey(primaryKeyInput.getPartNumber());
         }
     }
 
@@ -299,7 +310,7 @@ public class SampleDatabase {
      * of the serial format.
      */
     private static class ShipmentBySupplierKeyCreator
-        extends SerialSerialKeyCreator {
+        extends SerialSerialKeyCreator<ShipmentKey, ShipmentData, SupplierKey> {
 
         /**
          * Construct the supplier key extractor.
@@ -309,9 +320,9 @@ public class SampleDatabase {
          * @param indexKeyClass is the supplier key class.
          */
         private ShipmentBySupplierKeyCreator(ClassCatalog catalog,
-                                             Class primaryKeyClass,
-                                             Class valueClass,
-                                             Class indexKeyClass) {
+                                             Class<ShipmentKey> primaryKeyClass,
+                                             Class<ShipmentData> valueClass,
+                                             Class<SupplierKey> indexKeyClass) {
 
             super(catalog, primaryKeyClass, valueClass, indexKeyClass);
         }
@@ -321,11 +332,11 @@ public class SampleDatabase {
          * key is stored in the shipment key, so the shipment value is not
          * used.
          */
-        public Object createSecondaryKey(Object primaryKeyInput,
-                                         Object valueInput) {
+        @Override
+        public SupplierKey createSecondaryKey(ShipmentKey primaryKeyInput,
+                                         ShipmentData valueInput) {
 
-            ShipmentKey shipmentKey = (ShipmentKey) primaryKeyInput;
-            return new SupplierKey(shipmentKey.getSupplierNumber());
+            return new SupplierKey(primaryKeyInput.getSupplierNumber());
         }
     }
 }

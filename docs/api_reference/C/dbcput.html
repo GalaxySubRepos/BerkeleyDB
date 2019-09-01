@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DBcursor-&gt;put()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DBcursor-&gt;put()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbcget_priority.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbcput"></a>DBcursor-&gt;put()</h2>
+            <h2 class="title" style="clear: both"><a id="dbcput"></a>
+        <span>DBcursor-&gt;put()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -63,7 +69,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235121264"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113487567344"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -71,7 +77,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235120880"></a>key</h4>
+                <h4 class="title"><a id="idm140113487566960"></a>key</h4>
               </div>
             </div>
           </div>
@@ -91,7 +97,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235295664"></a>data</h4>
+                <h4 class="title"><a id="idm140113487809760"></a>data</h4>
               </div>
             </div>
           </div>
@@ -103,7 +109,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235270448"></a>flags</h4>
+                <h4 class="title"><a id="idm140113487574016"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -135,7 +141,10 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
                          item are automatically renumbered, and the key of the new record is
                          returned in the structure to which the <span class="bold"><strong>key</strong></span> parameter refers.  The initial value of the
                         <span class="bold"><strong>key</strong></span> parameter is ignored.  See 
-                        <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  for more information.
+                        <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  for more information.
                      </p>
                 <p>
                          The DB_AFTER flag may not be specified to the Queue access method.
@@ -169,7 +178,10 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
                          records after it are automatically renumbered, and the key of the new
                          record is returned in the structure to which the <span class="bold"><strong>key</strong></span> parameter refers. The initial value of the
                          <span class="bold"><strong>key</strong></span> parameter is ignored.  See 
-                        <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  for more information.
+                        <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  for more information.
                     </p>
                 <p>
                          The DB_BEFORE flag may not be specified to the Queue access method.
@@ -254,7 +266,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235099456"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113487545984"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -284,7 +296,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235081984"></a>DB_FOREIGN_CONFLICT</h4>
+                <h4 class="title"><a id="idm140113487541136"></a>DB_FOREIGN_CONFLICT</h4>
               </div>
             </div>
           </div>
@@ -318,7 +330,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235081472"></a>DB_HEAP_FULL</h4>
+                <h4 class="title"><a id="idm140113487573792"></a>DB_HEAP_FULL</h4>
               </div>
             </div>
           </div>
@@ -326,7 +338,10 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
                 An attempt was made to add or update a record in a Heap
                 database. However, the size of the database was constrained
                 using the
-                <a class="xref" href="dbset_heapsize.html" title="DB-&gt;set_heapsize()">DB-&gt;set_heapsize()</a>
+                <a class="xref" href="dbset_heapsize.html" title="DB-&gt;set_heapsize()">
+        <span>DB-&gt;set_heapsize()</span>
+        
+    </a>
                 method, and that limit has been reached.
             </p>
         </div>
@@ -334,7 +349,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235119920"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140113487516480"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -347,7 +362,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235101632"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140113487575872"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -359,7 +374,10 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -367,7 +385,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235068848"></a>  DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140113487512448"></a>  DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -386,7 +404,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235083888"></a>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140113487585808"></a>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -398,7 +416,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235100864"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140113487584848"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -410,7 +428,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235048032"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113487493520"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -432,14 +450,17 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235060704"></a>EPERM</h4>
+                <h4 class="title"><a id="idm140113487566048"></a>EPERM</h4>
               </div>
             </div>
           </div>
           <p>
                Write attempted on read-only cursor when the
                <a class="link" href="envopen.html#envopen_DB_INIT_CDB">DB_INIT_CDB</a>
-               flag was specified to <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>. 
+               flag was specified to <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>. 
             </p>
         </div>
       </div>
@@ -447,7 +468,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235130432"></a>Class</h3>
+              <h3 class="title"><a id="idm140113487524032"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -459,7 +480,7 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235093104"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113487546368"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -479,11 +500,17 @@ DBcursor-&gt;put(DBC *DBcursor, DBT *key, DBT *data, u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbcset_priority.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DBcursor-&gt;get_priority() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DBcursor-&gt;get_priority()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DBcursor-&gt;set_priority()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DBcursor-&gt;set_priority()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

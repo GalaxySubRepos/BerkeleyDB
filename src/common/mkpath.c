@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -53,7 +53,8 @@ __db_mkpath(env, name)
 			}
 	} else
 		for (p = t + 1; p[0] != '\0'; ++p)
-			if (strchr(PATH_SEPARATOR, p[0]) != NULL && p[0] != ':') {
+			if (strchr(PATH_SEPARATOR, p[0]) != NULL &&
+			    p[0] != ':') {
 				savech = *p;
 				*p = '\0';
 				if (__os_exists(env, t, NULL) &&

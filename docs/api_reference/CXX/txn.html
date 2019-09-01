@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -62,14 +62,29 @@ public:
             <code class="classname">DbTxn</code> handles are not free-threaded; transactions handles
             may be used by multiple threads, but only serially, that is, the application must
             serialize access to the <code class="classname">DbTxn</code> handle. Once the 
-            <a class="xref" href="txnabort.html" title="DbTxn::abort()">DbTxn::abort()</a> or 
-            <a class="xref" href="txncommit.html" title="DbTxn::commit()">DbTxn::commit()</a> methods are called, the handle
+            <a class="xref" href="txnabort.html" title="DbTxn::abort()">
+        
+        <span>DbTxn::abort()</span>
+    </a> or 
+            <a class="xref" href="txncommit.html" title="DbTxn::commit()">
+        
+        <span>DbTxn::commit()</span>
+    </a> methods are called, the handle
             may not be accessed again, regardless of the method's return. In addition, parent
             transactions may not issue any Berkeley DB operations while they have active child
             transactions (child transactions that have not yet been committed or aborted) except for
-            <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>, 
-            <a class="xref" href="txnabort.html" title="DbTxn::abort()">DbTxn::abort()</a> and 
-            <a class="xref" href="txncommit.html" title="DbTxn::commit()">DbTxn::commit()</a>.
+            <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>, 
+            <a class="xref" href="txnabort.html" title="DbTxn::abort()">
+        
+        <span>DbTxn::abort()</span>
+    </a> and 
+            <a class="xref" href="txncommit.html" title="DbTxn::commit()">
+        
+        <span>DbTxn::commit()</span>
+    </a>.
         </p>
       <p>
             Each <code class="classname">DbTxn</code> object has an associated
@@ -116,31 +131,46 @@ public:
             <tbody>
               <tr>
                 <td>
-                  <a class="xref" href="txnrecover.html" title="DbEnv::txn_recover()">DbEnv::txn_recover()</a>
+                  <a class="xref" href="txnrecover.html" title="DbEnv::txn_recover()">
+        
+        <span>DbEnv::txn_recover()</span>
+    </a>
                 </td>
                 <td>Distributed transaction recovery</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txncheckpoint.html" title="DbEnv::txn_checkpoint()">DbEnv::txn_checkpoint()</a>
+                  <a class="xref" href="txncheckpoint.html" title="DbEnv::txn_checkpoint()">
+        
+        <span>DbEnv::txn_checkpoint()</span>
+    </a>
                 </td>
                 <td>Checkpoint the transaction subsystem</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnstat.html" title="DbEnv::txn_stat()">DbEnv::txn_stat()</a>
+                  <a class="xref" href="txnstat.html" title="DbEnv::txn_stat()">
+        
+        <span>DbEnv::txn_stat()</span>
+    </a>
                 </td>
                 <td>Return transaction subsystem statistics</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnstat_print.html" title="DbEnv::txn_stat_print()">DbEnv::txn_stat_print()</a>
+                  <a class="xref" href="txnstat_print.html" title="DbEnv::txn_stat_print()">
+        
+        <span>DbEnv::txn_stat_print()</span>
+    </a>
                 </td>
                 <td>Print transaction subsystem statistics</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnset_timeout.html" title="DbTxn::set_timeout()">DbTxn::set_timeout()</a>
+                  <a class="xref" href="txnset_timeout.html" title="DbTxn::set_timeout()">
+        
+        <span>DbTxn::set_timeout()</span>
+    </a>
                 </td>
                 <td>Set transaction timeout</td>
               </tr>
@@ -152,27 +182,51 @@ public:
                 </td>
               </tr>
               <tr>
-                <td><a class="xref" href="envset_timeout.html" title="DbEnv::set_timeout()">DbEnv::set_timeout()</a>, <a class="xref" href="envget_timeout.html" title="DbEnv::get_timeout()">DbEnv::get_timeout()</a></td>
+                <td><a class="xref" href="envset_timeout.html" title="DbEnv::set_timeout()">
+        
+        <span>DbEnv::set_timeout()</span>
+    </a>, <a class="xref" href="envget_timeout.html" title="DbEnv::get_timeout()">
+        
+        <span>DbEnv::get_timeout()</span>
+    </a></td>
                 <td>Set/get lock and transaction timeout</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="dbget_transactional.html" title="Db::get_transactional()">Db::get_transactional()</a>
+                  <a class="xref" href="dbget_transactional.html" title="Db::get_transactional()">
+        
+        <span>Db::get_transactional()</span>
+    </a>
                 </td>
                 <td>Does the Db have transaction support</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>
+                  <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>
                 </td>
                 <td>Get a locker ID in Berkeley DB Concurrent Data Store</td>
               </tr>
               <tr>
-                <td><a class="xref" href="envset_tx_max.html" title="DbEnv::set_tx_max()">DbEnv::set_tx_max()</a>, <a class="xref" href="envget_tx_max.html" title="DbEnv::get_tx_max()">DbEnv::get_tx_max()</a></td>
+                <td><a class="xref" href="envset_tx_max.html" title="DbEnv::set_tx_max()">
+        
+        <span>DbEnv::set_tx_max()</span>
+    </a>, <a class="xref" href="envget_tx_max.html" title="DbEnv::get_tx_max()">
+        
+        <span>DbEnv::get_tx_max()</span>
+    </a></td>
                 <td>Set/get maximum number of transactions</td>
               </tr>
               <tr>
-                <td><a class="xref" href="envset_tx_timestamp.html" title="DbEnv::set_tx_timestamp()">DbEnv::set_tx_timestamp()</a>, <a class="xref" href="envget_tx_timestamp.html" title="DbEnv::get_tx_timestamp()">DbEnv::get_tx_timestamp()</a></td>
+                <td><a class="xref" href="envset_tx_timestamp.html" title="DbEnv::set_tx_timestamp()">
+        
+        <span>DbEnv::set_tx_timestamp()</span>
+    </a>, <a class="xref" href="envget_tx_timestamp.html" title="DbEnv::get_tx_timestamp()">
+        
+        <span>DbEnv::get_tx_timestamp()</span>
+    </a></td>
                 <td>Set/get recovery timestamp</td>
               </tr>
               <tr>
@@ -184,46 +238,76 @@ public:
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>
+                  <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>
                 </td>
                 <td>Begin a transaction</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnabort.html" title="DbTxn::abort()">DbTxn::abort()</a>
+                  <a class="xref" href="txnabort.html" title="DbTxn::abort()">
+        
+        <span>DbTxn::abort()</span>
+    </a>
                 </td>
                 <td>Abort a transaction</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txncommit.html" title="DbTxn::commit()">DbTxn::commit()</a>
+                  <a class="xref" href="txncommit.html" title="DbTxn::commit()">
+        
+        <span>DbTxn::commit()</span>
+    </a>
                 </td>
                 <td>Commit a transaction</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txndiscard.html" title="DbTxn::discard()">DbTxn::discard()</a>
+                  <a class="xref" href="txndiscard.html" title="DbTxn::discard()">
+        
+        <span>DbTxn::discard()</span>
+    </a>
                 </td>
                 <td>Discard a prepared but not resolved transaction handle</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnid.html" title="DbTxn::id()">DbTxn::id()</a>
+                  <a class="xref" href="txnid.html" title="DbTxn::id()">
+        
+        <span>DbTxn::id()</span>
+    </a>
                 </td>
                 <td>Return a transaction's ID</td>
               </tr>
               <tr>
                 <td>
-                  <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">DbTxn::prepare()</a>
+                  <a class="xref" href="txnprepare.html" title="DbTxn::prepare()">
+        
+        <span>DbTxn::prepare()</span>
+    </a>
                 </td>
                 <td>Prepare a transaction for commit</td>
               </tr>
               <tr>
-                <td><a class="xref" href="txnset_name.html" title="DbTxn::set_name()">DbTxn::set_name()</a>, <a class="xref" href="txnget_name.html" title="DbTxn::get_name()">DbTxn::get_name()</a></td>
+                <td><a class="xref" href="txnset_name.html" title="DbTxn::set_name()">
+        
+        <span>DbTxn::set_name()</span>
+    </a>, <a class="xref" href="txnget_name.html" title="DbTxn::get_name()">
+        
+        <span>DbTxn::get_name()</span>
+    </a></td>
                 <td>Associate a string with a transaction</td>
               </tr>
               <tr>
-                <td><a class="xref" href="txnset_priority.html" title="DbTxn::set_priority()">DbTxn::set_priority()</a>, <a class="xref" href="txnget_priority.html" title="DbTxn::get_priority()">DbTxn::get_priority()</a></td>
+                <td><a class="xref" href="txnset_priority.html" title="DbTxn::set_priority()">
+        
+        <span>DbTxn::set_priority()</span>
+    </a>, <a class="xref" href="txnget_priority.html" title="DbTxn::get_priority()">
+        
+        <span>DbTxn::get_priority()</span>
+    </a></td>
                 <td>Set/get transaction's priority</td>
               </tr>
             </tbody>
@@ -240,11 +324,17 @@ public:
           <td width="40%" align="right"> <a accesskey="n" href="dbget_transactional.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbSequence::stat_print() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbSequence::stat_print()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::get_transactional()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::get_transactional()</span>
+    </td>
         </tr>
       </table>
     </div>

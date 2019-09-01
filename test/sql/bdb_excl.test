@@ -34,7 +34,11 @@ set IGNORE_CASES {
   func-29.4		{# Test unsupported pager function. }
   hook-3.3		{# we commit when opening the environment }
   hook-3.4
+  incrblob-2.0.3	{# invalid pager statistics }
+  incrblob-2.0.5	{# invalid pager statistics }
+  incrblob-2.0.9	{# invalid pager statistics }
   incrblob-7.3.2	{# file size }
+  incrblob3-7.2		{# BDB uses page lock instead of table lock }
   incrvacuum-3.[234]	{# file size }
   incrvacuum-[456].*	{# file size }
   incrvacuum-7.*.[12]	{# file size }
@@ -45,9 +49,11 @@ set IGNORE_CASES {
   incrvacuum2-*		{# file size }
   incrvacuum-1.[47]	{# BDB allows setting vacuum at any time while SQLite does not }
   incrvacuum-2.2	{# BDB allows setting vacuum at any time while SQLite does not }
+  incrvacuum-ioerr-4.1.2	{# incrvacuum does not control the number of pages removed in BDB }
   autovacuum-3.[36]	{# BDB allows setting vacuum at any time while SQLite does not }
   expr-13.[14567]	{# differences in representing numbers }
   pagesize-1.[14]	{# different page size defaults }
+  misc4-7.1		{# VACUUM is a no-op on in-memory databases for BDB. }
   misc8-1.4		{# Different behavior of rollback between BDB and SQLite, #24498 }
   nan-*			{# Output is system dependent ("inf"/"Infinity") }
   rollback-1.[56]	{# Different behavior of rollback between BDB and SQLite, #24498 }
@@ -57,6 +63,7 @@ set IGNORE_CASES {
   thread1-2.[3467]	{# BDB expects different results for threaded case. }
   thread1-2.11		{# BDB expects different results for threaded case. }
   trans-9.*.[45]-*	{# Uses sqlite_fullsync_count }
+  unixexcl-1.1.4.*	{# BDB uses page locking instead of database locking }
   vacuum-1.[36]		{# file size checks not valid without checkpoint }
   vacuum-7.1		{# Berkeley DB no-ops the freelist_count pragma. }
   vacuum-7.5		{# Berkeley DB can enable vacuum of an existing db }
@@ -143,6 +150,7 @@ set EXCLUDE_CASES {
 # Add ignore/exclude cases for Windows/cygwin platform.
 # $tcl_platform(os) on cygwin also contains "Windows", so below statement also covers cygwin.
 if {[string first "windows" [string tolower $tcl_platform(os)]] >=0 } { 
+  lappend EXCLUDE_CASES bdb_sqlthreadtest	{# Not yet ported to Windows #26708 }
   lappend IGNORE_CASES expr-1.106		{# differences in representing numbers. #19803 }
   lappend IGNORE_CASES expr-1.\[2\]*		{# differences in representing numbers. #19803 }
   lappend IGNORE_CASES incrblob_err-5.1.3	{# Due to Windows Tcl 8.5 difference. #19803 }

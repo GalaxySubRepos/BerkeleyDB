@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db;
@@ -137,7 +136,7 @@ class TpcbExample {
             config.setHashNumElements(h_nelem);
             config.setAllowCreate(true);
             dbp = dbenv.openDatabase(null, "account", null, config);
-        } catch (Exception e1) {
+        } catch (DatabaseException | FileNotFoundException e1) {
             // can be DatabaseException or FileNotFoundException
             errExit(e1, "Open of account file failed");
         }
@@ -172,7 +171,7 @@ class TpcbExample {
             config.setPageSize(512);
             config.setAllowCreate(true);
             dbp = dbenv.openDatabase(null, "branch", null, config);
-        } catch (Exception e3) {
+        } catch (DatabaseException | FileNotFoundException e3) {
             // can be DatabaseException or FileNotFoundException
             errExit(e3, "Branch file create failed");
         }
@@ -207,7 +206,7 @@ class TpcbExample {
             config.setPageSize(512);
             config.setAllowCreate(true);
             dbp = dbenv.openDatabase(null, "teller", null, config);
-        } catch (Exception e5) {
+        } catch (DatabaseException | FileNotFoundException e5) {
             // can be DatabaseException or FileNotFoundException
             errExit(e5, "Teller file create failed");
         }
@@ -234,7 +233,7 @@ class TpcbExample {
             config.setRecordLength(HISTORY_LEN);
             config.setAllowCreate(true);
             dbp = dbenv.openDatabase(null, "history", null, config);
-        } catch (Exception e7) {
+        } catch (DatabaseException | FileNotFoundException e7) {
             // can be DatabaseException or FileNotFoundException
             errExit(e7, "Create of history file failed");
         }
@@ -385,7 +384,7 @@ class TpcbExample {
     }
 
     class TxnThread extends Thread {
-        private int ntxns;       /* Number of txns we were asked to run. */
+        private final int ntxns; /* Number of txns we were asked to run. */
         public int txns, failed; /* Number that succeeded / failed. */
         private Database adb, bdb, hdb, tdb;
 
@@ -394,6 +393,7 @@ class TpcbExample {
             this.ntxns = ntxns;
         }
 
+        @Override
         public void run() {
             double gtps, itps;
             int n, ret;
@@ -604,53 +604,67 @@ class TpcbExample {
         long seed = (new GregorianCalendar()).get(Calendar.SECOND);
 
         for (int i = 0; i < argv.length; ++i) {
-            if (argv[i].equals("-a")) {
-                // Number of account records
-                if ((accounts = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-b")) {
-                // Number of branch records
-                if ((branches = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-c")) {
-                // Cachesize in bytes
-                if ((mpool = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-f")) {
-                // Fast mode: no txn sync.
-                txn_no_sync = true;
-            } else if (argv[i].equals("-h")) {
-                // DB  home.
-                home = new File(argv[++i]);
-            } else if (argv[i].equals("-i")) {
-                // Initialize the test.
-                iflag = true;
-            } else if (argv[i].equals("-n")) {
-                // Number of transactions
-                if ((ntxns = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-S")) {
-                // Random number seed.
-                seed = Long.parseLong(argv[++i]);
-                if (seed <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-s")) {
-                // Number of history records
-                if ((history = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-T")) {
-                // Number of threads
-                if ((threads = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-t")) {
-                // Number of teller records
-                if ((tellers = Integer.parseInt(argv[++i])) <= 0)
-                    invarg(argv[i]);
-            } else if (argv[i].equals("-v")) {
-                // Verbose option.
-                verbose = true;
-            } else {
-                usage();
+            switch (argv[i]) {
+                case "-a":
+                    // Number of account records
+                    if ((accounts = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-b":
+                    // Number of branch records
+                    if ((branches = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-c":
+                    // Cachesize in bytes
+                    if ((mpool = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-f":
+                    // Fast mode: no txn sync.
+                    txn_no_sync = true;
+                    break;
+                case "-h":
+                    // DB  home.
+                    home = new File(argv[++i]);
+                    break;
+                case "-i":
+                    // Initialize the test.
+                    iflag = true;
+                    break;
+                case "-n":
+                    // Number of transactions
+                    if ((ntxns = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-S":
+                    // Random number seed.
+                    seed = Long.parseLong(argv[++i]);
+                    if (seed <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-s":
+                    // Number of history records
+                    if ((history = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-T":
+                    // Number of threads
+                    if ((threads = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-t":
+                    // Number of teller records
+                    if ((tellers = Integer.parseInt(argv[++i])) <= 0)
+                        invarg(argv[i]);
+                    break;
+                case "-v":
+                    // Verbose option.
+                    verbose = true;
+                    break;
+                default:
+                    usage();
+                    break;
             }
         }
 
@@ -663,7 +677,7 @@ class TpcbExample {
         try {
             app = new TpcbExample(home, accounts, branches, tellers, history,
                                   mpool, iflag || txn_no_sync);
-        } catch (Exception e1) {
+        } catch (DatabaseException | FileNotFoundException e1) {
             errExit(e1, "initializing environment failed");
         }
 

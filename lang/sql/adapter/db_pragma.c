@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 /*
@@ -10,7 +10,7 @@
 #include "sqliteInt.h"
 #include "btreeInt.h"
 
-extern void returnSingleInt(Parse *, const char *, i64);
+extern void returnSingleInt(Vdbe *, i64);
 
 static const char *PRAGMA_FILE = "pragma";
 static const char *PRAGMA_VERSION = "1.0";
@@ -28,11 +28,17 @@ static const char *REP_SITE_UNKNOWN = "UNKNOWN";
 static const u32 HDR_SIZE = 256;
 static const u32 RECORD_HDR_SIZE = 8;
 static const u32 VERSION_RECORD_SIZE = 12;
-static const char *pragma_names[] = {"persistent_version", "persistent_echo",
-    "replication_init", "replication_local_site", "replication_remote_site",
-    "replication_verbose_output", "replication_verbose_file",
-    "replication"};
-static const u32 DEFINED_PRAGMAS = 8;
+static const char *pragma_names[] = {
+    "persistent_version",
+    "persistent_echo",
+    "replication_init",
+    "replication_local_site",
+    "replication_remote_site",
+    "replication_verbose_output",
+    "replication_verbose_file",
+    "replication"
+};
+static const u32 DEFINED_PRAGMAS = sizeof(pragma_names) / sizeof(pragma_names[0]);
 
 /* Checks if the given pragma has been loaded into the cache. */
 #define	PRAGMA_LOADED(index)	(p->pBt->pragma[index].offset)
@@ -152,17 +158,6 @@ static const char *repSiteTypeToText(rep_site_type_t type)
 
 static u8 envIsClosed(Parse *pParse, Btree *p, const char *pragmaName)
 {
-	int rc;
-
-	rc = btreeUpdateBtShared(p, 1);
-	if (rc != SQLITE_OK) {
-		sqlite3ErrorMsg(pParse, "Error setting %s", pragmaName);
-		sqlite3ErrorWithMsg(p->db, rc,
-		    "Error checking environment while setting %s",
-		    pragmaName);
-		return 0;
-	}
-
 	if (p->pBt->env_opened) {
 		sqlite3ErrorMsg(pParse,
 		    "Cannot set %s after accessing the database",
@@ -606,10 +601,12 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 	Btree *pBt;
 	Db *pDb;
 	sqlite3 *db;
+	Vdbe *v;
 	int isRep, isLSite, isRSite, isVerb, isVFile, parsed, ret;
 
 	db = pParse->db;
 	pDb = &db->aDb[iDb];
+	v = sqlite3GetVdbe(pParse);
 	if (pDb != NULL)
 		pBt = pDb->pBt;
 	else
@@ -617,6 +614,7 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 
 	parsed = 0;
 	isRep = isLSite = isRSite = isVerb = isVFile = 0;
+
 	/*
 	 * Deal with the Berkeley DB specific autodetect page_size
 	 * setting.
@@ -633,15 +631,18 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 	} else if (sqlite3StrNICmp(zLeft, "txn_bulk", 8) == 0) {
 		if (zRight)
 			pBt->txn_bulk = sqlite3GetBoolean(zRight, 0);
-		returnSingleInt(pParse, "txn_bulk", (i64)pBt->txn_bulk);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, (i64)pBt->txn_bulk);
 		parsed = 1;
 		/* Enables MVCC and transactions snapshots. */
 	} else if (sqlite3StrNICmp(zLeft, "multiversion", 12) == 0) {
 		if (zRight)
 			bdbsqlPragmaMultiversion(pParse, pDb->pBt,
 			    sqlite3GetBoolean(zRight, 0));
-
-		returnSingleInt(pParse, "multiversion",
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v,
 		    (i64)((pDb->pBt->pBt->env_oflags & DB_MULTIVERSION)?
 		    1 : 0));
 		parsed = 1;
@@ -665,7 +666,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 				pDb->pBt->pBt->read_txn_flags &=
 				    ~DB_TXN_SNAPSHOT;
 		}
-		returnSingleInt(pParse, "snapshot_isolation",
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v,
 		    (i64)((pDb->pBt->pBt->read_txn_flags & DB_TXN_SNAPSHOT)?
 		    1 : 0));
 		parsed = 1;
@@ -695,8 +698,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		} else
 			iLimit = ((pDb->pBt->pBt->env_oflags &
 			    DB_SYSTEM_MEM) ? 1 : 0);
-
-		returnSingleInt(pParse, "bdbsql_system_memory", iLimit);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, iLimit);
 		parsed = 1;
 		/*
 		 * This pragma is just used to test the persistent pragma API.
@@ -946,7 +950,6 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		int iLimit = -2;
 		DB_ENV *dbenv;
 
-		btreeUpdateBtShared(pDb->pBt, 1);
 		dbenv = pDb->pBt->pBt->dbenv;
 		if (pDb->pBt->pBt->env_opened && zRight) {
 			if (!sqlite3GetInt32(zRight, &iLimit) ||
@@ -957,7 +960,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 			else if (dbenv->memp_trickle(dbenv, iLimit, NULL) != 0)
 				sqlite3ErrorMsg(pParse, "trickle failed.");
 		}
-		returnSingleInt(pParse, "trickle",
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v,
 		    (i64)((iLimit > 0 && iLimit < 101) ? iLimit : 0));
 		parsed = 1;
 	/*
@@ -991,8 +996,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 					    " must be a number.", zRight);
 			}
 		}
-		returnSingleInt(pParse, "txn_priority",
-		    pDb->pBt->txn_priority);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, pDb->pBt->txn_priority);
 		parsed = 1;
 	/*
 	 * PRAGMA bdbsql_log_buffer; -- DB_ENV->get_lg_bsize
@@ -1024,8 +1030,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 			/* Get existing value */
 			pDb->pBt->pBt->dbenv->get_lg_bsize(
 				pDb->pBt->pBt->dbenv, &val);
-
-			returnSingleInt(pParse, "bdbsql_log_buffer", val);
+			sqlite3VdbeSetNumCols(v, 1);
+			sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+			returnSingleInt(v, val);
 		}
 		parsed = 1;
 	/*
@@ -1057,9 +1064,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 			if (rc == 0)
 				pDb->pBt->pBt->single_process = new_value;
 		}
-
-		returnSingleInt(pParse, "bdbsql_single_process",
-				(i64)pDb->pBt->pBt->single_process);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, (i64)pDb->pBt->pBt->single_process);
 		parsed = 1;
 	/*
 	 * PRAGMA bdbsql_vacuum_fillpercent = N;
@@ -1083,7 +1090,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 			}
 		}
 		iLimit = pDb->pBt->fillPercent;
-		returnSingleInt(pParse, "bdbsql_vacuum_fillpercent", iLimit);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, iLimit);
 		parsed = 1;
 	/*
 	 * PRAGMA bdbsql_vacuum_pages = N;
@@ -1102,42 +1111,29 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 			}
 		}
 		iLimit = pDb->pBt->vacuumPages;
-		returnSingleInt(pParse, "bdbsql_vacuum_pages", iLimit);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, iLimit);
 		parsed = 1;
 	/*
 	 * PRAGMA bdbsql_error_file = filename;
-	 * Redirect the Berkeley DB error output to the file specified by
-	 * the given filename. When the filename doesn't be specified, echo
-	 * current setting.
+	 * Redirect the Berkeley DB error output to the given filename. When
+	 * none is specified, just display the current setting.
 	 */
 	} else if (sqlite3StrNICmp(zLeft, "bdbsql_error_file", 17) == 0) {
 		char filename[BT_MAX_PATH];
 		char *err_file;
 
-		btreeUpdateBtShared(pDb->pBt, 1);
-		err_file = NULL;
-
-		if (zRight) {
-			FILE *tmpfile;
-			tmpfile = fopen(zRight, "a");
-			if (tmpfile == NULL)
-				sqlite3ErrorMsg(pParse,
-				    "Can't open error file %s", zRight);
-			else {
-				fclose(tmpfile);
-				sqlite3_mutex_enter(pBt->pBt->mutex);
-				sqlite3_free(pBt->pBt->err_file);
-				pBt->pBt->err_file =
-				    sqlite3_mprintf("%s", zRight);
-				sqlite3_mutex_leave(pBt->pBt->mutex);
-				err_file = zRight;
-			}
-		}
-
-		if (err_file == NULL) {
+		if ((err_file = zRight) == NULL) {
+			btreeGetErrorFile(pBt->pBt, filename);
 			err_file = filename;
-			btreeGetErrorFile(pDb->pBt->pBt, err_file);
+		} else if ((ret = btreeSetErrorFile(pBt->pBt, err_file)) != 0) {
+			sqlite3ErrorMsg(pParse, "Can't open error file %s: %s",
+			    zRight, strerror(errno));
+			/* Don't continue? */
+			return (0);
 		}
+
 		sqlite3VdbeSetNumCols(pParse->pVdbe, 1);
 		sqlite3VdbeSetColName(pParse->pVdbe, 0, COLNAME_NAME,
 		    zLeft, SQLITE_STATIC);
@@ -1173,7 +1169,7 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 				sqlite3ErrorMsg(pParse, 
 				    "Can't set shared_resources for an open "
 				    "or existing environment");
-      			} else if (sqlite3Atoi64(zRight, &iLimit, 100000,
+      			} else if (sqlite3Atoi64(zRight, &iLimit, (int)strlen(zRight),
 			    SQLITE_UTF8) ||
 			    iLimit > (GIGABYTE * (SQLITE_MAX_U32 + 1) - 1))
 				sqlite3ErrorMsg(pParse,
@@ -1200,7 +1196,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		    pDb->pBt->pBt->dbenv, &gbyte, &byte);
 
 		iLimit = (i64)gbyte * GIGABYTE + byte;
-		returnSingleInt(pParse, "bdbsql_shared_resources", iLimit);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, iLimit);
 		parsed = 1;
 	/*
 	 * PRAGMA bdbsql_lock_tablesize; -- DB_ENV->get_lk_tablesize
@@ -1242,8 +1240,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		/* Get existing value */
 		pDb->pBt->pBt->dbenv->get_lk_tablesize(
 			pDb->pBt->pBt->dbenv, &val);
-
-		returnSingleInt(pParse, "bdbsql_lock_tablesize", val);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, val);
 		parsed = 1;
 	/*
 	 * PRAGMA large_record_opt; -- Gets the blob threshold
@@ -1283,7 +1282,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		}
 
 		val = pDb->pBt->pBt->blob_threshold;
-		returnSingleInt(pParse, "large_record_opt", val);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, val);
 		parsed = 1;
 	/*
 	 * PRAGMA replication_ack_policy; -- DB_ENV->repmgr_get_ack_policy
@@ -1363,8 +1364,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		/* Get existing value */
 		pDb->pBt->pBt->dbenv->rep_get_timeout(
 			pDb->pBt->pBt->dbenv, DB_REP_ACK_TIMEOUT, &val);
-
-		returnSingleInt(pParse, "replication_ack_timeout", val);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, val);
 		parsed = 1;
 	/*
 	 * PRAGMA replication_priority; -- DB_ENV->rep_get_priority
@@ -1396,8 +1398,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		/* Get existing value */
 		pDb->pBt->pBt->dbenv->rep_get_priority(
 			pDb->pBt->pBt->dbenv, &val);
-
-		returnSingleInt(pParse, "replication_priority", val);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, val);
 		parsed = 1;
 	/*
 	 * PRAGMA replication_num_sites; -- DB_ENV->repmgr_site_list
@@ -1421,8 +1424,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 
 		if (sites)
 			sqlite3_free(sites);
-
-		returnSingleInt(pParse, "replication_num_sites", val);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, val);
 		parsed = 1;
 	/*
 	 * PRAGMA replication_perm_failed; -- DB_REP_PERM_FAILED
@@ -1437,8 +1441,9 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 		val = pDb->pBt->pBt->permFailures;
 		pDb->pBt->pBt->permFailures = 0;
 		sqlite3_mutex_leave(pDb->pBt->pBt->mutex);
-
-		returnSingleInt(pParse, "replication_perm_failed", val);
+		sqlite3VdbeSetNumCols(v, 1);
+		sqlite3VdbeSetColName(v, 0, COLNAME_NAME, zLeft, SQLITE_STATIC);
+		returnSingleInt(v, val);
 		parsed = 1;
 	/*
 	 * PRAGMA replication_site_status;
@@ -1492,7 +1497,6 @@ int bdbsqlPragma(Parse *pParse, char *zLeft, char *zRight, int iDb)
 	} else if (sqlite3StrNICmp(zLeft, "statistics_file", 15) == 0) {
 		char *dirPathName, dirPathBuf[BT_MAX_PATH], *stat_file;
 
-		btreeUpdateBtShared(pDb->pBt, 1);
 		dirPathName = dirPathBuf;
 		stat_file = NULL;
 

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -68,6 +68,10 @@ proc repmgr025_sub { method niter tnum largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $masterdir	
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
 
 	# Log size is small so we quickly create more than one.
 	# The documentation says that the log file must be at least

@@ -1,7 +1,7 @@
 #
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -322,9 +322,10 @@ function emit_unmarshal()
 	printf("\treturn (0);\n\n") >> CFILE;
 
 	printf("too_few:\n") >> CFILE;
-	printf("\t__db_errx(env, DB_STR(\"3675\",\n") >> CFILE;
-	printf("\t    \"Not enough input bytes to fill a %s message\"));\n", \
-	    base_name) >> CFILE;
+	printf("\t__db_errx(env, DB_STR_A(\"3675\",\n") >> CFILE;
+	printf( \
+	 "\t    \"Not enough input bytes to fill a %%s message\",\n") >> CFILE;
+	printf("\t    \"%%s\"), \"%s\");\n", base_name) >> CFILE;
 	printf("\treturn (EINVAL);\n") >> CFILE;
 	printf("}\n\n") >> CFILE;
 }	

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -303,31 +303,40 @@ __db_pthread_mutex_prep(env, mutex, mutexp, ip, exclusive)
 	PERFMON4(env,
 	    mutex, suspend, mutex, exclusive, mutexp->alloc_id, mutexp);
 
+	/*
+	 * If this is a failchk'ing env handle, then use this special path so
+	 * that the failchk thread does not get blocked by a dead process.
+	 */
 	if (F_ISSET(dbenv, DB_ENV_FAILCHK)) {
-		DB_ASSERT(env, ip != NULL);
 		for (;;) {
 			RET_SET_PTHREAD_TRYLOCK(mutexp, ret);
 			if (ret != EBUSY)
 				break;
-			if (dbenv->is_alive(dbenv,
-			    mutexp->pid, mutexp->tid, 0) == 0) {
-				if (ip->dbth_state == THREAD_FAILCHK) {
-					ret = DB_RUNRECOVERY;
-				} else {
-					/*
-					 * Some thread other than the true
-					 * FAILCHK thread in this process is
-					 * asking for the mutex held by the
-					 * dead process/thread.  We will block
-					 * here until someone else does the
-					 * cleanup.  Same behavior as if we
-					 * hadn't gone down the 'if
-					 * DB_ENV_FAILCHK' path to start with.
-					 */
-					goto lockit;
-				}
-				__os_yield(env, 0, 10);
+			/* If the owner is still alive, try again. */
+			if (dbenv->is_alive(dbenv, mutexp->pid, mutexp->tid, 0))
+				continue;
+			/*
+			 * The owner is dead, but we don't yet know whether
+			 * this is the failchk thread or some other thread that
+			 * is sharing the same DB_ENV.  We treat it as the
+			 * failchk thread if the DB_THREAD_INFO is NULL (as
+			 * when opening the environment and the thread info
+			 * table is not yet accessible) or if the thread state
+			 * is THREAD_FAILCHK.
+			 */
+			if (ip == NULL || ip->dbth_state == THREAD_FAILCHK) {
+				ret = DB_RUNRECOVERY;
+				break;
 			}
+			/*
+			 * Some thread other than the true FAILCHK thread in
+			 * this process is asking for the mutex held by the dead
+			 * process/thread.  We will block in this function until
+			 * someone else does the cleanup.  This is the same
+			 * behavior as if we hadn't gone down the
+			 * 'if DB_ENV_FAILCHK' path to start with.
+			 */
+			goto lockit;
 		}
 	} else {
 lockit:
@@ -626,7 +635,7 @@ timeout:
 			goto err;
 		}
 	}
-		
+
 #ifdef DIAGNOSTIC
 	/*
 	 * For diagnostics we want to switch threads as often as possible.
@@ -666,7 +675,7 @@ __db_pthread_mutex_readlock(env, mutex, flags)
 	u_int32_t flags;
 {
 	DB_ENV *dbenv;
-	DB_MUTEX *mutexp, before;
+	DB_MUTEX *mutexp;
 	DB_THREAD_INFO *ip;
 	MUTEX_STATE *state;
 #ifdef HAVE_FAILCHK_BROADCAST
@@ -696,7 +705,6 @@ __db_pthread_mutex_readlock(env, mutex, flags)
 		STAT_INC(env,
 		    mutex, set_rd_nowait, mutexp->mutex_set_rd_nowait, mutex);
 
-	before = *mutexp;
 	ip = NULL;
 	state = NULL;
 	if (env->thr_hashtab != NULL) {
@@ -756,7 +764,8 @@ busy:
 	if (ret != 0 && ret != DB_LOCK_NOTGRANTED)
 		goto err;
 	if (state != NULL)
-		state->action = MUTEX_ACTION_SHARED;
+		state->action = ret == 0 ?
+		    MUTEX_ACTION_SHARED : MUTEX_ACTION_UNLOCKED;
 #ifdef HAVE_FAILCHK_BROADCAST
 	if (F_ISSET(mutexp, DB_MUTEX_OWNER_DEAD) &&
 	    !F_ISSET(dbenv, DB_ENV_FAILCHK)) {
@@ -826,7 +835,8 @@ __db_hybrid_mutex_suspend(env, mutex, timespec, ip, exclusive)
 		DB_ASSERT(env, F_ISSET(mutexp, DB_MUTEX_SHARED));
 	DB_ASSERT(env, F_ISSET(mutexp, DB_MUTEX_SELF_BLOCK));
 
-	if ((ret = __db_pthread_mutex_prep(env, mutex, mutexp, ip, exclusive)) != 0)
+	if ((ret = __db_pthread_mutex_prep(env,
+	    mutex, mutexp, ip, exclusive)) != 0)
 		goto err;
 
 	/*
@@ -883,7 +893,7 @@ err:
  * __db_pthread_mutex_unlock --
  *	Release a mutex, or, if hybrid, wake a thread up from a suspend.
  *
- * PUBLIC: int __db_pthread_mutex_unlock 
+ * PUBLIC: int __db_pthread_mutex_unlock
  * PUBLIC:     __P((ENV *, db_mutex_t, DB_THREAD_INFO *, u_int32_t));
  */
 int
@@ -951,7 +961,7 @@ __db_pthread_mutex_unlock(env, mutex, ip, flags)
 				ip->mtx_ctr--;
 			}
 		}
-		else if (ip != NULL && 
+		else if (ip != NULL &&
 		    (ret = __mutex_record_unlock(env, mutex, ip)) != 0)
 			goto err;
 #endif

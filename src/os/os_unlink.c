@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -29,7 +29,7 @@ __os_unlink(env, path, overwrite_test)
 
 	if (dbenv != NULL &&
 	    FLD_ISSET(dbenv->verbose, DB_VERB_FILEOPS | DB_VERB_FILEOPS_ALL))
-		__db_msg(env, DB_STR_A("0160", "fileops: unlink %s",
+		__db_msg(env, DB_STR_A("0028", "fileops: unlink %s",
 		    "%s"), path);
 
 	/* Optionally overwrite the contents of the file to enhance security. */

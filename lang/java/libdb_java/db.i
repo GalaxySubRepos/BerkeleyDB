@@ -1839,6 +1839,11 @@ struct DbEnv
 		    (u_int32_t)(bytes % GIGABYTE));
 	}
 
+	JAVA_EXCEPT(DB_RETOK_STD, JDBENV)
+	db_ret_t repmgr_set_ssl_config(int config_type, char *value) {
+		return self->repmgr_set_ssl_config(self, config_type, value);
+	}
+
 	JAVA_EXCEPT_ERRNO(DB_RETOK_STD, JDBENV)
 	DB_SITE *repmgr_site(const char *host, u_int port) {
 		DB_SITE *site = NULL;

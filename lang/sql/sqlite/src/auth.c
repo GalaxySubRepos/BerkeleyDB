@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2003 January 11
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -107,10 +113,11 @@ int sqlite3AuthReadCol(
   const char *zCol,               /* Column name */
   int iDb                         /* Index of containing database. */
 ){
-  sqlite3 *db = pParse->db;       /* Database handle */
-  char *zDb = db->aDb[iDb].zName; /* Name of attached database */
-  int rc;                         /* Auth callback return code */
+  sqlite3 *db = pParse->db;          /* Database handle */
+  char *zDb = db->aDb[iDb].zDbSName; /* Schema name of attached database */
+  int rc;                            /* Auth callback return code */
 
+  if( db->init.busy ) return SQLITE_OK;
   rc = db->xAuth(db->pAuthArg, SQLITE_READ, zTab,zCol,zDb,pParse->zAuthContext
 #ifdef SQLITE_USER_AUTHENTICATION
                  ,db->auth.zAuthUser

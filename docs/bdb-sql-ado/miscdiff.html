@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -169,6 +169,17 @@ dbsql&gt; insert into a values (5); </pre>
                         PRAGMA cache size for SQL database has a default value
                         increase. The default PRAGMA cache size for SQL
                         databases is increased from 2000 pages to 5000 pages.
+                    </p>
+          </li>
+          <li>
+            <p>
+                        Calling sqlite3_open(_v2) does not create or access the
+                        database as it does in SQLite.  The database is not
+                        created or accessed until a table is created or
+                        accessed.  This means athat certain errors returned by
+                        sqlite3_open in SQLite, such as SQLITE_CANTOPEN when
+                        the path to the database does not exist, are not
+                        returned by BDB SQL until a table is accessed.
                     </p>
           </li>
         </ul>

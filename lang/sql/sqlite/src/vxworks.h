@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2015-03-02
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -26,4 +32,7 @@
 #else
 /* This is not VxWorks. */
 #define OS_VXWORKS 0
+#define HAVE_FCHOWN 1
+#define HAVE_READLINK 1
+#define HAVE_LSTAT 1
 #endif /* defined(_WRS_KERNEL) */

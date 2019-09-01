@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="db_copy.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbcreate"></a>Db</h2>
+            <h2 class="title" style="clear: both"><a id="dbcreate"></a>
+        
+        <span>Db</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -58,23 +64,47 @@ public:
       <p>
         Db handles are free-threaded if the 
         <a class="link" href="envopen.html#envopen_DB_THREAD">DB_THREAD</a> flag is specified to 
-        the <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> method when the database is opened or 
+        the <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> method when the database is opened or 
         if the database environment in which the database is opened is free-threaded. The handle 
         should not be closed while any other handle that refers to the database is in use; for 
         example, database handles must not be closed while cursor handles into the database remain 
         open, or transactions that include operations on the database have not yet been committed 
-        or aborted.  Once the <a class="xref" href="dbclose.html" title="Db::close()">Db::close()</a>, 
-        <a class="xref" href="dbremove.html" title="Db::remove()">Db::remove()</a>, 
-        <a class="xref" href="dbrename.html" title="Db::rename()">Db::rename()</a>, or
-        <a class="xref" href="dbverify.html" title="Db::verify()">Db::verify()</a> 
+        or aborted.  Once the <a class="xref" href="dbclose.html" title="Db::close()">
+        
+        <span>Db::close()</span>
+    </a>, 
+        <a class="xref" href="dbremove.html" title="Db::remove()">
+        
+        <span>Db::remove()</span>
+    </a>, 
+        <a class="xref" href="dbrename.html" title="Db::rename()">
+        
+        <span>Db::rename()</span>
+    </a>, or
+        <a class="xref" href="dbverify.html" title="Db::verify()">
+        
+        <span>Db::verify()</span>
+    </a> 
         methods are called, the handle may not be accessed again, regardless of the method's return.
     </p>
       <p>
         The constructor creates a <a class="link" href="db.html" title="Chapter 2.  The Db Handle">Db</a> object that is the
         handle for a Berkeley DB database. The constructor allocates memory internally; calling
-        the <a class="xref" href="dbclose.html" title="Db::close()">Db::close()</a>,
-        <a class="xref" href="dbremove.html" title="Db::remove()">Db::remove()</a>, or
-        <a class="xref" href="dbrename.html" title="Db::rename()">Db::rename()</a>
+        the <a class="xref" href="dbclose.html" title="Db::close()">
+        
+        <span>Db::close()</span>
+    </a>,
+        <a class="xref" href="dbremove.html" title="Db::remove()">
+        
+        <span>Db::remove()</span>
+    </a>, or
+        <a class="xref" href="dbrename.html" title="Db::rename()">
+        
+        <span>Db::rename()</span>
+    </a>
         methods will free that memory.        
     </p>
       <p>
@@ -108,7 +138,7 @@ public:
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703828449968"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176786730528"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -116,7 +146,7 @@ public:
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703828473824"></a>dbenv</h4>
+                <h4 class="title"><a id="idm140176786747536"></a>dbenv</h4>
               </div>
             </div>
           </div>
@@ -124,7 +154,8 @@ public:
                  
                 <span>If no <span class="bold"><strong>dbenv</strong></span> value is specified,</span> 
                 the database is standalone; that is, it is not part of any Berkeley DB
-                environment.
+                environment. Since it is not part of any environment, any DB_CONFIG file in the application’s 
+                current working directory is ignored.
             </p>
           <p>
                 
@@ -143,7 +174,7 @@ public:
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703828323120"></a>flags</h4>
+                <h4 class="title"><a id="idm140176786624832"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -179,7 +210,7 @@ public:
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703828182528"></a>Class</h3>
+              <h3 class="title"><a id="idm140176786453632"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -191,7 +222,7 @@ public:
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703829040832"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176787237088"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -215,7 +246,10 @@ public:
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::del()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::del()</span>
+    </td>
         </tr>
       </table>
     </div>

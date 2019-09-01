@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -43,7 +43,7 @@ __os_getenv(env, name, bpp, buflen)
 		}
 
 		*bpp = NULL;
-		__db_errx(env, DB_STR_A("0157",
+		__db_errx(env, DB_STR_A("0027",
 		    "%s: buffer too small to hold environment variable %s",
 		    "%s %s"), name, p);
 		return (EINVAL);

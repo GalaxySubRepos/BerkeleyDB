@@ -1054,6 +1054,9 @@
 #ifndef HAVE_REPLICATION_THREADS
 #define	__repmgr_set_socket __repmgr_set_socket@DB_VERSION_UNIQUE_NAME@
 #endif
+#ifndef HAVE_REPLICATION_THREADS
+#define	__repmgr_set_ssl_config_pp __repmgr_set_ssl_config_pp@DB_VERSION_UNIQUE_NAME@
+#endif
 #define	__fop_create_42_desc __fop_create_42_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_60_desc __fop_create_60_desc@DB_VERSION_UNIQUE_NAME@
 #define	__fop_create_desc __fop_create_desc@DB_VERSION_UNIQUE_NAME@
@@ -1693,6 +1696,7 @@
 #define	__memp_sync_int __memp_sync_int@DB_VERSION_UNIQUE_NAME@
 #define	__memp_mf_sync __memp_mf_sync@DB_VERSION_UNIQUE_NAME@
 #define	__memp_purge_dead_files __memp_purge_dead_files@DB_VERSION_UNIQUE_NAME@
+#define	__memp_purge_dead __memp_purge_dead@DB_VERSION_UNIQUE_NAME@
 #define	__memp_trickle_pp __memp_trickle_pp@DB_VERSION_UNIQUE_NAME@
 #define	__mutex_alloc __mutex_alloc@DB_VERSION_UNIQUE_NAME@
 #define	__mutex_alloc_int __mutex_alloc_int@DB_VERSION_UNIQUE_NAME@
@@ -2039,6 +2043,8 @@
 #define	__rep_write_egen __rep_write_egen@DB_VERSION_UNIQUE_NAME@
 #define	__rep_write_gen __rep_write_gen@DB_VERSION_UNIQUE_NAME@
 #define	__rep_check_view __rep_check_view@DB_VERSION_UNIQUE_NAME@
+#define	__rep_object_size __rep_object_size@DB_VERSION_UNIQUE_NAME@
+#define	__rep_object_max __rep_object_max@DB_VERSION_UNIQUE_NAME@
 #define	__rep_stat_pp __rep_stat_pp@DB_VERSION_UNIQUE_NAME@
 #define	__rep_stat_print_pp __rep_stat_print_pp@DB_VERSION_UNIQUE_NAME@
 #define	__rep_stat_print __rep_stat_print@DB_VERSION_UNIQUE_NAME@
@@ -2094,8 +2100,14 @@
 #define	__repmgr_v2handshake_unmarshal __repmgr_v2handshake_unmarshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_parm_refresh_marshal __repmgr_parm_refresh_marshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_parm_refresh_unmarshal __repmgr_parm_refresh_unmarshal@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_v6permlsn_marshal __repmgr_v6permlsn_marshal@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_v6permlsn_unmarshal __repmgr_v6permlsn_unmarshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_permlsn_marshal __repmgr_permlsn_marshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_permlsn_unmarshal __repmgr_permlsn_unmarshal@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_heartbeat_marshal __repmgr_heartbeat_marshal@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_heartbeat_unmarshal __repmgr_heartbeat_unmarshal@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_readonly_response_marshal __repmgr_readonly_response_marshal@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_readonly_response_unmarshal __repmgr_readonly_response_unmarshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_version_proposal_marshal __repmgr_version_proposal_marshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_version_proposal_unmarshal __repmgr_version_proposal_unmarshal@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_version_confirmation_marshal __repmgr_version_confirmation_marshal@DB_VERSION_UNIQUE_NAME@
@@ -2139,6 +2151,7 @@
 #define	__repmgr_start_selector __repmgr_start_selector@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_close __repmgr_close@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_stop __repmgr_stop@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_set_ssl_config_pp __repmgr_set_ssl_config_pp@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_set_ack_policy __repmgr_set_ack_policy@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_get_ack_policy __repmgr_get_ack_policy@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_set_incoming_queue_max __repmgr_set_incoming_queue_max@DB_VERSION_UNIQUE_NAME@
@@ -2200,6 +2213,16 @@
 #define	__repmgr_net_close __repmgr_net_close@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_net_destroy __repmgr_net_destroy@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_print_addr __repmgr_print_addr@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_set_ssl_ctx __repmgr_set_ssl_ctx@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_accept __repmgr_ssl_accept@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_connect __repmgr_ssl_connect@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_shutdown __repmgr_ssl_shutdown@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_write __repmgr_ssl_write@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_writemsg __repmgr_ssl_writemsg@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_writev __repmgr_ssl_writev@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_readv __repmgr_ssl_readv@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_write_possible __repmgr_ssl_write_possible@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_ssl_read_possible __repmgr_ssl_read_possible@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_thread_start __repmgr_thread_start@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_thread_join __repmgr_thread_join@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_set_nonblock_conn __repmgr_set_nonblock_conn@DB_VERSION_UNIQUE_NAME@
@@ -2225,7 +2248,7 @@
 #define	__repmgr_wake_main_thread __repmgr_wake_main_thread@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_writev __repmgr_writev@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_readv __repmgr_readv@DB_VERSION_UNIQUE_NAME@
-#define	__repmgr_select_loop __repmgr_select_loop@DB_VERSION_UNIQUE_NAME@
+#define	__repmgr_network_event_handler __repmgr_network_event_handler@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_queue_destroy __repmgr_queue_destroy@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_queue_get __repmgr_queue_get@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_queue_put __repmgr_queue_put@DB_VERSION_UNIQUE_NAME@
@@ -2306,6 +2329,9 @@
 #endif
 #ifndef HAVE_REPLICATION_THREADS
 #define	__repmgr_set_socket __repmgr_set_socket@DB_VERSION_UNIQUE_NAME@
+#endif
+#ifndef HAVE_REPLICATION_THREADS
+#define	__repmgr_set_ssl_config_pp __repmgr_set_ssl_config_pp@DB_VERSION_UNIQUE_NAME@
 #endif
 #define	__repmgr_schedule_connection_attempt __repmgr_schedule_connection_attempt@DB_VERSION_UNIQUE_NAME@
 #define	__repmgr_is_server __repmgr_is_server@DB_VERSION_UNIQUE_NAME@
@@ -2467,6 +2493,7 @@
 #define	tcl_MutStatPrint tcl_MutStatPrint@DB_VERSION_UNIQUE_NAME@
 #define	tcl_MutUnlock tcl_MutUnlock@DB_VERSION_UNIQUE_NAME@
 #define	tcl_RepConfig tcl_RepConfig@DB_VERSION_UNIQUE_NAME@
+#define	tcl_RepMgrSSLConfig tcl_RepMgrSSLConfig@DB_VERSION_UNIQUE_NAME@
 #define	tcl_RepGetTwo tcl_RepGetTwo@DB_VERSION_UNIQUE_NAME@
 #define	tcl_RepGetConfig tcl_RepGetConfig@DB_VERSION_UNIQUE_NAME@
 #define	tcl_RepGetTimeout tcl_RepGetTimeout@DB_VERSION_UNIQUE_NAME@

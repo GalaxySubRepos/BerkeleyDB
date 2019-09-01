@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1348,7 +1348,7 @@ public:
 	inline iterator end()
 	{
 		end_itr_.owner_ = (db_container*)this;
-		end_itr_.inval_pos_type_ = db_base_iterator<T>::IPT_AFTER_LAST;
+		end_itr_.inval_pos_type_ = iterator::IPT_AFTER_LAST;
  		return end_itr_;
 	}
 
@@ -1358,7 +1358,7 @@ public:
 	inline const_iterator end() const
 	{
 		end_itr_.owner_ = (db_container*)this;
-		end_itr_.inval_pos_type_ = db_base_iterator<T>::IPT_AFTER_LAST;
+		end_itr_.inval_pos_type_ = iterator::IPT_AFTER_LAST;
  		return end_itr_;
 	}
 
@@ -1440,7 +1440,7 @@ public:
 
 		itr.itr_status_ = INVALID_ITERATOR_POSITION;
 		itr.owner_ = (db_container*)this;
-		itr.inval_pos_type_ = db_base_iterator<T>::IPT_BEFORE_FIRST;
+		itr.inval_pos_type_ = iterator::IPT_BEFORE_FIRST;
 		return itr;
 	}
 
@@ -1453,7 +1453,7 @@ public:
 
 		itr.itr_status_ = INVALID_ITERATOR_POSITION;
 		itr.owner_ = (db_container*)this;
-		itr.inval_pos_type_ = db_base_iterator<T>::IPT_BEFORE_FIRST;
+		itr.inval_pos_type_ = iterator::IPT_BEFORE_FIRST;
 		return itr;
 	}
 	//@} // iterator_funcs

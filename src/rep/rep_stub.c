@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -431,5 +431,21 @@ __rep_txn_applied(env, ip, commit_info, timeout)
 	COMPQUIET(commit_info, NULL);
 	COMPQUIET(timeout, 0);
 	return (__db_norep(env));
+}
+
+size_t
+__rep_object_size(env)
+	ENV *env;
+{
+	COMPQUIET(env, NULL);
+	return (0);
+}
+
+size_t
+__rep_object_max(env)
+	ENV *env;
+{
+	COMPQUIET(env, NULL);
+	return (0);
 }
 #endif /* !HAVE_REPLICATION */

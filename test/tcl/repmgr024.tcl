@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr024
 # TEST	Test of group-wide log archiving awareness.
@@ -58,10 +58,13 @@ proc repmgr024_sub { method niter tnum testopt largs } {
 		set repmemargs "-rep_inmem_files "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	file mkdir [set dira $testdir/SITE_A]
 	file mkdir [set dirb $testdir/SITE_B]
 	file mkdir [set dirc $testdir/SITE_C]
+
 	foreach { porta portb portc } [available_ports 3] {}
 	set hoststr [get_hoststr $ipversion]
 
@@ -74,7 +77,7 @@ proc repmgr024_sub { method niter tnum testopt largs } {
 	set log_max [expr $log_buf * 4]
 
 	set cmda "berkdb_env_noerr -create -txn nosync \
-	    $verbargs $repmemargs -rep -thread -event \
+	    $verbargs $repmemargs $sslargs -rep -thread -event \
 	    -log_buffer $log_buf -log_max $log_max -errpfx SITE_A \
 	    -home $dira"
 	set enva [eval $cmda]
@@ -92,7 +95,7 @@ proc repmgr024_sub { method niter tnum testopt largs } {
 		set viewstr ""
 	}
 	set cmdb "berkdb_env_noerr -create -txn nosync \
-	    $verbargs $repmemargs -rep -thread -event \
+	    $verbargs $repmemargs $sslargs -rep -thread -event \
 	    -log_buffer $log_buf -log_max $log_max -errpfx SITE_B \
 	    $viewstr -home $dirb"
 	set envb [eval $cmdb]
@@ -103,7 +106,7 @@ proc repmgr024_sub { method niter tnum testopt largs } {
 	await_startup_done $envb
 
 	set cmdc "berkdb_env_noerr -create -txn nosync \
-	    $verbargs $repmemargs -rep -thread -event \
+	    $verbargs $repmemargs $sslargs -rep -thread -event \
 	    -log_buffer $log_buf -log_max $log_max -errpfx SITE_C \
 	    -home $dirc"
 	set envc [eval $cmdc]
@@ -210,6 +213,10 @@ proc repmgr024_sub { method niter tnum testopt largs } {
 		}
 	}
 
+	# Test the stable log file stat.  Make sure it has an initial value.
+	set stable_lf1 [stat_field $enva repmgr_stat "Group stable log file"]
+	error_check_good init_stable_lf [expr $stable_lf1 > 0] 1
+
 	#
 	# Get the new last log file for client 1.
 	#
@@ -289,6 +296,10 @@ proc repmgr024_sub { method niter tnum testopt largs } {
 	puts "\tRepmgr$tnum.l: Advance master log files."
 	set start [repmgr024_advlog $method $niter $start \
 	    $enva $dira $last_client_log $largs]
+
+	# Make sure the stable log file stat increased.
+	set stable_lf2 [stat_field $enva repmgr_stat "Group stable log file"]
+	error_check_good later_stable_lf [expr $stable_lf2 > $stable_lf1] 1
 
 	#
 	# Make sure neither log_archive in same process nor db_archive

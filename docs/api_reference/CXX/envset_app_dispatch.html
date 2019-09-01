@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_app_dispatch()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_app_dispatch()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_alloc.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_app_dispatch"></a>DbEnv::set_app_dispatch()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_app_dispatch"></a>
+        
+        <span>DbEnv::set_app_dispatch()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -54,9 +60,15 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
     </p>
       <p>
          The <code class="methodname">DbEnv::set_app_dispatch()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is
          called. If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  is called, the
          information specified to <code class="methodname">DbEnv::set_app_dispatch()</code> must be
          consistent with the existing environment or corruption can occur.
     </p>
@@ -68,7 +80,7 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812371616"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176769852384"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -76,7 +88,7 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812335264"></a>tx_recover</h4>
+                <h4 class="title"><a id="idm140176769715408"></a>tx_recover</h4>
               </div>
             </div>
           </div>
@@ -197,7 +209,7 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812286976"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176769603120"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -215,12 +227,15 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812291392"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176769615744"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -229,7 +244,7 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812289056"></a>Class</h3>
+              <h3 class="title"><a id="idm140176769594960"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -241,7 +256,7 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812308096"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176769597648"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -261,11 +276,17 @@ DbEnv::set_app_dispatch(int (*tx_recover)(DbEnv *dbenv,
           <td width="40%" align="right"> <a accesskey="n" href="envset_backup_callbacks.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_alloc() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_alloc()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_backup_callbacks()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_backup_callbacks()</span>
+    </td>
         </tr>
       </table>
     </div>

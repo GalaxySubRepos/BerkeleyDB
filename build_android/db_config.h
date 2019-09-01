@@ -81,6 +81,10 @@
 /* Define to 1 if ctime_r takes a buffer length as a third argument. */
 /* #undef HAVE_CTIME_R_3ARG */
 
+/* Define to 1 to use the C++11-specific iota function provided by the
+   compiler. */
+/* #undef HAVE_CXX_IOTA */
+
 /* Define to 1 if building the DBM API. */
 /* #undef HAVE_DBM */
 
@@ -100,6 +104,15 @@
 
 /* Define to 1 to use dtrace for performance event tracing. */
 /* #undef HAVE_DTRACE */
+
+/* Define to 1 if you have the `epoll_create' function. */
+/* #undef HAVE_EPOLL_CREATE */
+
+/* Define to 1 if you have the `epoll_ctl' function. */
+/* #undef HAVE_EPOLL_CTL */
+
+/* Define to 1 if you have the `epoll_wait' function. */
+/* #undef HAVE_EPOLL_WAIT */
 
 /* Define to 1 if you have the <execinfo.h> header file. */
 /* #undef HAVE_EXECINFO_H */
@@ -133,6 +146,9 @@
 
 /* Define to 1 if allocated filesystem blocks are not zeroed. */
 /* #undef HAVE_FILESYSTEM_NOTZERO */
+
+/* Define to 1 if you have the `flock' function. */
+/* #undef HAVE_FLOCK */
 
 /* Define to 1 if you have the `fopen' function. */
 #define HAVE_FOPEN 1
@@ -359,6 +375,15 @@
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 /* #undef HAVE_NDIR_H */
 
+/* Define to 1 if you have the <openssl/err.h> header file. */
+/* #undef HAVE_OPENSSL_ERR_H */
+
+/* Define to 1 if you have the <openssl/opensslconf.h> header file. */
+/* #undef HAVE_OPENSSL_OPENSSLCONF_H */
+
+/* Define to 1 if you have the <openssl/ssl.h> header file. */
+/* #undef HAVE_OPENSSL_SSL_H */
+
 /* Define to 1 if you have the O_DIRECT flag. */
 /* #undef HAVE_O_DIRECT */
 
@@ -371,6 +396,9 @@
 /* Define to 1 to enable performance event monitoring of *_stat() statistics.
    */
 /* #undef HAVE_PERFMON_STATISTICS */
+
+/* Define to 1 if you have the `poll' function. */
+/* #undef HAVE_POLL */
 
 /* Define to 1 if you have the `pread' function. */
 /* #undef HAVE_PREAD 1 */
@@ -436,6 +464,9 @@
 
 /* Define to 1 if building the Berkeley DB replication framework. */
 /* #undef HAVE_REPLICATION_THREADS */
+
+/* Define to 1 if building ssl support for replication manager. */
+/* #undef HAVE_REPMGR_SSL_SUPPORT */
 
 /* Define to 1 if you have the `sched_yield' function. */
 #define HAVE_SCHED_YIELD 1
@@ -543,9 +574,15 @@
    */
 /* #undef HAVE_SYS_DIR_H */
 
+/* Define to 1 if you have the <sys/epoll.h> header file. */
+/* #undef HAVE_SYS_EPOLL_H */
+
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */
 /* #undef HAVE_SYS_NDIR_H */
+
+/* Define to 1 if you have the <sys/poll.h> header file. */
+/* #undef HAVE_SYS_POLL_H */
 
 /* Define to 1 if you have the <sys/sdt.h> header file. */
 /* #undef HAVE_SYS_SDT_H */
@@ -603,16 +640,16 @@
 #define PACKAGE_NAME "Berkeley DB"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Berkeley DB 6.2.38"
+#define PACKAGE_STRING "Berkeley DB 18.1.32"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "db-6.2.38"
+#define PACKAGE_TARNAME "db-18.1.32"
 
 /* Define to the home page for this package. */
 #define PACKAGE_URL "http://www.oracle.com/technology/software/products/berkeley-db/index.html"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "6.2.38"
+#define PACKAGE_VERSION "18.1.32"
 
 /* The size of `char', as computed by sizeof. */
 #define SIZEOF_CHAR 1

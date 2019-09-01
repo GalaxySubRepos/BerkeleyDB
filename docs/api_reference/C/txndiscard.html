@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_TXN-&gt;discard()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_TXN-&gt;discard()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="txncommit.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txndiscard"></a>DB_TXN-&gt;discard()</h2>
+            <h2 class="title" style="clear: both"><a id="txndiscard"></a>
+        <span>DB_TXN-&gt;discard()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -46,10 +52,16 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
          The <code class="methodname">DB_TXN-&gt;discard()</code> method frees up all the per-process resources
          associated with the specified <a class="link" href="txn.html" title="Chapter 12.  The DB_TXN Handle">DB_TXN</a>  handle, neither
          committing nor aborting the transaction.  This call may be used only
-         after calls to <a class="xref" href="txnrecover.html" title="DB_ENV-&gt;txn_recover()">DB_ENV-&gt;txn_recover()</a>  when
+         after calls to <a class="xref" href="txnrecover.html" title="DB_ENV-&gt;txn_recover()">
+        <span>DB_ENV-&gt;txn_recover()</span>
+        
+    </a>  when
          there are multiple global transaction managers recovering transactions
          in a single Berkeley DB environment.  Any transactions returned by
-         <a class="xref" href="txnrecover.html" title="DB_ENV-&gt;txn_recover()">DB_ENV-&gt;txn_recover()</a> 
+         <a class="xref" href="txnrecover.html" title="DB_ENV-&gt;txn_recover()">
+        <span>DB_ENV-&gt;txn_recover()</span>
+        
+    </a> 
          that are not handled by the current global transaction manager should
          be discarded using <code class="methodname">DB_TXN-&gt;discard()</code>.
      </p>
@@ -72,7 +84,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227650592"></a>DB_LOCK_DEADLOCK</h4>
+              <h4 class="title"><a id="idm140113479884960"></a>DB_LOCK_DEADLOCK</h4>
             </div>
           </div>
         </div>
@@ -85,7 +97,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227651520"></a>DB_LOCK_NOTGRANTED</h4>
+              <h4 class="title"><a id="idm140113479884080"></a>DB_LOCK_NOTGRANTED</h4>
             </div>
           </div>
         </div>
@@ -97,7 +109,10 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
       </div>
@@ -105,7 +120,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815227669584"></a>EINVAL</h4>
+              <h4 class="title"><a id="idm140113479881232"></a>EINVAL</h4>
             </div>
           </div>
         </div>
@@ -123,7 +138,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227681184"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113479879312"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -131,7 +146,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227680800"></a>flags</h4>
+                <h4 class="title"><a id="idm140113479878928"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -145,7 +160,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227796768"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113480030240"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -161,7 +176,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227671168"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113479904016"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -176,7 +191,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227645056"></a>Class</h3>
+              <h3 class="title"><a id="idm140113479944320"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -188,7 +203,7 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227755392"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113479865568"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -208,11 +223,17 @@ DB_TXN-&gt;discard(DB_TXN *tid, u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="txnget_name.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_TXN-&gt;commit() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_TXN-&gt;commit()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_TXN-&gt;get_name()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_TXN-&gt;get_name()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

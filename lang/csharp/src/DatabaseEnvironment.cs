@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -242,6 +242,14 @@ namespace BerkeleyDB {
                 InitThreadCount = cfg.InitThreadCount;
             if (cfg.initTxnCountIsSet)
                 InitTxnCount = cfg.InitTxnCount;
+            if (cfg.initDatabaseCountIsSet)
+                InitDatabaseCount = cfg.InitDatabaseCount;
+            if (cfg.initDatabaseLengthIsSet)
+                InitDatabaseLength = cfg.InitDatabaseLength;
+            if (cfg.initExtFileDatabaseCountIsSet)
+                InitExtFileDatabaseCount = cfg.InitExtFileDatabaseCount;
+            if (cfg.initRepSitesCountIsSet)
+                InitRepSitesCount = cfg.InitRepSitesCount;
 
             if (cfg.LockSystemCfg != null) {
                 if (cfg.LockSystemCfg.Conflicts != null)
@@ -391,8 +399,13 @@ namespace BerkeleyDB {
                     RepPrefmasClient = true;
                 if (cfg.RepSystemCfg.ForwardWrites)
                     RepForwardWrites = true;
+		if (cfg.RepSystemCfg.EnableEpoll)
+		    RepEnableEpoll = true;
+		if (cfg.RepSystemCfg.DisablePoll)
+		    RepDisablePoll = true;
+                if (cfg.RepSystemCfg.DisableSSL)
+                    RepDisableSSL = true;
             }
-
         }
 
         #region Properties
@@ -879,6 +892,48 @@ namespace BerkeleyDB {
                     DbConstants.DB_HOTBACKUP_IN_PROGRESS, value ? 1 : 0);
             }
         }
+
+        /// <summary>
+        /// The number of databases initialized when the environment is created
+        /// </summary>
+        public uint InitDatabaseCount {
+            get {
+                uint ret = 0;
+                dbenv.get_memory_init(DbConstants.DB_MEM_DATABASE, ref ret);
+                return ret;
+            }
+            private set {
+                dbenv.set_memory_init(DbConstants.DB_MEM_DATABASE, value);
+            }
+        }
+        /// <summary>
+        /// The maximum length of database's directory and name strings 
+        /// initialized when the environment is created
+        /// </summary>
+        public uint InitDatabaseLength {
+            get {
+                uint ret = 0;
+                dbenv.get_memory_init(DbConstants.DB_MEM_DATABASE_LENGTH, ref ret);
+                return ret;
+            }
+            private set {
+                dbenv.set_memory_init(DbConstants.DB_MEM_DATABASE_LENGTH, value);
+            }
+        }
+        /// <summary>
+        /// The number of databases and subdatabases using external files 
+        /// initialized when the environment is created
+        /// </summary>
+        public uint InitExtFileDatabaseCount {
+            get {
+                uint ret = 0;
+                dbenv.get_memory_init(DbConstants.DB_MEM_EXTFILE_DATABASE, ref ret);
+                return ret;
+            }
+            private set {
+                dbenv.set_memory_init(DbConstants.DB_MEM_EXTFILE_DATABASE, value);
+            }
+        }
         /// <summary>
         /// The number of locks allocated when the environment is created
         /// </summary>
@@ -931,6 +986,20 @@ namespace BerkeleyDB {
             private set {
                 dbenv.set_memory_init(DbConstants.DB_MEM_LOGID, value);
             }
+        }
+        /// <summary>
+        /// The maximum number of replication sites initialized when the 
+        /// environment is created
+        /// </summary>
+        public uint InitRepSitesCount {
+           get {
+               uint ret = 0;
+               dbenv.get_memory_init(DbConstants.DB_MEM_REP_SITE, ref ret);
+               return ret;
+           }
+           private set {
+               dbenv.set_memory_init(DbConstants.DB_MEM_REP_SITE, value);
+           }   
         }
         /// <summary>
         /// The number of thread objects allocated when the environment is
@@ -2196,6 +2265,52 @@ namespace BerkeleyDB {
                     DbConstants.DB_REPMGR_CONF_2SITE_STRICT, value ? 1 : 0);
             }
         }
+	/// <summary>
+	/// This flag is used to prevent the use of poll() as polling method for
+	/// networking events on the target site. This flag guarantees that
+	/// instead of poll() select or epoll() would be used depending on the
+	/// availablity of these methods on the target platform and additional
+	/// flags provided to repmgr.
+	/// </summary>
+	public bool RepDisablePoll {
+	    get {
+	        return getRepConfig(DbConstants.DB_REPMGR_CONF_DISABLE_POLL);
+	    }
+	    set {
+	        dbenv.rep_set_config(
+	            DbConstants.DB_REPMGR_CONF_DISABLE_POLL, value ? 1 : 0);
+	    }
+	}
+	/// <summary>
+	/// This flag is used to prevent the use of SSL for securing the
+	/// messages exchanged between nodes in a replication group.
+	/// </summary>
+	public bool RepDisableSSL {
+	    get {
+	        return getRepConfig(DbConstants.DB_REPMGR_CONF_DISABLE_SSL);
+	    }
+	    set {
+	        dbenv.rep_set_config(
+	            DbConstants.DB_REPMGR_CONF_DISABLE_SSL, value ? 1 : 0);
+	    }
+	}
+	/// <summary>
+	/// This flag is used to force the use of epoll as polling method for
+	/// networking events instad of poll or select. Use of this flag does
+	/// not guarantee that epoll will be used though. It depends on the
+	/// availability of epoll on target platform. Epoll is supposed to be
+	/// used only when the expected number of connections for repmgr is
+	/// greater than 1000.
+	/// </summary>
+	public bool RepEnableEpoll {
+	    get {
+		return getRepConfig(DbConstants.DB_REPMGR_CONF_ENABLE_EPOLL);
+	    }
+	    set {
+		dbenv.rep_set_config(
+		    DbConstants.DB_REPMGR_CONF_ENABLE_EPOLL, value ? 1 : 0);
+	    }
+	}
         /// <summary>
         /// This flag is used to specify the preferred master site in a
         /// replication group operating in preferred master mode. A preferred

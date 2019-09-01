@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::mutex_set_max()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::mutex_set_max()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mutexset_init.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mutexset_max"></a>DbEnv::mutex_set_max()</h2>
+            <h2 class="title" style="clear: both"><a id="mutexset_max"></a>
+        
+        <span>DbEnv::mutex_set_max()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -50,7 +56,10 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
         in the cache. When you specify the cache size, DB assumes a
         page size of 4K and allocates mutexes accordingly. If your page
         size is different than 4K, you indicate this using
-        <a class="xref" href="envset_mp_pagesize.html" title="DbEnv::set_mp_pagesize()">DbEnv::set_mp_pagesize()</a>. 
+        <a class="xref" href="envset_mp_pagesize.html" title="DbEnv::set_mp_pagesize()">
+        
+        <span>DbEnv::set_mp_pagesize()</span>
+    </a>. 
         DB will then allocate the proper number of mutexes based on this new page size.
     </p>
       <p>
@@ -60,7 +69,10 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
       <p>
          Calling the <code class="methodname">DbEnv::mutex_set_max()</code> method discards any value
          previously set using the 
-         <a class="xref" href="mutexset_increment.html" title="DbEnv::mutex_set_increment()">DbEnv::mutex_set_increment()</a> method.
+         <a class="xref" href="mutexset_increment.html" title="DbEnv::mutex_set_increment()">
+        
+        <span>DbEnv::mutex_set_increment()</span>
+    </a> method.
     </p>
       <p>
          The database environment's total number of mutexes may also be
@@ -77,9 +89,15 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
     </p>
       <p>
              The <code class="methodname">DbEnv::mutex_set_max()</code> method may not be called after the 
-             <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+             <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
              If the database environment already exists when 
-             <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  is called, the
+             <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  is called, the
          information specified to <code class="methodname">DbEnv::mutex_set_max()</code> will be ignored.
     </p>
       <p>
@@ -96,7 +114,7 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808437280"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176765678352"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -104,7 +122,7 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703808438528"></a>max</h4>
+                <h4 class="title"><a id="idm140176765679600"></a>max</h4>
               </div>
             </div>
           </div>
@@ -118,7 +136,7 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808442592"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176765684064"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -136,7 +154,7 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703808420656"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176765660640"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -149,7 +167,7 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808422736"></a>Class</h3>
+              <h3 class="title"><a id="idm140176765662720"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -161,7 +179,7 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808430400"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176765670384"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -181,11 +199,17 @@ DbEnv::mutex_set_max(u_int32_t max); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="mutexset_tas_spins.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::mutex_set_init() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::mutex_set_init()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::mutex_set_tas_spins()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::mutex_set_tas_spins()</span>
+    </td>
         </tr>
       </table>
     </div>

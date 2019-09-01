@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # Code to load up the tests in to the Queue database
 # $Id$
@@ -97,6 +97,7 @@ proc init_runqueue { {dbdir RUNQUEUE} nitems list} {
 proc run_parallel { nprocs {list run_all} {nitems ALL} } {
 	global num_serial
 	global num_parallel
+	global ssl_test_enabled
 
 	# Forcibly remove stuff from prior runs, if it's still there.
 	fileremove -f ./RUNQUEUE
@@ -129,7 +130,9 @@ proc run_parallel { nprocs {list run_all} {nitems ALL} } {
 	for { set i 1 } { $i <= $nprocs } { incr i } {
 		set ret [catch {
 			set p [exec $tclsh_path << \
-			    "source $test_path/test.tcl; run_queue $i \
+			    "global ssl_test_enabled; \
+			    set ssl_test_enabled $ssl_test_enabled; \
+			    source $test_path/test.tcl; run_queue $i \
 			    $basename.$i $queuedir parallel $num_parallel" &]
 			lappend pidlist $p
 			set f [open $testdir/begin.$p w]
@@ -158,6 +161,9 @@ proc run_parallel { nprocs {list run_all} {nitems ALL} } {
 }
 
 proc run_queue { i rundir queuedir {qtype parallel} {nitems 0} } {
+
+	global ssl_test_enabled 
+
 	set builddir [pwd]
 	file delete $builddir/ALL.OUT.$i
 	cd $rundir
@@ -222,7 +228,10 @@ proc run_queue { i rundir queuedir {qtype parallel} {nitems 0} } {
 			set env(PURECOVOPTIONS) \
 	"-counts-file=./cov.pcv -log-file=./cov.log -follow-child-processes"
 			if [catch {exec $tclsh_path \
-			     << "source $test_path/test.tcl; $cmd" \
+			     << "global ssl_test_enabled; \
+				set ssl_test_enabled $ssl_test_enabled; \
+			        source $test_path/test.tcl; \
+				$cmd" \
 			     >>& $builddir/ALL.OUT.$i } res] {
                                 set o [open $builddir/ALL.OUT.$i a]
                                 puts $o "FAIL: '$cmd': $res"
@@ -281,9 +290,10 @@ proc mkparalleldirs { nprocs basename queuedir } {
 			    [eval glob {$dir/$buildpath/*.dll}] $destdir/$buildpath}
 			catch {eval file copy \
 			    [eval glob {$dir/$buildpath/db_{checkpoint,deadlock}$EXE} \
-			    {$dir/$buildpath/db_{dump,load,printlog,recover,stat,upgrade}$EXE} \
-			    {$dir/$buildpath/db_{archive,verify,hotbackup,log_verify}$EXE}] \
-			    {$dir/$buildpath/dbkill$EXE} \
+			    {$dir/$buildpath/db_{dump,load,printlog,recover}$EXE} \
+			    {$dir/$buildpath/db_{stat,upgrade,archive,verify}$EXE} \
+			    {$dir/$buildpath/db_{hotbackup,log_verify,tuner}$EXE} \
+			    {$dir/$buildpath/dbkill$EXE}] \
 			    $destdir/$buildpath}
 			catch {eval file copy \
 			    [eval glob -nocomplain {$dir/$buildpath/db_{reptest,repsite,replicate}$EXE}] \
@@ -294,8 +304,9 @@ proc mkparalleldirs { nprocs basename queuedir } {
 		# catch {eval file copy $dir/$queuedir $destdir}
 		catch {eval file copy \
 		    [eval glob {$dir/db_{checkpoint,deadlock}$EXE} \
-		    {$dir/db_{dump,load,printlog,recover,stat,upgrade}$EXE} \
-		    {$dir/db_{archive,verify,hotbackup,log_verify}$EXE}] \
+		    {$dir/db_{dump,load,printlog,recover}$EXE} \
+		    {$dir/db_{stat,upgrade,archive,verify}$EXE} \
+		    {$dir/db_{hotbackup,log_verify,tuner}$EXE}] \
 		    $destdir}
 		catch {eval file copy \
 		    [eval glob -nocomplain {$dir/db_{reptest,repsite,replicate}$EXE}] $destdir}

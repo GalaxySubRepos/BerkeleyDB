@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::stat()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::stat()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbsort_multiple.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbstat"></a>Db::stat()</h2>
+            <h2 class="title" style="clear: both"><a id="dbstat"></a>
+        
+        <span>Db::stat()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -63,7 +69,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814598576"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176771966432"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -71,17 +77,23 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814597680"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176771966880"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                   If the operation is part of an application-specified transaction, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                  handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; if the
+                  handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; if the
                   operation is part of a Berkeley DB Concurrent Data Store group, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                  from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>;
+                  from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>;
                   otherwise NULL. If no transaction handle is specified, but the
                   operation occurs in a transactional database, the operation will be
                   implicitly transaction protected.
@@ -91,7 +103,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814611776"></a>flags</h4>
+                <h4 class="title"><a id="idm140176772037408"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -143,14 +155,17 @@ Db::stat(void *sp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814589104"></a>Statistical Structure</h3>
+              <h3 class="title"><a id="idm140176771967136"></a>Statistical Structure</h3>
             </div>
           </div>
         </div>
         <p>
                     Statistical structures are stored in allocated memory. If
                     application-specific allocation routines have been declared (see
-                    <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">DbEnv::set_alloc()</a>
+                    <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">
+        
+        <span>DbEnv::set_alloc()</span>
+    </a>
                     for more information), they are used to allocate the
                     memory; otherwise, the standard C library 
                     <span class="bold"><strong>malloc</strong></span>(3) is used. The caller is
@@ -175,7 +190,10 @@ Db::stat(void *sp, u_int32_t flags); </pre>
             </p>
         <p>
                     The <code class="methodname">Db::stat()</code> method may not be called before the 
-                    <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>
+                    <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>
                     method is called.
             </p>
         <p>
@@ -186,7 +204,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814608400"></a>Hash Statistics</h4>
+                <h4 class="title"><a id="idm140176772039136"></a>Hash Statistics</h4>
               </div>
             </div>
           </div>
@@ -360,7 +378,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814583280"></a>Heap Statistics</h4>
+                <h4 class="title"><a id="idm140176771913744"></a>Heap Statistics</h4>
               </div>
             </div>
           </div>
@@ -456,7 +474,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814556096"></a>Btree and Recno Statistics</h4>
+                <h4 class="title"><a id="idm140176771919280"></a>Btree and Recno Statistics</h4>
               </div>
             </div>
           </div>
@@ -689,7 +707,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814517008"></a>Queue Statistics</h4>
+                <h4 class="title"><a id="idm140176771880160"></a>Queue Statistics</h4>
               </div>
             </div>
           </div>
@@ -825,7 +843,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814477296"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176771840512"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -843,7 +861,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814703680"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176771899856"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -865,7 +883,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814567424"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176771932688"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -882,7 +900,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814554528"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176771919504"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -895,7 +913,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814527616"></a>Class</h3>
+              <h3 class="title"><a id="idm140176771833360"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -907,7 +925,7 @@ Db::stat(void *sp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814543344"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176771919088"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -927,11 +945,17 @@ Db::stat(void *sp, u_int32_t flags); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::sort_multiple() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::sort_multiple()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::stat_print()</span>
+    </td>
         </tr>
       </table>
     </div>

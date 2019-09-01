@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -79,7 +79,7 @@ __os_getaddrinfo(env, nodename, port, servname, hints, res)
 			if (hostaddr == NULL) {
 #ifdef DB_WIN32
 				ret = __os_get_neterr();
-				__db_syserr(env, ret, DB_STR_A("0154",
+				__db_syserr(env, ret, DB_STR_A("0153",
 				    "%s(%u): host lookup failed", "%s %u"),
 				    nodename == NULL ? "" : nodename, port);
 				return (__os_posix_err(ret));
@@ -96,13 +96,13 @@ __os_getaddrinfo(env, nodename, port, servname, hints, res)
 				 * unexported symbol).
 				 */
 #ifdef HAVE_HSTRERROR
-				__db_errx(env, DB_STR_A("0155",
+				__db_errx(env, DB_STR_A("0153",
 				    "%s(%u): host lookup failed: %s",
 				    "%s %u %s"),
 				    nodename == NULL ? "" : nodename, port,
 				    hstrerror(h_errno));
 #else
-				__db_errx(env, DB_STR_A("0156",
+				__db_errx(env, DB_STR_A("0153",
 				    "%s(%u): host lookup failed: %d",
 				    "%s %u %d"),
 				    nodename == NULL ? "" : nodename, port,

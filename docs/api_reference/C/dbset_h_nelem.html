@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;set_h_nelem()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;set_h_nelem()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_h_hash.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_h_nelem"></a>DB-&gt;set_h_nelem()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_h_nelem"></a>
+        <span>DB-&gt;set_h_nelem()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -47,7 +53,10 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
     </p>
       <p>
          In order for the estimate to be used when creating the database, the
-         <a class="xref" href="dbset_h_ffactor.html" title="DB-&gt;set_h_ffactor()">DB-&gt;set_h_ffactor()</a> 
+         <a class="xref" href="dbset_h_ffactor.html" title="DB-&gt;set_h_ffactor()">
+        <span>DB-&gt;set_h_ffactor()</span>
+        
+    </a> 
          method must also be called.  If the estimate or fill factor are not
          set or are set too low, hash tables will still expand gracefully as
          keys are entered, although a slight performance degradation may be
@@ -60,8 +69,14 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
     </p>
       <p>
          The <code class="methodname">DB-&gt;set_h_nelem()</code> method may not be called after the 
-         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method is called. If
-         the database already exists when <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  
+         <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method is called. If
+         the database already exists when <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  
          is called, the information specified to <code class="methodname">DB-&gt;set_h_nelem()</code> will be ignored.
     </p>
       <p>
@@ -76,7 +91,7 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236292224"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488732208"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -84,7 +99,7 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236273424"></a>h_nelem</h4>
+                <h4 class="title"><a id="idm140113488750016"></a>h_nelem</h4>
               </div>
             </div>
           </div>
@@ -98,7 +113,7 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236282944"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113488740528"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -114,12 +129,15 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236262384"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113488721632"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -128,7 +146,7 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236264464"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488723712"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -140,7 +158,7 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236258352"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113488740272"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -160,11 +178,17 @@ DB-&gt;set_h_nelem(DB *db, u_int32_t h_nelem);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_heapsize.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;set_h_hash() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;set_h_hash()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_heapsize()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_heapsize()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

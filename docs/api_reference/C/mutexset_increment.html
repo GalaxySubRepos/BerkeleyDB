@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;mutex_set_increment()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;mutex_set_increment()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mutexset_align.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mutexset_increment"></a>DB_ENV-&gt;mutex_set_increment()</h2>
+            <h2 class="title" style="clear: both"><a id="mutexset_increment"></a>
+        <span>DB_ENV-&gt;mutex_set_increment()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -52,7 +58,10 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
     </p>
       <p>
          Calling the <code class="methodname">DB_ENV-&gt;mutex_set_increment()</code> method discards any value
-         previously set using the <a class="xref" href="mutexset_max.html" title="DB_ENV-&gt;mutex_set_max()">DB_ENV-&gt;mutex_set_max()</a> method.
+         previously set using the <a class="xref" href="mutexset_max.html" title="DB_ENV-&gt;mutex_set_max()">
+        <span>DB_ENV-&gt;mutex_set_max()</span>
+        
+    </a> method.
     </p>
       <p>
          The database environment's number of additional mutexes may also be
@@ -70,9 +79,15 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;mutex_set_increment()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is
          called. If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  is called, the
          information specified to <code class="methodname">DB_ENV-&gt;mutex_set_increment()</code> will be
          ignored.
     </p>
@@ -88,7 +103,7 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230003104"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113482322512"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -96,7 +111,7 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230037216"></a>increment</h4>
+                <h4 class="title"><a id="idm140113482301760"></a>increment</h4>
               </div>
             </div>
           </div>
@@ -110,7 +125,7 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229985760"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113482310128"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -126,12 +141,15 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815229965008"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113482287408"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -140,7 +158,7 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229967088"></a>Class</h3>
+              <h3 class="title"><a id="idm140113482289488"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -152,7 +170,7 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815229992304"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113482283376"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -172,11 +190,17 @@ DB_ENV-&gt;mutex_set_increment(DB_ENV *dbenv, u_int32_t increment);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="mutexset_init.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;mutex_set_align() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;mutex_set_align()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;mutex_set_init()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;mutex_set_init()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -12,6 +12,9 @@
 # TEST	and make sure we still have the same contents.
 # TEST	Add back some entries, delete more entries (this time by
 # TEST	cursor), dump, compact, and do the before/after check again.
+# TEST	
+# TEST	The input keys are made into overflow keys in the "overflow"
+# TEST	loop for raising coverage purpose.
 
 proc test114 { method {nentries 10000} {tnum "114"} args } {
 	source ./include.tcl
@@ -175,6 +178,9 @@ proc test114 { method {nentries 10000} {tnum "114"} args } {
 					set key [expr $keycnt + 1]
 				} else {
 					set key $str
+					if { $pgt == "overflow" } {
+						append key [repeat $alphabet 100]
+					}
 				}
 				for { set i $start } \
 				    { $i <= $end && $count < $nentries } \
@@ -240,6 +246,9 @@ proc test114 { method {nentries 10000} {tnum "114"} args } {
 					set key [expr $count + 1]
 				} else {
 					set key $str
+					if { $pgt == "overflow" } {
+						append key [repeat $alphabet 100]
+					}
 				}
 
 				if { [expr $count % $n] != 0 } {

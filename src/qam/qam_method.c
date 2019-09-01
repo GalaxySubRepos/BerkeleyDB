@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -346,7 +346,7 @@ __qam_rr(dbp, ip, txn, name, subdb, newname, op)
 		ret = __qam_nameop(tmpdbp, txn, newname, op);
 
 	if (!F2_ISSET(dbp, DB2_AM_MPOOL_OPENED)) {
-err:		
+err:
 		/* We need to remove the lock event we associated with this. */
 		if (txn != NULL)
 			__txn_remlock(env, txn, NULL, tmpdbp->locker);

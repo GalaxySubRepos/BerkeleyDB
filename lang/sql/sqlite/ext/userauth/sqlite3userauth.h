@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2014-09-08
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -27,7 +33,7 @@
 #endif
 
 #if defined(BDBSQL_USER_AUTHENTICATION) || \
-	defined(BDBSQL_USER_AUTHENTICATION_KEYSTORE)
+ defined(BDBSQL_USER_AUTHENTICATION_KEYSTORE)
 #define SQLITE_USER_AUTHENTICATION 1
 #endif
 
@@ -40,6 +46,7 @@
 #endif
 
 #ifdef SQLITE_USER_AUTHENTICATION
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -27,7 +27,7 @@ __os_rmdir(env, name)
 
 	if (dbenv != NULL &&
 	    FLD_ISSET(dbenv->verbose, DB_VERB_FILEOPS | DB_VERB_FILEOPS_ALL))
-		__db_msg(env, DB_STR_A("0240", "fileops: rmdir %s",
+		__db_msg(env, DB_STR_A("0239", "fileops: rmdir %s",
 		    "%s"), name);
 
 	TO_TSTRING(env, name, tname, ret);

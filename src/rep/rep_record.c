@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -20,14 +20,14 @@ static int __rep_collect_txn
     __P((ENV *, DB_LSN *, LSN_COLLECTION *, DELAYED_BLOB_LIST **));
 static int __rep_remove_delayed_blobs
     __P((ENV *, db_seq_t, u_int32_t ,DELAYED_BLOB_LIST **));
-static int __rep_do_ckp __P((ENV *, DBT *, __rep_control_args *, DB_LSN *));
+static int __rep_do_ckp __P((ENV *, DBT *, __rep_control_args *));
 static int __rep_fire_newmaster __P((ENV *, u_int32_t, int));
 static int __rep_fire_startupdone __P((ENV *, u_int32_t, int));
 static int __rep_getnext __P((ENV *, DB_THREAD_INFO *));
 static int __rep_lsn_cmp __P((const void *, const void *));
 static int __rep_newfile __P((ENV *, __rep_control_args *, DBT *));
 static int __rep_process_rec __P((ENV *, DB_THREAD_INFO *, __rep_control_args *,
-    DBT *, db_timespec *, DB_LSN *, DB_LSN *));
+    DBT *, db_timespec *, DB_LSN *));
 static int __rep_remfirst __P((ENV *, DB_THREAD_INFO *, DBT *, DBT *));
 static int __rep_skip_msg __P((ENV *, REP *, int, u_int32_t));
 
@@ -199,8 +199,7 @@ __rep_process_message_pp(dbenv, control, rec, eid, ret_lsnp)
 	}
 
 	ENV_ENTER(env, ip);
-	ret = __rep_process_message_int(env, control, rec, eid, ret_lsnp,
-	    NULL);
+	ret = __rep_process_message_int(env, control, rec, eid, ret_lsnp);
 	ENV_LEAVE(env, ip);
 
 	__dbt_userfree(env, control, rec, NULL);
@@ -213,15 +212,14 @@ __rep_process_message_pp(dbenv, control, rec, eid, ret_lsnp)
  * This routine performs the internal steps to process an incoming message.
  *
  * PUBLIC: int __rep_process_message_int
- * PUBLIC:     __P((ENV *, DBT *, DBT *, int, DB_LSN *, DB_LSN *));
+ * PUBLIC:     __P((ENV *, DBT *, DBT *, int, DB_LSN *));
  */
 int
-__rep_process_message_int(env, control, rec, eid, ret_lsnp, ckp_lsnp)
+__rep_process_message_int(env, control, rec, eid, ret_lsnp)
 	ENV *env;
 	DBT *control, *rec;
 	int eid;
 	DB_LSN *ret_lsnp;
-	DB_LSN *ckp_lsnp;
 {
 	DBT data_dbt;
 	DB_LOG *dblp;
@@ -587,8 +585,7 @@ __rep_process_message_int(env, control, rec, eid, ret_lsnp, ckp_lsnp)
 	case REP_BULK_LOG:
 		RECOVERING_LOG_SKIP;
 		CLIENT_ONLY(rep, rp);
-		ret = __rep_bulk_log(env, ip, rp, rec, savetime, ret_lsnp,
-		    ckp_lsnp);
+		ret = __rep_bulk_log(env, ip, rp, rec, savetime, ret_lsnp);
 		break;
 	case REP_BULK_PAGE:
 		/*
@@ -690,8 +687,7 @@ __rep_process_message_int(env, control, rec, eid, ret_lsnp, ckp_lsnp)
 	case REP_LOG_MORE:
 		RECOVERING_LOG_SKIP;
 		CLIENT_ONLY(rep, rp);
-		ret = __rep_log(env, ip, rp, rec, eid, savetime, ret_lsnp,
-		    ckp_lsnp);
+		ret = __rep_log(env, ip, rp, rec, eid, savetime, ret_lsnp);
 		break;
 	case REP_LOG_REQ:
 		RECOVERING_SKIP;
@@ -848,7 +844,7 @@ __rep_process_message_int(env, control, rec, eid, ret_lsnp, ckp_lsnp)
 		RECOVERING_LOG_SKIP;
 		CLIENT_ONLY(rep, rp);
 		ret = __rep_apply(env,
-		     ip, rp, rec, ret_lsnp, NULL, &last_lsn, ckp_lsnp);
+		     ip, rp, rec, ret_lsnp, NULL, &last_lsn);
 		if (ret == DB_REP_LOGREADY)
 			ret = __rep_logready(env, rep, savetime, &last_lsn);
 		break;
@@ -1062,10 +1058,10 @@ out:
  * we try to process as much as possible from __db.rep.db to catch up.
  *
  * PUBLIC: int __rep_apply __P((ENV *, DB_THREAD_INFO *, __rep_control_args *,
- * PUBLIC:     DBT *, DB_LSN *, int *, DB_LSN *, DB_LSN *));
+ * PUBLIC:     DBT *, DB_LSN *, int *, DB_LSN *));
  */
 int
-__rep_apply(env, ip, rp, rec, ret_lsnp, is_dupp, last_lsnp, ckp_lsnp)
+__rep_apply(env, ip, rp, rec, ret_lsnp, is_dupp, last_lsnp)
 	ENV *env;
 	DB_THREAD_INFO *ip;
 	__rep_control_args *rp;
@@ -1073,7 +1069,6 @@ __rep_apply(env, ip, rp, rec, ret_lsnp, is_dupp, last_lsnp, ckp_lsnp)
 	DB_LSN *ret_lsnp;
 	int *is_dupp;
 	DB_LSN *last_lsnp;
-	DB_LSN *ckp_lsnp;
 {
 	DB *dbp;
 	DBT control_dbt, key_dbt;
@@ -1172,7 +1167,7 @@ __rep_apply(env, ip, rp, rec, ret_lsnp, is_dupp, last_lsnp, ckp_lsnp)
 		if (rp->rectype == REP_NEWFILE)
 			newfile_seen = 1;
 		if ((ret = __rep_process_rec(env, ip,
-		    rp, rec, &max_ts, &max_lsn, ckp_lsnp)) != 0)
+		    rp, rec, &max_ts, &max_lsn)) != 0)
 			goto err;
 		/*
 		 * If we get the record we are expecting, reset
@@ -1205,7 +1200,7 @@ gap_check:
 			if (rp->rectype == REP_NEWFILE)
 				newfile_seen = 1;
 			if ((ret = __rep_process_rec(env, ip,
-			    rp, rec, &max_ts, &max_lsn, ckp_lsnp)) != 0)
+			    rp, rec, &max_ts, &max_lsn)) != 0)
 				goto err;
 
 			STAT(--rep->stat.st_log_queued);
@@ -1523,8 +1518,7 @@ out:
 /*
  * __rep_process_txn --
  *
- * This is the routine that actually gets a transaction ready for
- * processing.
+ * This is the routine that actually applies a transaction's set of updates.
  *
  * PUBLIC: int __rep_process_txn __P((ENV *, DBT *));
  */
@@ -1614,6 +1608,7 @@ __rep_process_txn(env, rec)
 	/* Phase 1.  Get a list of the LSNs in this transaction, and sort it. */
 	if ((ret = __rep_collect_txn(env, &prev_lsn, &lc, &dblp)) != 0)
 		goto err;
+
 	/* Deal with any child transactions that had to be delayed. */
 	while (dblp != NULL) {
 		if ((ret = __rep_collect_txn(
@@ -1635,6 +1630,10 @@ __rep_process_txn(env, rec)
 	ENV_GET_THREAD_INFO(env, ip);
 	if ((ret = __db_txnlist_init(env, ip, 0, 0, NULL, &txninfo)) != 0)
 		goto err;
+	/* Replication uses a transaction only when client mvcc is active. */
+	if (F_ISSET(env->dbenv, DB_ENV_MULTIVERSION) && (ret = __txn_begin(env,
+	    ip, NULL, &txninfo->txn, DB_TXN_SNAPSHOT | DB_TXN_DISPATCH)) != 0)
+		goto err;
 
 	/* Phase 2: Apply updates. */
 	if ((ret = __log_cursor(env, &logc)) != 0)
@@ -1648,12 +1647,24 @@ __rep_process_txn(env, rec)
 		}
 		if ((ret = __db_dispatch(env, &env->recover_dtab,
 		    &data_dbt, lsnp, DB_TXN_APPLY, txninfo)) != 0) {
-			__db_errx(env, DB_STR_A("3523",
-			    "transaction failed at [%lu][%lu]", "%lu %lu"),
+			__db_err(env, ret, DB_STR_A("3523",
+			    "transaction %x failed at [%lu][%lu]", "%lu %lu"),
+			    txninfo->txn->txnid,
 			    (u_long)lsnp->file, (u_long)lsnp->offset);
 			goto err;
 		}
 		LOGCOPY_32(env, &rectype, data_dbt.data);
+	}
+	if (txninfo->txn != NULL) {
+		ret = __txn_commit(txninfo->txn, 0);
+		txninfo->txn = NULL;
+		if (ret != 0) {
+			__db_errx(env, DB_STR_A("3715", "%lu %lu",
+			    "rep_process_txn [%lu][%lu] failed to commit"),
+			    (u_long)lc.array[lc.nlsns - 1].file,
+			    (u_long)lc.array[lc.nlsns - 1].offset);
+			goto err;
+		}
 	}
 
 err:	memset(&req, 0, sizeof(req));
@@ -1998,14 +2009,14 @@ __rep_newfile(env, rp, rec)
  * and must not be holding the region mutex.
  */
 static int
-__rep_do_ckp(env, rec, rp, ckp_lsnp)
+__rep_do_ckp(env, rec, rp)
 	ENV *env;
 	DBT *rec;
 	__rep_control_args *rp;
-	DB_LSN *ckp_lsnp;
 {
 	DB_ENV *dbenv;
 	__txn_ckp_args *ckp_args;
+	DB_LSN ckp_lsn;
 	REP *rep;
 	int ret;
 
@@ -2014,7 +2025,7 @@ __rep_do_ckp(env, rec, rp, ckp_lsnp)
 	/* Crack the log record and extract the checkpoint LSN. */
 	if ((ret = __txn_ckp_read(env, rec->data, &ckp_args)) != 0)
 		return (ret);
-	*ckp_lsnp = ckp_args->ckp_lsn;
+	ckp_lsn = ckp_args->ckp_lsn;
 	__os_free(env, ckp_args);
 
 	rep = env->rep_handle->region;
@@ -2035,7 +2046,7 @@ __rep_do_ckp(env, rec, rp, ckp_lsnp)
 	 */
 	(void)__memp_set_config(dbenv, DB_MEMP_SUPPRESS_WRITE, 1);
 	MUTEX_LOCK(env, rep->mtx_ckp);
-	ret = __memp_sync(env, DB_SYNC_CHECKPOINT, ckp_lsnp);
+	ret = __memp_sync(env, DB_SYNC_CHECKPOINT, &ckp_lsn);
 	MUTEX_UNLOCK(env, rep->mtx_ckp);
 	(void)__memp_set_config(dbenv, DB_MEMP_SUPPRESS_WRITE, 0);
 
@@ -2045,11 +2056,19 @@ __rep_do_ckp(env, rec, rp, ckp_lsnp)
 	else {
 		__db_errx(env, DB_STR_A("3525",
 		    "Error syncing ckp [%lu][%lu]", "%lu %lu"),
-		    (u_long)ckp_lsnp->file, (u_long)ckp_lsnp->offset);
+		    (u_long)ckp_lsn.file, (u_long)ckp_lsn.offset);
 		ret = __env_panic(env, ret);
 	}
 
 	MUTEX_LOCK(env, rep->mtx_clientdb);
+#ifdef HAVE_REPLICATION_THREADS
+	if (ret == 0) {
+		REP_SYSTEM_LOCK(env);
+		if (LOG_COMPARE(&ckp_lsn, &rep->last_ckp_lsn) > 0)
+			rep->last_ckp_lsn = ckp_lsn;
+		REP_SYSTEM_UNLOCK(env);
+	}
+#endif
 	return (ret);
 }
 
@@ -2158,14 +2177,13 @@ err:	if ((t_ret = __dbc_close(dbc)) != 0 && ret == 0)
  * the log.
  */
 static int
-__rep_process_rec(env, ip, rp, rec, ret_tsp, ret_lsnp, ckp_lsnp)
+__rep_process_rec(env, ip, rp, rec, ret_tsp, ret_lsnp)
 	ENV *env;
 	DB_THREAD_INFO *ip;
 	__rep_control_args *rp;
 	DBT *rec;
 	db_timespec *ret_tsp;
 	DB_LSN *ret_lsnp;
-	DB_LSN *ckp_lsnp;
 {
 	DB *dbp;
 	DBT control_dbt, key_dbt, rec_dbt;
@@ -2246,8 +2264,8 @@ __rep_process_rec(env, ip, rp, rec, ret_tsp, ret_lsnp, ckp_lsnp)
 		/*
 		 * DB opens occur in the context of a transaction, so we can
 		 * simply handle them when we process the transaction.  Closes,
-		 * however, are not transaction-protected, so we have to handle
-		 * them here.
+		 * checkpoints and other dbreg opcodes are not transaction-
+		 * protected, so we have to handle them here.
 		 *
 		 * It should be unsafe for the master to do a close of a file
 		 * that was opened in an active transaction, so we should be
@@ -2347,7 +2365,7 @@ __rep_process_rec(env, ip, rp, rec, ret_tsp, ret_lsnp, ckp_lsnp)
 		 * will act like we never received the
 		 * checkpoint.
 		 */
-		if ((ret = __rep_do_ckp(env, rec, rp, &lsn)) == 0)
+		if ((ret = __rep_do_ckp(env, rec, rp)) == 0)
 			ret = __log_rep_put(env, &rp->lsn, rec,
 			    DB_LOG_CHKPNT);
 		if ((t_ret = __rep_remfirst(env, ip,
@@ -2359,8 +2377,6 @@ __rep_process_rec(env, ip, rp, rec, ret_tsp, ret_lsnp, ckp_lsnp)
 		 */
 		if (ret == 0) {
 			*ret_lsnp = rp->lsn;
-			if (ckp_lsnp != NULL)
- 				*ckp_lsnp = lsn;
 			ret = __log_flush(env, NULL);
 			if (ret == 0 && lp->db_log_autoremove)
 				__log_autoremove(env);

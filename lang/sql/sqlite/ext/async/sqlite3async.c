@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2005 December 14
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -1636,6 +1642,7 @@ void sqlite3async_run(void){
 ** Control/configure the asynchronous IO system.
 */
 int sqlite3async_control(int op, ...){
+  int rc = SQLITE_OK;
   va_list ap;
   va_start(ap, op);
   switch( op ){
@@ -1645,7 +1652,8 @@ int sqlite3async_control(int op, ...){
        && eWhen!=SQLITEASYNC_HALT_NOW
        && eWhen!=SQLITEASYNC_HALT_IDLE
       ){
-        return SQLITE_MISUSE;
+        rc = SQLITE_MISUSE;
+        break;
       }
       async.eHalt = eWhen;
       async_mutex_enter(ASYNC_MUTEX_QUEUE);
@@ -1657,7 +1665,8 @@ int sqlite3async_control(int op, ...){
     case SQLITEASYNC_DELAY: {
       int iDelay = va_arg(ap, int);
       if( iDelay<0 ){
-        return SQLITE_MISUSE;
+        rc = SQLITE_MISUSE;
+        break;
       }
       async.ioDelay = iDelay;
       break;
@@ -1668,7 +1677,8 @@ int sqlite3async_control(int op, ...){
       async_mutex_enter(ASYNC_MUTEX_QUEUE);
       if( async.nFile || async.pQueueFirst ){
         async_mutex_leave(ASYNC_MUTEX_QUEUE);
-        return SQLITE_MISUSE;
+        rc = SQLITE_MISUSE;
+        break;
       }
       async.bLockFiles = bLock;
       async_mutex_leave(ASYNC_MUTEX_QUEUE);
@@ -1692,9 +1702,11 @@ int sqlite3async_control(int op, ...){
     }
 
     default:
-      return SQLITE_ERROR;
+      rc = SQLITE_ERROR;
+      break;
   }
-  return SQLITE_OK;
+  va_end(ap);
+  return rc;
 }
 
 #endif /* !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ASYNCIO) */

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -53,6 +53,10 @@ extern "C" {
  *
  * Protocol version 6 introduced preferred master mode, which added several
  * new REPMGR_OWN messages.
+ *
+ * Protocol version 7 did not introduce any new message types, but changed the
+ * format of permlsn to improve group-aware log archiving and added new struct
+ * names for heartbeat and readonly_response payloads.
  */
 #define	REPMGR_MAX_V1_MSG_TYPE	3
 #define	REPMGR_MAX_V2_MSG_TYPE	4
@@ -60,6 +64,7 @@ extern "C" {
 #define	REPMGR_MAX_V4_MSG_TYPE	8
 #define	REPMGR_MAX_V5_MSG_TYPE	8
 #define	REPMGR_MAX_V6_MSG_TYPE	8
+#define	REPMGR_MAX_V7_MSG_TYPE	8
 #define	HEARTBEAT_MIN_VERSION	2
 #define	CHANNEL_MIN_VERSION	4
 #define	CONN_COLLISION_VERSION	4
@@ -69,7 +74,7 @@ extern "C" {
 #define	PREFMAS_MIN_VERSION	6
 
 /* The range of protocol versions we're willing to support. */
-#define	DB_REPMGR_VERSION	6
+#define	DB_REPMGR_VERSION	7
 #define	DB_REPMGR_MIN_VERSION	2
 
 /*
@@ -390,6 +395,29 @@ typedef enum {
 	UNKNOWN_CONN_TYPE
 } conn_type_t;
 
+#if defined(HAVE_REPMGR_SSL)
+typedef struct __repmgr_ssl_write_sync_info {
+	char		*rmgr_ssl_wbuf_ptr;
+	int		rmgr_ssl_wbuf_length;
+	int		rmgr_ssl_write_pending;
+	mgr_mutex_t	*rmgr_ssl_write_mutex;
+} REPMGR_SSL_WRITE_INFO;
+
+typedef struct __repmgr_ssl__conn_info {
+	/* Only one thread can be interacting with the SSL object at a time. */
+	mgr_mutex_t	*repmgr_ssl_conn_mutex; 
+	SSL *ssl;
+
+#define	REPMGR_SSL_READ_PENDING_ON_READ		0x1
+#define	REPMGR_SSL_READ_PENDING_ON_WRITE	0x2
+#define	REPMGR_SSL_WRITE_PENDING_ON_READ	0x4
+#define	REPMGR_SSL_WRITE_PENDING_ON_WRITE	0x8
+	int ssl_io_state;
+
+	REPMGR_SSL_WRITE_INFO	*rmgr_ssl_wrinfo;
+} REPMGR_SSL_CONN_INFO;
+#endif
+
 struct __repmgr_connection {
 	TAILQ_ENTRY(__repmgr_connection) entries;
 
@@ -507,6 +535,12 @@ struct __repmgr_connection {
 	 */
 	int eid;
 
+#if defined(HAVE_REPMGR_SSL)
+	/* For ssl connection information. */
+	REPMGR_SSL_CONN_INFO	*repmgr_ssl_info;
+#endif
+
+	ENV	*env;
 };
 
 #define	IS_READY_STATE(s)	((s) == CONN_READY || (s) == CONN_CONGESTED)
@@ -638,6 +672,7 @@ struct __repmgr_site {
 	 */
 	u_int32_t max_ack_gen;	/* Master generation for max_ack. */
 	DB_LSN max_ack;		/* Best ack we've heard from this site. */
+	DB_LSN max_ckp_lsn;	/* Best ckp_lsn we've heard from this site. */
 	int ack_policy;		/* Or 0 if unknown. */
 	u_int16_t alignment;	/* Requirements for app channel msgs. */
 	db_timespec last_rcvd_timestamp;
@@ -965,6 +1000,48 @@ typedef struct timespec threadsync_timeout_t;
 #endif
 
 #define	SELECTOR_RUNNING(db_rep)	((db_rep)->selector != NULL)
+
+#define	IS_REPMGR_SSL_ENABLED(env)					\
+	(!FLD_ISSET(((env)->rep_handle->region)->config, REP_C_DISABLE_SSL))
+
+/* Macros for SSL Diagnostic messages. */
+#if defined(HAVE_REPMGR_SSL)
+
+#define SSL_DEBUG_SHUTDOWN(env, format,...)				\
+	if (IS_REPMGR_SSL_ENABLED(env))					\
+		VPRINT(env, (env,					\
+		    DB_VERB_REPMGR_SSL_CONN|DB_VERB_REPMGR_SSL_ALL,	\
+		    format, ##__VA_ARGS__))
+#define SSL_DEBUG_CONNECT(env, format,...)				\
+	if (IS_REPMGR_SSL_ENABLED(env))					\
+		VPRINT(env, (env,					\
+		    DB_VERB_REPMGR_SSL_CONN|DB_VERB_REPMGR_SSL_ALL,	\
+		    format, ##__VA_ARGS__))
+#define SSL_DEBUG_ACCEPT(env, format,...)				\
+	if (IS_REPMGR_SSL_ENABLED(env))					\
+		VPRINT(env, (env,					\
+		    DB_VERB_REPMGR_SSL_CONN|DB_VERB_REPMGR_SSL_ALL,	\
+		    format, ##__VA_ARGS__))
+#define SSL_DEBUG_WRITE(env, format,...)				\
+	if (IS_REPMGR_SSL_ENABLED(env))					\
+		VPRINT(env, (env,					\
+		    DB_VERB_REPMGR_SSL_IO|DB_VERB_REPMGR_SSL_ALL,	\
+		    format, ##__VA_ARGS__))
+#define SSL_DEBUG_READ(env, format,...)					\
+	if (IS_REPMGR_SSL_ENABLED(env))					\
+		VPRINT(env, (env,					\
+		    DB_VERB_REPMGR_SSL_IO|DB_VERB_REPMGR_SSL_ALL,	\
+		    format, ##__VA_ARGS__))
+
+#else
+
+#define SSL_DEBUG_SHUTDOWN(env, format,...)
+#define SSL_DEBUG_CONNECT(env, format,...)
+#define SSL_DEBUG_ACCEPT(env, format,...)
+#define SSL_DEBUG_WRITE(env, format,...)
+#define SSL_DEBUG_READ(env, format,...)
+
+#endif
 
 /*
  * Generic definition of some action to be performed on each connection, in the

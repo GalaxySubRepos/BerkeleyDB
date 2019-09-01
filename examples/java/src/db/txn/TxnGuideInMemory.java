@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File TxnGuideInMemory.java
@@ -21,7 +20,6 @@ import com.sleepycat.db.LockDetectMode;
 import com.sleepycat.db.Environment;
 import com.sleepycat.db.EnvironmentConfig;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 public class TxnGuideInMemory {
@@ -31,7 +29,7 @@ public class TxnGuideInMemory {
     private static Database myClassDb = null;
     private static Environment myEnv = null;
 
-    private static int NUMTHREADS = 5;
+    private static final int NUMTHREADS = 5;
 
     public static void main(String args[]) {
         try {
@@ -55,7 +53,8 @@ public class TxnGuideInMemory {
             for (int i = 0; i < NUMTHREADS; i++) {
                 threadArray[i].join();
             }
-        } catch (Exception e) {
+        } catch (DatabaseException
+                | IllegalArgumentException | InterruptedException e) {
             System.err.println("TxnGuideInMemory: " + e.toString());
             e.printStackTrace();
         } finally {

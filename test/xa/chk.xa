@@ -132,7 +132,7 @@ if test "$?" -ne 0; then
 fi
 echo "TEST 5"
 # MVCC tests.
-for i in {0..2}
+for i in 0 1 2
 do
     func_clean 
     utilities/multi_1thr_tuxconfig.sh $((200106 + $i))

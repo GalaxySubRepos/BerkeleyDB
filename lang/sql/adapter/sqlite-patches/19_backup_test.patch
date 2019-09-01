@@ -1,6 +1,11 @@
 --- test/backup.test
 +++ test/backup.test
-@@ -73,7 +73,7 @@
+@@ -68,17 +68,17 @@ do_test backup-1.1 {
+ 
+ # Sanity check to verify that the [test_contents] proc works.
+ #
+ test_contents backup-1.2 db main db main
+ 
  # Check that it is possible to create and finish backup operations.
  #
  do_test backup-1.3.1 {
@@ -9,11 +14,21 @@
    sqlite3 db2 test2.db
    sqlite3_backup B db2 main db main
  } {B}
-@@ -164,12 +164,12 @@
+ do_test backup-1.3.2 {
+   B finish
+ } {SQLITE_OK}
+ do_test backup-1.3.3 {
+   info commands B
+@@ -159,22 +159,22 @@ foreach zOpenScript [list {
+   set file_dest main
+ } {
+   sqlite3 db $zSrcFile
+   sqlite3 db2 $zDestFile
+   set db_dest db2
    set file_dest temp
  }] {
  foreach rows_dest {0 3 10} {
--foreach pgsz_dest {512 1024 2048} {
+-foreach pgsz_dest {512 1024 2048 4096} {
 +foreach pgsz_dest {1024} {
  foreach nPagePerStep {1 200} {
  
@@ -25,7 +40,17 @@
    eval $zOpenScript
  
    # Set to true if copying to an in-memory destination. Copying to an 
-@@ -191,6 +191,7 @@
+   # in-memory destination is only possible if the initial destination
+   # page size is the same as the source page size (in this case 1024 bytes).
+   #
+   set isMemDest [expr { $zDestFile eq ":memory:" || $file_dest eq "temp" }]
+ 
+@@ -185,31 +185,33 @@ foreach nPagePerStep {1 200} {
+     puts ""
+   }
+ 
+   if { $isMemDest==0 || $pgsz_dest==1024 || $rows_dest==0 } {
+ 
      # Set up the content of the source database.
      execsql {
        PRAGMA page_size = 1024;
@@ -33,15 +58,33 @@
        BEGIN;
        CREATE TABLE t1(a, b);
        CREATE INDEX i1 ON t1(a, b);
-@@ -206,6 +207,7 @@
-
+       INSERT INTO t1 VALUES(1, randstr(1000,1000));
+       INSERT INTO t1 VALUES(2, randstr(1000,1000));
+       INSERT INTO t1 VALUES(3, randstr(1000,1000));
+       INSERT INTO t1 VALUES(4, randstr(1000,1000));
+       INSERT INTO t1 VALUES(5, randstr(1000,1000));
+       COMMIT;
+     }
+     
+     
+ 
      # Set up the content of the target database.
      execsql "PRAGMA ${file_dest}.page_size = ${pgsz_dest}" $db_dest
 +    execsql "PRAGMA ${file_dest}.cache_size = 4000" $db_dest
      if {$rows_dest != 0} {
        execsql "
-         BEGIN;
-@@ -245,120 +248,6 @@
+         BEGIN; 
+         CREATE TABLE ${file_dest}.t1(a, b);
+         CREATE INDEX ${file_dest}.i1 ON t1(a, b);
+       " $db_dest
+       for {set ii 0} {$ii < $rows_dest} {incr ii} {
+         execsql "
+@@ -240,130 +242,16 @@ foreach nPagePerStep {1 200} {
+   incr iTest
+ 
+ } } } } } }
+ #
+ # End of backup-2.* tests.
  #---------------------------------------------------------------------
  
  #---------------------------------------------------------------------
@@ -162,7 +205,17 @@
  # The following tests, backup-4.*, test various error conditions:
  # 
  # backup-4.1.*: Test invalid database names.
-@@ -492,11 +380,11 @@
+ #
+ # backup-4.2.*: Test that the source database cannot be detached while 
+ #               a backup is in progress.
+ #
+ # backup-4.3.*: Test that the source database handle cannot be closed
+@@ -487,21 +375,21 @@ db2 close
+ #
+ #   1) Backing up file-to-file. The writer writes via an external pager.
+ #   2) Backing up file-to-file. The writer writes via the same pager as
+ #      is used by the backup operation.
+ #   3) Backing up memory-to-file. 
  #
  set iTest 0
  forcedelete bak.db-wal
@@ -177,7 +230,17 @@
    sqlite3 db $file
    sqlite3 db3 $file
  
-@@ -520,7 +409,7 @@
+   do_test backup-5.$iTest.1.1 {
+     execsql {
+       BEGIN;
+       CREATE TABLE t1(a, b);
+       CREATE INDEX i1 ON t1(a, b);
+@@ -515,17 +403,17 @@ foreach {writer file} {db test.db db3 te
+     expr {[execsql {PRAGMA page_count}] > 10}
+   } {1}
+   do_test backup-5.$iTest.1.2 {
+     sqlite3_backup B db2 main db main
+     B step 5
    } {SQLITE_OK}
    do_test backup-5.$iTest.1.3 {
      execsql { UPDATE t1 SET a = a + 1 } $writer
@@ -186,7 +249,17 @@
    } {SQLITE_DONE}
    do_test backup-5.$iTest.1.4 {
      B finish
-@@ -597,9 +485,9 @@
+   } {SQLITE_OK} 
+   integrity_check backup-5.$iTest.1.5 db2
+   test_contents backup-5.$iTest.1.6 db main db2 main
+ 
+   do_test backup-5.$iTest.2.1 {
+@@ -592,19 +480,19 @@ foreach {writer file} {db test.db db3 te
+     B finish
+   } {SQLITE_OK} 
+   integrity_check backup-5.$iTest.4.5 db2
+   test_contents backup-5.$iTest.4.6 db main db2 main
+ 
    catch {db close}
    catch {db2 close}
    catch {db3 close}
@@ -198,7 +271,17 @@
    sqlite3 db $file
    sqlite3 db3 $file
    do_test backup-5.$iTest.5.1 {
-@@ -631,7 +520,6 @@
+     execsql {
+       PRAGMA auto_vacuum = incremental;
+       BEGIN;
+       CREATE TABLE t1(a, b);
+       CREATE INDEX i1 ON t1(a, b);
+@@ -626,17 +514,16 @@ foreach {writer file} {db test.db db3 te
+       PRAGMA incremental_vacuum;
+     } $writer
+     B step 50
+   } {SQLITE_DONE}
+   do_test backup-5.$iTest.5.4 {
      B finish
    } {SQLITE_OK} 
    integrity_check backup-5.$iTest.5.5 db2
@@ -206,7 +289,17 @@
    catch {db close}
    catch {db2 close}
    catch {db3 close}
-@@ -705,6 +592,7 @@
+ }
+ #
+ # End of backup-5.* tests.
+ #---------------------------------------------------------------------
+ 
+@@ -700,16 +587,17 @@ catch {db2 close}
+ #
+ # backup-7.3.*: Destination database is externally locked (return SQLITE_BUSY).
+ #
+ do_test backup-7.0 {
+   catch { forcedelete test.db }
    catch { forcedelete test2.db }
    sqlite3 db2 test2.db
    sqlite3 db test.db
@@ -214,7 +307,17 @@
    execsql {
      CREATE TABLE t1(a, b);
      CREATE INDEX i1 ON t1(a, b);
-@@ -723,24 +612,12 @@
+     INSERT INTO t1 VALUES(1, randstr(1000,1000));
+     INSERT INTO t1 SELECT a+ 1, randstr(1000,1000) FROM t1;
+     INSERT INTO t1 SELECT a+ 2, randstr(1000,1000) FROM t1;
+     INSERT INTO t1 SELECT a+ 4, randstr(1000,1000) FROM t1;
+     INSERT INTO t1 SELECT a+ 8, randstr(1000,1000) FROM t1;
+@@ -718,34 +606,22 @@ do_test backup-7.0 {
+     INSERT INTO t1 SELECT a+64, randstr(1000,1000) FROM t1;
+   }
+ } {}
+ 
+ do_test backup-7.1.1 {
    sqlite3_backup B db2 main db main
    B step 5
  } {SQLITE_OK}
@@ -239,7 +342,17 @@
  do_test backup-7.2.3 {
    execsql { ROLLBACK }
    B step 5000
-@@ -759,12 +635,12 @@
+ } {SQLITE_DONE}
+ do_test backup-7.2.4 {
+   B finish
+ } {SQLITE_OK}
+ test_contents backup-7.2.5 db main db2 main
+@@ -754,31 +630,30 @@ integrity_check backup-7.3.6 db2
+ do_test backup-7.3.1 {
+   db2 close
+   db3 close
+   forcedelete test2.db
+   sqlite3 db2 test2.db
    sqlite3 db3 test2.db
  
    sqlite3_backup B db2 main db main
@@ -254,7 +367,8 @@
    B step 5000
  } {SQLITE_DONE}
  do_test backup-7.3.3 {
-@@ -773,7 +650,6 @@
+   B finish
+ } {SQLITE_OK}
  test_contents backup-7.3.4 db main db2 main
  integrity_check backup-7.3.5 db2
  catch { db2 close }
@@ -262,7 +376,17 @@
  
  #-----------------------------------------------------------------------
  # The following tests, backup-8.*, test attaching multiple backup
-@@ -916,16 +791,24 @@
+ # processes to the same source database. Also, reading from the source
+ # database while a read transaction is active.
+ #
+ # These tests reuse the database "test.db" left over from backup-7.*.
+ #
+@@ -911,57 +786,62 @@ ifcapable memorymanage {
+ 
+ 
+ #-----------------------------------------------------------------------
+ # Test that if the database is written to via the same database handle being
+ # used as the source by a backup operation:
  #
  #   10.1.*: If the db is in-memory, the backup is restarted.
  #   10.2.*: If the db is a file, the backup is not restarted.
@@ -290,7 +414,16 @@
        CREATE TABLE t1(a INTEGER PRIMARY KEY, b BLOB);
        BEGIN;
          INSERT INTO t1 VALUES(NULL, randomblob(200));
-@@ -942,11 +826,6 @@
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+         INSERT INTO t1 SELECT NULL, randomblob(200) FROM t1;
+       COMMIT;
+       SELECT count(*) FROM t1;
      }
    } {256}
  
@@ -302,7 +435,7 @@
    do_test backup-10.$tn.3 {
      forcedelete bak.db bak.db-journal
      sqlite3 db2 bak.db
-@@ -954,9 +832,11 @@
+     sqlite3_backup B db2 main db main
      B step 50
    } {SQLITE_OK}
  
@@ -317,3 +450,8 @@
  
    do_test backup-10.$tn.5 {
      B step 50
+   } $rc
+ 
+   do_test backup-10.$tn.6 {
+     B finish
+   } {SQLITE_OK}

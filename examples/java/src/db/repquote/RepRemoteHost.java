@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db.repquote;
@@ -11,8 +10,8 @@ package db.repquote;
 import com.sleepycat.db.ReplicationHostAddress;
 
 public class RepRemoteHost{
-    private ReplicationHostAddress addr;
-    private boolean isPeer;
+    private final ReplicationHostAddress addr;
+    private final boolean isPeer;
 
     public RepRemoteHost(ReplicationHostAddress remoteAddr, boolean hostIsPeer){
         addr = remoteAddr;

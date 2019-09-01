@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr110
 # TEST  Multi-process repmgr start-up policies.
@@ -25,6 +25,11 @@ proc repmgr110 { } {
 	make_dbconfig $dira $conf
 	make_dbconfig $dirb $conf
 	make_dbconfig $dirc $conf
+
+	setup_repmgr_ssl $dira
+	setup_repmgr_ssl $dirb
+	setup_repmgr_ssl $dirc
+
 	foreach {aport bport cport} [available_ports 3] {}
 	set hoststr [get_hoststr $ipversion]
 

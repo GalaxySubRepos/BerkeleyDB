@@ -56,8 +56,6 @@ s/@db_off_t_max_decl@/#define DB_OFF_T_MAX INT64_MAX/
 s/@db_seq_decl@/typedef int64_t db_seq_t;/
 s/@db_threadid_t_decl@/typedef uintmax_t db_threadid_t;/
 s/@socket_decl@/typedef int DB_REPMGR_SOCKET;/
-s/@DB_VERSION_FAMILY@/$DB_VERSION_FAMILY/
-s/@DB_VERSION_RELEASE@/$DB_VERSION_RELEASE/
 s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/
 s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/
 s/@DB_VERSION_PATCH@/$DB_VERSION_PATCH/
@@ -412,6 +410,51 @@ vx6()
 	cat vx_6/Makefile.3
 }
 
+# vx7 --
+#	Generate a VxWorks 7 Makefile.
+#	"bdbvxw_partialImage" is the location used to 
+#	store generated objects in VxWorks 7 scenario.
+#
+# $1: list of files
+vx7()
+{
+	# Build VxWorks 7 Makefile.
+	cat vx_7/Makefile.1
+	echo
+	sed -e 's/\.c$//p' -e d < $1 > $s
+	for i in `cat $s`; do
+		sed "s;__FILENAME__;$i;g" < vx_7/cfile
+	done
+	echo
+	sed -e 's/\.cpp$//p' -e d < $1 > $s
+	for i in `cat $s`; do
+		sed "s;__FILENAME__;$i;g" < vx_7/cxxfile
+	done
+	echo
+	sed -e 's/\.c.*//' < $1 > $s
+	/bin/echo -n "OBJECTS_bdbvxw_partialImage ="
+	sep=" \\"
+	for i in `cat $s`; do
+		echo "$sep"
+		/bin/echo -n '	bdbvxw_partialImage/$(MODE_DIR)/Objects/bdbvxw/'
+		/bin/echo -n "$i.o"
+	done
+	echo
+	echo
+	cat vx_7/Makefile.2
+	echo
+	/bin/echo -n "DEP_FILES :="
+	for i in `cat $s`; do
+		echo "$sep"
+		/bin/echo -n '	bdbvxw_partialImage/$(MODE_DIR)/Objects/bdbvxw/'
+		/bin/echo -n "$i.d"
+	done
+	echo
+	echo
+	cat vx_7/Makefile.3
+}
+
+
 # Build the list of "normal build" files VxWorks 6x knows about -- it's
 # the standard Vx list plus some additions.
 sed -e '/^$/d' -e '/^[	 #]/d' srcfiles.in |
@@ -428,9 +471,32 @@ cmp $t $f > /dev/null 2>&1 ||
 # Build the list of "small build" files VxWorks 6x knows about -- it's
 # the standard vxsmall list.
 sed -e '/^$/d' -e '/^[	 #]/d' srcfiles.in |
-    egrep -w vxsmall |
-    sed 's/[	 ].*//' >> $vxsmallfiles
+    egrep -w vxsmall | 
+    sed 's/[	 ].*//' > $vxsmallfiles
 vx6 $vxsmallfiles > $t
 f=../build_vxworks/Makefile.6x.small
+cmp $t $f > /dev/null 2>&1 ||
+    (echo "Building $f" && rm -f $f && cp $t $f)
+
+# Build the list of "normal build" files VxWorks 7 knows about -- it's
+# the standard Vx list plus some additions.
+sed -e '/^$/d' -e '/^[	 #]/d' srcfiles.in |
+    egrep -w vx |
+    sed 's/[	 ].*//' > $vxfilelist
+sed -e '/^$/d' -e '/^[	 #]/d' srcfiles.in |
+    egrep -w vx7 |
+    sed 's/[	 ].*//' >> $vxfilelist
+vx7 $vxfilelist > $t
+f=../build_vxworks/Makefile.7
+cmp $t $f > /dev/null 2>&1 ||
+    (echo "Building $f" && rm -f $f && cp $t $f)
+
+# Build the list of "small build" files VxWorks 7 knows about -- it's
+# the standard vxsmall list.
+sed -e '/^$/d' -e '/^[	 #]/d' srcfiles.in |
+    egrep -w vxsmall |
+    sed 's/[	 ].*//' > $vxsmallfiles
+vx7 $vxsmallfiles > $t
+f=../build_vxworks/Makefile.7.small
 cmp $t $f > /dev/null 2>&1 ||
     (echo "Building $f" && rm -f $f && cp $t $f)

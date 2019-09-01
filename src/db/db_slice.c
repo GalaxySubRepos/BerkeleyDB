@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -286,7 +286,7 @@ __db_slice_default_callback(dbp, key, slice)
  *
  *	The 'expect' DBT is either inserted (if the db is still being created
  *	or the operation is an insert) or compared to the value actually
- * 	present.
+ *	present.
  *
  * PUBLIC: int __db_slice_metadata __P((DB *,
  * PUBLIC:     DB_THREAD_INFO *, DB_TXN *, const char *, DBT *, int));
@@ -406,7 +406,8 @@ __db_slice_metachk(dbp, ip, txn)
 	/* Make sure that the version number is not too high, or low. */
 	value.size = (u_int32_t)snprintf(value.data,
 	    value.ulen, "%u", DB_SLICE_METADATA_VERSION);
-	if ((ret = __db_slice_metadata(dbp, ip, txn, "version", &value, 0)) != 0)
+	if ((ret = __db_slice_metadata(dbp, ip,
+	    txn, "version", &value, 0)) != 0)
 		goto err;
 
 	/* Make sure that the slice count matches the environment. */
@@ -526,7 +527,8 @@ __db_slice_open(dbp, ip, txn, fname, type, flags, mode)
 	dbp->key_range = (int (*) __P((DB *,
 	    DB_TXN *, DBT *, DB_KEY_RANGE *, u_int32_t)))__db_slice_notsup;
 	dbp->set_lk_exclusive = (int (*) __P((DB *, int)))__db_slice_notsup;
-	dbp->set_partition = (int (*) __P ((DB *, u_int32_t, DBT *, u_int32_t (*)(DB *, DBT *key))))__db_slice_notsup;
+	dbp->set_partition = (int (*) __P ((DB *, u_int32_t, DBT *,
+	    u_int32_t (*)(DB *, DBT *key))))__db_slice_notsup;
 
 	return (0);
 
@@ -742,6 +744,7 @@ __db_slice_activate(dbp, txn, sl_dbt, sl_dbpp, sl_txnp)
 	} else if (txn->txn_slices == NULL) {
 		txnmsg = "new";
 		ENV_ENTER(dbp->env, ip);
+		txn->thread_info = ip;
 		ret = __txn_slice_begin(txn, &sl_txn, slice_index);
 		ENV_LEAVE(dbp->env, ip);
 	} else if ((sl_txn = txn->txn_slices[slice_index]) == NULL) {
@@ -1009,7 +1012,6 @@ __db_slice_secondary_get_pp(sdbp, txn, skey, data, flags)
 	COMPQUIET(txn, NULL);
 	return (ret);
 }
-
 
 /*
  * __dbc_slice_init --
@@ -1468,7 +1470,6 @@ __db_slice_associate(dbp, txn, sdbp, callback, flags)
 	return (ret);
 }
 
-
 /*
  * __db_slice_compact --
  *	Extra compact steps for a sliced database, after doing the container.
@@ -1706,7 +1707,7 @@ __dbc_slice_dump_get(dbc, key, data, flags)
 	int ret;
 
 	dbp = dbc->dbp;
-	
+
 	/*
 	 * If the current slice is too high, the caller has continued fetching
 	 * after the previous call returned DB_NOTFOUND.

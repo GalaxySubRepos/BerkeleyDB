@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -2239,9 +2239,8 @@ __bam_lock_tree(dbc, sp, csp, start, stop)
 		return (ret);
 
 	/*
-	 * Then recurse on the other records on the page if needed.
-	 * If the page is in the stack then its already locked or
-	 * was processed above.
+	 * Then recurse on the other records on the page if needed. If the page
+	 * is in the stack then it is already locked or it was processed above.
 	 */
 	if (start == 0 && pgno == PGNO(cpage))
 		start = 1;
@@ -2323,7 +2322,7 @@ __bam_savekey(dbc, next, start)
 	db_pgno_t pgno, saved_pgno;
 	int ret, t_ret;
 	u_int32_t len;
-	u_int8_t *data;
+	u_int8_t *data, type;
 	int level;
 
 	dbp = dbc->dbp;
@@ -2331,6 +2330,7 @@ __bam_savekey(dbc, next, start)
 	cp = (BTREE_CURSOR *)dbc->internal;
 	pg = cp->csp->page;
 	ret = 0;
+	bo = NULL;
 
 	if (dbc->dbtype == DB_RECNO) {
 		if (next)
@@ -2346,6 +2346,7 @@ __bam_savekey(dbc, next, start)
 	bi = GET_BINTERNAL(dbp, pg, NUM_ENT(pg) - 1);
 	data = bi->data;
 	len = bi->len;
+	type = bi->type;
 	LOCK_INIT(lock);
 	saved_pgno = PGNO_INVALID;
 	/* If there is single record on the page it may have an empty key. */
@@ -2382,8 +2383,15 @@ __bam_savekey(dbc, next, start)
 		 */
 		if (pg->level == LEAFLEVEL) {
 			bk = GET_BKEYDATA(dbp, pg, NUM_ENT(pg) - 2);
-			data = bk->data;
-			len = bk->len;
+			if (B_TYPE(bk->type) == B_OVERFLOW) {
+				bo = (BOVERFLOW *)bk;
+				len = bo->tlen;
+				type = bo->type;
+			} else {
+				data = bk->data;
+				len = bk->len;
+				type = bk->type;
+			}
 			if (len == 0) {
 no_key:				__db_errx(env, DB_STR("1023",
 				    "Compact cannot handle zero length key"));
@@ -2394,10 +2402,12 @@ no_key:				__db_errx(env, DB_STR("1023",
 			bi = GET_BINTERNAL(dbp, pg, NUM_ENT(pg) - 1);
 			data = bi->data;
 			len = bi->len;
+			type = bi->type;
 		}
 	}
-	if (B_TYPE(bi->type) == B_OVERFLOW) {
-		bo = (BOVERFLOW *)(data);
+	if (B_TYPE(type) == B_OVERFLOW) {
+		if (bo == NULL)
+			bo = (BOVERFLOW *)(data);
 		ret = __db_goff(dbc, start, bo->tlen, bo->pgno,
 		    &start->data, &start->ulen);
 	}

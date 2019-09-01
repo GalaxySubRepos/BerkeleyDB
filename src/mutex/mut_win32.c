@@ -1,7 +1,7 @@
 /*
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -136,14 +136,13 @@ __db_win32_mutex_lock(env, mutex, timeout, flags)
 	ip = NULL;
 	if (env->thr_hashtab != NULL && LF_ISSET(MUTEX_CTR)) {
 		if ((ret = __env_set_state(env, &ip, THREAD_CTR_VERIFY)) != 0)
-			return (__env_panic(env, ret)); 
+			return (__env_panic(env, ret));
 		if (ip != NULL) {
 			DB_ASSERT(env, ip->mtx_ctr < 20);
 			ip->mtx_ctr++;
 		}
 	}
 	/* All non-successful returns after this point should go to failed. */
-
 
 loop:	/* Attempt to acquire the mutex mutex_tas_spins times, if waiting. */
 	for (nspins =
@@ -278,12 +277,11 @@ loop:	/* Attempt to acquire the mutex mutex_tas_spins times, if waiting. */
 	    !F_ISSET(dbenv, DB_ENV_FAILCHK)) {
 died:
 		ret = __mutex_died(env, mutex);
-	    	goto failed;
+		goto failed;
 	}
 #endif
 	PANIC_CHECK(env);
 	goto loop;
-
 
 failed:
 	/* If this call incremented the counter, decrement it on error. */
@@ -327,7 +325,6 @@ __db_win32_mutex_init(env, mutex, flags)
 
 	return (0);
 }
-
 
 #if defined(HAVE_SHARED_LATCHES)
 /*
@@ -380,7 +377,7 @@ __db_win32_mutex_readlock(env, mutex, flags)
 	state = NULL;
 	if (env->thr_hashtab != NULL) {
 		if ((ret = __env_set_state(env, &ip, THREAD_CTR_VERIFY)) != 0)
-			return (__env_panic(env, ret)); 
+			return (__env_panic(env, ret));
 		if (env->thr_hashtab != NULL && (ret = __mutex_record_lock(env,
 		    mutex, ip, MUTEX_ACTION_INTEND_SHARE, &state)) != 0)
 			return (ret);
@@ -445,7 +442,7 @@ retry:		mtx_val = atomic_read(&mutexp->sharecount);
 #ifdef MUTEX_DIAG
 			if (ret != WAIT_OBJECT_0) {
 				QueryPerformanceCounter(&diag_now);
-				printf(DB_STR_A("2007",
+				printf(DB_STR_A("2004",
 				    "[%lld]: Lost signal on mutex %p, "
 				    "id %d, ms %d\n", "%lld %p %d %d"),
 				    diag_now.QuadPart, mutexp, mutexp->id, ms);
@@ -476,7 +473,7 @@ retry:		mtx_val = atomic_read(&mutexp->sharecount);
 	if (event == NULL) {
 #ifdef MUTEX_DIAG
 		QueryPerformanceCounter(&diag_now);
-		printf(DB_STR_A("2008",
+		printf(DB_STR_A("2005",
 		    "[%lld]: Waiting on mutex %p, id %d\n",
 		    "%lld %p %d"), diag_now.QuadPart, mutexp, mutexp->id);
 #endif
@@ -562,8 +559,9 @@ __db_win32_mutex_unlock(env, mutex, ip, flags)
 #endif
 
 	/*
-	 * If the caller hasn't already specified the thread from which to unlock
-	 * this mutex, use the current thread.  Failchk can indicate a dead thread.
+	 * If the caller hasn't already specified the thread from which
+	 * to unlock this mutex, use the current thread.  Failchk can
+	 * indicate a dead thread.
 	 */
 	if (env->thr_hashtab != NULL && ip == NULL &&
 	   (ret = __env_set_state(env, &ip, THREAD_CTR_VERIFY)) != 0)
@@ -580,7 +578,7 @@ __db_win32_mutex_unlock(env, mutex, ip, flags)
 		sharecount = atomic_read(&mutexp->sharecount);
 		if (sharecount == 0) {
 			if (!PANIC_ISSET(env)) {
-				__db_errx(env, DB_STR_A("2071",
+				__db_errx(env, DB_STR_A("2070",
 				    "Shared unlock %s: already unlocked", "%s"),
 				    __mutex_describe(env, mutex, description));
 				return (DB_RUNRECOVERY);

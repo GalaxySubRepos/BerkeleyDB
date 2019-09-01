@@ -7,7 +7,7 @@
     <!-- Let WiX generate guid for us. -->
     <Package Id='*'
      Keywords="Embedded Database Datastore"
-     Description='@PRODUCT_NAME@ @PROD_WIX_VERSION@'
+     Description='@PRODUCT_NAME@'
      Comments='includes sources and binaries' InstallerVersion='300'
      Compressed='yes' Platform="@WIN_BUILD@"
      Languages="1033" SummaryCodepage="1252" />
@@ -44,7 +44,7 @@
       <Directory Id="@PROGRAM_FILES_FOLDER@" Name=".">
         <Directory Id="OracleFolder" Name="Oracle">
           <Directory Id="INSTALLDIR"
-                   Name="@PRODUCT_NAME@ @PROD_WIX_VERSION@">
+                   Name="@PRODUCT_NAME@">
             <Directory Id="INSTALLUTIL" Name="installutil">
             </Directory>
 	  </Directory> <!-- installdir -->
@@ -52,7 +52,7 @@
       </Directory> <!-- ProgramFilesFolder -->
       <Directory Id="ProgramMenuFolder" Name=".">
         <Directory Id="BerkeleyDbMenu"
-         Name="@PRODUCT_NAME@ @PROD_WIX_VERSION@" />
+         Name="@PRODUCT_NAME@" />
       </Directory>
     </Directory>
     <!-- template for location of Visual Studio Merge Modules.  This
@@ -78,7 +78,7 @@
 	o examples
   o Thrift server/client
     -->
-    <Feature Id="Complete" Title="@PRODUCT_NAME@ @PROD_WIX_VERSION@" Description="Complete installation"
+    <Feature Id="Complete" Title="@PRODUCT_NAME@" Description="Complete installation"
 	      Display="expand" Level="1" ConfigurableDirectory="INSTALLDIR">
 
     <Feature Id="AlwaysInstall" Title="Always Install"

@@ -1,3 +1,10 @@
+
+Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+
+See the file LICENSE for license information.
+
+-------------------------
+
 Synchronization in the Locking Subsystem
 
 This is a document that describes how we implemented fine-grain locking
@@ -51,7 +58,7 @@ Locker ID #3 is waiting for a lock on Object #2 (L6).
 
 	OBJECT                   -----------------------
 	HASH                     |                     |
-                             ----|-------------        |
+			     ----|-------------        |
 	________    _______  |   |   ________ |        |
 	|	|-->| O1  |--|---|-->|  O2  | |        |
 	|_______|   |_____|  |   |   |______| V        |
@@ -298,4 +305,3 @@ A: We currently do not support any automatic configuration for FINE_GRAIN
    locking.  When we do, will need to document that atomicity discussion
    listed above (it is bug-report #553).
 
-Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_errcall()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_errcall()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envevent_notify.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_errcall"></a>DbEnv::set_errcall()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_errcall"></a>
+        
+        <span>DbEnv::set_errcall()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -55,7 +61,10 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
     </p>
       <p>
          The <code class="methodname">DbEnv::set_errcall()</code> and 
-         <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">DbEnv::set_errcall()</a>  methods
+         <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">
+        
+        <span>DbEnv::set_errcall()</span>
+    </a>  methods
          are used to enhance the mechanism for reporting error messages to the
          application. In some cases, when an error occurs, Berkeley DB will
          call <span class="bold"><strong>db_errcall_fcn</strong></span> with additional
@@ -75,8 +84,14 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
                 methods to display the additional information via an output stream, or the
             </span>
 
-         <a class="xref" href="dbset_errfile.html" title="Db::set_errfile()">Db::set_errfile()</a>  or
-         <a class="xref" href="envset_errfile.html" title="DbEnv::set_errfile()">Db::set_errfile()</a>
+         <a class="xref" href="dbset_errfile.html" title="Db::set_errfile()">
+        
+        <span>Db::set_errfile()</span>
+    </a>  or
+         <a class="xref" href="envset_errfile.html" title="DbEnv::set_errfile()">
+        
+        <span>Db::set_errfile()</span>
+    </a>
          methods to display the additional information via a C library <code class="literal">FILE *</code>.
          <span>You should not mix these approaches.</span>
     </p>
@@ -106,7 +121,7 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812095120"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176769417568"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -114,7 +129,7 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811966064"></a>db_errcall_fcn</h4>
+                <h4 class="title"><a id="idm140176769300192"></a>db_errcall_fcn</h4>
               </div>
             </div>
           </div>
@@ -141,8 +156,14 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
                 <p>
                  The <span class="bold"><strong>errpfx</strong></span> parameter is the prefix
                  string (as previously set by 
-                 <a class="xref" href="dbset_errpfx.html" title="Db::set_errpfx()">Db::set_errpfx()</a>  or 
-                 <a class="xref" href="envset_errpfx.html" title="DbEnv::set_errpfx()">DbEnv::set_errpfx()</a>).
+                 <a class="xref" href="dbset_errpfx.html" title="Db::set_errpfx()">
+        
+        <span>Db::set_errpfx()</span>
+    </a>  or 
+                 <a class="xref" href="envset_errpfx.html" title="DbEnv::set_errpfx()">
+        
+        <span>DbEnv::set_errpfx()</span>
+    </a>).
             </p>
               </li>
               <li>
@@ -162,7 +183,7 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811960784"></a>Class</h3>
+              <h3 class="title"><a id="idm140176769380784"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -174,7 +195,7 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812000080"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176769460368"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -194,11 +215,17 @@ void DbEnv::set_errcall(void (*db_errcall_fcn)
           <td width="40%" align="right"> <a accesskey="n" href="envset_errfile.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_event_notify() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_event_notify()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_errfile()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_errfile()</span>
+    </td>
         </tr>
       </table>
     </div>

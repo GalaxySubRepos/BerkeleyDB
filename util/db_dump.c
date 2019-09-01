@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -74,7 +74,7 @@ main(argc, argv)
 			break;
 		case 'f':
 			if (freopen(optarg, "w", stdout) == NULL) {
-				fprintf(stderr, DB_STR_A("5108",
+				fprintf(stderr, DB_STR_A("5072",
 				    "%s: %s: reopen: %s\n", "%s %s %s\n"),
 				    progname, optarg, strerror(errno));
 				goto err;
@@ -104,8 +104,8 @@ main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'p':
 			pflag = 1;
@@ -317,7 +317,7 @@ err:		exitval = 1;
 	}
 done:	if (dbp != NULL && (ret = dbp->close(dbp, 0)) != 0) {
 		exitval = 1;
-		dbenv->err(dbenv, ret, DB_STR("5117", "close"));
+		dbenv->err(dbenv, ret, DB_STR("0164", "close"));
 	}
 	if (dbenv != NULL && (ret = dbenv->close(dbenv, 0)) != 0) {
 		exitval = 1;

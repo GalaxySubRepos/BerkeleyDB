@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;set_errpfx()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;set_errpfx()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_errfile.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_errpfx"></a>DB-&gt;set_errpfx()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_errpfx"></a>
+        <span>DB-&gt;set_errpfx()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -48,7 +54,10 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
     </p>
       <p>
          The <code class="methodname">DB-&gt;set_errpfx()</code> and 
-         <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">DB_ENV-&gt;set_errpfx()</a> 
+         <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">
+        <span>DB_ENV-&gt;set_errpfx()</span>
+        
+    </a> 
          methods do not copy the memory to which the <span class="bold"><strong>errpfx</strong></span> parameter refers; rather, they maintain
          a reference to it.  Although this allows applications to modify the
          error message prefix at any time (without repeatedly calling the
@@ -59,7 +68,10 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
          For <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a>  handles opened
          inside of Berkeley DB environments, calling the <code class="methodname">DB-&gt;set_errpfx()</code>
          method affects the entire environment and is equivalent to calling the
-         <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">DB_ENV-&gt;set_errpfx()</a> 
+         <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">
+        <span>DB_ENV-&gt;set_errpfx()</span>
+        
+    </a> 
          method.
     </p>
       <p>
@@ -75,7 +87,7 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236496784"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488958048"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -83,7 +95,7 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815236496400"></a>errpfx</h4>
+                <h4 class="title"><a id="idm140113488957664"></a>errpfx</h4>
               </div>
             </div>
           </div>
@@ -97,7 +109,7 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236555632"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488976496"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -109,7 +121,7 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815236511168"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113488971920"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -129,11 +141,17 @@ DB-&gt;set_errpfx(DB *db, const char *errpfx);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_feedback.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;set_errfile() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;set_errfile()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;set_feedback()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;set_feedback()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

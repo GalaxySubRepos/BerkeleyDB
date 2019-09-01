@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::verify()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::verify()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbupgrade.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbverify"></a>Db::verify()</h2>
+            <h2 class="title" style="clear: both"><a id="dbverify"></a>
+        
+        <span>Db::verify()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -58,7 +64,10 @@ Db::verify(const char *file,
     </p>
       <p>
              The <code class="methodname">Db::verify()</code> method may not be called after the 
-             <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called.
+             <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <a class="link" href="db.html" title="Chapter 2.  The Db Handle">Db</a>  handle may not be
@@ -88,7 +97,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814369136"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176771730672"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -96,7 +105,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814337984"></a>file</h4>
+                <h4 class="title"><a id="idm140176771734000"></a>file</h4>
               </div>
             </div>
           </div>
@@ -109,7 +118,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814360240"></a>database</h4>
+                <h4 class="title"><a id="idm140176771725664"></a>database</h4>
               </div>
             </div>
           </div>
@@ -128,7 +137,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814354816"></a>outfile</h4>
+                <h4 class="title"><a id="idm140176771721184"></a>outfile</h4>
               </div>
             </div>
           </div>
@@ -141,7 +150,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814421472"></a>flags</h4>
+                <h4 class="title"><a id="idm140176771723680"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -261,7 +270,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814312384"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140176771671600"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -272,7 +281,10 @@ Db::verify(const char *file,
                     </p>
         <p>
                             <code class="methodname">Db::verify()</code> is affected by any database directory specified using the
-                            <a class="xref" href="envadd_data_dir.html" title="DbEnv::add_data_dir()">DbEnv::add_data_dir()</a>
+                            <a class="xref" href="envadd_data_dir.html" title="DbEnv::add_data_dir()">
+        
+        <span>DbEnv::add_data_dir()</span>
+    </a>
                             method, or by setting the "add_data_dir" string
                             in the environment's <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file.
                     </p>
@@ -281,7 +293,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814344976"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176771669520"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -299,12 +311,15 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814318704"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176771674896"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -312,7 +327,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814361008"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140176771741008"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -325,7 +340,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814339616"></a>Class</h3>
+              <h3 class="title"><a id="idm140176771698544"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -337,7 +352,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814311968"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176771693424"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -357,11 +372,17 @@ Db::verify(const char *file,
           <td width="40%" align="right"> <a accesskey="n" href="db_heap_rid.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::upgrade() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::upgrade()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbHeapRecordId</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbHeapRecordId</span>
+    </td>
         </tr>
       </table>
     </div>

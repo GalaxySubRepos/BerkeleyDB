@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1998, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -39,7 +39,7 @@ extern "C" {
 #define	DB_ASSERT(env, e)	((void)0)
 #endif
 
-#if defined(HAVE_ERROR_HISTORY)
+#if defined(HAVE_ERROR_HISTORY) && defined(DIAGNOSTIC)
 #define	DB_DEBUG_MSG	__db_debug_msg
 #else
 #define	DB_DEBUG_MSG	if (0) __db_debug_msg

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2016, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -32,7 +32,7 @@ proc memp009_body { flags } {
 	puts "\tMemp009.a: Create the environment"
 
 	set dbenv [eval {berkdb_env -create -lock -mode 0644 -home $testdir \
-	    -mutex_set_max $mutex_max -lock_partitions 1}]
+	    -mutex_set_max $mutex_max -lock_partitions 1 }]
 	error_check_good env_open [is_valid_env $dbenv] TRUE
 
 	puts "\tMemp009.b: Create databases"

@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -57,22 +57,34 @@
         <table class="simplelist" border="0" summary="Simple list">
           <tr>
             <td>
-              <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">DB_ENV-&gt;add_data_dir()</a>
+              <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">
+        <span>DB_ENV-&gt;add_data_dir()</span>
+        
+    </a>
             </td>
           </tr>
           <tr>
             <td>
-              <a class="xref" href="envset_data_dir.html" title="DB_ENV-&gt;set_data_dir()">DB_ENV-&gt;set_data_dir()</a>
+              <a class="xref" href="envset_data_dir.html" title="DB_ENV-&gt;set_data_dir()">
+        <span>DB_ENV-&gt;set_data_dir()</span>
+        
+    </a>
             </td>
           </tr>
           <tr>
             <td>
-              <a class="xref" href="envset_lg_dir.html" title="DB_ENV-&gt;set_lg_dir()">DB_ENV-&gt;set_lg_dir()</a>
+              <a class="xref" href="envset_lg_dir.html" title="DB_ENV-&gt;set_lg_dir()">
+        <span>DB_ENV-&gt;set_lg_dir()</span>
+        
+    </a>
             </td>
           </tr>
           <tr>
             <td>
-              <a class="xref" href="envset_region_dir.html" title="DB_ENV-&gt;set_region_dir()">DB_ENV-&gt;set_region_dir()</a>
+              <a class="xref" href="envset_region_dir.html" title="DB_ENV-&gt;set_region_dir()">
+        <span>DB_ENV-&gt;set_region_dir()</span>
+        
+    </a>
             </td>
           </tr>
         </table>
@@ -180,12 +192,21 @@
         </ul>
       </div>
       <p>
-         Log cursor handles (returned by the <a class="xref" href="logcursor.html" title="DB_ENV-&gt;log_cursor()">DB_ENV-&gt;log_cursor()</a>
+         Log cursor handles (returned by the <a class="xref" href="logcursor.html" title="DB_ENV-&gt;log_cursor()">
+        <span>DB_ENV-&gt;log_cursor()</span>
+        
+    </a>
          method) may have open file
          descriptors for log files in the database environment.  Also, the Berkeley DB interfaces to
          the database environment logging subsystem (for example, 
-         <a class="xref" href="logput.html" title="DB_ENV-&gt;log_put()">DB_ENV-&gt;log_put()</a> and
-         <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">DB_TXN-&gt;abort()</a> may allocate
+         <a class="xref" href="logput.html" title="DB_ENV-&gt;log_put()">
+        <span>DB_ENV-&gt;log_put()</span>
+        
+    </a> and
+         <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">
+        <span>DB_TXN-&gt;abort()</span>
+        
+    </a> may allocate
          log cursors and have open file descriptors for log files as well.  On operating systems
          where filesystem related system calls (for example, rename and unlink on Windows/NT) can
          fail if a process has an open file descriptor for the affected file, attempting to move or
@@ -208,7 +229,10 @@
          interrupt signal (SIGINT).
     </p>
       <p>
-         The <a class="xref" href="logarchive.html" title="DB_ENV-&gt;log_archive()">DB_ENV-&gt;log_archive()</a> method is the
+         The <a class="xref" href="logarchive.html" title="DB_ENV-&gt;log_archive()">
+        <span>DB_ENV-&gt;log_archive()</span>
+        
+    </a> method is the
          underlying method used by the <span class="command"><strong>db_archive</strong></span> utility. See the 
          <span class="command"><strong>db_archive</strong></span> utility source code for an example of using 
          <code class="methodname">DB_ENV-&gt;log_archive()</code> in an IEEE/ANSI Std
@@ -222,7 +246,7 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227203088"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113479426592"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -230,7 +254,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227202704"></a>DB_HOME</h4>
+                <h4 class="title"><a id="idm140113479426208"></a>DB_HOME</h4>
               </div>
             </div>
           </div>
@@ -238,7 +262,10 @@
                           If the <span class="bold"><strong>-h</strong></span> option is not specified and
                           the environment variable DB_HOME is set, it is used as the path of the
                           database home, as described in the
-                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method.
+                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method.
                      </p>
         </div>
       </div>

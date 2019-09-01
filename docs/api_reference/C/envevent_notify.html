@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_event_notify()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_event_notify()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_encrypt.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envevent_notify"></a>DB_ENV-&gt;set_event_notify()</h2>
+            <h2 class="title" style="clear: both"><a id="envevent_notify"></a>
+        <span>DB_ENV-&gt;set_event_notify()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -81,7 +87,7 @@ DB_ENV-&gt;set_event_notify(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233376704"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113485783744"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -89,7 +95,7 @@ DB_ENV-&gt;set_event_notify(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233428320"></a>db_event_fcn</h4>
+                <h4 class="title"><a id="idm140113485852416"></a>db_event_fcn</h4>
               </div>
             </div>
           </div>
@@ -130,7 +136,10 @@ DB_ENV-&gt;set_event_notify(DB_ENV *dbenv,
                                     DB_RUNRECOVERY
                                 </a>
                                 error because a prior panic event has occurred and the
-                                thread has been marked by <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a> as being held by a
+                                thread has been marked by <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a> as being held by a
                                 crashed process. 
                             </p>
                       <p>
@@ -163,7 +172,10 @@ char symptom[DB_FAILURE_SYMPTOM_SIZE];</pre>
                                     DB_RUNRECOVERY
                                 </a>
                                 error because a mutex it requires has been 
-                                marked by <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a> as being held by a
+                                marked by <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a> as being held by a
                                 crashed process. 
                             </p>
                       <p>
@@ -216,7 +228,10 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
                                 Recovery is needed in an environment where the 
                                 <a class="link" href="envopen.html#envopen_DB_REGISTER">DB_REGISTER</a> 
                                 flag was specified on the 
-                                <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method and there is 
+                                <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method and there is 
                                 a process attached to the environment.   The callback function is triggered
                                 once for each process attached. 
                             </p>
@@ -234,7 +249,10 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
                                 Recovery is needed in an environment where the
                                 <a class="link" href="envopen.html#envopen_DB_REGISTER">DB_REGISTER</a>
                                 flag was specified 
-                                on the <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> method.  All threads
+                                on the <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> method.  All threads
                                 of control in the database environment should exit the environment.   
                             </p>
                       <p>
@@ -244,6 +262,32 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
                                 dies in the environment and recovery is initiated versus the case when an
                                 error happened (for example, if Berkeley DB is unable to allocate heap
                                 memory)
+                            </p>
+                    </li>
+                    <li>
+                      <p><a id="event_notify_DB_EVENT_REP_AUTOTAKEOVER"></a>
+                                <code class="literal">DB_EVENT_REP_AUTOTAKEOVER</code>
+                            </p>
+                      <p>
+                                The current process, which was previously a
+                                subordinate process, has taken over as the
+                                replication process.
+                            </p>
+                      <p>
+                                The replication process is the main Replication
+                                Manager process which is responsible for
+                                sending and processing most Replication
+                                Manager messages.  Normally this is the first
+                                process started in a replication group, but
+                                when that process shuts down cleanly, a
+                                subordinate process will take over if one is
+                                available.
+                            </p>
+                      <p>
+                                The
+                                <code class="literal">DB_EVENT_REP_AUTOTAKEOVER</code>
+                                event is provided only to applications
+                                configured for the Replication Manager.
                             </p>
                     </li>
                     <li>
@@ -266,7 +310,10 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
                                 This event means that this Replication Manager subordinate process
                                 attempted to take over as the replication process, but it failed.
                                 Replication Manager is not running locally but may be restarted by
-                                invoking <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">DB_ENV-&gt;repmgr_start()</a>.
+                                invoking <a class="xref" href="repmgrstart.html" title="DB_ENV-&gt;repmgr_start()">
+        <span>DB_ENV-&gt;repmgr_start()</span>
+        
+    </a>.
                             </p>
                       <p>
                                 The <code class="literal">DB_EVENT_REP_AUTOTAKEOVER_FAILED</code> event is provided
@@ -371,13 +418,19 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
                       <p>
                                 The local replication site has just won an election.  A
                                 Base API application should call the 
-                                <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a>  method
+                                <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a>  method
                                 after receiving this event, to reconfigure the local environment as a
                                 replication master.
                             </p>
                       <p>
                                 Replication Manager applications may safely ignore this event.  The
-                                Replication Manager calls <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">DB_ENV-&gt;rep_start()</a> 
+                                Replication Manager calls <a class="xref" href="repstart.html" title="DB_ENV-&gt;rep_start()">
+        <span>DB_ENV-&gt;rep_start()</span>
+        
+    </a> 
                                 automatically on behalf of the application when appropriate (resulting
                                 in firing of the DB_EVENT_REP_MASTER event).
                             </p>
@@ -502,7 +555,10 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
                       <p>
                                 The Replication Manager did not receive enough acknowledgements (based
                                 on the acknowledgement policy configured with 
-                                <a class="xref" href="repmgrset_ack_policy.html" title="DB_ENV-&gt;repmgr_set_ack_policy()">DB_ENV-&gt;repmgr_set_ack_policy()</a> )
+                                <a class="xref" href="repmgrset_ack_policy.html" title="DB_ENV-&gt;repmgr_set_ack_policy()">
+        <span>DB_ENV-&gt;repmgr_set_ack_policy()</span>
+        
+    </a> )
                                 to ensure a transaction's durability within the replication group. 
                                 The transaction will be flushed to the master's local disk storage for
                                 durability.
@@ -581,7 +637,7 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233408528"></a>Class</h3>
+              <h3 class="title"><a id="idm140113485731568"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -593,7 +649,7 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233395440"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113485784576"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -613,11 +669,17 @@ char          mtxdied_desc[DB_MUTEX_DESCRIBE_STRLEN]; </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_errcall.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_encrypt() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_encrypt()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_errcall()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_errcall()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

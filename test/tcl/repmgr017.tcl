@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -58,12 +58,14 @@ proc repmgr017_sub { method niter tnum largs } {
 	# In-memory logs cannot be used with -txn nosync.
 	set logargs [adjust_logargs "in-memory"]
 	set txnargs [adjust_txnargs "in-memory"]
+	set sslargs [setup_repmgr_sslargs]
 
 	# Open a master with a very small cache.
 	puts "\tRepmgr$tnum.a: Start a master with a very small cache."
 	set cacheargs "-cachesize {0 32768 1}"
-	set ma_envcmd "berkdb_env_noerr -create $logargs $txnargs $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $logargs $txnargs $verbargs $sslargs \
 	   -errpfx MASTER -rep -thread -rep_inmem_files -private $cacheargs"
+
 	set masterenv [eval $ma_envcmd]
 	$masterenv repmgr -ack all \
 	    -local [list $hoststr [lindex $ports 0]] \
@@ -71,7 +73,7 @@ proc repmgr017_sub { method niter tnum largs } {
 
 	# Open a client
 	puts "\tRepmgr$tnum.b: Start a client."
-	set cl_envcmd "berkdb_env_noerr -create $logargs $txnargs $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $logargs $txnargs $verbargs $sslargs\
 	    -errpfx CLIENT -rep -thread -rep_inmem_files -private"
 	set clientenv [eval $cl_envcmd]
 	$clientenv repmgr -ack all \

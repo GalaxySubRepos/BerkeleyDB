@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -83,14 +83,14 @@ struct __db_foreign_info {
 /*
  * Standard initialization and shutdown macros for all recovery functions.
  */
-#define	REC_INTRO(func, ip, do_cursor) do {				\
+#define	REC_INTRO(func, txnhead, do_cursor) do {			\
 	argp = NULL;							\
 	dbc = NULL;							\
 	file_dbp = NULL;						\
 	COMPQUIET(mpf, NULL);	/* Not all recovery routines use mpf. */\
-	if ((ret = func(env, &file_dbp,					\
-	    (info != NULL) ? ((DB_TXNHEAD *)info)->td : NULL,		\
+	if ((ret = func(env, &file_dbp,	 txnhead->td,			\
 	    dbtp->data, &argp)) != 0) {					\
+		/* Skip this logrec if the db file has been removed. */	\
 		if (ret	== DB_DELETED) {				\
 			ret = 0;					\
 			goto done;					\
@@ -98,8 +98,8 @@ struct __db_foreign_info {
 		goto out;						\
 	}								\
 	if (do_cursor) {						\
-		if ((ret = __db_cursor(file_dbp,			\
-		    ip, NULL, &dbc, DB_RECOVER)) != 0)			\
+		if ((ret = __db_cursor(file_dbp, txnhead->thread_info,	\
+		    txnhead->txn, &dbc, DB_RECOVER)) != 0)		\
 			goto out;					\
 	}								\
 	mpf = file_dbp->mpf;						\
@@ -109,6 +109,7 @@ struct __db_foreign_info {
 	int __t_ret;							\
 	if (argp != NULL)						\
 		__os_free(env, argp);					\
+	(void)USR_ERR(env, ret);					\
 	if (dbc != NULL &&						\
 	    (__t_ret = __dbc_close(dbc)) != 0 && ret == 0)		\
 		ret = __t_ret;						\
@@ -120,7 +121,7 @@ struct __db_foreign_info {
  */
 #define	REC_NOOP_INTRO(func) do {					\
 	argp = NULL;							\
-	if ((ret = func(env, dbtp->data, &argp)) != 0)		\
+	if ((ret = func(env, dbtp->data, &argp)) != 0)			\
 		return (ret);						\
 } while (0)
 #define	REC_NOOP_CLOSE							\
@@ -131,19 +132,22 @@ struct __db_foreign_info {
 /*
  * Macro for reading pages during recovery.  In most cases we
  * want to avoid an error if the page is not found during rollback.
+ *
+ * The last parameter ('cont') is not a variable, but the label used when
+ * the page is not found.
  */
-#define	REC_FGET(mpf, ip, pgno, pagep, cont)				\
-	if ((ret = __memp_fget(mpf,					\
-	     &(pgno), ip, NULL, 0, pagep)) != 0) {			\
+#define	REC_FGET(mpf, txnhead, pgno, pagep, cont)			\
+	if ((ret = __memp_fget(mpf, &(pgno), 				\
+	     txnhead->thread_info, txnhead->txn, 0, pagep)) != 0) {	\
 		if (ret != DB_PAGE_NOTFOUND) {				\
 			ret = __db_pgerr(file_dbp, pgno, ret);		\
 			goto out;					\
 		} else							\
 			goto cont;					\
 	}
-#define	REC_DIRTY(mpf, ip, priority, pagep)				\
-	if ((ret = __memp_dirty(mpf,					\
-	    pagep, ip, NULL, priority, DB_MPOOL_EDIT)) != 0) {		\
+#define	REC_DIRTY(mpf, txnhead, priority, pagep)			\
+	if ((ret = __memp_dirty(mpf, pagep, txnhead->thread_info,	\
+	    txnhead->txn, priority, DB_MPOOL_EDIT)) != 0) {		\
 		ret = __db_pgerr(file_dbp, PGNO(*(pagep)), ret);	\
 		goto out;						\
 	}
@@ -157,10 +161,23 @@ struct __db_foreign_info {
 #define	REC_PRINT_DBREG(func, dummy)	REC_PRINT_INTERNAL(func, dummy)
 
 #ifdef DEBUG_RECOVER
-#define	REC_PRINT_INTERNAL(func, info)	 {		\
-	if (op != DB_TXN_PRINT && op != DB_TXN_LOG_VERIFY)		\
-		__db_msg(env, "%s:", DB_UNDO(op) ? "undo" :		\
-		    (DB_REDO(op) ? "redo" : "open/popen"));		\
+/*
+ * When DEBUG_RECOVER is defined, include the recovery opcode if it is being
+ * applied, either forward or backward.  Include the environment home if the
+ * env is in a group -- a process with many roles can be hard to follow.
+ */
+#define	REC_PRINT_INTERNAL(func, info)	 {				\
+	char *rep_home;							\
+	if (op != DB_TXN_PRINT && op != DB_TXN_LOG_VERIFY) {		\
+		if (!REP_ON(env))					\
+			rep_home = "";					\
+		else if ((rep_home = strrchr(env->db_home, '/')) == NULL) \
+			rep_home = env->db_home;			\
+		else							\
+			rep_home++;	/* Skip over '/'. */		\
+		__db_msg(env, "%s:%s", DB_UNDO(op) ? "undo" :		\
+		    (DB_REDO(op) ? "redo" : "open/popen"), rep_home);	\
+	}								\
 	(void)func(env, dbtp, lsnp, op, info);				\
     }
 #else

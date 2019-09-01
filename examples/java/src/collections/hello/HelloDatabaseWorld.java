@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.hello;
@@ -34,14 +33,16 @@ public class HelloDatabaseWorld implements TransactionWorker {
     private static final String[] INT_NAMES = {
         "Hello", "Database", "World",
     };
-    private static boolean create = true;
+    private static final boolean create = true;
 
     private Environment env;
     private ClassCatalog catalog;
     private Database db;
-    private SortedMap map;
+    private SortedMap<Integer, String> map;
 
-    /** Creates the environment and runs a transaction */
+    /** Creates the environment and runs a transaction
+     * @param argv
+     * @throws java.lang.Exception */
     public static void main(String[] argv)
         throws Exception {
 
@@ -77,7 +78,9 @@ public class HelloDatabaseWorld implements TransactionWorker {
         open();
     }
 
-    /** Performs work within a transaction. */
+    /** Performs work within a transaction.
+     * @throws java.lang.Exception */
+    @Override
     public void doWork()
         throws Exception {
 
@@ -101,16 +104,16 @@ public class HelloDatabaseWorld implements TransactionWorker {
         catalog = new StoredClassCatalog(catalogDb);
 
         // use Integer tuple binding for key entries
-        TupleBinding keyBinding =
+        TupleBinding<Integer> keyBinding =
             TupleBinding.getPrimitiveBinding(Integer.class);
 
         // use String serial binding for data entries
-        SerialBinding dataBinding = new SerialBinding(catalog, String.class);
+        SerialBinding<String> dataBinding = new SerialBinding<>(catalog, String.class);
 
         this.db = env.openDatabase(null, "helloworld", null, dbConfig);
 
         // create a map view of the database
-        this.map = new StoredSortedMap(db, keyBinding, dataBinding, true);
+        this.map = new StoredSortedMap<>(db, keyBinding, dataBinding, true);
     }
 
     /** Closes the database. */
@@ -135,13 +138,13 @@ public class HelloDatabaseWorld implements TransactionWorker {
     private void writeAndRead() {
 
         // check for existing data
-        Integer key = new Integer(0);
+        Integer key = 0;
         String val = (String) map.get(key);
         if (val == null) {
             System.out.println("Writing data");
             // write in reverse order to show that keys are sorted
             for (int i = INT_NAMES.length - 1; i >= 0; i -= 1) {
-                map.put(new Integer(i), INT_NAMES[i]);
+                map.put(i, INT_NAMES[i]);
             }
         }
         // get iterator over map entries

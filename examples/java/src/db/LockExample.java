@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db;
@@ -14,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Vector;
+import java.util.ArrayList;
 
 //
 // An example of a program using Lock and related classes.
@@ -91,7 +90,7 @@ class LockExample {
         boolean did_get = false;
         int lockid = 0;
         InputStreamReader in = new InputStreamReader(System.in);
-        Vector locks = new Vector();
+        ArrayList<Lock> locks = new ArrayList<>();
 
         //
         // Accept lock requests.
@@ -143,7 +142,7 @@ class LockExample {
                         System.out.println("Got lock: " + lock);
                     }
                     lockid = locks.size();
-                    locks.addElement(lock);
+                    locks.add(lock);
                 } else {
                     // Release a lock.
                     String objbuf;
@@ -158,7 +157,7 @@ class LockExample {
                         continue;
                     }
                     did_get = false;
-                    Lock lock = (Lock)locks.elementAt(lockid);
+                    Lock lock = locks.get(lockid);
                     dbenv.putLock(lock);
                 }
                 System.out.println("Lock #" + lockid + " " +
@@ -190,23 +189,26 @@ class LockExample {
         int maxlocks = 0;
 
         for (int i = 0; i < argv.length; ++i) {
-            if (argv[i].equals("-h")) {
-                if (++i >= argv.length)
+            switch (argv[i]) {
+                case "-h":
+                    if (++i >= argv.length)
+                        usage();
+                    home = new File(argv[i]);
+                    break;
+                case "-m":
+                    if (++i >= argv.length)
+                        usage();
+                    try {
+                        maxlocks = Integer.parseInt(argv[i]);
+                    } catch (NumberFormatException nfe) {
+                        usage();
+                    }   break;
+                case "-u":
+                    do_unlink = true;
+                    break;
+                default:
                     usage();
-                home = new File(argv[i]);
-            } else if (argv[i].equals("-m")) {
-                if (++i >= argv.length)
-                    usage();
-
-                try {
-                    maxlocks = Integer.parseInt(argv[i]);
-                } catch (NumberFormatException nfe) {
-                    usage();
-                }
-            } else if (argv[i].equals("-u")) {
-                do_unlink = true;
-            } else {
-                usage();
+                    break;
             }
         }
 

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_re_source()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_re_source()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_re_pad.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_re_source"></a>Db::set_re_source()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_re_source"></a>
+        
+        <span>Db::set_re_source()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -53,7 +59,10 @@ Db::set_re_source(char *source); </pre>
          underlying flat text database file that is read to initialize a
          transient record number index.  In the case of variable length
          records, the records are separated, as specified by 
-         <a class="xref" href="dbset_re_delim.html" title="Db::set_re_delim()">Db::set_re_delim()</a>.  For
+         <a class="xref" href="dbset_re_delim.html" title="Db::set_re_delim()">
+        
+        <span>Db::set_re_delim()</span>
+    </a>.  For
          example, standard UNIX byte stream files can be interpreted as a
          sequence of variable length records separated by &lt;newline&gt;
          characters.
@@ -61,8 +70,14 @@ Db::set_re_source(char *source); </pre>
       <p>
          In addition, when cached data would normally be written back to the
          underlying database file (for example, the 
-         <a class="xref" href="dbclose.html" title="Db::close()">Db::close()</a>  or 
-         <a class="xref" href="dbsync.html" title="Db::sync()">Db::sync()</a>  methods are called),
+         <a class="xref" href="dbclose.html" title="Db::close()">
+        
+        <span>Db::close()</span>
+    </a>  or 
+         <a class="xref" href="dbsync.html" title="Db::sync()">
+        
+        <span>Db::sync()</span>
+    </a>  methods are called),
          the in-memory copy of the database will be written back to the
          <span class="bold"><strong>source</strong></span> file.
     </p>
@@ -74,7 +89,10 @@ Db::set_re_source(char *source); </pre>
          or deleting records, the backing source file must be read in its
          entirety before more than a single process accesses the database, and
          only that process should specify the backing source file as part of
-         the <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  call.  See the 
+         the <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  call.  See the 
          <a class="link" href="dbset_flags.html#dbset_flags_DB_SNAPSHOT">DB_SNAPSHOT</a>  flag
          for more information.</strong></span>
     </p>
@@ -91,17 +109,29 @@ Db::set_re_source(char *source); </pre>
     </p>
       <p>
          The <span class="bold"><strong>source</strong></span> file must already exist
-         (but may be zero-length) when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  is called.
+         (but may be zero-length) when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  is called.
     </p>
       <p>
          It is not an error to specify a read-only <span class="bold"><strong>source</strong></span> file when creating a database, nor is it
          an error to modify the resulting database. However, any attempt to
          write the changes to the backing source file using either the 
-         <a class="xref" href="dbsync.html" title="Db::sync()">Db::sync()</a>  or 
-         <a class="xref" href="dbclose.html" title="Db::close()">Db::close()</a>  methods will fail,
+         <a class="xref" href="dbsync.html" title="Db::sync()">
+        
+        <span>Db::sync()</span>
+    </a>  or 
+         <a class="xref" href="dbclose.html" title="Db::close()">
+        
+        <span>Db::close()</span>
+    </a>  methods will fail,
          of course. Specify the 
          <a class="link" href="dbclose.html#dbclose_DB_NOSYNC">DB_NOSYNC</a>  flag to the
-         <a class="xref" href="dbclose.html" title="Db::close()">Db::close()</a>  method to
+         <a class="xref" href="dbclose.html" title="Db::close()">
+        
+        <span>Db::close()</span>
+    </a>  method to
          stop it from attempting to write the changes to the backing file;
          instead, they will be silently discarded.
     </p>
@@ -118,9 +148,15 @@ Db::set_re_source(char *source); </pre>
     </p>
       <p>
          The <code class="methodname">Db::set_re_source()</code> method may not be called after the 
-         <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called. If
+         <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called. If
          the database already exists when 
-         <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  is called, the
+         <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  is called, the
          information specified to <code class="methodname">Db::set_re_source()</code> must be the same as that
          historically used to create the database or corruption can occur.
     </p>
@@ -138,7 +174,7 @@ Db::set_re_source(char *source); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814748752"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176772116416"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -146,7 +182,7 @@ Db::set_re_source(char *source); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814747504"></a>source</h4>
+                <h4 class="title"><a id="idm140176772112688"></a>source</h4>
               </div>
             </div>
           </div>
@@ -165,7 +201,7 @@ Db::set_re_source(char *source); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814762928"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176772097024"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -183,12 +219,15 @@ Db::set_re_source(char *source); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703814703392"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176772068048"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -197,7 +236,7 @@ Db::set_re_source(char *source); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814766064"></a>Class</h3>
+              <h3 class="title"><a id="idm140176772065488"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -209,7 +248,7 @@ Db::set_re_source(char *source); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814730592"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176772096608"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -229,11 +268,17 @@ Db::set_re_source(char *source); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_slice_callback.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_re_pad() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_re_pad()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_slice_callback()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_slice_callback()</span>
+    </td>
         </tr>
       </table>
     </div>

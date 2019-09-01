@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1995, 1996
@@ -99,6 +99,7 @@ __txn_begin_pp(dbenv, parent, txnpp, flags)
 	ENV *env;
 	int rep_check, ret;
 
+	*txnpp = NULL;
 	env = dbenv->env;
 
 	ENV_REQUIRES_CONFIG(env, env->tx_handle, "txn_begin", DB_INIT_TXN);
@@ -128,6 +129,8 @@ __txn_begin_pp(dbenv, parent, txnpp, flags)
 	}
 
 	ENV_ENTER(env, ip);
+	if (parent != NULL)
+		parent->thread_info = ip;
 
 	/* Replication accounts for top-level transactions. */
 	rep_check = IS_ENV_REPLICATED(env) &&
@@ -248,16 +251,11 @@ __txn_begin(env, ip, parent, txnpp, flags)
 		F_SET(txn, TXN_READ_UNCOMMITTED);
 	if (LF_ISSET(DB_TXN_FAMILY))
 		F_SET(txn, TXN_FAMILY | TXN_INFAMILY | TXN_READONLY);
+	if (LF_ISSET(DB_TXN_DISPATCH))
+		F_SET(txn, TXN_DISPATCH);
 	if (LF_ISSET(DB_TXN_SNAPSHOT) || F_ISSET(dbenv, DB_ENV_TXN_SNAPSHOT) ||
-	    (parent != NULL && F_ISSET(parent, TXN_SNAPSHOT))) {
-		if (IS_REP_CLIENT(env)) {
-			__db_errx(env, DB_STR("4572",
-		"DB_TXN_SNAPSHOT may not be used on a replication client"));
-			ret = (EINVAL);
-			goto err;
-		} else
-			F_SET(txn, TXN_SNAPSHOT);
-	}
+	    (parent != NULL && F_ISSET(parent, TXN_SNAPSHOT)))
+		F_SET(txn, TXN_SNAPSHOT);
 	if (LF_ISSET(DB_IGNORE_LEASE))
 		F_SET(txn, TXN_IGNORE_LEASE);
 
@@ -373,7 +371,7 @@ __txn_begin_int(txn)
 
 	TXN_SYSTEM_LOCK(env);
 	DB_TEST_CRASH(env->test_abort, DB_TEST_EXC_MUTEX);
-	if (!F_ISSET(txn, TXN_COMPENSATE) && F_ISSET(region, TXN_IN_RECOVERY)) {
+	if (!F_ISSET(txn, TXN_DISPATCH) && F_ISSET(region, TXN_IN_RECOVERY)) {
 		ret = USR_ERR(env, EINVAL);
 		__db_errx(env, DB_STR("4524",
 		    "operation not permitted during recovery"));
@@ -639,6 +637,7 @@ __txn_commit_pp(txn, flags)
 
 	ENV_ENTER(env, ip);
 
+ 	txn->thread_info = ip;
 	if ((t_ret = __txn_commit(txn, flags)) != 0 && ret == 0)
 		ret = t_ret;
 	if (rep_check && (t_ret = __op_rep_exit(env)) != 0 && ret == 0)
@@ -1068,6 +1067,7 @@ __txn_abort_pp(txn)
 	    txn->parent == NULL && IS_REAL_TXN(txn);
 
 	ENV_ENTER(env, ip);
+ 	txn->thread_info = ip;
 	ret = __txn_abort(txn);
 	if (rep_check && (t_ret = __op_rep_exit(env)) != 0 && ret == 0)
 		ret = t_ret;
@@ -1257,6 +1257,7 @@ __txn_discard(txn, flags)
 	    txn->parent == NULL && IS_REAL_TXN(txn);
 
 	ENV_ENTER(env, ip);
+ 	txn->thread_info = ip;
 	ret = __txn_discard_int(txn, flags);
 	if (rep_check && (t_ret = __op_rep_exit(env)) != 0 && ret == 0)
 		ret = t_ret;
@@ -1570,21 +1571,11 @@ __txn_isvalid(txn, op)
 	txnop_t op;
 {
 	DB_TXNMGR *mgr;
-	DB_TXNREGION *region;
 	ENV *env;
 	TXN_DETAIL *td;
 
 	mgr = txn->mgrp;
 	env = mgr->env;
-	region = mgr->reginfo.primary;
-
-	/* Check for recovery. */
-	if (!F_ISSET(txn, TXN_COMPENSATE) &&
-	    F_ISSET(region, TXN_IN_RECOVERY)) {
-		__db_errx(env, DB_STR("4530",
-		    "operation not permitted during recovery"));
-		goto err;
-	}
 
 	/* Check for live cursors. */
 	if (txn->cursors != 0) {
@@ -1673,7 +1664,7 @@ err:	/*
 	 * handles are dead by definition when we return, and if you use
 	 * a cursor you forgot to close, we have no idea what will happen.
 	 */
-	return (__env_panic(env, EINVAL));
+	return (__env_panic(env, USR_ERR(env, EINVAL)));
 }
 
 /*
@@ -1953,6 +1944,8 @@ __txn_undo(txn)
 	 */
 	for (ptxn = txn->parent; ptxn != NULL && ptxn->parent != NULL;)
 		ptxn = ptxn->parent;
+	if (ptxn != NULL)
+		txn->thread_info = ptxn->thread_info;
 
 	if (ptxn != NULL && ptxn->txn_list != NULL)
 		txnlist = ptxn->txn_list;
@@ -2030,12 +2023,11 @@ __txn_activekids(env, rectype, txn)
 	 * On a child commit, we know that there are children (i.e., the
 	 * committing child at the least.  In that case, skip this check.
 	 */
-	if (F_ISSET(txn, TXN_COMPENSATE) || rectype == DB___txn_child)
+	if (F_ISSET(txn, TXN_DISPATCH) || rectype == DB___txn_child)
 		return (0);
 
 	if (TAILQ_FIRST(&txn->kids) != NULL) {
-		__db_errx(env, DB_STR("4538",
-		    "Child transaction is active"));
+		__db_errx(env, DB_STR("4538", "Child transaction is active"));
 		return (USR_ERR(env, EPERM));
 	}
 	return (0);

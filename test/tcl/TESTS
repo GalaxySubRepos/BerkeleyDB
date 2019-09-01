@@ -8,7 +8,8 @@ backup
 	Do all the of the following tests with and without 
 	the -c (checkpoint) option; and with and without the
 	transactional bulk loading optimization; and with
-	and without BLOB. Make sure that -c and -d (data_dir)
+	and without BLOB, with and without -deepcopy.
+	Make sure that -c and -d (data_dir)
 	are not allowed together; and backing up with BLOB
 	but without -log_blob is not allowed.  If slices are
 	enabled, run some of the tests with the -sliced
@@ -414,6 +415,13 @@ env030
 	4. Test that failchk returns RUNRECOVER when another process:
 	crashes while holding an exclusive latch, crashes while holding
 	a mutex, and crashes while performing failchk.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+env031
+	Test utility db_tuner.
+
+	Tests db_tuner with different situations about with/without off-page 
+	duplicate page and with/without overflow page.  
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 fail001
@@ -1903,15 +1911,6 @@ rep108
 	via internal init, recovery or by applying live log records.
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-rep109
-	Test that snapshot isolation cannot be used on HA clients.
-	Master creates a txn with DB_TXN_SNAPSHOT and succeeds.
-	Client gets an error when creating txn with DB_TXN_SNAPSHOT.
-	Master opens a cursor with DB_TXN_SNAPSHOT and succeeds.
-	Client gets and error when opening a cursor with DB_TXN_SNAPSHOT.
-
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 rep110
 	Test of internal initialization, nowait and child processes.
 	This tests a particular code path for handle_cnt management.
@@ -2002,12 +2001,26 @@ repmgr004
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+repmgr005
+	Test use of set_memory_init() with replication.
+
+	Tests the set_memory_init() object types that are used to
+	calculate the additional environment region memory needed
+	for replication:  DB_MEM_DATABASE, DB_MEM_DATABASE_LENGTH,
+	DB_MEM_EXTFILE_DATABASE, DB_MEM_REP_SITE.
+
+	Run for btree only because access method shouldn't matter.
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 repmgr007
 	Basic repmgr client shutdown/restart test.
 
 	Start an appointed master site and two clients. Shut down and
 	restart each client, processing transactions after each restart.
 	Verify all expected transactions are replicated.
+
+	Test flag -R of utility db_printlog.
 
 	Run for btree only because access method shouldn't matter.
 
@@ -2351,6 +2364,40 @@ repmgr046
 	The other tests include cases for blobs, subdatabases,
 	various duplicate options, and additional error cases.
 	Run for btree only because access method shouldn't matter.
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+repmgr047
+	Environment-level MVCC on a replication client.
+
+	Ensure that DB_MULTIVERSION creates the extra page copies
+	for MVCC and that DB_TXN_SNAPSHOT operates as expected on
+	a replication client.
+
+	The basic test ensures the expected operation visibility
+	with snapshot transactions.  There are also test cases
+	for cursor position, freezing/thawing, and to make sure
+	a client operates correctly when it gets the environment-
+	level DB_MULTIVERSION setting from the DB_CONFIG file.
+
+	Run for btree only because access method shouldn't matter.
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+repmgr048
+	Repmgr Poll/Epoll/Select Test.
+
+	Test if
+	a) EPOLL, POLL and SELECT work as expected.
+
+	Poll, epoll and select all do the same thing.(with difference
+	in implementation and performance). So to test if they are
+	working we create a group with three sites, with each site
+	employing a different method. Then we verify that we get to the
+	same expected end-state (which would have been reached had only
+	select() been employed on all sites).
+
+	b) Flags for ENABLE_EPOLL and DISABLE_EPOLL work as expected.
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -3755,6 +3802,9 @@ test114
 	Add back some entries, delete more entries (this time by
 	cursor), dump, compact, and do the before/after check again.
 
+	The input keys are made into overflow keys in the "overflow"
+	loop for raising coverage purpose.
+
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 test115
 	Test database compaction with user-specified btree sort.
@@ -3788,8 +3838,8 @@ test117
 
 	On each compaction, make sure we still have the same contents.
 
-	Unlike the other compaction tests, this one does not
-	use -freespace.
+	This is much like test112, with a large number of entries and a 
+	small page size to make the tree deep. It uses -freespace as well.
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 test119
@@ -4150,6 +4200,11 @@ test156
 	Test byte order conversions.
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+test157
+	Test the utility db_upgrade with all combinations of flags
+	except the flag -s.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 txn001
 	Begin, commit, abort testing.
 
@@ -4219,3 +4274,10 @@ txn014
 
 	Commit the child, verify that the parent can write again.
 	Check contents of database with a second child.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+txn015
+	Test the thread-switching problem with Go interface.[#26945]
+	Start a multi-thread test to perform cursor operations, 
+	transaction begin, transaction commit and transaction 
+	abort.

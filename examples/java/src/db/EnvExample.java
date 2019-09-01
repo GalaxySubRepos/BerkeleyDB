@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db;
@@ -113,16 +112,22 @@ public class EnvExample {
         File dataDir = new File("data");
 
         for (int i = 0; i < argv.length; ++i) {
-            if (argv[i].equals("-h")) {
-                if (++i >= argv.length)
+            switch (argv[i]) {
+                case "-h":
+                    if (++i >= argv.length)
+                        usage();
+                    home = new File(argv[i]);
+                    break;
+                case "-d":
+                    if (++i >= argv.length)
+                        usage();
+                    dataDir = new File(argv[i]);
+                    break;
+                case "-u":
                     usage();
-                home = new File(argv[i]);
-            } else if (argv[i].equals("-d")) {
-                if (++i >= argv.length)
-                    usage();
-                dataDir = new File(argv[i]);
-            } else if (argv[i].equals("-u")) {
-                usage();
+                    break;
+                default:
+                    break;
             }
         }
 

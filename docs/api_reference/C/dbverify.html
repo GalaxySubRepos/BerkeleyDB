@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;verify()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;verify()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbupgrade.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbverify"></a>DB-&gt;verify()</h2>
+            <h2 class="title" style="clear: both"><a id="dbverify"></a>
+        <span>DB-&gt;verify()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -58,7 +64,10 @@ DB-&gt;verify(DB *db, const char *file,
     </p>
       <p>
              The <code class="methodname">DB-&gt;verify()</code> method may not be called after the 
-             <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method is called.
+             <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>  method is called.
     </p>
       <p>
          The <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a>  handle may not be
@@ -94,7 +103,7 @@ DB-&gt;verify(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235559312"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488061152"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -102,7 +111,7 @@ DB-&gt;verify(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235529040"></a>file</h4>
+                <h4 class="title"><a id="idm140113487977632"></a>file</h4>
               </div>
             </div>
           </div>
@@ -115,7 +124,7 @@ DB-&gt;verify(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235602800"></a>database</h4>
+                <h4 class="title"><a id="idm140113487994704"></a>database</h4>
               </div>
             </div>
           </div>
@@ -134,7 +143,7 @@ DB-&gt;verify(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235643168"></a>outfile</h4>
+                <h4 class="title"><a id="idm140113488007120"></a>outfile</h4>
               </div>
             </div>
           </div>
@@ -147,7 +156,7 @@ DB-&gt;verify(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235562592"></a>flags</h4>
+                <h4 class="title"><a id="idm140113488057168"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -267,7 +276,7 @@ DB-&gt;verify(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235503392"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113487951392"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -278,7 +287,10 @@ DB-&gt;verify(DB *db, const char *file,
                     </p>
         <p>
                             <code class="methodname">DB-&gt;verify()</code> is affected by any database directory specified using the
-                            <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">DB_ENV-&gt;add_data_dir()</a>
+                            <a class="xref" href="envadd_data_dir.html" title="DB_ENV-&gt;add_data_dir()">
+        <span>DB_ENV-&gt;add_data_dir()</span>
+        
+    </a>
                             method, or by setting the "add_data_dir" string
                             in the environment's <a href="../../programmer_reference/env_db_config.html#env_db_config.DB_CONFIG" class="olink">DB_CONFIG</a> file.
                     </p>
@@ -287,7 +299,7 @@ DB-&gt;verify(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235495104"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113488003712"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -303,12 +315,15 @@ DB-&gt;verify(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235523280"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113487938064"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -316,7 +331,7 @@ DB-&gt;verify(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235478240"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140113487959872"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -329,7 +344,7 @@ DB-&gt;verify(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235547712"></a>Class</h3>
+              <h3 class="title"><a id="idm140113487996304"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -341,7 +356,7 @@ DB-&gt;verify(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235522624"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113487954048"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -361,11 +376,17 @@ DB-&gt;verify(DB *db, const char *file,
           <td width="40%" align="right"> <a accesskey="n" href="db_heap_rid.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;upgrade() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;upgrade()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_HEAP_RID</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_HEAP_RID</span>
+        
+    </td>
         </tr>
       </table>
     </div>

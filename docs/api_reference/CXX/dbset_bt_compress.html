@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_bt_compress()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_bt_compress()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_bt_compare.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_bt_compress"></a>Db::set_bt_compress()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_bt_compress"></a>
+        
+        <span>Db::set_bt_compress()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -78,8 +84,14 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
    </p>
       <p>
         The <code class="methodname">Db::set_bt_compress()</code> method may not be called after the 
-        <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called. If
-        the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+        <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called. If
+        the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
         is called, the information specified to <code class="methodname">Db::set_bt_compress()</code> 
         must be the same as
         that historically used to create the database or corruption can occur.
@@ -98,7 +110,7 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703826232160"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176784639072"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -106,7 +118,7 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703826245808"></a>bt_compress_fcn</h4>
+                <h4 class="title"><a id="idm140176784646944"></a>bt_compress_fcn</h4>
               </div>
             </div>
           </div>
@@ -206,7 +218,7 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703827986208"></a>bt_decompress_fcn</h4>
+                <h4 class="title"><a id="idm140176786591808"></a>bt_decompress_fcn</h4>
               </div>
             </div>
           </div>
@@ -319,7 +331,7 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703825966688"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176784564464"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -337,12 +349,15 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703830073904"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176772797728"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -351,7 +366,7 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703827060224"></a>Class</h3>
+              <h3 class="title"><a id="idm140176785601456"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -363,7 +378,7 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703830188752"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176773346960"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -383,11 +398,17 @@ Db::set_bt_compress(bt_compress_fcn_type bt_compress_fcn,
           <td width="40%" align="right"> <a accesskey="n" href="dbset_bt_minkey.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_bt_compare() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_bt_compare()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_bt_minkey()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_bt_minkey()</span>
+    </td>
         </tr>
       </table>
     </div>

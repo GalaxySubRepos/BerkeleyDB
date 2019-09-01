@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -53,6 +53,10 @@ proc repmgr038_sub { method niter tnum largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
 
 	# Turn off 2SITE_STRICT at all sites to make sure we accurately test 
 	# that a view won't become master when there is only one other

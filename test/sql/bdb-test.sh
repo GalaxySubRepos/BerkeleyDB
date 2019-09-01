@@ -3,12 +3,15 @@
 TOP=`dirname $0`
 TOP=`cd $TOP && /bin/pwd`
 SQLITE=$TOP/../../lang/sql/sqlite
+OS_NAME=`uname -s`
 
 # Excluded Tests
 #
 # thread1.test - Reace condition can lead to hangs.
 #
 BDB_TESTS_PASSING="\
+affinity2.test
+affinity3.test
 aggerror.test
 alter.test
 alter3.test
@@ -21,12 +24,15 @@ analyze5.test
 analyze6.test
 analyze7.test
 analyzeC.test
+analyzer1.test
 async.test
 async2.test
 async3.test
 async4.test
 async5.test
 attach4.test
+autoanalyze1.test
+autovacuum.test
 auth.test
 auth2.test
 auth3.test
@@ -34,9 +40,7 @@ autoinc.test
 autoindex2.test
 autoindex3.test
 autoindex4.test
-autovacuum.test
 autovacuum_ioerr2.test
-backup.test
 backup2.test
 backup_malloc.test
 badutf.test
@@ -44,7 +48,6 @@ badutf2.test
 bdb_deadlock.test
 bdb_dupset.test
 bdb_logsize.test
-bdb_multi_proc.test
 bdb_exclusive.test
 bdb_inmem_memleak.test
 bdb_mvcc.test
@@ -53,6 +56,8 @@ bdb_pragmas.test
 bdb_rdonly.test
 bdb_replication.test
 bdb_sequence.test
+bdb_sqlthreadtest
+bestindex1.test
 between.test
 bigrow.test
 bigsort.test
@@ -81,17 +86,22 @@ collate7.test
 collate8.test
 collate9.test
 collateA.test
+collateB.test
 colmeta.test
 colname.test
 cost.test
 count.test
 createtab.test
 cse.test
+csv01.test
+cursorhint2.test
+cursorhint.test
 date.test
 default.test
 delete.test
 delete2.test
 delete3.test
+delete4.test
 descidx1.test
 descidx2.test
 descidx3.test
@@ -113,6 +123,7 @@ enc.test
 enc3.test
 enc4.test
 eqp.test
+eval.test
 exec.test
 exists.test
 expr.test
@@ -126,8 +137,13 @@ func2.test
 func3.test
 fuzz2.test
 fuzzer1.test
+fuzzer2.test
 fuzz-oss1.test
+gcfault.test
+hidden.test
 hook.test
+hook2.test
+ieee754.test
 icu.test
 in.test
 in2.test
@@ -135,6 +151,7 @@ in3.test
 in4.test
 incrblob.test
 incrblob2.test
+incrblob3.test
 incrblob4.test
 incrblob_err.test
 incrvacuum.test
@@ -144,11 +161,13 @@ index.test
 index2.test
 index3.test
 indexedby.test
+indexexpr1.test
 insert.test
 insert2.test
 insert3.test
 insert4.test
 insert5.test
+instrfault.test
 intarray.test
 interrupt.test
 intpkey.test
@@ -158,6 +177,10 @@ join3.test
 join4.test
 join5.test
 join6.test
+json101.test
+json102.test
+json103.test
+json104.test
 keyword1.test
 lastinsert.test
 laststmtchanges.test
@@ -165,6 +188,7 @@ like.test
 like2.test
 like3.test
 limit.test
+limit2.test
 loadext.test
 loadext2.test
 lookaside.test
@@ -182,6 +206,7 @@ mallocG.test
 mallocH.test
 mallocJ.test
 mallocL.test
+mallocM.test
 manydb.test
 mem5.test
 memdb.test
@@ -201,25 +226,40 @@ notify1.test
 notify2.test
 notnull.test
 null.test
+numindex1.test
+offset1.test
 openv2.test
 orderby6.test
 orderby8.test
+orderby9.test
 ovfl.test
 pagesize.test
+parser1.test
 printf.test
 ptrchng.test
 quote.test
 randexpr1.test
+rbu.test
 rdonly.test
 reindex.test
 rollback.test
 rowhash.test
 rowid.test
+rowvalue.test
+rowvalue2.test
+rowvalue3.test
+rowvalue4.test
+rowvalue5.test
+rowvalue6.test
+rowvalue7.test
+rowvalue8.test
+rowvalue9.test
+rowvaluefault.test
 rtree.test
 savepoint2.test
-savepoint3.test
 savepoint5.test
 savepoint7.test
+savepointfault.test
 schema.test
 schema2.test
 schema4.test
@@ -240,6 +280,7 @@ selectC.test
 selectF.test
 selectG.test
 server1.test
+session.test
 shared2.test
 shared3.test
 shared4.test
@@ -247,17 +288,25 @@ shared6.test
 shared7.test
 sharedB.test
 sidedelete.test
+snapshot.test
+snapshot2.test
+snapshot_fault.test
 sort.test
 sort2.test
 sort3.test
 sort4.test
+sqldiff1.test
+sqllog.test
 sqllimits1.test
 subquery.test
 subselect.test
 substr.test
+subtype1.test
+tabfunc01.test
 table.test
 tempdb.test
 temptable.test
+temptable3.test
 temptrigger.test
 thread001.test
 thread003.test
@@ -285,6 +334,7 @@ tkt-f7b4edec.test
 tokenize.test
 trace.test
 trace2.test
+trace3.test
 trans.test
 trans2.test
 trans3.test
@@ -301,11 +351,15 @@ triggerA.test
 triggerB.test
 triggerC.test
 triggerD.test
+triggerE.test
+triggerF.test
+triggerG.test
 types.test
 types2.test
 types3.test
 unique.test
 unique2.test
+unixexcl.test
 unordered.test
 update.test
 userauth01.test
@@ -313,6 +367,7 @@ utf16align.test
 vacuum.test
 vacuum2.test
 vacuum4.test
+vacuummem.test
 view.test
 vtab1.test
 vtab2.test
@@ -338,15 +393,16 @@ where5.test
 where6.test
 where7.test
 where8.test
-where8m.test
 where9.test
 whereA.test
 whereB.test
 whereC.test
 whereI.test
 wherelimit.test
+wherefault.test
 with1.test
 with2.test
+with3.test
 without_rowid6.test
 zeroblob.test"
 
@@ -358,7 +414,6 @@ alter.test
 alter3.test
 alter4.test
 analyze.test
-analyze4.test
 analyze7.test
 async.test
 attach4.test
@@ -494,7 +549,6 @@ rowhash.test
 rowid.test
 rtree.test
 savepoint2.test
-savepoint3.test
 savepoint5.test
 savepoint7.test
 schema.test
@@ -608,13 +662,10 @@ wherelimit.test
 zeroblob.test"
 
 BDB_TESTS_ERRORS="\
-eval.test
-incrblob3.test
-progress.test
-tkt-5d863f876e.test
-unixexcl.test"
+progress.test"
 
-BDB_TESTS_HANGS=""
+BDB_TESTS_HANGS="\
+backup.test"
 
 BDB_TESTS_ALL="$BDB_TESTS_PASSING $BDB_TESTS_ERRORS $BDB_TESTS_HANGS"
 
@@ -629,6 +680,7 @@ fts3corrupt2.test
 fts3defer.test
 fts3malloc.test
 fts3matchinfo.test
+fts3offsets.test
 fts3rnd.test"
 
 BDB_RTREE_TESTS="\
@@ -638,6 +690,9 @@ rtree3.test
 rtree4.test
 rtree5.test
 rtree6.test"
+
+BDB_REPLICATION_TESTS="\
+bdb_replication.test"
 
 exe_suffix=""
 cygwin=`uname | grep -i "cygwin"`
@@ -675,6 +730,7 @@ fts3)	    TEST_CASES="$BDB_FTS3_TESTS"
 rtree)	    TEST_CASES="$BDB_RTREE_TESTS"
 	    TIMEOUT=7200
 	    ;;
+replication) TEST_CASES="$BDB_REPLICATION_TESTS";;
 *)       TEST_CASES="$BDB_TESTS_ALL";;
 esac
 
@@ -705,7 +761,21 @@ while [ $PROCESS -lt $NPROCESS ] ; do
 			export BDB_BLOB_SETTING=2
 		fi
 
-		alarm $TIMEOUT $TESTFIXTURE $tpath > $LOG 2>&1
+		# bdb_sqlthreadtest is C, not tcl. Look for it in ..
+		if [ "$t" = "bdb_sqlthreadtest" ]; then
+			case "$OS_NAME" in
+				Win*|win*|Cygwin*|CYGWIN*|cygwin*)
+				alarm $TIMEOUT ./$t > $LOG 2>&1
+				;;
+				*)
+				(cd .. && make $t)
+				alarm $TIMEOUT ../$t > $LOG 2>&1
+				;;
+			esac
+			
+		else 
+			alarm $TIMEOUT $TESTFIXTURE $tpath > $LOG 2>&1
+		fi
 
 		# Detect test result
 		result=`grep "errors out of" $LOG || echo "failed"`

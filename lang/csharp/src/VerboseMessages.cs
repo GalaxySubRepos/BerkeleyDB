@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -55,6 +55,20 @@ namespace BerkeleyDB {
         /// </summary>
         public bool RepMgrConnectionFailure;
         /// <summary>
+        /// Display all information about Replication Manager SSL support.
+        /// </summary>
+        public bool RepMgrSSLAll;
+        /// <summary>
+        /// Display detailed information about Replication Manager
+        /// connections(accept(), connect() and shutdown() attempts).
+        /// </summary>
+        public bool RepMgrSSLConnection;
+        /// <summary>
+        /// Display detailed information about Replication Manager SSL
+        /// reads and writes.
+        /// </summary>
+        public bool RepMgrSSLIO;
+        /// <summary>
         /// Display detailed information about general Replication Manager
         /// processing. 
         /// </summary>
@@ -107,6 +121,9 @@ namespace BerkeleyDB {
                 ret |= Replication ? DbConstants.DB_VERB_REPLICATION : 0;
                 ret |= RepMgrConnectionFailure ? DbConstants.DB_VERB_REPMGR_CONNFAIL : 0;
                 ret |= RepMgrMisc ? DbConstants.DB_VERB_REPMGR_MISC : 0;
+                ret |= RepMgrSSLAll ? DbConstants.DB_VERB_REPMGR_SSL_ALL : 0;
+                ret |= RepMgrSSLConnection ? DbConstants.DB_VERB_REPMGR_SSL_CONN : 0;
+                ret |= RepMgrSSLIO ? DbConstants.DB_VERB_REPMGR_SSL_IO : 0;
                 ret |= ReplicationElection ? DbConstants.DB_VERB_REP_ELECT : 0;
                 ret |= ReplicationLease ? DbConstants.DB_VERB_REP_LEASE : 0;
                 ret |= ReplicationMisc ? DbConstants.DB_VERB_REP_MISC : 0;
@@ -130,6 +147,9 @@ namespace BerkeleyDB {
                 ret |= Replication ? 0 : DbConstants.DB_VERB_REPLICATION;
                 ret |= RepMgrConnectionFailure ? 0 : DbConstants.DB_VERB_REPMGR_CONNFAIL;
                 ret |= RepMgrMisc ? 0 : DbConstants.DB_VERB_REPMGR_MISC;
+                ret |= RepMgrSSLAll ? 0 : DbConstants.DB_VERB_REPMGR_SSL_ALL;
+                ret |= RepMgrSSLConnection ? 0 : DbConstants.DB_VERB_REPMGR_SSL_CONN;
+                ret |= RepMgrSSLIO ? 0 : DbConstants.DB_VERB_REPMGR_SSL_IO;
                 ret |= ReplicationElection ? 0 : DbConstants.DB_VERB_REP_ELECT;
                 ret |= ReplicationLease ? 0 : DbConstants.DB_VERB_REP_LEASE;
                 ret |= ReplicationMisc ? 0 : DbConstants.DB_VERB_REP_MISC;
@@ -154,6 +174,9 @@ namespace BerkeleyDB {
             ret.Replication = ((flags & DbConstants.DB_VERB_REPLICATION) != 0);
             ret.RepMgrConnectionFailure = ((flags & DbConstants.DB_VERB_REPMGR_CONNFAIL) != 0);
             ret.RepMgrMisc = ((flags & DbConstants.DB_VERB_REPMGR_MISC) != 0);
+            ret.RepMgrSSLAll = ((flags & DbConstants.DB_VERB_REPMGR_SSL_ALL) != 0);
+            ret.RepMgrSSLConnection = ((flags & DbConstants.DB_VERB_REPMGR_SSL_CONN) != 0);
+            ret.RepMgrSSLIO = ((flags & DbConstants.DB_VERB_REPMGR_SSL_IO) != 0);
             ret.ReplicationElection = ((flags & DbConstants.DB_VERB_REP_ELECT) != 0);
             ret.ReplicationLease = ((flags & DbConstants.DB_VERB_REP_LEASE) != 0);
             ret.ReplicationMisc = ((flags & DbConstants.DB_VERB_REP_MISC) != 0);

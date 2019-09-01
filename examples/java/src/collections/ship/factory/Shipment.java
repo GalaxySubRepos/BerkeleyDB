@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.factory;
@@ -37,7 +36,7 @@ public class Shipment implements Serializable, MarshalledTupleKeyEntity {
 
     private transient String partNumber;
     private transient String supplierNumber;
-    private int quantity;
+    private final int quantity;
 
     public Shipment(String partNumber, String supplierNumber, int quantity) {
 
@@ -61,6 +60,7 @@ public class Shipment implements Serializable, MarshalledTupleKeyEntity {
         return quantity;
     }
 
+    @Override
     public String toString() {
 
         return "[Shipment: part=" + partNumber +
@@ -70,31 +70,44 @@ public class Shipment implements Serializable, MarshalledTupleKeyEntity {
 
     // --- MarshalledTupleKeyEntity implementation ---
 
+    @Override
     public void marshalPrimaryKey(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.partNumber);
         keyOutput.writeString(this.supplierNumber);
     }
 
+    @Override
     public void unmarshalPrimaryKey(TupleInput keyInput) {
 
         this.partNumber = keyInput.readString();
         this.supplierNumber = keyInput.readString();
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean marshalSecondaryKey(String keyName, TupleOutput keyOutput) {
 
-        if (keyName.equals(PART_KEY)) {
-            keyOutput.writeString(this.partNumber);
-            return true;
-        } else if (keyName.equals(SUPPLIER_KEY)) {
-            keyOutput.writeString(this.supplierNumber);
-            return true;
-        } else {
-            throw new UnsupportedOperationException(keyName);
+        switch (keyName) {
+            case PART_KEY:
+                keyOutput.writeString(this.partNumber);
+                return true;
+            case SUPPLIER_KEY:
+                keyOutput.writeString(this.supplierNumber);
+                return true;
+            default:
+                throw new UnsupportedOperationException(keyName);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean nullifyForeignKey(String keyName) {
 
         throw new UnsupportedOperationException(keyName);

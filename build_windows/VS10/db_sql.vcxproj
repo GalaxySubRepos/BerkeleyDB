@@ -93,63 +93,63 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;SQLITE_DEBUG;SQLITE_MEMDEBUG;SQLITE_API=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalOptions>/FIXED:NO %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libdb62d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;SQLITE_DEBUG;SQLITE_MEMDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;SQLITE_API=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb62.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;SQLITE_DEBUG;SQLITE_MEMDEBUG;SQLITE_API=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalOptions>/FIXED:NO %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>libdb62d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;SQLITE_DEBUG;SQLITE_MEMDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;SQLITE_API=__declspec(dllexport);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb62.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/rtree;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../lang/sql/generated;../../lang/sql/adapter;../../lang/sql/sqlite/src;../../lang/sql/sqlite/ext/fts3;../../lang/sql/sqlite/ext/fts5;../../lang/sql/sqlite/ext/rtree;../../lang/sql/sqlite/ext/icu;../../lang/sql/sqlite/ext/session;../../lang/sql/sqlite/ext/rbu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SQLITE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;SQLITE_CORE;SQLITE_ENABLE_COLUMN_METADATA;SQLITE_ENABLE_FTS3;SQLITE_ENABLE_LOAD_EXTENSION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -167,10 +167,11 @@
     <ClCompile Include="..\..\lang\sql\sqlite\src\complete.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\ctime.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\date.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\dbstat.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\db_encrypt.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\db_pragma.c"/>
-    <ClCompile Include="..\..\lang\sql\adapter\db_shell.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\db_sequence.c"/>
+    <ClCompile Include="..\..\lang\sql\adapter\db_shell.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\delete.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\expr.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\fault.c"/>
@@ -182,18 +183,18 @@
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_icu.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_porter.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_snippet.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_term.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenizer.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenizer1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenize_vtab.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_tokenizer.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_unicode.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_unicode2.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\fts3\fts3_write.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\func.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\global.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\hash.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\icu\icu.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\insert.c"/>
-    <ClCompile Include="..\..\lang\sql\sqlite\src\journal.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\misc\json1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\legacy.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\loadext.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\main.c"/>
@@ -201,6 +202,8 @@
     <ClCompile Include="..\..\lang\sql\sqlite\src\mem0.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\mem1.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\mem2.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\mem3.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\mem5.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\memjournal.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\mutex.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\mutex_noop.c"/>
@@ -220,11 +223,14 @@
     <ClCompile Include="..\..\lang\sql\sqlite\src\resolve.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\rowset.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\ext\rtree\rtree.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\session\sqlite3session.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\select.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\ext\rbu\sqlite3rbu.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\status.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\table.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\threads.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\tokenize.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\treeview.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\trigger.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\update.c"/>
     <ClCompile Include="..\..\lang\sql\adapter\userauth.c"/>
@@ -242,6 +248,8 @@
     <ClCompile Include="..\..\lang\sql\adapter\wal.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\walker.c"/>
     <ClCompile Include="..\..\lang\sql\sqlite\src\where.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\wherecode.c"/>
+    <ClCompile Include="..\..\lang\sql\sqlite\src\whereexpr.c"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr111
 # TEST Multi-process repmgr with env open before set local site.
@@ -31,6 +31,7 @@ proc repmgr111 { } {
 	fconfigure $master -buffering line
 	puts $master "home $masterdir"
 	make_dbconfig $masterdir {{rep_set_config db_repmgr_conf_2site_strict off}}
+	setup_repmgr_ssl $masterdir
 	puts $master "output $testdir/m1output"
 	puts $master "open_env"
 	puts $master "local $hoststr $master_port"
@@ -43,6 +44,7 @@ proc repmgr111 { } {
 	puts $client "home $clientdir"
 	puts $client "local $hoststr $client_port"
 	make_dbconfig $clientdir {{rep_set_config db_repmgr_conf_2site_strict off}}
+	setup_repmgr_ssl $clientdir
 	puts $client "output $testdir/coutput"
 	puts $client "open_env"
 	puts $client "remote $hoststr $master_port"

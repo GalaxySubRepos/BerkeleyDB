@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -21,9 +21,10 @@
 #define	SLOT_LEN	25				/* Slot entry length */
 
 #define	REGISTRY_LOCK(env, pos, nowait)					\
-	__os_fdlock(env, (env)->dbenv->registry, (off_t)(pos), 1, nowait)
+	__os_fdlock(env, (env)->dbenv->registry, (off_t)(pos),		\
+	    DB_LOCK_WRITE, nowait)
 #define	REGISTRY_UNLOCK(env, pos)					\
-	__os_fdlock(env, (env)->dbenv->registry, (off_t)(pos), 0, 0)
+	__os_fdlock(env, (env)->dbenv->registry, (off_t)(pos), DB_LOCK_NG, 0)
 #define	REGISTRY_EXCL_LOCK(env, nowait)					\
 	REGISTRY_LOCK(env, 1, nowait)
 #define	REGISTRY_EXCL_UNLOCK(env)					\
@@ -169,22 +170,7 @@ __envreg_register(env, need_recoveryp, flags)
 		__db_msg(env, DB_STR_A("1524",
 		    "%lu: register environment", "%lu"), (u_long)pid);
 
-	/* Build the path name and open the registry file. */
-	if ((ret = __db_appname(env,
-	    DB_APP_NONE, REGISTER_FILE, NULL, &pp)) != 0)
-		goto err;
-	if ((ret = __os_open(env, pp, 0,
-	    DB_OSO_CREATE, DB_MODE_660, &dbenv->registry)) != 0)
-		goto err;
-
-	/*
-	 * Wait for an exclusive lock on the file.
-	 *
-	 * !!!
-	 * We're locking bytes that don't yet exist, but that's OK as far as
-	 * I know.
-	 */
-	if ((ret = REGISTRY_EXCL_LOCK(env, 0)) != 0)
+	if ((ret = __envreg_registry_open(env, &pp, DB_OSO_CREATE)) != 0)
 		goto err;
 
 	/*
@@ -220,9 +206,7 @@ err:
 		 * !!!
 		 * Closing the file handle must release all of our locks.
 		 */
-		if (dbenv->registry != NULL)
-			(void)__os_closehandle(env, dbenv->registry);
-		dbenv->registry = NULL;
+		(void)__envreg_registry_close(env);
 	}
 	if (pp != NULL)
 		__os_free(env, pp);
@@ -258,13 +242,13 @@ __envreg_add(env, need_recoveryp, flags)
 	COMPQUIET(p, NULL);
 	ip = NULL;
 
-  	pid = env->pid_cache;
- 	snprintf(my_slot, sizeof(my_slot),
- 	    SLOT_FMT, (u_long)pid, (u_long)__clock_get_start());
+	pid = env->pid_cache;
+	snprintf(my_slot, sizeof(my_slot),
+	    SLOT_FMT, (u_long)pid, (u_long)__clock_get_start());
 
 	if (FLD_ISSET(dbenv->verbose, DB_VERB_REGISTER))
 		__db_msg(env, DB_STR_A("1526",
- 		    "adding self to registry: \"%s\"", "%s"), my_slot);
+		    "adding self to registry: \"%s\"", "%s"), my_slot);
 
 #if DB_ENVREG_KILL_ALL
 	if (0) {
@@ -359,11 +343,11 @@ kill_all:	/*
 	}
 
 	/* Check for a panic; if so there's no need to call failchk. */
-	if (__env_attach(env, NULL, 0, 0) != 0)
+	if ((t_ret = __env_attach(env, NULL, 0, 0)) != 0)
 		goto sig_proc;
 	infop = env->reginfo;
 	renv = infop->primary;
-	*need_recoveryp = renv->panic != 0;
+	*need_recoveryp = renv->envid != env->envid;
 	(void)__env_detach(env, 0);
 	if (*need_recoveryp)
 		return (0);
@@ -385,9 +369,9 @@ kill_all:	/*
 				__db_msg(env,
 				    "%lu: performing failchk", (u_long)pid);
 
-  			if (LF_ISSET(DB_FAILCHK_ISALIVE) && (ret =
- 			    __envreg_create_active_pid(env, my_slot)) != 0)
-  				goto sig_proc;
+			if (LF_ISSET(DB_FAILCHK_ISALIVE) && (ret =
+			    __envreg_create_active_pid(env, my_slot)) != 0)
+				goto sig_proc;
 
 			/*
 			 * The environment will already exist, so we do not
@@ -454,7 +438,7 @@ sig_proc:
 			 * mechanism in the code that everything looks for.
 			 */
 			renv->reg_panic = 1;
-			renv->panic = 1;
+			renv->envid = ENVID_PANIC;
 			(void)__env_detach(env, 0);
 		}
 
@@ -526,9 +510,9 @@ add:	if ((ret = __os_seek(env, dbenv->registry, 0, 0, 0)) != 0)
 			    (ret = __os_write(env,
 			    dbenv->registry, my_slot, SLOT_LEN, &nw)) != 0)
 				return (ret);
-  			/* Add the entry for this process. */
- 			if ((ret = __envreg_add_active_pid(env, my_slot)) != 0)
-  				return (ret);
+			/* Add the entry for this process. */
+			if ((ret = __envreg_add_active_pid(env, my_slot)) != 0)
+				return (ret);
 			dbenv->registry_off = (u_int32_t)pos;
 			break;
 		}

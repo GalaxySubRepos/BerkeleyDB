@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -47,6 +47,10 @@ global rep_verbose
 set rep_verbose 0
 global verbose_type
 set verbose_type "rep"
+global ssl_test_enabled
+if { [info exists ssl_test_enabled] == 0 } {
+set ssl_test_enabled 0
+}
 
 # To run a replication test with verbose messages, type
 # 'run_verbose' and then the usual test command string enclosed
@@ -106,6 +110,163 @@ proc run_verbose_repmgr_misc { commandstring } {
 	global verbose_type
 	set verbose_type "repmgr_misc"
 	run_verb $commandstring
+}
+
+proc run_verbose_repmgr_ssl { commandstring } {
+	global verbose_type
+	set verbose_type "repmgr_ssl_all"
+	run_verb $commandstring
+}
+
+proc run_verbose_repmgr_ssl_conn { commandstring } {
+	global verbose_type
+	set verbose_type "repmgr_ssl_conn"
+	run_verb $commandstring
+}
+
+proc run_verbose_repmgr_ssl_io { commandstring } {
+	global verbose_type
+	set verbose_type "repmgr_ssl_io"
+	run_verb $commandstring
+}
+
+# Generate self signed SSL certificates for Repmgr-SSL testing.
+proc generate_ssl_certs {cert_dir PK_PASS} {
+
+	global is_windows_test
+	global is_linux_test
+
+	if { $is_windows_test == 1 || $is_linux_test == 1 } {
+
+		# if this already exist dont make it all over again.
+		if {[file isdirectory $cert_dir]} {
+			return
+		} 
+
+		env_cleanup $cert_dir
+		file mkdir $cert_dir
+
+		# Generate the Private key for CA(Certificate Authority).
+		if {[catch {exec openssl genrsa -passout pass:$PK_PASS -des3 \
+			-out $cert_dir/rootCA.key 2048} results options]} {}
+
+		# Generate the Self signed Certificate for the CA.
+		if {[catch {exec openssl req -x509 -new -nodes -key \
+			$cert_dir/rootCA.key -text -sha256 -days 1024 \
+			-out $cert_dir/rootCA.crt -passin pass:$PK_PASS \
+			-subj   "/C=US/ST=New York/L=Brooklyn/O=Example \
+			Brooklyn Company/CN=server"} results options]} {}
+
+		# Generate the private key for the replication nodes. We are
+		# using the same private key for all nodes. In practice
+		# private key and certificate for each node would be
+		# different.
+		if {[catch {exec openssl genrsa -passout pass:$PK_PASS \
+			-aes256 -out $cert_dir/repNode.key 2048} results \
+			options]} {}
+
+		# Generate the CSR(certificate signing request) for the repnode.
+		if {[catch {exec openssl req -new -key $cert_dir/repNode.key \
+			-out $cert_dir/repNode.csr -passin pass:$PK_PASS \
+			-subj "/C=US/ST=New York/L=Brooklyn/O=Example \
+			Brooklyn Company/CN=repnode"} results options]} {}
+
+		# Generate the signed certificate for the repnode
+		# (signed using private key of CA).
+		if {[catch {exec openssl x509 -req -in $cert_dir/repNode.csr \
+			-CA $cert_dir/rootCA.crt -CAkey $cert_dir/rootCA.key \
+			-text -CAcreateserial -text -out $cert_dir/repNode.crt \
+			-days 500 -passin pass:$PK_PASS} results options]} {}
+
+		# following would verify the repnode certificate against the
+		# CA certificate.
+		if { $is_linux_test == 1 } {
+			if {[catch {exec openssl verify -CAfile \
+				$cert_dir/rootCA.crt $cert_dir/repNode.crt | \
+				grep OK | wc -l} results options] == 0} {
+				if {"1" ne $results} {
+					puts "Certification creation for SSL \
+						Testing Failed."
+				}
+			}
+		}
+	}
+}
+
+# Password callback for setting up tcl SSL connections
+proc ::tcl_tls_get_cert_pass {} {
+	return "someRandomPass"
+}
+
+# TLS init params
+proc tcl_tls_setup_string {} {
+	return "-cafile BDBTestSSLCertDir/rootCA.crt \
+		-certfile BDBTestSSLCertDir/repNode.crt \
+		-keyfile BDBTestSSLCertDir/repNode.key \
+		-password ::get_cert_pass -require 1 -tls1 1"
+}
+
+# Setup DB_CONFIG with SSL_config values for Repmgr SSL testing.
+proc setup_repmgr_ssl { dir } {	
+	global ssl_test_enabled
+
+if { $ssl_test_enabled == 1 } {
+ puts "Turning SSL testing ON."
+} else {
+ puts "SSL testing is OFF"
+}
+	set f [open "$dir/DB_CONFIG" "a"]
+
+	if { $ssl_test_enabled != 1 } {
+		# Disable the SSL tests by setting DB_REPMGR_CONF_DISABLE_SSL flag.
+		puts $f "rep_set_config db_repmgr_conf_disable_ssl"
+
+		close $f
+		return
+	}
+	
+	set cert_dir BDBTestSSLCertDir
+	set PK_PASS someRandomPass
+
+	# Create the certs.
+	generate_ssl_certs $cert_dir $PK_PASS
+
+	# Flush values to the DB_CONFIG file.
+	puts $f "repmgr_set_ssl_config DB_REPMGR_SSL_CA_CERT $cert_dir/rootCA.crt"
+	#puts $f "rep_set_ssl_ca_dir DB_REPMGR_SSL_CA_DIR "
+	puts $f "repmgr_set_ssl_config db_repmgr_ssl_repnode_cert $cert_dir/repNode.crt" 
+	puts $f "repmgr_set_ssl_config db_repmgr_ssl_repnode_private_key $cert_dir/repNode.key" 
+	puts $f "repmgr_set_ssl_config db_repmgr_ssl_repnode_key_passwd $PK_PASS"
+	puts $f "repmgr_set_ssl_config db_repmgr_ssl_verify_depth 6"
+	
+	close $f
+}
+
+# 'setup_repmgr_ssl' would not work if a test regenerates/overwrites their
+# DB_CONFIG or there is no DB_HOME(inmemory tests). Following proc 
+# generates the config string to be passed to env creation command
+# for such cases. 
+proc setup_repmgr_sslargs {} {
+	global ssl_test_enabled
+	
+	if { $ssl_test_enabled != 1 } {
+		set disable_ssl " -rep_config {mgrdisablessl on} "		
+		return "$disable_ssl"
+	}
+
+	set cert_dir BDBTestSSLCertDir
+	set PK_PASS someRandomPass
+
+	generate_ssl_certs $cert_dir $PK_PASS
+
+	set ca_cert_arg " -repmgr_ssl_config {ca_cert $cert_dir/rootCA.crt} "
+	#set ca_dir_arg "-ca_dir $cert_dir"
+	set ssl_cert_arg " -repmgr_ssl_config {node_cert $cert_dir/repNode.crt} "
+	set ssl_key_arg " -repmgr_ssl_config {node_pkey $cert_dir/repNode.key} "
+	set ssl_key_passwd " -repmgr_ssl_config {pkey_passwd $PK_PASS} "
+	set verify_depth_arg " -repmgr_ssl_config {verify_depth 6} "
+
+	return "$ca_cert_arg $ssl_cert_arg $ssl_key_arg $ssl_key_passwd $verify_depth_arg"
 }
 
 proc run_verb { commandstring } {
@@ -3266,63 +3427,91 @@ proc upgradescr_verify { oplist mydir rep_env_cmd } {
 
 # run_ipv4_tests is used to run all the repmgr tests using 
 # IPv4 addresses.  
-proc run_ipv4_tests { } {
+proc run_ipv4_tests { {display 0} {run 1} } {
 	global test_names
 	global ipversion
 	set orig_ipversion $ipversion
 	set ipversion 4
 
-	if { [catch { 
-		if { [catch { set s [setup_site_prog] } res ] != 0 } {
-			puts "Skipping repmgr_multiproc tests\
-			    because db_repsite is not built."
-		} else {
-			foreach test $test_names(repmgr_multiproc) {
-				puts "Running test $test with IPv4"
-				$test
-			}
+
+	if { $display } {
+		foreach test $test_names(repmgr_multiproc) {
+			puts "run_ipv4 {$test}"
 		}
 		foreach test $test_names(repmgr_other) {
-			puts "Running test $test with IPv4"
-			$test
+			puts "run_ipv4 {$test}"
 		}
-		foreach test $test_names(repmgr_basic) { 
-			puts "Running test $test with IPv4"
-			$test 100 1 1 1 1 1
-			$test 100 1 0 0 0 0
-			$test 100 0 1 0 0 0
-			$test 100 0 0 1 0 0
-			$test 100 0 0 0 1 0
-			$test 100 0 0 0 0 1
-			$test 100 0 0 0 0 0
+		foreach test $test_names(repmgr_basic) {
+			puts "run_ipv4 {$test 100 1 1 1 1 1}"
+			puts "run_ipv4 {$test 100 1 0 0 0 0}"
+			puts "run_ipv4 {$test 100 0 1 0 0 0}"
+			puts "run_ipv4 {$test 100 0 0 1 0 0}"
+			puts "run_ipv4 {$test 100 0 0 0 1 0}"
+			puts "run_ipv4 {$test 100 0 0 0 0 1}"
+			puts "run_ipv4 {$test 100 0 0 0 0 0}"
 		}
-		flush stdout 
-		flush stderr
-	} res] != 0 } {
-		global errorInfo
+	}
+	if { $run } {
+		if { [catch { 
+			if { [catch { set s [setup_site_prog] } res ] != 0 } {
+				puts "Skipping repmgr_multiproc tests\
+				    because db_repsite is not built."
+			} else {
+				foreach test $test_names(repmgr_multiproc) {
+					puts "Running test $test with IPv4"
+					run_ipv4 $test
+				}
+			}
+			foreach test $test_names(repmgr_other) {
+				puts "Running test $test with IPv4"
+				run_ipv4 $test
+			}
+			foreach test $test_names(repmgr_basic) {
+				puts "Running test $test with IPv4"
+				run_ipv4 "$test 100 1 1 1 1 1"
+				run_ipv4 "$test 100 1 0 0 0 0"
+				run_ipv4 "$test 100 0 1 0 0 0"
+				run_ipv4 "$test 100 0 0 1 0 0"
+				run_ipv4 "$test 100 0 0 0 1 0"
+				run_ipv4 "$test 100 0 0 0 0 1"
+				run_ipv4 "$test 100 0 0 0 0 0"
+			}
+			flush stdout 
+			flush stderr
+		} res] != 0 } {
+			global errorInfo
 	
-		set ipversion $orig_ipversion
-		if {[string first FAIL $errorInfo] == -1} {
-			error "FAIL:[timestamp]\
-			    run_ipv4_tests: $test: $res"
+			set ipversion $orig_ipversion
+			if {[string first FAIL $errorInfo] == -1} {
+				error "FAIL:[timestamp]\
+				    run_ipv4_tests: $test: $res"
 
-		} else {
-			error $res
+			} else {
+				error $res
+			}
 		}
 	}
 	set ipversion $orig_ipversion
+	global ipversion
 }
 
 # run_ipv4 is suitable for running a single repmgr test using
-# IPv4 addresses.  The repmgr tests don't take arguments, so neither
-# does this procedure. 
-proc run_ipv4 { test } {
+# IPv4 addresses. Pass in the name of the test plus arguments,
+# if any.
+proc run_ipv4 { commandstring } {
 	global ipversion 
+	global test_names
 	set orig_ipversion $ipversion
 	set ipversion 4
 
+	if { [catch { set s [setup_site_prog] } res ] != 0 && 
+	    [is_substr $test_names(repmgr_multiproc)) $commandstring] == 1} {
+			puts "Skipping repmgr_multiproc tests\
+				because db_repsite is not built."
+			return
+	}
 	if { [catch { 
-		$test
+		eval $commandstring
 		flush stdout
 		flush stderr
 	} res] !=0 } {
@@ -3334,12 +3523,13 @@ proc run_ipv4 { test } {
 		set theError [string range $errorInfo 0 [expr $fnl - 1]]
 		if {[string first FAIL $errorInfo] == -1} {
 			error "FAIL:[timestamp]\
-			    run_verbose: $test: $theError"
+			    run_verbose: $commandstring: $theError"
 
 		} else {
 			error $theError;
 		}
 	}
 	set ipversion $orig_ipversion
+	global ipversion
 }
 

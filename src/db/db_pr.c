@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -971,7 +971,7 @@ __db_prpage_int(env, mbp, dbp, lead, h, pagesize, data, flags)
 				if (ret != 0)
 					__db_msgadd(env, mbp,
 				    "external file: blob_size overflow. ");
-				__db_msgadd(env, mbp, 
+				__db_msgadd(env, mbp,
 				    "external file: size: %llu",
 				    (long long)blob_size);
 				/*
@@ -1034,14 +1034,14 @@ __db_prpage_int(env, mbp, dbp, lead, h, pagesize, data, flags)
 			case B_BLOB:
 				memcpy(&bl, bk, BBLOB_SIZE);
 				blob_id = (db_seq_t)bl.id;
-				__db_msgadd(env, mbp, 
+				__db_msgadd(env, mbp,
 				    "external file: id: %llu ",
 				    (long long)blob_id);
 				GET_BLOB_SIZE(env, bl, blob_size, ret);
 				if (ret != 0)
 					__db_msgadd(env, mbp,
 				    "external file: blob_size overflow. ");
-				__db_msgadd(env, mbp, 
+				__db_msgadd(env, mbp,
 				    "external file: size: %llu",
 				    (long long)blob_size);
 				DB_MSGBUF_FLUSH(env, mbp);
@@ -2305,7 +2305,8 @@ __db_dbt_print(env, mbp, dbt)
  * PUBLIC:     __P((ENV *, const DBT *, const DBT *, const char *, ...));
  */
 int
-__db_dbt_printpair(ENV *env, const DBT *key, const DBT *data, const char *fmt, ...)
+__db_dbt_printpair(ENV *env, const DBT *key, const DBT *data,
+							const char *fmt, ...)
 {
 	DB_MSGBUF mb;
 	va_list ap;

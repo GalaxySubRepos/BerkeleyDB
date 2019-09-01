@@ -808,7 +808,6 @@ Co
 codec
 CODEC
 CODECKEY
-codegen
 CollectionTest
 collseq
 CollSeq
@@ -1503,6 +1502,7 @@ edggsefcd
 EDIRIOCTL
 EDIRNOEXISTS
 EDIRNOTEMPTY
+editline
 EDOM
 EDOOFUS
 EDQUOT

@@ -55,8 +55,8 @@ get_max() {
 for i in $MSG_DIRS; do
 	for f in `$GREP_CMD BDB#### -r $i -wl --include=*.c --include=*.h \
  	    --include=*.in --include=*.awk | \
-	    $GREP_CMD -v "../util/db_dump185.c" | \
-	    $GREP_CMD -v "../util/db_sql_codegen"`; do
+	    $GREP_CMD -v "../util/db_dump185.c"`; do
+		step=1
 		IFS='/'
 		set $f
 		# There are 11 categories in the MSG_DIRS:
@@ -70,6 +70,25 @@ for i in $MSG_DIRS; do
 		if [ "$i" = "../util/" ] || [ "$i" = "../lang/dbm/" ]; then
 			cat_indx=10
 			cat_dirs="../util/ ../lang/dbm/"
+		# We have decided that the duplicate error messages should have
+		# identical message ID. Then some message IDs may be out of
+		# range. So we add a 12th category, which will be used for all
+		# new error messages. The 12th category can be allocated all
+		# remaining numbers from 5501 - 9999. Please edit the message ID
+		# manually after running this script if there are any duplicate
+		# error messages.
+		elif [ "$i" = "../src/" ]; then
+			step=9
+			cat_indx=11
+			cat_dirs=$i"blob "$i"btree "$i"clib "$i"common "
+			cat_dirs=$cat_dirs$i"crypto "$i"db "$i"dbinc "
+			cat_dirs=$cat_dirs$i"dbinc_auto "$i"dbreg "$i"env "
+			cat_dirs=$cat_dirs$i"fileops "$i"hash "$i"heap "
+			cat_dirs=$cat_dirs$i"hmac "$i"lock "$i"log "$i"mp "
+			cat_dirs=$cat_dirs$i"mutex "$i"os "$i"os_qnx "
+			cat_dirs=$cat_dirs$i"os_vxworks "$i"os_windows "$i"qam "
+			cat_dirs=$cat_dirs$i"rep "$i"repmgr "$i"sequence "
+			cat_dirs=$cat_dirs$i"txn "$i"xa"
 		elif [ "$3" = "blob" ] || [ "$3" = "common" ] || \
 		    [ "$3" = "crypto" ] || \
 		    [ "$3" = "fileops" ] || [ "$3" = "hmac" ] || \
@@ -165,12 +184,12 @@ for i in $MSG_DIRS; do
 			}
 			return "\""s""i"\""
 		}' num=`get_value $pref $cat_indx` \
-		max=`expr \( $cat_indx + 1 \) \* 500`
+		max=`expr \( $cat_indx + $step \) \* 500`
 		cp tmp.tmp $f
 		eval "$pref$cat_indx=`sed 'q' tmp.num`"
-		if [ "$cat_indx" -lt 11 ]; then
+		if [ "$cat_indx" -lt 12 ]; then
 			if [ `get_value $pref $cat_indx` -ge \
-			    `expr \( $cat_indx + 1 \) \* 500` ]; then
+			    `expr \( $cat_indx + $step \) \* 500` ]; then
 				echo "RANGE FULL"
 			fi
 		else

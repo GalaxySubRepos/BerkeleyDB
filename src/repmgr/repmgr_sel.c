@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -14,7 +14,7 @@ typedef int (*HEARTBEAT_ACTION) __P((ENV *));
 
 static int accept_handshake __P((ENV *, REPMGR_CONNECTION *, char *, int *));
 static int accept_v1_handshake __P((ENV *, REPMGR_CONNECTION *, char *));
-static void check_min_log_file __P((ENV *, DB_LSN *, REPMGR_SITE *));
+static void check_min_log_file __P((ENV *));
 static int dispatch_msgin __P((ENV *, REPMGR_CONNECTION *));
 static int prepare_input __P((ENV *, REPMGR_CONNECTION *));
 static int process_own_msg __P((ENV *, REPMGR_CONNECTION *));
@@ -65,7 +65,7 @@ __repmgr_select_thread(argsp)
 	ret = 0;
 
 	ENV_ENTER_RET(env, ip, ret);
-	if (ret != 0 || (ret = __repmgr_select_loop(env)) != 0) {
+	if (ret != 0 || (ret = __repmgr_network_event_handler(env)) != 0) {
 		__db_err(env, ret, DB_STR("3614", "select loop failed"));
 		ENV_LEAVE(env, ip);
 		(void)__repmgr_thread_failure(env, ret);
@@ -161,6 +161,16 @@ __repmgr_accept(env)
 		(void)closesocket(s);
 		return (ret);
 	}
+
+#if defined(HAVE_REPMGR_SSL)
+	if (IS_REPMGR_SSL_ENABLED(env))
+		if ((ret = __repmgr_ssl_accept(env, conn, s)) != 0) {
+			(void)__repmgr_destroy_conn(env, conn);
+			(void)closesocket(s);
+			return (ret);
+		}
+#endif
+
 	if ((ret = __repmgr_set_keepalive(env, conn)) != 0)
 		return (ret);
 	if ((ret = __repmgr_set_nonblock_conn(conn)) != 0) {
@@ -352,8 +362,8 @@ __repmgr_send_heartbeat(env)
 	DB_REP *db_rep;
 	REP *rep;
 	DBT control, rec;
-	__repmgr_permlsn_args permlsn;
-	u_int8_t buf[__REPMGR_PERMLSN_SIZE];
+	__repmgr_heartbeat_args heartbeat;
+	u_int8_t buf[__REPMGR_HEARTBEAT_SIZE];
 	u_int unused1, unused2;
 	int ret, unused3;
 
@@ -378,12 +388,12 @@ __repmgr_send_heartbeat(env)
 	    rep->master_id == db_rep->self_eid)
 		__os_gettime(env, &db_rep->last_hbeat, 1);
 
-	permlsn.generation = rep->gen;
-	if ((ret = __rep_get_maxpermlsn(env, &permlsn.lsn)) != 0)
+	heartbeat.generation = rep->gen;
+	if ((ret = __rep_get_maxpermlsn(env, &heartbeat.lsn)) != 0)
 		return (ret);
-	__repmgr_permlsn_marshal(env, &permlsn, buf);
+	__repmgr_heartbeat_marshal(env, &heartbeat, buf);
 	control.data = buf;
-	control.size = __REPMGR_PERMLSN_SIZE;
+	control.size = __REPMGR_HEARTBEAT_SIZE;
 
 	DB_INIT_DBT(rec, NULL, 0);
 	ret =__repmgr_send_broadcast(env,
@@ -645,6 +655,7 @@ __repmgr_takeover_thread(argsp)
 		STAT(rep->mstat.st_takeovers++);
 		RPRINT(env, (env, DB_VERB_REPMGR_MISC,
 		    "finished takeover and became listener"));
+		DB_EVENT(env, DB_EVENT_REP_AUTOTAKEOVER, NULL);
 	} else if (ret != 0 && db_rep->repmgr_status == stopped) {
 		RPRINT(env, (env, DB_VERB_REPMGR_MISC,
 		    "failed to take over, repmgr was stopped"));
@@ -1149,6 +1160,7 @@ __repmgr_read_from_site(env, conn)
 	DB_REP *db_rep;
 	REPMGR_SITE *site;
 	int ret;
+	int msg_process_ret;
 
 	db_rep = env->rep_handle;
 
@@ -1157,6 +1169,7 @@ __repmgr_read_from_site(env, conn)
 	 * other branches return.)
 	 */
 	for (;;) {
+finish_io:
 		switch ((ret = __repmgr_read_conn(conn))) {
 #ifndef DB_WIN32
 		case EINTR:
@@ -1170,6 +1183,9 @@ __repmgr_read_from_site(env, conn)
 			return (0);
 
 		case DB_REP_UNAVAIL:
+			SSL_DEBUG_READ(env, "Peer not available for read. ret = %d",
+			    ret);
+
 			/* Error 0 is understood to mean EOF. */
 			__repmgr_fire_conn_err_event(env, conn, 0);
 			STAT(env->rep_handle->
@@ -1182,11 +1198,34 @@ __repmgr_read_from_site(env, conn)
 				__os_gettime(env,
 				    &site->last_rcvd_timestamp, 1);
 			}
-			return (conn->reading_phase == SIZES_PHASE ?
+			msg_process_ret = (conn->reading_phase == SIZES_PHASE ?
 			    prepare_input(env, conn) :
 			    dispatch_msgin(env, conn));
 
+			if (msg_process_ret != 0)
+				return msg_process_ret;
+
+#if defined(HAVE_REPMGR_SSL)
+			/*
+			 * If SSL_read is not blocked on a read and write and
+			 * there is more data to read(i.e. SSL_pending is non
+			 * zero), then we read and consume the rest of the
+			 * record.
+			 */
+			if (IS_REPMGR_SSL_ENABLED(env))
+				if (conn->repmgr_ssl_info->ssl
+				    && SSL_pending(conn->repmgr_ssl_info->ssl)
+				    && !(conn->repmgr_ssl_info->ssl_io_state
+					& REPMGR_SSL_READ_PENDING_ON_READ)
+				    && !(conn->repmgr_ssl_info->ssl_io_state
+					& REPMGR_SSL_READ_PENDING_ON_WRITE))
+						goto finish_io;
+#endif
+
+			return msg_process_ret;
 		default:
+			SSL_DEBUG_READ(env, "Unexpected read error. ret = %d",
+			    ret);
 #ifdef EBADF
 			DB_ASSERT(env, ret != EBADF);
 #endif
@@ -1214,21 +1253,70 @@ __repmgr_read_conn(conn)
 {
 	size_t nr;
 	int ret;
+	int use_ssl_api;
+	int read_error;
+	ENV *env;
+#if defined(HAVE_REPMGR_SSL)
+	SSL *conn_ssl;
+#endif
+
+	nr = 0;
+	ret = 0;
+	read_error = 0;
+	use_ssl_api = 0;
+	env = conn->env;
+
+#if defined(HAVE_REPMGR_SSL)
+	if (conn->repmgr_ssl_info)
+		conn_ssl = conn->repmgr_ssl_info->ssl;
+
+	if (IS_REPMGR_SSL_ENABLED(conn->env))
+		use_ssl_api = 1;
+#endif
+
+	SSL_DEBUG_READ(env,"Starting SSL read for ssl=%p fd=%d",
+	    conn_ssl, conn->fd);
 
 	/*
 	 * Keep reading pieces as long as we're making some progress, or until
 	 * we complete the current read phase as defined in iovecs.
 	 */
 	for (;;) {
-		if ((ret = __repmgr_readv(conn->fd,
-		    &conn->iovecs.vectors[conn->iovecs.offset],
-		    conn->iovecs.count - conn->iovecs.offset, &nr)) != 0)
+		if (use_ssl_api) {
+#if defined(HAVE_REPMGR_SSL)
+			read_error = 0;
+			if ((ret = __repmgr_ssl_readv(conn,
+			    &conn->iovecs.vectors[conn->iovecs.offset],
+			    conn->iovecs.count - conn->iovecs.offset,
+			    &nr)) != 0)
+				read_error = 1;
+		
+#endif
+		} else {
+			read_error = 0;
+
+			if ((ret = __repmgr_readv(conn->fd,
+			    &conn->iovecs.vectors[conn->iovecs.offset],
+			    conn->iovecs.count - conn->iovecs.offset,
+			    &nr)) != 0)
+				read_error = 1;
+		}
+
+		if (read_error) {
+			SSL_DEBUG_READ(env, "SSL read failed for ssl=%p",
+			    conn_ssl);
 			return (ret);
+		}
+
+		SSL_DEBUG_READ(env,"SSL read success ssl=%p fd=%d ret=%d",
+		    conn_ssl, conn->fd, ret);
 
 		if (nr == 0)
 			return (DB_REP_UNAVAIL);
 
 		if (__repmgr_update_consumed(&conn->iovecs, nr)) {
+			SSL_DEBUG_READ(env,"SSL record completely read for ssl=%p",
+			    conn_ssl);
 			/* We've fully read as much as we wanted. */
 			return (0);
 		}
@@ -2017,6 +2105,7 @@ __repmgr_send_handshake(env, conn, opt, optlen, flags)
 	case 4:
 	case 5:
 	case 6:
+	case 7:
 		cntrl_len = __REPMGR_HANDSHAKE_SIZE;
 		break;
 	default:
@@ -2050,6 +2139,7 @@ __repmgr_send_handshake(env, conn, opt, optlen, flags)
 	case 4:
 	case 5:
 	case 6:
+	case 7:
 		hs.port = my_addr->port;
 		hs.alignment = MEM_ALIGN;
 		hs.ack_policy = (u_int32_t)rep->perm_policy;
@@ -2148,6 +2238,14 @@ read_version_response(env, conn)
 	if (conn->type == REP_CONNECTION &&
 	    site->state == SITE_CONNECTED && !IS_SUBORDINATE(db_rep)) {
 		rep->sites_avail++;
+
+		REP_SYSTEM_LOCK(env);
+
+		if (FLD_ISSET(rep->elect_flags, REP_E_PEER_CONN_WAIT))
+			FLD_CLR(rep->elect_flags, REP_E_PEER_CONN_WAIT);
+
+		REP_SYSTEM_UNLOCK(env);
+
 		RPRINT(env, (env, DB_VERB_REPMGR_MISC,
 		    "vers_resp: EID %lu CONNECTED, READY.  sites_avail %lu",
 		    (u_long)conn->eid, (u_long)rep->sites_avail));
@@ -2241,6 +2339,7 @@ accept_handshake(env, conn, hostname, subordinate)
 	case 4:
 	case 5:
 	case 6:
+	case 7:
 		if (__repmgr_handshake_unmarshal(env, &hs,
 		   conn->input.repmgr_msg.cntrl.data,
 		   conn->input.repmgr_msg.cntrl.size, NULL) != 0)
@@ -2522,7 +2621,10 @@ record_permlsn(env, conn)
 {
 	DB_REP *db_rep;
 	REPMGR_SITE *site;
-	__repmgr_permlsn_args *ackp, ack;
+	__repmgr_v6permlsn_args v6ack;
+	__repmgr_permlsn_args ack;
+	u_int32_t ack_gen;
+	DB_LSN ack_lsn, ack_ckp_lsn;
 	SITE_STRING_BUFFER location;
 	u_int32_t gen;
 	int ret;
@@ -2543,56 +2645,62 @@ record_permlsn(env, conn)
 	 * Extract the LSN.  Save it only if it is an improvement over what the
 	 * site has already ack'ed.
 	 */
-	if (conn->version == 1) {
-		ackp = conn->input.repmgr_msg.cntrl.data;
-		if (conn->input.repmgr_msg.cntrl.size != sizeof(ack) ||
-		    conn->input.repmgr_msg.rec.size != 0) {
-			__db_errx(env, DB_STR("3627", "bad ack msg size"));
+	if (conn->version < 7) {
+		if ((ret = __repmgr_v6permlsn_unmarshal(env, &v6ack,
+		    conn->input.repmgr_msg.cntrl.data,
+		    conn->input.repmgr_msg.cntrl.size, NULL)) != 0)
 			return (DB_REP_UNAVAIL);
-		}
+		ack_gen = v6ack.generation;
+		ack_lsn = v6ack.lsn;
+		ZERO_LSN(ack_ckp_lsn);
 	} else {
-		ackp = &ack;
-		if ((ret = __repmgr_permlsn_unmarshal(env, ackp,
-			 conn->input.repmgr_msg.cntrl.data,
-			 conn->input.repmgr_msg.cntrl.size, NULL)) != 0)
+		if ((ret = __repmgr_permlsn_unmarshal(env, &ack,
+		    conn->input.repmgr_msg.cntrl.data,
+		    conn->input.repmgr_msg.cntrl.size, NULL)) != 0)
 			return (DB_REP_UNAVAIL);
+		ack_gen = ack.generation;
+		ack_lsn = ack.lsn;
+		ack_ckp_lsn = ack.last_ckp_lsn;
 	}
 
 	/* Ignore stale acks. */
 	gen = db_rep->region->gen;
-	if (ackp->generation < gen) {
+	if (ack_gen < gen) {
 		VPRINT(env, (env, DB_VERB_REPMGR_MISC,
 		    "ignoring stale ack (%lu<%lu), from %s",
-		     (u_long)ackp->generation, (u_long)gen,
+		     (u_long)ack_gen, (u_long)gen,
 		     __repmgr_format_site_loc(site, location)));
 		return (0);
 	}
 	VPRINT(env, (env, DB_VERB_REPMGR_MISC,
-	    "got ack [%lu][%lu](%lu) from %s", (u_long)ackp->lsn.file,
-	    (u_long)ackp->lsn.offset, (u_long)ackp->generation,
+	    "got ack [%lu][%lu](%lu) and ckp_lsn [%lu][%lu] from %s",
+	    (u_long)ack_lsn.file, (u_long)ack_lsn.offset, (u_long)ack_gen,
+	    (u_long)ack_ckp_lsn.file, (u_long)ack_ckp_lsn.offset,
 	    __repmgr_format_site_loc(site, location)));
 
-	if (ackp->generation == gen && ackp->lsn.offset != 0 &&
-	    LOG_COMPARE(&ackp->lsn, &site->max_ack) == 1) {
+	if (ack_gen == gen &&
+	    LOG_COMPARE(&ack_lsn, &site->max_ack) == 1) {
 		/*
 		 * If file number for this site changed, check lowest log
-		 * file needed after recording new permlsn for this site.
+		 * file needed after recording LSNs for this site.
+		 * Use ckp_lsn if it is available.  Otherwise fall back to
+		 * permlsn.
 		 */
-		if (ackp->lsn.file > site->max_ack.file)
+		if (ack_ckp_lsn.file > site->max_ckp_lsn.file ||
+		    (IS_ZERO_LSN(ack_ckp_lsn) &&
+		    ack_lsn.file > site->max_ack.file))
 			do_log_check = 1;
-		site->max_ack_gen = ackp->generation;
-		memcpy(&site->max_ack, &ackp->lsn, sizeof(DB_LSN));
+		site->max_ack_gen = ack_gen;
+		memcpy(&site->max_ack, &ack_lsn, sizeof(DB_LSN));
+		if (LOG_COMPARE(&ack_ckp_lsn, &site->max_ckp_lsn) == 1)
+			memcpy(&site->max_ckp_lsn, &ack_ckp_lsn,
+			    sizeof(DB_LSN));
 		if (do_log_check)
-			check_min_log_file(env, &ackp->lsn, site);
+			check_min_log_file(env);
 		if ((ret = __repmgr_wake_waiters(env,
 		    &db_rep->ack_waiters)) != 0)
 			return (ret);
 	}
-	/*
-	 * If we received a checkpoint message, check the lowest log file.
-	 */
-	if (ackp->generation == gen && ackp->lsn.offset == 0)
-		check_min_log_file(env, &ackp->lsn, site);
 	return (0);
 }
 
@@ -2603,28 +2711,52 @@ record_permlsn(env, conn)
  * (e.g. a separate db_archive process.)
  */
 static void
-check_min_log_file(env, ack_lsnp, from_site)
+check_min_log_file(env)
 	ENV *env;
- 	DB_LSN *ack_lsnp;
- 	REPMGR_SITE *from_site;
 {
 	DB_REP *db_rep;
 	REP *rep;
 	REPMGR_CONNECTION *conn;
 	REPMGR_SITE *site;
-	DB_LSN min_lsn;
+	u_int32_t min_log, file;
 	int eid;
 
 	db_rep = env->rep_handle;
 	rep = db_rep->region;
-	ZERO_LSN(min_lsn);
+	min_log = 0;
 
 	/*
-	 * Record the lowest LSN from all connected sites.  If this
-	 * is a client, ignore the master because the master does not maintain
-	 * nor send out its repmgr perm LSN in this way.  Consider connections
-	 * so that we don't allow a site that has been down a long time to
-	 * indefinitely prevent log archiving.
+	 * We need to consider two things here:
+	 * 1. We want to keep log records that may still be needed by clients.
+	 *    This reduces the chance that a client needs to go through
+	 *    internal init because of missing log files.
+	 * 2. When master changes, if we can find a log verify match with
+	 *    the new master, we want to keep all the log records that are
+	 *    necessary to recover to that match point.  This reduces the
+	 *    chance that this site needs to go through internal init.
+	 *
+	 * To satisfy 1. we only need to set rep->min_log_file to the lowest
+	 * log file number of all connected sites' max_ack.
+	 * In general, there is no way to satisfy 2. with 100% certainty, so
+	 * we will try to do something simple that increases our chance of
+	 * meeting 2.  Every site must have the log record at its max_ack.
+	 * Therefore if there is a common sync point between this site and the
+	 * new master, the common sync point must be greater than or equal to
+	 * the new master's max_ack.  If we keep all the log records after the
+	 * ckp_lsn field of the checkpoint at or right before the new master's
+	 * max_ack, we would be able to perform recovery to the common sync
+	 * point.
+	 *
+	 * To do this, starting from protocol version 7, each permlsn message
+	 * includes the ckp_lsn field of the checkpoint at or right before the
+	 * perm LSN.  We record the maximum ckp_lsn received for each site in
+	 * the site's max_ckp_lsn field.  This field is preferred over the
+	 * max_ack field when we compute rep->min_log_file.
+	 *
+	 * If this is a client, ignore the master because the master does not
+	 * maintain nor send out its repmgr perm LSN in this way.  Consider
+	 * connections so that we don't allow a site that has been down a long
+	 * time to indefinitely prevent log archiving.
 	 */
 	FOR_EACH_REMOTE_SITE_INDEX(eid) {
 		if (eid == rep->master_id)
@@ -2635,55 +2767,23 @@ check_min_log_file(env, ack_lsnp, from_site)
 		    conn->state == CONN_READY) ||
 		    ((conn = site->ref.conn.out) != NULL &&
 		    conn->state == CONN_READY)) &&
-		    !IS_ZERO_LSN(site->max_ack) &&
-		    (IS_ZERO_LSN(min_lsn) ||
-		    LOG_COMPARE(&site->max_ack, &min_lsn) < 0))
-			min_lsn = site->max_ack;
+		    !IS_ZERO_LSN(site->max_ack)) {
+			if (IS_ZERO_LSN(site->max_ckp_lsn))
+				file = site->max_ack.file;
+			else
+				file = site->max_ckp_lsn.file;
+			if (min_log == 0 || file < min_log)
+				min_log = file;
+		}
 	}
 	/*
- 	 * We need to consider two things here:
- 	 * 1. We want to keep log records that may still be needed by clients.
- 	 *    This reduces the chance that a client needs to go through
- 	 *    internal init because of missing log files.
- 	 * 2. When master changes, if we can find a log verify match with
- 	 *    the new master, we want to keep all the log records that are
- 	 *    necessary to recover to that match point.  This reduces the
- 	 *    chance that this site needs to go through internal init. 
- 	 *
- 	 * To satisfy 1. we only need to set rep->min_log_file to min_lsn.file.
- 	 * In general, there is no way to satisfy 2. with 100% certainty, so
- 	 * we will try to do something simple that increases our chance of
- 	 * meeting 2.  Suppose that when master changes the new master is
- 	 * one of the above available sites, the new master must have the log
- 	 * record at min_lsn.  Therefore if there is a common sync point
- 	 * between this site and the new master, it must have an LSN greater
- 	 * than or equal to min_lsn.  If we keep all the log records after
- 	 * the ckp_lsn field of the checkpoint at or right before min_lsn,
- 	 * we would be able to perform recovery to the common sync point.
- 	 *
- 	 * To do this, we broadcast checkpoint messages from clients.  A
- 	 * checkpoint message is a permlsn message representing a successfully
- 	 * applied checkpoint.  Its lsn.file is ckp_lsn.file of the checkpoint
- 	 * record and its lsn.offset is 0.  If we received a checkpoint message
- 	 * and the sending site has the lowest LSN, we know that every
- 	 * available site must have processed the checkpoint, so we can use
- 	 * it as the lower bound.
+	 * During normal operation min_log should increase over time, but it
+	 * is possible if a site returns after being disconnected for a while
+	 * that min_log could decrease.
 	 */
-	if (ack_lsnp->offset == 0) {
-		if (LOG_COMPARE(&from_site->max_ack, &min_lsn) == 0)
-			rep->min_log_file = ack_lsnp->file;
-	} else {
-		/*
-		 * During normal operation, the lower bound determined by the
-		 * above checkpoint message <= LSN of the checkpoint <= LSN
-		 * of the last normal permlsn message.  Therefore, normal
-		 * permlsn messages can be ignored.  However it is possible
-		 * if a site returns after being disconnected for a while
-		 * that min_lsn could decrease and thus provide a new lower
-		 * bound.
-		 */
-		if (!IS_ZERO_LSN(min_lsn) && min_lsn.file < rep->min_log_file)
-			rep->min_log_file = min_lsn.file;
+	if (min_log != 0 && min_log != rep->min_log_file) {
+		rep->min_log_file = min_log;
+		STAT(db_rep->region->mstat.st_group_stable_log_file = min_log);
 	}
 }
 
@@ -2698,13 +2798,57 @@ __repmgr_write_some(env, conn)
 	QUEUED_OUTPUT *output;
 	REPMGR_FLAT *msg;
 	int bytes, ret;
+#if defined(HAVE_REPMGR_SSL)
+	SSL *ssl;
+#endif	
+	int error_code;
+	int use_ssl_api;
+	int write_error;
+
+	write_error = 0;
+	use_ssl_api = 0;
+
+#if defined(HAVE_REPMGR_SSL)
+	if (IS_REPMGR_SSL_ENABLED(env)) {
+		use_ssl_api = 1;
+
+		if (conn->repmgr_ssl_info)
+			ssl = conn->repmgr_ssl_info->ssl;
+		if (ssl == NULL)
+			return DB_REP_UNAVAIL;
+	}
+#endif
 
 	while (!STAILQ_EMPTY(&conn->outbound_queue)) {
 		output = STAILQ_FIRST(&conn->outbound_queue);
 		msg = output->msg;
-		if ((bytes = sendsocket(conn->fd, &msg->data[output->offset],
-		    msg->length - output->offset, 0)) == SOCKET_ERROR) {
-			switch (ret = net_errno) {
+
+		if (use_ssl_api) {
+#if defined(HAVE_REPMGR_SSL)
+			SSL_DEBUG_WRITE(env,"Trying SSL write with fd=%d ssl=%p.",
+			    conn->fd, conn->repmgr_ssl_info->ssl);
+			write_error = 0;
+			if ((bytes = __repmgr_ssl_writemsg(conn,
+			    (char *)&msg->data[output->offset],
+			    msg->length - output->offset, &error_code))
+			    == SOCKET_ERROR) {
+				ret = error_code;
+				write_error = 1;
+			}	
+#endif
+		} else {
+			write_error = 0;
+			if ((bytes = sendsocket(conn->fd,
+			    &msg->data[output->offset],
+			    msg->length - output->offset, 0))
+			    == SOCKET_ERROR) {
+				ret = net_errno;
+				write_error = 1;
+			}
+		}
+
+		if (write_error) {
+			switch (ret) {
 			case WOULDBLOCK:
 #if defined(DB_REPMGR_EAGAIN) && DB_REPMGR_EAGAIN != WOULDBLOCK
 			case DB_REPMGR_EAGAIN:

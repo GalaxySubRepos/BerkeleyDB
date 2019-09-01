@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::repmgr_msg_dispatch()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::repmgr_msg_dispatch()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repmgrget_incoming_queue_max.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repmgr_msg_dispatch"></a>DbEnv::repmgr_msg_dispatch()</h2>
+            <h2 class="title" style="clear: both"><a id="repmgr_msg_dispatch"></a>
+        
+        <span>DbEnv::repmgr_msg_dispatch()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -49,15 +55,30 @@ DbEnv::repmgr_msg_dispatch(
       <p>
         Sets the message dispatch function. This function is responsible
         for receiving messages sent from remote sites using either the
-        <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">DbChannel::send_msg()</a>
+        <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">
+        
+        <span>DbChannel::send_msg()</span>
+    </a>
         or
-        <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">DbChannel::send_request()</a>
+        <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">
+        
+        <span>DbChannel::send_request()</span>
+    </a>
         methods. If the message received by this function was sent using the
-        <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">DbChannel::send_msg()</a>
+        <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">
+        
+        <span>DbChannel::send_msg()</span>
+    </a>
         method then no response is required. If the message was sent using the
-        <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">DbChannel::send_request()</a>
+        <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">
+        
+        <span>DbChannel::send_request()</span>
+    </a>
         method, then this function must send a response using the 
-        <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">DbChannel::send_msg()</a>
+        <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">
+        
+        <span>DbChannel::send_msg()</span>
+    </a>
         method.
     </p>
       <p>
@@ -79,7 +100,7 @@ DbEnv::repmgr_msg_dispatch(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807229168"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176764446528"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -87,7 +108,7 @@ DbEnv::repmgr_msg_dispatch(
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807230432"></a>msg_dispatch_fcn</h4>
+                <h4 class="title"><a id="idm140176764447856"></a>msg_dispatch_fcn</h4>
               </div>
             </div>
           </div>
@@ -106,11 +127,17 @@ DbEnv::repmgr_msg_dispatch(
                          Provides the DbChannel to be used to send
                          a response back to the originator of the message.
                          If the message was sent by the remote site using 
-                         <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">DbChannel::send_request()</a>
+                         <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">
+        
+        <span>DbChannel::send_request()</span>
+    </a>
                          then this function should send a response back to
                          the originator using the channel provided on this
                          parameter. The message should be sent by calling 
-                         <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">DbChannel::send_msg()</a>
+                         <a class="xref" href="dbchannel_send_msg.html" title="DbChannel::send_msg()">
+        
+        <span>DbChannel::send_msg()</span>
+    </a>
                          exactly once. 
                      </p>
                 <p>
@@ -121,9 +148,15 @@ DbEnv::repmgr_msg_dispatch(
                          use it later elsewhere. Methods that do not make
                          sense in the context of a message dispatch
                          function (such as 
-                         <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">DbChannel::send_request()</a>
+                         <a class="xref" href="dbchannel_send_request.html" title="DbChannel::send_request()">
+        
+        <span>DbChannel::send_request()</span>
+    </a>
                          and
-                         <a class="xref" href="dbchannel_close.html" title="DbChannel::close()">DbChannel::close()</a>)
+                         <a class="xref" href="dbchannel_close.html" title="DbChannel::close()">
+        
+        <span>DbChannel::close()</span>
+    </a>)
                          will be rejected with <code class="literal">EINVAL</code>.
                      </p>
               </li>
@@ -169,7 +202,7 @@ DbEnv::repmgr_msg_dispatch(
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807207712"></a>flags</h4>
+                <h4 class="title"><a id="idm140176764424544"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -183,7 +216,7 @@ DbEnv::repmgr_msg_dispatch(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807219184"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176764435472"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -202,7 +235,7 @@ DbEnv::repmgr_msg_dispatch(
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807212416"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176764429248"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -216,7 +249,7 @@ DbEnv::repmgr_msg_dispatch(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807202048"></a>Class</h3>
+              <h3 class="title"><a id="idm140176764418880"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -228,7 +261,7 @@ DbEnv::repmgr_msg_dispatch(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807190544"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176764427584"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -249,12 +282,16 @@ DbEnv::repmgr_msg_dispatch(
         </tr>
         <tr>
           <td width="40%" align="left" valign="top">
-        DbEnv::repmgr_get_incoming_queue_max()
+        
+        <span>DbEnv::repmgr_get_incoming_queue_max()</span>
      </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::repmgr_set_ack_policy()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::repmgr_set_ack_policy()</span>
+    </td>
         </tr>
       </table>
     </div>

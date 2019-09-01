@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.sentity;
@@ -19,8 +18,8 @@ package collections.ship.sentity;
  */
 public class ShipmentKey {
 
-    private String partNumber;
-    private String supplierNumber;
+    private final String partNumber;
+    private final String supplierNumber;
 
     public ShipmentKey(String partNumber, String supplierNumber) {
 
@@ -38,6 +37,7 @@ public class ShipmentKey {
         return supplierNumber;
     }
 
+    @Override
     public String toString() {
 
         return "[ShipmentKey: supplier=" + supplierNumber +

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 /*
@@ -17,11 +17,31 @@
 ** collapse free space, etc.  It is modelled after the VACUUM command
 ** in PostgreSQL.
 */
-void sqlite3Vacuum(Parse *pParse) {
+void sqlite3Vacuum(Parse *pParse, Token *pNm) {
 	Vdbe *v = sqlite3GetVdbe(pParse);
-
-	if (v)
-		sqlite3VdbeAddOp2(v, OP_Vacuum, 0, 0);
+	int iDb = 0;
+	if( v==0 ) return;
+	if( pNm ){
+#ifndef SQLITE_BUG_COMPATIBLE_20160819
+		/* Default behavior:  Report an error if the argument to VACUUM is
+		** not recognized */
+		iDb = sqlite3TwoPartName(pParse, pNm, pNm, &pNm);
+		if( iDb<0 ) return;
+#else
+		/* When SQLITE_BUG_COMPATIBLE_20160819 is defined, unrecognized arguments
+		** to VACUUM are silently ignored.  This is a back-out of a bug fix that
+		** occurred on 2016-08-19 (https://www.sqlite.org/src/info/083f9e6270).
+		** The buggy behavior is required for binary compatibility with some
+		** legacy applications. */
+		iDb = sqlite3FindDb(pParse->db, pNm);
+		if( iDb<0 ) iDb = 0;
+#endif
+	}
+	if( iDb!=1 ){
+		sqlite3VdbeAddOp1(v, OP_Vacuum, iDb);
+		sqlite3VdbeUsesBtree(v, iDb);
+	}
+	return;
 }
 
 int btreeVacuum(Btree *p, char **pzErrMsg) {
@@ -335,11 +355,11 @@ err:	/* Free cursor and DBT if run into error */
 /*
 ** This routine implements the OP_Vacuum opcode of the VDBE.
 */
-int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db) {
+int sqlite3RunVacuum(char **pzErrMsg, sqlite3 *db, int iDb) {
 	int rc;
 	Btree *p;
 
-	p = db->aDb[0].pBt;
+	p = db->aDb[iDb].pBt;
 	rc = SQLITE_OK;
 
 	if (p->pBt->dbStorage != DB_STORE_NAMED)

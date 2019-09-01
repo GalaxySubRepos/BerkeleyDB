@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -536,6 +536,8 @@ __db_byteswap(dbp, pg, h, pagesize, pgin)
 	case P_HASH_UNSORTED:
 	case P_HASH:
 		for (i = 0; i < NUM_ENT(h); i++) {
+			if (inp[i] == 0)
+				continue;
 			if (pgin)
 				M_16_SWAP(inp[i]);
 			if (inp[i] >= pagesize)
@@ -558,9 +560,18 @@ __db_byteswap(dbp, pg, h, pagesize, pgin)
 			case H_KEYDATA:
 				break;
 			case H_DUPLICATE:
+				if (LEN_HITEM(dbp, h, pagesize, i) <= 
+				    HKEYDATA_SIZE(0))
+					return (__db_pgfmt(env, pg));
+
 				len = LEN_HKEYDATA(dbp, h, pagesize, i);
 				p = HKEYDATA_DATA(P_ENTRY(dbp, h, i));
-				for (end = p + len; p < end;) {
+
+				end = p + len;
+				if (end >= pgend)
+					return (__db_pgfmt(env, pg));
+
+				while (p < end) {
 					if (pgin) {
 						P_16_SWAP(p);
 						memcpy(&tmp,
@@ -572,6 +583,8 @@ __db_byteswap(dbp, pg, h, pagesize, pgin)
 						SWAP16(p);
 					}
 					p += tmp;
+					if (p >= end)
+						return (__db_pgfmt(env, pg));
 					SWAP16(p);
 				}
 				break;
@@ -1129,7 +1142,7 @@ __db_convert_pp(dbp, fname, lorder)
 /*
  * __db_convert_extent --
  *	Convert the byte order of each database extent (a queue or partition
- * 	extent).
+ *	extent).
  */
 static int
 __db_convert_extent(env, fname, pagesize, flags)
@@ -1169,8 +1182,8 @@ __db_convert_extent(env, fname, pagesize, flags)
 		goto err;
 	ret = __os_fsync(env, fhp);
 
-err:	
-	if (fhp != NULL && 
+err:
+	if (fhp != NULL &&
 	    (t_ret = __os_closehandle(env, fhp)) != 0 && ret == 0)
 		ret = t_ret;
 	if (dbp != NULL && (t_ret = __db_close(dbp, NULL, 0) != 0) && ret == 0)
@@ -1192,7 +1205,7 @@ __db_convert_extent_names(dbp, mbuf, fname, namelistp)
 	env = dbp->env;
 	*namelistp = NULL;
 
-	switch(mbuf->magic) {
+	switch (mbuf->magic) {
 	case DB_BTREEMAGIC:
 	case DB_HASHMAGIC:
 #ifdef HAVE_PARTITION
@@ -1217,7 +1230,7 @@ __db_convert_extent_names(dbp, mbuf, fname, namelistp)
 
 /*
  * __db_convert --
- * 	Convert the byte order of a database.
+ *	Convert the byte order of a database.
  *
  * PUBLIC: int __db_convert __P((DB *, const char *, u_int32_t));
  */

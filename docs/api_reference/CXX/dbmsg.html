@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::msg()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::msg()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbkey_range.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbmsg"></a>Db::msg()</h2>
+            <h2 class="title" style="clear: both"><a id="dbmsg"></a>
+        
+        <span>Db::msg()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -42,13 +48,19 @@
 
 Db::msg(const char *fmt, ...); </pre>
       <p>
-         The <a class="xref" href="envmsg.html" title="DbEnv::msg()">DbEnv::msg()</a> and
+         The <a class="xref" href="envmsg.html" title="DbEnv::msg()">
+        
+        <span>DbEnv::msg()</span>
+    </a> and
          <code class="methodname">Db::msg()</code> 
          methods provide informational messaging functionality for
          applications written using the Berkeley DB library.
     </p>
       <p>
-         The <code class="methodname">Db::msg()</code> and <a class="xref" href="envmsg.html" title="DbEnv::msg()">DbEnv::msg()</a>  methods construct
+         The <code class="methodname">Db::msg()</code> and <a class="xref" href="envmsg.html" title="DbEnv::msg()">
+        
+        <span>DbEnv::msg()</span>
+    </a>  methods construct
          an informational message consisting of the following elements:
     </p>
       <div class="itemizedlist">
@@ -59,9 +71,15 @@ Db::msg(const char *fmt, ...); </pre>
                 </p>
             <p>
                         If no informational callback function has been set using the 
-                        <a class="xref" href="envset_msgcall.html" title="DbEnv::set_msgcall()">DbEnv::set_msgcall()</a> 
+                        <a class="xref" href="envset_msgcall.html" title="DbEnv::set_msgcall()">
+        
+        <span>DbEnv::set_msgcall()</span>
+    </a> 
                         method, any prefix string specified using the 
-                        <a class="xref" href="envset_msgpfx.html" title="DbEnv::set_msgpfx()">DbEnv::set_msgpfx()</a> 
+                        <a class="xref" href="envset_msgpfx.html" title="DbEnv::set_msgpfx()">
+        
+        <span>DbEnv::set_msgpfx()</span>
+    </a> 
                         method.
                 </p>
           </li>
@@ -85,19 +103,37 @@ Db::msg(const char *fmt, ...); </pre>
           <li>
             <p>
                         If an informational callback function has been set (see 
-                        <a class="xref" href="dbset_msgcall.html" title="Db::set_msgcall()">Db::set_msgcall()</a>  and
-                        <a class="xref" href="envset_msgcall.html" title="DbEnv::set_msgcall()">DbEnv::set_msgcall()</a>),
+                        <a class="xref" href="dbset_msgcall.html" title="Db::set_msgcall()">
+        
+        <span>Db::set_msgcall()</span>
+    </a>  and
+                        <a class="xref" href="envset_msgcall.html" title="DbEnv::set_msgcall()">
+        
+        <span>DbEnv::set_msgcall()</span>
+    </a>),
                         that function is called with two parameters: any prefix string
-                        specified (see <a class="xref" href="dbset_msgpfx.html" title="Db::set_msgpfx()">Db::set_msgpfx()</a>
-                        and <a class="xref" href="envset_msgpfx.html" title="DbEnv::set_msgpfx()">DbEnv::set_msgpfx()</a>) and 
+                        specified (see <a class="xref" href="dbset_msgpfx.html" title="Db::set_msgpfx()">
+        
+        <span>Db::set_msgpfx()</span>
+    </a>
+                        and <a class="xref" href="envset_msgpfx.html" title="DbEnv::set_msgpfx()">
+        
+        <span>DbEnv::set_msgpfx()</span>
+    </a>) and 
                         the informational message.
                     </p>
           </li>
           <li>
             <p>
                         If a C library FILE * has been set (see 
-                        <a class="xref" href="dbset_msgfile.html" title="Db::set_msgfile()">Db::set_msgfile()</a>  and
-                        <a class="xref" href="envset_msgfile.html" title="DbEnv::set_msgfile()">DbEnv::set_msgfile()</a>),
+                        <a class="xref" href="dbset_msgfile.html" title="Db::set_msgfile()">
+        
+        <span>Db::set_msgfile()</span>
+    </a>  and
+                        <a class="xref" href="envset_msgfile.html" title="DbEnv::set_msgfile()">
+        
+        <span>DbEnv::set_msgfile()</span>
+    </a>),
                         the informational message is written to that output stream.
                     </p>
           </li>
@@ -129,7 +165,7 @@ Db::msg(const char *fmt, ...); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703827163088"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176780230416"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -137,7 +173,7 @@ Db::msg(const char *fmt, ...); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703827379184"></a>fmt</h4>
+                <h4 class="title"><a id="idm140176779966224"></a>fmt</h4>
               </div>
             </div>
           </div>
@@ -151,7 +187,7 @@ Db::msg(const char *fmt, ...); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703825660944"></a>Class</h3>
+              <h3 class="title"><a id="idm140176773715504"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -163,7 +199,7 @@ Db::msg(const char *fmt, ...); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703817463008"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176777659680"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -183,11 +219,17 @@ Db::msg(const char *fmt, ...); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbopen.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::key_range() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::key_range()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::open()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::open()</span>
+    </td>
         </tr>
       </table>
     </div>

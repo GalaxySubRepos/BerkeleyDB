@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -215,7 +215,7 @@ proc env017_mutex_stat { } {
 		{ "Mutex max"	st_mutex_max }
 		{ "Free mutexes"	    st_mutex_free }
 		{ "Mutexes in use"	    st_mutex_inuse }
-		{ "Max in use"	    st_mutex_inuse_max }
+		{ "Max mutexes in use"	    st_mutex_inuse_max }
 		{ "Mutex region size"	    st_regsize }
 		{ "Mutex region max"	    st_regmax }
 		{ "Number of region waits"	    st_region_wait }
@@ -347,6 +347,7 @@ proc env017_repmgr_stat { } {
 		{ "Connections dropped"	    st_connection_drop}
 		{ "Failed re-connects"	    st_connect_fail}
 		{ "Election threads"	    st_elect_threads}
+		{ "Group stable log file"   st_group_stable_log_file}
 		{ "Max elect threads"	    st_max_elect_threads}
 		{ "Total sites"		    st_site_total}
 		{ "View sites"		    st_site_views}
@@ -357,13 +358,15 @@ proc env017_repmgr_stat { } {
 		{ "Incoming messages discarded"		st_incoming_msgs_dropped }
 		{ "Forwarded write operations received"	st_write_ops_received }
 		{ "Write operations forwarded"		st_write_ops_forwarded }
+		{ "Replication Manager Polling method"	st_polling_method }
 	}
 	set doc_list [list st_perm_failed st_msgs_queued st_msgs_dropped \
 	    st_connection_drop st_connect_fail st_elect_threads \
+	    st_group_stable_log_file \
 	    st_max_elect_threads st_site_total st_site_views \
 	    st_site_participants st_takeovers st_incoming_queue_gbytes \
 	    st_incoming_queue_bytes st_incoming_msgs_dropped \
-	    st_write_ops_received st_write_ops_forwarded]
+	    st_write_ops_received st_write_ops_forwarded st_polling_method]
 	env017_stat_check \
 	    $map_list $doc_list $check_type $stat_method $envargs
 }
@@ -469,7 +472,7 @@ proc env017_db_stat { } {
 		{ "Page count"	    hash_pagecnt }
 		{ "Number of keys"	    hash_nkeys }
 		{ "Number of records"	    hash_ndata }
-		{ "Number of external files" hash_nblobs }
+		{ "Number of external files" hash_ext_files }
 		{ "Fill factor"	    hash_ffactor }
 		{ "Buckets"	    hash_buckets }
 		{ "Free pages"	    hash_free }
@@ -485,7 +488,7 @@ proc env017_db_stat { } {
 	set heap_map_list {
 		{ "Magic"	    heap_magic }
 		{ "Version"	    heap_version }
-		{ "Number of external files"         heap_nblobs }
+		{ "Number of external files"         heap_ext_files }
 		{ "Number of records"	    heap_nrecs }
 		{ "Page size"	    heap_pagesize }
 		{ "Page count"	    heap_pagecnt }
@@ -513,7 +516,7 @@ proc env017_db_stat { } {
 		{ "Version"	    bt_version }
 		{ "Number of keys"	    bt_nkeys }
 		{ "Number of records"	    bt_ndata }
-		{ "Number of external files"         bt_nblobs }
+		{ "Number of external files"         bt_ext_files }
 		{ "Minimum keys per page"	    bt_minkey }
 		{ "Fixed record length"	    bt_re_len }
 		{ "Record pad"	    bt_re_pad }
@@ -533,15 +536,15 @@ proc env017_db_stat { } {
 		{ "Flags"	flags }
 	}
 	set hash_doc_list [list hash_magic hash_version hash_nkeys hash_ndata \
-	    hash_nblobs hash_pagecnt hash_pagesize hash_ffactor hash_buckets \
+	    hash_ext_files hash_pagecnt hash_pagesize hash_ffactor hash_buckets \
 	    hash_free hash_bfree hash_bigpages hash_big_bfree hash_overflows \
 	    hash_ovfl_free hash_dup hash_dup_free flags]
 
-	set heap_doc_list [list heap_magic heap_version heap_nblobs heap_nrecs \
+	set heap_doc_list [list heap_magic heap_version heap_ext_files heap_nrecs \
 	    heap_pagesize heap_pagecnt heap_nregions heap_regionsize flags ]
 
 	set btree_doc_list [list bt_magic bt_version bt_nkeys bt_ndata \
-	    bt_nblobs bt_pagecnt bt_pagesize bt_minkey bt_re_len bt_re_pad \
+	    bt_ext_files bt_pagecnt bt_pagesize bt_minkey bt_re_len bt_re_pad \
 	    bt_levels bt_int_pg bt_leaf_pg bt_dup_pg bt_over_pg bt_empty_pg \
 	    bt_free  bt_int_pgfree bt_leaf_pgfree bt_dup_pgfree \
 	    bt_over_pgfree flags ]

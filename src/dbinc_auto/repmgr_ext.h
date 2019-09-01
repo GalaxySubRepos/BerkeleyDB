@@ -15,8 +15,14 @@ void __repmgr_v2handshake_marshal __P((ENV *, __repmgr_v2handshake_args *, u_int
 int __repmgr_v2handshake_unmarshal __P((ENV *, __repmgr_v2handshake_args *, u_int8_t *, size_t, u_int8_t **));
 void __repmgr_parm_refresh_marshal __P((ENV *, __repmgr_parm_refresh_args *, u_int8_t *));
 int __repmgr_parm_refresh_unmarshal __P((ENV *, __repmgr_parm_refresh_args *, u_int8_t *, size_t, u_int8_t **));
+void __repmgr_v6permlsn_marshal __P((ENV *, __repmgr_v6permlsn_args *, u_int8_t *));
+int __repmgr_v6permlsn_unmarshal __P((ENV *, __repmgr_v6permlsn_args *, u_int8_t *, size_t, u_int8_t **));
 void __repmgr_permlsn_marshal __P((ENV *, __repmgr_permlsn_args *, u_int8_t *));
 int __repmgr_permlsn_unmarshal __P((ENV *, __repmgr_permlsn_args *, u_int8_t *, size_t, u_int8_t **));
+void __repmgr_heartbeat_marshal __P((ENV *, __repmgr_heartbeat_args *, u_int8_t *));
+int __repmgr_heartbeat_unmarshal __P((ENV *, __repmgr_heartbeat_args *, u_int8_t *, size_t, u_int8_t **));
+void __repmgr_readonly_response_marshal __P((ENV *, __repmgr_readonly_response_args *, u_int8_t *));
+int __repmgr_readonly_response_unmarshal __P((ENV *, __repmgr_readonly_response_args *, u_int8_t *, size_t, u_int8_t **));
 void __repmgr_version_proposal_marshal __P((ENV *, __repmgr_version_proposal_args *, u_int8_t *));
 int __repmgr_version_proposal_unmarshal __P((ENV *, __repmgr_version_proposal_args *, u_int8_t *, size_t, u_int8_t **));
 void __repmgr_version_confirmation_marshal __P((ENV *, __repmgr_version_confirmation_args *, u_int8_t *));
@@ -60,6 +66,7 @@ int __repmgr_autostart __P((ENV *));
 int __repmgr_start_selector __P((ENV *));
 int __repmgr_close __P((ENV *));
 int __repmgr_stop __P((ENV *));
+int __repmgr_set_ssl_config_pp __P((DB_ENV *, int, char *value));
 int __repmgr_set_ack_policy __P((DB_ENV *, int));
 int __repmgr_get_ack_policy __P((DB_ENV *, int *));
 int __repmgr_set_incoming_queue_max __P((DB_ENV *, u_int32_t, u_int32_t));
@@ -121,6 +128,16 @@ int __repmgr_listen __P((ENV *));
 int __repmgr_net_close __P((ENV *));
 void __repmgr_net_destroy __P((ENV *, DB_REP *));
 void __repmgr_print_addr __P((ENV *, struct sockaddr *, const char *, int, int));
+int __repmgr_set_ssl_ctx __P((ENV *));
+int __repmgr_ssl_accept __P((ENV *, REPMGR_CONNECTION *, socket_t));
+int __repmgr_ssl_connect __P((ENV *, socket_t, REPMGR_CONNECTION *));
+int __repmgr_ssl_shutdown __P ((ENV *, REPMGR_CONNECTION *));
+int __repmgr_ssl_write __P((REPMGR_CONNECTION *, char *, size_t, int *));
+ssize_t __repmgr_ssl_writemsg __P((REPMGR_CONNECTION *, char *, size_t, int *));
+ssize_t __repmgr_ssl_writev __P((REPMGR_CONNECTION *, db_iovec_t *, int, size_t *));
+int __repmgr_ssl_readv __P((REPMGR_CONNECTION *, db_iovec_t *, int, size_t *));
+int __repmgr_ssl_write_possible __P ((REPMGR_CONNECTION *, int, int));
+int __repmgr_ssl_read_possible __P ((REPMGR_CONNECTION *, int, int));
 int __repmgr_thread_start __P((ENV *, REPMGR_RUNNABLE *));
 int __repmgr_thread_join __P((REPMGR_RUNNABLE *));
 int __repmgr_set_nonblock_conn __P((REPMGR_CONNECTION *));
@@ -146,7 +163,7 @@ int __repmgr_wake_msngers __P((ENV*, u_int));
 int __repmgr_wake_main_thread __P((ENV*));
 int __repmgr_writev __P((socket_t, db_iovec_t *, int, size_t *));
 int __repmgr_readv __P((socket_t, db_iovec_t *, int, size_t *));
-int __repmgr_select_loop __P((ENV *));
+int __repmgr_network_event_handler __P((ENV *));
 int __repmgr_queue_destroy __P((ENV *));
 int __repmgr_queue_get __P((ENV *, REPMGR_MESSAGE **, REPMGR_RUNNABLE *));
 int __repmgr_queue_put __P((ENV *, REPMGR_MESSAGE *));
@@ -227,6 +244,9 @@ int __repmgr_init_recover __P((ENV *, DB_DISTAB *));
 #endif
 #ifndef HAVE_REPLICATION_THREADS
 int __repmgr_set_socket __P((DB_ENV *, int (*)(DB_ENV *, DB_REPMGR_SOCKET, int *, u_int32_t)));
+#endif
+#ifndef HAVE_REPLICATION_THREADS
+int __repmgr_set_ssl_config_pp __P((DB_ENV *, int, char *value));
 #endif
 int __repmgr_schedule_connection_attempt __P((ENV *, int, int));
 int __repmgr_is_server __P((ENV *, REPMGR_SITE *));

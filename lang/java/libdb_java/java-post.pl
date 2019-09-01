@@ -13,10 +13,10 @@ s!public [^(]*log_compare\([^)]*\)!$& /* no exception */!;
 s!public [^(]* feedback\([^)]*\)!$& /* no exception */!;
 
 # Mark methods that throw special exceptions
-m/DbSequence/ || s!(public [^(]*(open|remove|rename)0?\([^)]*\))( {|;)!$1 throws com.sleepycat.db.DatabaseException, java.io.FileNotFoundException$3!;
+m/DbSequence/ || s!(public [^(]*(open|remove|rename)0?\([^)]*\))( \{|;)!$1 throws com.sleepycat.db.DatabaseException, java.io.FileNotFoundException$3!;
 
 # Everything else throws a DbException
-s!(public [^(]*\([^)]*\))(;| {)!$1 throws com.sleepycat.db.DatabaseException$2!;
+s!(public [^(]*\([^)]*\))(;| \{)!$1 throws com.sleepycat.db.DatabaseException$2!;
 
 # Add initialize methods for Java parts of Db and DbEnv
 s!\.new_DbEnv\(.*$!$&\n    initialize();!;

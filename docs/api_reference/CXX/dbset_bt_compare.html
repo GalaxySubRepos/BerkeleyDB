@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_bt_compare()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_bt_compare()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_append_recno.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_bt_compare"></a>Db::set_bt_compare()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_bt_compare"></a>
+        
+        <span>Db::set_bt_compare()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -62,8 +68,14 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
     </p>
       <p>
          The <code class="methodname">Db::set_bt_compare()</code> method may not be called after the 
-         <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called. If
-         the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+         <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called. If
+         the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
          is called, the information specified to <code class="methodname">Db::set_bt_compare()</code> must be the same as
          that historically used to create the database or corruption can occur.
     </p>
@@ -81,7 +93,7 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703823743616"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176782419024"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -89,7 +101,7 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703823760656"></a>bt_compare_fcn</h4>
+                <h4 class="title"><a id="idm140176782436336"></a>bt_compare_fcn</h4>
               </div>
             </div>
           </div>
@@ -149,7 +161,10 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
                     function must correctly handle any key values used by the application (possibly
                     including zero-length keys). In addition, when Btree key prefix comparison is
                     being performed (see 
-                    <a class="xref" href="dbset_bt_prefix.html" title="Db::set_bt_prefix()">Db::set_bt_prefix()</a> 
+                    <a class="xref" href="dbset_bt_prefix.html" title="Db::set_bt_prefix()">
+        
+        <span>Db::set_bt_prefix()</span>
+    </a> 
                     for more information), the comparison routine may be passed a prefix of any database 
                     key. The <span class="bold"><strong>data</strong></span> and <span class="bold"><strong>size</strong></span>
                     fields of the <a class="link" href="dbt.html" title="Chapter 4.  The Dbt Handle">Dbt</a> are the only fields
@@ -163,7 +178,7 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703825025856"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176782219120"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -181,12 +196,15 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703824990032"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176783866832"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a> 
+                If the method was called after <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -195,7 +213,7 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703825116784"></a>Class</h3>
+              <h3 class="title"><a id="idm140176783790320"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -207,7 +225,7 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703825740960"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176778770352"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -227,11 +245,17 @@ Db::set_bt_compare(bt_compare_fcn_type bt_compare_fcn);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_bt_compress.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_append_recno() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_append_recno()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_bt_compress()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_bt_compress()</span>
+    </td>
         </tr>
       </table>
     </div>

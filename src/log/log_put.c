@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -98,6 +98,8 @@ __log_put(env, lsnp, udbt, flags)
 	int lock_held, need_free, ret;
 	u_int8_t *key;
 
+	COMPQUIET(rep, NULL);
+	
 	dblp = env->lg_handle;
 	lp = dblp->reginfo.primary;
 	db_cipher = env->crypto_handle;
@@ -137,10 +139,9 @@ __log_put(env, lsnp, udbt, flags)
 		}
 	}
 
-	if (IS_REP_CLIENT(env)) {		
+	if (IS_REP_CLIENT(env)) {
 		__db_errx(env, DB_STR("2590",
-			    "log_put is illegal on replication clients"));		
-		
+			    "log_put is illegal on replication clients"));
 #if  !defined(DIAGNOSTIC)
 		/*
 		 * DB_ASSERT would generate a stack if DIAGNOSTIC is true.
@@ -1729,7 +1730,7 @@ __log_put_record_pp(DB_ENV *dbenv, DB *dbp, DB_TXN *txnp, DB_LSN *ret_lsnp,
 
 	/* Replication clients should never write log records. */
 	if (IS_REP_CLIENT(env)) {
-		__db_errx(env, DB_STR("2522",
+		__db_errx(env, DB_STR("2511",
 		    "DB_ENV->log_put is illegal on replication clients"));
 		return (EINVAL);
 	}

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * PutHelper implements a few helper methods for making remote put calls.
  */
-interface PutHelper extends RemoteCallHelper {
+public interface PutHelper extends RemoteCallHelper {
 
     /**
      * Calculate the secondary keys generated for each secondary database for
@@ -78,7 +78,7 @@ interface PutHelper extends RemoteCallHelper {
     Set<SSecondaryDatabase> getSecondaryDatabases();
 
     @FunctionalInterface
-    interface RemotePutFunction {
+    public interface RemotePutFunction {
         TPutResult applyWithException(List<TKeyDataWithSecondaryKeys> pairs)
                 throws TException;
     }

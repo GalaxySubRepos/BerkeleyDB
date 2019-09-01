@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file EXAMPLES-LICENSE for license information.
  *
  * $Id$
  */
@@ -69,10 +69,10 @@ hm_loop(args)
 	ha = (hm_loop_args *)args;
 	dbenv = ha->dbenv;
 	fd = ha->fd;
-	home = ha->home;
 	eid = ha->eid;
 	progname = ha->progname;
 	tab = ha->tab;
+	COMPQUIET(home, ha->home);
 	free(ha);
 	app = dbenv->app_private;
 
@@ -353,10 +353,11 @@ connect_all(args)
 	aa = (all_args *)args;
 	dbenv = aa->dbenv;
 	progname = aa->progname;
-	home = aa->home;
 	machtab = aa->machtab;
 	nsites = aa->nsites;
 	sites = aa->sites;
+	COMPQUIET(home, aa->home);
+
 	status = NULL;
 	app = dbenv->app_private;
 	memset(&empty_id, 0, sizeof(thread_t));

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbMpoolFile::set_lsn_offset()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbMpoolFile::set_lsn_offset()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="mempset_ftype.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="mempset_lsn_offset"></a>DbMpoolFile::set_lsn_offset()</h2>
+            <h2 class="title" style="clear: both"><a id="mempset_lsn_offset"></a>
+        
+        <span>DbMpoolFile::set_lsn_offset()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -46,7 +52,10 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
          byte offset of a log sequence number  
          (<a class="link" href="lsn.html" title="Chapter 8.  The DbLsn Handle">DbLsn</a>) on the file's pages, for
          the purposes of page-flushing as part of transaction checkpoint.  (See
-         the <a class="xref" href="mempsync.html" title="DbEnv::memp_sync()">DbEnv::memp_sync()</a> 
+         the <a class="xref" href="mempsync.html" title="DbEnv::memp_sync()">
+        
+        <span>DbEnv::memp_sync()</span>
+    </a> 
          documentation for more information.)
     </p>
       <p>
@@ -56,9 +65,15 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
     </p>
       <p>
          The <code class="methodname">DbMpoolFile::set_lsn_offset()</code> method may not be called after the
-         <a class="xref" href="mempfopen.html" title="DbMpoolFile::open()">DbMpoolFile::open()</a> 
+         <a class="xref" href="mempfopen.html" title="DbMpoolFile::open()">
+        
+        <span>DbMpoolFile::open()</span>
+    </a> 
          method is called. If the file is already open in the cache when
-         <a class="xref" href="mempfopen.html" title="DbMpoolFile::open()">DbMpoolFile::open()</a>  is
+         <a class="xref" href="mempfopen.html" title="DbMpoolFile::open()">
+        
+        <span>DbMpoolFile::open()</span>
+    </a>  is
          called, the information specified to <code class="methodname">DbMpoolFile::set_lsn_offset()</code>
          must be consistent with the existing file or an error will be returned.
     </p>
@@ -76,7 +91,7 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808772416"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176766016800"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -84,7 +99,7 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703808735296"></a>lsn_offset</h4>
+                <h4 class="title"><a id="idm140176766015936"></a>lsn_offset</h4>
               </div>
             </div>
           </div>
@@ -98,7 +113,7 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808733888"></a>Class</h3>
+              <h3 class="title"><a id="idm140176765979968"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -110,7 +125,7 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703808755888"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176765973088"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -130,11 +145,17 @@ int DbMpoolFile::set_lsn_offset(int32_t lsn_offset); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="mempset_maxsize.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbMpoolFile::set_ftype() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbMpoolFile::set_ftype()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbMpoolFile::set_maxsize()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbMpoolFile::set_maxsize()</span>
+    </td>
         </tr>
       </table>
     </div>

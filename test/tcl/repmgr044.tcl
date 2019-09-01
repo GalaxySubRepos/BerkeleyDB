@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2014, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -53,6 +53,8 @@ proc repmgr044_groupsize { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -67,7 +69,7 @@ proc repmgr044_groupsize { method niter tnum largs } {
 
 	# Create error files to capture group size warnings.
 	puts "\tRepmgr$tnum.gs.a: Start preferred master site."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errfile $testdir/rm44mas.err \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread -event"
 	set masterenv [eval $ma_envcmd]
@@ -77,7 +79,7 @@ proc repmgr044_groupsize { method niter tnum largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.gs.b: Start client site."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errfile $testdir/rm44cli.err \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread -event"
 	set clientenv [eval $cl_envcmd]
@@ -177,7 +179,7 @@ proc repmgr044_groupsize { method niter tnum largs } {
 	# removing the third site, verify that preferred master behaves
 	# as we expect.
 	puts "\tRepmgr$tnum.gs.f1: Start a second client site."
-	set cl2_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl2_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT2 -home $client2dir -txn -rep -thread -event"
 	set client2env [eval $cl2_envcmd]
 	$client2env repmgr -ack all \
@@ -262,6 +264,8 @@ proc repmgr044_mastertrans { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -275,7 +279,7 @@ proc repmgr044_mastertrans { method niter tnum largs } {
 	file mkdir $client2dir
 
 	puts "\tRepmgr$tnum.mx.a: Start preferred master site."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errfile $testdir/rm44mas.err \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
@@ -285,7 +289,7 @@ proc repmgr044_mastertrans { method niter tnum largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.mx.b: Start client site."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errfile $testdir/rm44cli.err \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
@@ -346,7 +350,7 @@ proc repmgr044_mastertrans { method niter tnum largs } {
 
 	puts "\tRepmgr$tnum.mx.g: Make a third site the new preferred\
 	    master client."
-	set cl2_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl2_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT2 -home $client2dir -txn -rep -thread"
 	set client2env [eval $cl2_envcmd]
 	$client2env rep_config {mgrprefmasclient on}

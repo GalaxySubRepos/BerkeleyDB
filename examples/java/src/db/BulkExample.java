@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db;
@@ -83,7 +82,7 @@ public class BulkExample {
             /* If perform bulk update or delete, clean environment home */
             app.cleanHome(app.opt != Operations.BULK_READ);
             app.initDbs();
-        }catch (Exception e) {
+        } catch (DatabaseException | FileNotFoundException e) {
             e.printStackTrace();
             app.closeDbs();
         }
@@ -132,9 +131,7 @@ public class BulkExample {
                         count, startTime, endTime);
                 }
             }
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (DatabaseException | IOException e) {
             e.printStackTrace();
         } finally {
             /* Close dbs */
@@ -346,12 +343,9 @@ public class BulkExample {
             }
 
             txn.commit();
-        }catch (DatabaseException e1) {
+        } catch (DatabaseException | IOException e1) {
             txn.abort();
             throw e1;
-        }catch (IOException e2) {
-            txn.abort();
-            throw e2;
         }
     }
 
@@ -367,8 +361,8 @@ public class BulkExample {
             file.mkdir();
         else if (clean == true) {
             File[] files = file.listFiles();
-            for(int i=0; i< files.length; i++) {
-                files[i].delete();
+            for (File file1 : files) {
+                file1.delete();
             }
             file.delete();
             file.mkdir();
@@ -419,7 +413,7 @@ public class BulkExample {
         File envFile = new File(home);
         try {
             env = new Environment(envFile, envConfig);
-        } catch (Exception e) {
+        } catch (DatabaseException | FileNotFoundException e) {
             System.exit(1);
         }
 
@@ -452,12 +446,9 @@ public class BulkExample {
             }
 
             txn.commit();
-        } catch (DatabaseException e1) {
+        } catch (DatabaseException | FileNotFoundException e1) {
             txn.abort();
             throw e1;
-        } catch (FileNotFoundException e2) {
-            txn.abort();
-            throw e2;
         }
     }
 
@@ -489,7 +480,7 @@ public class BulkExample {
         /* String template */
         public static final String tstring = "0123456789abcde";
 
-        private String dataString;
+        private final String dataString;
         private int dataId;
 
         /* 
@@ -539,6 +530,7 @@ public class BulkExample {
 
     /* Secondary key creator */
     class FirstStrKeyCreator implements SecondaryKeyCreator {
+        @Override
         public boolean createSecondaryKey(SecondaryDatabase secondary,
                 DatabaseEntry key, DatabaseEntry data, DatabaseEntry result)
                 throws DatabaseException {

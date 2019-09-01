@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::key_range()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::key_range()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbjoin.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbkey_range"></a>Db::key_range()</h2>
+            <h2 class="title" style="clear: both"><a id="dbkey_range"></a>
+        
+        <span>Db::key_range()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -108,7 +114,7 @@ Db::key_range(DbTxn *txnid
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703821856448"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176778268560"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -116,17 +122,23 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703823795504"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176780493296"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; 
+                          handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; 
                           if the operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected. The <code class="methodname">Db::key_range()</code> method does not
@@ -138,7 +150,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703820798384"></a>key</h4>
+                <h4 class="title"><a id="idm140176784137088"></a>key</h4>
               </div>
             </div>
           </div>
@@ -150,7 +162,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703822681728"></a>key_range</h4>
+                <h4 class="title"><a id="idm140176784404240"></a>key_range</h4>
               </div>
             </div>
           </div>
@@ -167,7 +179,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703823680384"></a>flags</h4>
+                <h4 class="title"><a id="idm140176784952576"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -181,7 +193,7 @@ Db::key_range(DbTxn *txnid
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703822701632"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176784696592"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -199,7 +211,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703824393968"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176786262336"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -217,7 +229,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703825183232"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176786864128"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -229,7 +241,10 @@ Db::key_range(DbTxn *txnid
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">Db::set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">
+        
+        <span>Db::set_lk_exclusive()</span>
+    </a>
                 for more information.
             </p>
           <p>
@@ -242,7 +257,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703826576896"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176773869664"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -264,7 +279,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703826593216"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176774888656"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -281,7 +296,7 @@ Db::key_range(DbTxn *txnid
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703826851168"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176787937440"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -297,7 +312,7 @@ Db::key_range(DbTxn *txnid
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703824465472"></a>Class</h3>
+              <h3 class="title"><a id="idm140176785823328"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -309,7 +324,7 @@ Db::key_range(DbTxn *txnid
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703827537584"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176775979312"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -329,11 +344,17 @@ Db::key_range(DbTxn *txnid
           <td width="40%" align="right"> <a accesskey="n" href="dbmsg.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::join() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::join()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::msg()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::msg()</span>
+    </td>
         </tr>
       </table>
     </div>

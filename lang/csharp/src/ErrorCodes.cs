@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -86,6 +86,10 @@ namespace BerkeleyDB {
         /// This message should be ignored.
         ///</summary>
         public const int DB_REP_IGNORE = DbConstants.DB_REP_IGNORE;
+        ///<summary>
+        /// Election in progress.
+        ///</summary>
+        public const int DB_REP_INELECT = DbConstants.DB_REP_INELECT;
         ///<summary>
         /// Cached not written perm written.
         ///</summary>

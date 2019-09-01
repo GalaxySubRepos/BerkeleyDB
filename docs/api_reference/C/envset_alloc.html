@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_alloc()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_alloc()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envremove.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_alloc"></a>DB_ENV-&gt;set_alloc()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_alloc"></a>
+        <span>DB_ENV-&gt;set_alloc()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -59,15 +65,36 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
          reallocate memory which then becomes the responsibility of the calling
          application.  Other examples are the Berkeley DB interfaces
          which return statistical information to the application: 
-         <a class="xref" href="dbstat.html" title="DB-&gt;stat()">DB-&gt;stat()</a>, 
-         <a class="xref" href="lockstat.html" title="DB_ENV-&gt;lock_stat()">DB_ENV-&gt;lock_stat()</a>, 
-         <a class="xref" href="logarchive.html" title="DB_ENV-&gt;log_archive()">DB_ENV-&gt;log_archive()</a>, 
-         <a class="xref" href="logstat.html" title="DB_ENV-&gt;log_stat()">DB_ENV-&gt;log_stat()</a>, 
-         <a class="xref" href="mempstat.html" title="DB_ENV-&gt;memp_stat()">DB_ENV-&gt;memp_stat()</a>, and 
-         <a class="xref" href="txnstat.html" title="DB_ENV-&gt;txn_stat()">DB_ENV-&gt;txn_stat()</a>.  There is
+         <a class="xref" href="dbstat.html" title="DB-&gt;stat()">
+        <span>DB-&gt;stat()</span>
+        
+    </a>, 
+         <a class="xref" href="lockstat.html" title="DB_ENV-&gt;lock_stat()">
+        <span>DB_ENV-&gt;lock_stat()</span>
+        
+    </a>, 
+         <a class="xref" href="logarchive.html" title="DB_ENV-&gt;log_archive()">
+        <span>DB_ENV-&gt;log_archive()</span>
+        
+    </a>, 
+         <a class="xref" href="logstat.html" title="DB_ENV-&gt;log_stat()">
+        <span>DB_ENV-&gt;log_stat()</span>
+        
+    </a>, 
+         <a class="xref" href="mempstat.html" title="DB_ENV-&gt;memp_stat()">
+        <span>DB_ENV-&gt;memp_stat()</span>
+        
+    </a>, and 
+         <a class="xref" href="txnstat.html" title="DB_ENV-&gt;txn_stat()">
+        <span>DB_ENV-&gt;txn_stat()</span>
+        
+    </a>.  There is
          one method in Berkeley DB where memory is allocated by the application
          and then given to the library: the callback specified to
-         <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">DB-&gt;associate()</a>.
+         <a class="xref" href="dbassociate.html" title="DB-&gt;associate()">
+        <span>DB-&gt;associate()</span>
+        
+    </a>.
     </p>
       <p>
          On systems in which there may be multiple library versions of the
@@ -75,7 +102,10 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
          between the library and the application will fail because the Berkeley
          DB library allocates memory from a different heap than the application
          uses to free it.  To avoid this problem, the <code class="methodname">DB_ENV-&gt;set_alloc()</code> and
-         <a class="xref" href="dbset_alloc.html" title="DB-&gt;set_alloc()">DB-&gt;set_alloc()</a> 
+         <a class="xref" href="dbset_alloc.html" title="DB-&gt;set_alloc()">
+        <span>DB-&gt;set_alloc()</span>
+        
+    </a> 
          methods can be used to pass Berkeley DB references to the
          application's allocation routines.
     </p>
@@ -95,7 +125,10 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
     </p>
       <p>
              The <code class="methodname">DB_ENV-&gt;set_alloc()</code> method may not be called after the 
-             <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is called.
+             <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_alloc()</code> <span>
@@ -109,7 +142,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233972560"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113486091200"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -117,7 +150,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233677648"></a>app_malloc</h4>
+                <h4 class="title"><a id="idm140113486089056"></a>app_malloc</h4>
               </div>
             </div>
           </div>
@@ -130,7 +163,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233674544"></a>app_realloc</h4>
+                <h4 class="title"><a id="idm140113486126912"></a>app_realloc</h4>
               </div>
             </div>
           </div>
@@ -143,7 +176,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233657408"></a>app_free</h4>
+                <h4 class="title"><a id="idm140113486198336"></a>app_free</h4>
               </div>
             </div>
           </div>
@@ -157,7 +190,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233632496"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113486044640"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -173,12 +206,15 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233623216"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113486035472"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -187,7 +223,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233620736"></a>Class</h3>
+              <h3 class="title"><a id="idm140113486032992"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -199,7 +235,7 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233630768"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113486043440"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -219,11 +255,17 @@ DB_ENV-&gt;set_alloc(DB_ENV *dbenv,
           <td width="40%" align="right"> <a accesskey="n" href="envset_app_dispatch.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;remove() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;remove()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_app_dispatch()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_app_dispatch()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

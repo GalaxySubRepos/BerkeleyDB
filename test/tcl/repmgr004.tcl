@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -141,6 +141,9 @@ proc repmgr004_sub { method niter tnum use_bulk use_blob largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+
 	# Use a big cache size on the master so that the master can do 
 	# operations fast.
 	puts "\tRepmgr$tnum.a: Start the master."
@@ -264,7 +267,8 @@ proc repmgr004_sub { method niter tnum use_bulk use_blob largs } {
 		puts "\tRepmgr$tnum.$istr.3:\
 		    Close the client and run transactions on the master."
 		$masterenv repmgr -ack none
-		error_check_good client_close [$clientenv close] 0
+		error_check_good client_close [$clientenv close] 0		
+
 		for {set i 0} {$i < $times} {incr i} {
 			if {$use_bulk || $use_blob} {
 			        eval $test_proc $method $masterenv $repdb \

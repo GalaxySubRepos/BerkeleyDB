@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr107
 # TEST Repmgr combined with replication-unaware process at master.
@@ -31,6 +31,7 @@ proc repmgr107 { } {
 	}
 	make_dbconfig $mdir \
             [linsert $dbconfig 0 [list repmgr_site $hoststr $mport db_local_site on]]
+	setup_repmgr_ssl $mdir
 	set cmds {
 		"home $mdir"
 		"output $testdir/moutput"
@@ -46,6 +47,7 @@ proc repmgr107 { } {
             [linsert $dbconfig 0 \
                  [list repmgr_site $hoststr $cport db_local_site on] \
                  [list repmgr_site $hoststr $mport db_bootstrap_helper on]]
+	setup_repmgr_ssl $cdir
 	set cmds {
 		"home $cdir"
 		"output $testdir/coutput"

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envclose.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envcreate"></a>DbEnv</h2>
+            <h2 class="title" style="clear: both"><a id="envcreate"></a>
+        
+        <span>DbEnv</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -60,25 +66,43 @@ public:
       <p>
         <code class="classname">DbEnv</code> handles are free-threaded if the 
         <a class="link" href="envopen.html#envopen_DB_THREAD">DB_THREAD</a> flag is specified to the
-        <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> method when the environment is opened.
+        <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> method when the environment is opened.
         The <code class="classname">DbEnv</code> handle should not be closed while any other handle
         remains open that is using it as a reference (for example, 
         <a class="link" href="db.html" title="Chapter 2.  The Db Handle">Db</a> or <a class="link" href="txn.html" title="Chapter 13.  The DbTxn Handle">DbTxn</a>). 
         Once either the
-        <a class="xref" href="envclose.html" title="DbEnv::close()">DbEnv::close()</a> or 
-        <a class="xref" href="envremove.html" title="DbEnv::remove()">DbEnv::remove()</a> 
+        <a class="xref" href="envclose.html" title="DbEnv::close()">
+        
+        <span>DbEnv::close()</span>
+    </a> or 
+        <a class="xref" href="envremove.html" title="DbEnv::remove()">
+        
+        <span>DbEnv::remove()</span>
+    </a> 
         methods are called, the handle may not be accessed again, regardless of the method's return.
     </p>
       <p>
         The constructor creates the <code class="classname">DbEnv</code> object. 
         The constructor allocates memory internally; calling the 
-        <a class="xref" href="envclose.html" title="DbEnv::close()">DbEnv::close()</a> or 
-        <a class="xref" href="envremove.html" title="DbEnv::remove()">DbEnv::remove()</a> 
+        <a class="xref" href="envclose.html" title="DbEnv::close()">
+        
+        <span>DbEnv::close()</span>
+    </a> or 
+        <a class="xref" href="envremove.html" title="DbEnv::remove()">
+        
+        <span>DbEnv::remove()</span>
+    </a> 
          methods will free that memory.
     </p>
       <p>
             Before the handle may be used, you must open it using the 
-            <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>
+            <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>
             method.
     </p>
       <p>
@@ -128,7 +152,7 @@ public:
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703813271712"></a>Class</h3>
+              <h3 class="title"><a id="idm140176770657536"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -140,7 +164,7 @@ public:
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703813334160"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176770689392"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -160,11 +184,17 @@ public:
           <td width="40%" align="right"> <a accesskey="n" href="envdbbackup.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::close() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::close()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::dbbackup()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::dbbackup()</span>
+    </td>
         </tr>
       </table>
     </div>

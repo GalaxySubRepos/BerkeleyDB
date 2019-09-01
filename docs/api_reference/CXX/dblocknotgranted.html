@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -63,9 +63,15 @@ public:
     </p>
       <p>
         Finally, <code class="classname">DbLockNotGrantedException</code> is thrown when a lock requested using the
-        <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a>
+        <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a>
         or
-        <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a>
+        <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a>
         methods, where the <a class="link" href="lockvec.html#vec_DB_LOCK_NOWAIT">DB_LOCK_NOWAIT</a>
         flag or lock timers were configured, could not be granted before the wait-time expired.
     </p>
@@ -83,9 +89,15 @@ public:
                 <code class="methodname">get_op()</code>
             </p>
             <p>
-                Returns <code class="literal">DB_LOCK_GET</code> when <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a>
+                Returns <code class="literal">DB_LOCK_GET</code> when <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a>
                 was called, and returns the <span class="bold"><strong>op</strong></span> for the failed
-                <code class="literal">DB_LOCKREQ</code> when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a>
+                <code class="literal">DB_LOCKREQ</code> when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a>
                 was called. If this exception is raised due to a database
                 operation, <code class="literal">DB_LOCK_GET</code> is returned.
             </p>
@@ -96,9 +108,15 @@ public:
             </p>
             <p>
                 Returns the <span class="bold"><strong>mode</strong></span> parameter when 
-                <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a> was called, and returns the
+                <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a> was called, and returns the
                 <span class="bold"><strong>mode</strong></span> for the failed <code class="literal">DB_LOCKREQ</code>
-                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a> was called.
+                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a> was called.
                 If this exception is raised due to a database operation, 
                 <code class="literal">DB_LOCK_NG</code> is returned.
             </p>
@@ -109,13 +127,25 @@ public:
             </p>
             <p>
                 Returns the <span class="bold"><strong>object</strong></span> parameter when 
-                <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a> was called, and returns the
+                <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a> was called, and returns the
                 <span class="bold"><strong>object</strong></span> for the failed <code class="literal">DB_LOCKREQ</code>
-                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a> was called.
+                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a> was called.
                 The <a class="link" href="dbt.html" title="Chapter 4.  The Dbt Handle">Dbt</a> pointer may or may not refer valid
                 memory, depending on whether the <a class="link" href="dbt.html" title="Chapter 4.  The Dbt Handle">Dbt</a>
-                used in the call to the failed <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a>
-                or <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a> method is still in
+                used in the call to the failed <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a>
+                or <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a> method is still in
                 scope and has not been deleted.
             </p>
           </li>
@@ -124,9 +154,15 @@ public:
                 <code class="methodname">get_lock()</code>
             </p>
             <p>
-                Returns NULL when <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a> was called, 
+                Returns NULL when <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a> was called, 
                 and returns the <span class="bold"><strong>lock</strong></span> in the failed <code class="literal">DB_LOCKREQ</code>
-                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a> was called.
+                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a> was called.
                 If this exception is raised due to a database operation, NULL is returned.
             </p>
           </li>
@@ -135,9 +171,15 @@ public:
                 <code class="methodname">get_index()</code>
             </p>
             <p>
-                Returns <code class="literal">-1</code> when <a class="xref" href="lockget.html" title="DbEnv::lock_get()">DbEnv::lock_get()</a> was called, 
+                Returns <code class="literal">-1</code> when <a class="xref" href="lockget.html" title="DbEnv::lock_get()">
+        
+        <span>DbEnv::lock_get()</span>
+    </a> was called, 
                 and returns the index of the failed <code class="literal">DB_LOCKREQ</code>
-                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">DbEnv::lock_vec()</a> was called.
+                when <a class="xref" href="lockvec.html" title="DbEnv::lock_vec()">
+        
+        <span>DbEnv::lock_vec()</span>
+    </a> was called.
                 If this exception is raised due to a database operation, 
                 <code class="literal">0</code> is returned.
             </p>

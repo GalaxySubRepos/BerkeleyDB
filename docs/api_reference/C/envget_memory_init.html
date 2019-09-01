@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;get_memory_init()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;get_memory_init()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envget_intermediate_dir_mode.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envget_memory_init"></a>DB_ENV-&gt;get_memory_init()</h2>
+            <h2 class="title" style="clear: both"><a id="envget_memory_init"></a>
+        <span>DB_ENV-&gt;get_memory_init()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -48,7 +54,10 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
         the number of objects to allocate and initialize when an
         environment is created. The count is returned for a specific named
         structure. The count for each structure is set using the
-        <a class="xref" href="envset_memory_init.html" title="DB_ENV-&gt;set_memory_init()">DB_ENV-&gt;set_memory_init()</a>
+        <a class="xref" href="envset_memory_init.html" title="DB_ENV-&gt;set_memory_init()">
+        <span>DB_ENV-&gt;set_memory_init()</span>
+        
+    </a>
         method.
      </p>
       <p>
@@ -68,7 +77,7 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234146288"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113486578000"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -76,7 +85,7 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234147536"></a>type</h4>
+                <h4 class="title"><a id="idm140113486576848"></a>type</h4>
               </div>
             </div>
           </div>
@@ -90,12 +99,39 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
             <ul type="disc">
               <li>
                 <p>
+                        <code class="literal">DB_MEM_DATABASE</code>
+                    </p>
+                <p>
+                        Initialize the number of databases in the
+                        environment.
+                    </p>
+              </li>
+              <li>
+                <p>
+                        <code class="literal">DB_MEM_DATABASE_LENGTH</code>
+                    </p>
+                <p>
+                        Initialize the maximum combined length of a
+                        database's directory and name strings.
+                    </p>
+              </li>
+              <li>
+                <p>
+                        <code class="literal">DB_MEM_EXTFILE_DATABASE</code>
+                    </p>
+                <p>
+                        Initialize the number of database files and
+                        subdatabases using external files.
+                    </p>
+              </li>
+              <li>
+                <p>
                         <code class="literal">DB_MEM_LOCK</code>
                     </p>
                 <p>
                         Initialize locks.  A thread uses this structure
                         to lock a page (or record for the QUEUE access
-                        method) and hold it to the end of a transactions.
+                        method) and hold it to the end of a transaction.
                     </p>
               </li>
               <li>
@@ -130,6 +166,15 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
               </li>
               <li>
                 <p>
+                        <code class="literal">DB_MEM_REP_SITE</code>
+                    </p>
+                <p>
+                        If using replication, initialize the maximum
+                        number of sites in the replication group.
+                    </p>
+              </li>
+              <li>
+                <p>
                           <code class="literal">DB_MEM_TRANSACTION</code>
                     </p>
                 <p>
@@ -149,7 +194,10 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
                         BDB library that it will no longer be making calls, unused
                         structures may accumulate until a cleanup is triggered either
                         using a high water mark or by running 
-                        <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">DB_ENV-&gt;failchk()</a>.
+                        <a class="xref" href="envfailchk.html" title="DB_ENV-&gt;failchk()">
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </a>.
                     </p>
               </li>
             </ul>
@@ -159,7 +207,7 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234121584"></a>countp</h4>
+                <h4 class="title"><a id="idm140113486538512"></a>countp</h4>
               </div>
             </div>
           </div>
@@ -174,7 +222,7 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234139440"></a>Class</h3>
+              <h3 class="title"><a id="idm140113486545888"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -186,7 +234,7 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234145456"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113486603584"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -206,11 +254,17 @@ DB_ENV-&gt;get_memory_init(DB_ENV *dbenv, DB_MEM_CONFIG type,
           <td width="40%" align="right"> <a accesskey="n" href="envget_memory_max.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;get_intermediate_dir_mode() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;get_intermediate_dir_mode()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;get_memory_max()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;get_memory_max()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

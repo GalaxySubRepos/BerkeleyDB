@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.sentity;
@@ -19,7 +18,7 @@ package collections.ship.sentity;
  */
 public class PartKey {
 
-    private String number;
+    private final String number;
 
     public PartKey(String number) {
 
@@ -31,6 +30,7 @@ public class PartKey {
         return number;
     }
 
+    @Override
     public String toString() {
 
         return "[PartKey: number=" + number + ']';

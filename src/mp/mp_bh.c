@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -710,6 +710,7 @@ __memp_bh_clear_dirty(env, hp, bhp)
 	DB_MPOOL_HASH *hp;
 	BH *bhp;
 {
+	COMPQUIET(env, env);
 	if (F_ISSET(bhp, BH_DIRTY)) {
 		F_CLR(bhp, BH_DIRTY | BH_DIRTY_CREATE);
 		DB_ASSERT(env, atomic_read(&hp->hash_page_dirty) > 0);

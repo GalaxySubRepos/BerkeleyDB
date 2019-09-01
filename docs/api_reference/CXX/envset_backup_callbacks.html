@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_backup_callbacks()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_backup_callbacks()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_app_dispatch.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_backup_callbacks"></a>DbEnv::set_backup_callbacks()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_backup_callbacks"></a>
+        
+        <span>DbEnv::set_backup_callbacks()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -50,16 +56,28 @@ DB_ENV-&gt;set_backup_callbacks(
       <p>
          The <code class="methodname">DbEnv::set_backup_callbacks()</code> method
          configures three callback functions which can be used by the
-         <a class="xref" href="envbackup.html" title="DbEnv::backup()">DbEnv::backup()</a>
+         <a class="xref" href="envbackup.html" title="DbEnv::backup()">
+        
+        <span>DbEnv::backup()</span>
+    </a>
          or
-         <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">DbEnv::dbbackup()</a>
+         <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">
+        
+        <span>DbEnv::dbbackup()</span>
+    </a>
          methods to override their default behavior. If one callback is
          configured, then all three callbacks must be configured.
          These callbacks are required if the <code class="literal">target</code> parameter is 
          set to <code class="literal">NULL</code> for the
-         <a class="xref" href="envbackup.html" title="DbEnv::backup()">DbEnv::backup()</a>
+         <a class="xref" href="envbackup.html" title="DbEnv::backup()">
+        
+        <span>DbEnv::backup()</span>
+    </a>
          or
-         <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">DbEnv::dbbackup()</a>
+         <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">
+        
+        <span>DbEnv::dbbackup()</span>
+    </a>
          methods.
     </p>
       <p>
@@ -86,7 +104,7 @@ DB_ENV-&gt;set_backup_callbacks(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812337136"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176769851584"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -94,7 +112,7 @@ DB_ENV-&gt;set_backup_callbacks(
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812395024"></a>open_func</h4>
+                <h4 class="title"><a id="idm140176769651632"></a>open_func</h4>
               </div>
             </div>
           </div>
@@ -155,7 +173,7 @@ DB_ENV-&gt;set_backup_callbacks(
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812263136"></a>write_func</h4>
+                <h4 class="title"><a id="idm140176769632512"></a>write_func</h4>
               </div>
             </div>
           </div>
@@ -241,7 +259,7 @@ DB_ENV-&gt;set_backup_callbacks(
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812306096"></a>close_func</h4>
+                <h4 class="title"><a id="idm140176769631840"></a>close_func</h4>
               </div>
             </div>
           </div>
@@ -290,7 +308,7 @@ DB_ENV-&gt;set_backup_callbacks(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812254400"></a>Class</h3>
+              <h3 class="title"><a id="idm140176769605984"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -302,15 +320,24 @@ DB_ENV-&gt;set_backup_callbacks(
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812349312"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176769560640"></a>See Also</h3>
             </div>
           </div>
         </div>
         <p>
             <a class="xref" href="env.html#envlist" title="Database Environments and Related Methods">Database Environments and Related Methods</a>,
-            <a class="xref" href="envget_backup_callbacks.html" title="DbEnv::get_backup_callbacks()">DbEnv::get_backup_callbacks()</a>,
-            <a class="xref" href="envbackup.html" title="DbEnv::backup()">DbEnv::backup()</a>, and
-            <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">DbEnv::dbbackup()</a>.
+            <a class="xref" href="envget_backup_callbacks.html" title="DbEnv::get_backup_callbacks()">
+        
+        <span>DbEnv::get_backup_callbacks()</span>
+    </a>,
+            <a class="xref" href="envbackup.html" title="DbEnv::backup()">
+        
+        <span>DbEnv::backup()</span>
+    </a>, and
+            <a class="xref" href="envdbbackup.html" title="DbEnv::dbbackup()">
+        
+        <span>DbEnv::dbbackup()</span>
+    </a>.
         </p>
       </div>
     </div>
@@ -325,11 +352,17 @@ DB_ENV-&gt;set_backup_callbacks(
           <td width="40%" align="right"> <a accesskey="n" href="envset_backup_config.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_app_dispatch() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_app_dispatch()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_backup_config()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_backup_config()</span>
+    </td>
         </tr>
       </table>
     </div>

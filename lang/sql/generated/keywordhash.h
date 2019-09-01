@@ -12,7 +12,7 @@
 ** on platforms with limited memory.
 */
 /* Hash score: 182 */
-static int keywordCode(const char *z, int n){
+static int keywordCode(const char *z, int n, int *pType){
   /* zText[] encodes 834 bytes of keywords in 554 bytes */
   /*   REINDEXEDESCAPEACHECKEYBEFOREIGNOREGEXPLAINSTEADDATABASELECT       */
   /*   ABLEFTHENDEFERRABLELSEXCEPTRANSACTIONATURALTERAISEXCLUSIVE         */
@@ -132,13 +132,21 @@ static int keywordCode(const char *z, int n){
     TK_JOIN_KW,    TK_ROLLBACK,   TK_ROW,        TK_UNION,      TK_USING,      
     TK_VACUUM,     TK_VIEW,       TK_INITIALLY,  TK_ALL,        
   };
-  int h, i;
-  if( n<2 ) return TK_ID;
-  h = ((charMap(z[0])*4) ^
-      (charMap(z[n-1])*3) ^
-      n) % 127;
-  for(i=((int)aHash[h])-1; i>=0; i=((int)aNext[i])-1){
-    if( aLen[i]==n && sqlite3StrNICmp(&zText[aOffset[i]],z,n)==0 ){
+  int i, j;
+  const char *zKW;
+  if( n>=2 ){
+    i = ((charMap(z[0])*4) ^ (charMap(z[n-1])*3) ^ n) % 127;
+    for(i=((int)aHash[i])-1; i>=0; i=((int)aNext[i])-1){
+      if( aLen[i]!=n ) continue;
+      j = 0;
+      zKW = &zText[aOffset[i]];
+#ifdef SQLITE_ASCII
+      while( j<n && (z[j]&~0x20)==zKW[j] ){ j++; }
+#endif
+#ifdef SQLITE_EBCDIC
+      while( j<n && toupper(z[j])==zKW[j] ){ j++; }
+#endif
+      if( j<n ) continue;
       testcase( i==0 ); /* REINDEX */
       testcase( i==1 ); /* INDEXED */
       testcase( i==2 ); /* INDEX */
@@ -263,12 +271,15 @@ static int keywordCode(const char *z, int n){
       testcase( i==121 ); /* VIEW */
       testcase( i==122 ); /* INITIALLY */
       testcase( i==123 ); /* ALL */
-      return aCode[i];
+      *pType = aCode[i];
+      break;
     }
   }
-  return TK_ID;
+  return n;
 }
 int sqlite3KeywordCode(const unsigned char *z, int n){
-  return keywordCode((char*)z, n);
+  int id = TK_ID;
+  keywordCode((char*)z, n, &id);
+  return id;
 }
 #define SQLITE_N_KEYWORD 124

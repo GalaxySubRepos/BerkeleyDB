@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;err()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;err()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envdbrename.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="enverr"></a>DB_ENV-&gt;err()</h2>
+            <h2 class="title" style="clear: both"><a id="enverr"></a>
+        <span>DB_ENV-&gt;err()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -47,14 +53,23 @@ void
 DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
       <p>
         The <code class="methodname">DB_ENV-&gt;err()</code>, <code class="methodname">DB_ENV-&gt;errx,()</code>,         
-        <a class="xref" href="dberr.html" title="DB-&gt;err()">DB-&gt;err()</a>  and 
+        <a class="xref" href="dberr.html" title="DB-&gt;err()">
+        <span>DB-&gt;err()</span>
+        
+    </a>  and 
        <code class="methodname">DB-&gt;errx()</code> methods provide
        error-messaging functionality for applications written using the
        Berkeley DB library.
     </p>
       <p>
-         The <a class="xref" href="dberr.html" title="DB-&gt;err()">DB-&gt;err()</a>  and
-         <a class="xref" href="enverr.html" title="DB_ENV-&gt;err()">DB_ENV-&gt;err()</a>
+         The <a class="xref" href="dberr.html" title="DB-&gt;err()">
+        <span>DB-&gt;err()</span>
+        
+    </a>  and
+         <a class="xref" href="enverr.html" title="DB_ENV-&gt;err()">
+        <span>DB_ENV-&gt;err()</span>
+        
+    </a>
          methods constructs an error message consisting of the
          following elements:
     </p>
@@ -66,9 +81,15 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
                 </p>
             <p>
                         If no error callback function has been set using the 
-                        <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">DB_ENV-&gt;set_errcall()</a> 
+                        <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">
+        <span>DB_ENV-&gt;set_errcall()</span>
+        
+    </a> 
                         method, any prefix string specified using the 
-                        <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">DB_ENV-&gt;set_errpfx()</a> 
+                        <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">
+        <span>DB_ENV-&gt;set_errpfx()</span>
+        
+    </a> 
                         method, followed by two separating characters: a colon and a
                         &lt;space&gt; character.
                 </p>
@@ -98,7 +119,10 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
             <p>
                         The standard system or Berkeley DB library error string associated
                          with the <span class="bold"><strong>error</strong></span> value, as returned by
-                         the <a class="xref" href="envstrerror.html" title="db_strerror">db_strerror</a> 
+                         the <a class="xref" href="envstrerror.html" title="db_strerror">
+        <span>db_strerror</span>
+        
+    </a> 
                          method.
                 </p>
           </li>
@@ -112,19 +136,37 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <li>
             <p>
                         If an error callback function has been set (see
-                        <a class="xref" href="dbset_errcall.html" title="DB-&gt;set_errcall()">DB-&gt;set_errcall()</a>  and
-                        <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">DB_ENV-&gt;set_errcall()</a>),
+                        <a class="xref" href="dbset_errcall.html" title="DB-&gt;set_errcall()">
+        <span>DB-&gt;set_errcall()</span>
+        
+    </a>  and
+                        <a class="xref" href="envset_errcall.html" title="DB_ENV-&gt;set_errcall()">
+        <span>DB_ENV-&gt;set_errcall()</span>
+        
+    </a>),
                         that function is called with two parameters: any prefix string
-                        specified (see <a class="xref" href="dbset_errpfx.html" title="DB-&gt;set_errpfx()">DB-&gt;set_errpfx()</a>
-                        and <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">DB_ENV-&gt;set_errpfx()</a>) and
+                        specified (see <a class="xref" href="dbset_errpfx.html" title="DB-&gt;set_errpfx()">
+        <span>DB-&gt;set_errpfx()</span>
+        
+    </a>
+                        and <a class="xref" href="envset_errpfx.html" title="DB_ENV-&gt;set_errpfx()">
+        <span>DB_ENV-&gt;set_errpfx()</span>
+        
+    </a>) and
                         the error message.
                     </p>
           </li>
           <li>
             <p>
                         If a C library FILE * has been set (see
-                        <a class="xref" href="dbset_errfile.html" title="DB-&gt;set_errfile()">DB-&gt;set_errfile()</a>  and
-                        <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">DB_ENV-&gt;set_errfile()</a>),
+                        <a class="xref" href="dbset_errfile.html" title="DB-&gt;set_errfile()">
+        <span>DB-&gt;set_errfile()</span>
+        
+    </a>  and
+                        <a class="xref" href="envset_errfile.html" title="DB_ENV-&gt;set_errfile()">
+        <span>DB_ENV-&gt;set_errfile()</span>
+        
+    </a>),
                         the error message is written to that output stream.
                     </p>
           </li>
@@ -147,7 +189,7 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234416208"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113486847552"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -155,14 +197,17 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234413360"></a>error</h4>
+                <h4 class="title"><a id="idm140113486853584"></a>error</h4>
               </div>
             </div>
           </div>
           <p>
                           The <span class="bold"><strong>error</strong></span> parameter is the error
                           value for which the <code class="methodname">DB_ENV-&gt;err()</code>  and  
-                          <a class="xref" href="dberr.html" title="DB-&gt;err()">DB-&gt;err()</a>  methods will display a
+                          <a class="xref" href="dberr.html" title="DB-&gt;err()">
+        <span>DB-&gt;err()</span>
+        
+    </a>  methods will display a
                           explanatory string.
                      </p>
         </div>
@@ -170,7 +215,7 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815234500608"></a>fmt</h4>
+                <h4 class="title"><a id="idm140113486865024"></a>fmt</h4>
               </div>
             </div>
           </div>
@@ -184,7 +229,7 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234472032"></a>Class</h3>
+              <h3 class="title"><a id="idm140113486924208"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -196,7 +241,7 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815234414304"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113486850688"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -216,11 +261,17 @@ DB_ENV-&gt;errx(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envfailchk.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;dbrename() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;dbrename()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;failchk()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;failchk()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

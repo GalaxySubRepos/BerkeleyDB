@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -101,7 +101,7 @@ nomem:			__db_errx(env, DB_STR("2034",
 	    "unable to allocate memory for mutex; resize mutex region"));
 			if (locksys)
 				MUTEX_SYSTEM_UNLOCK(env);
-			return (ret == 0 ? ENOMEM : ret);
+			return (ret == 0 ? USR_ERR(env, ENOMEM) : ret);
 		}
 		cnt = mtxregion->stat.st_mutex_cnt / 2;
 		if (cnt < 8)
@@ -162,6 +162,9 @@ nomem:			__db_errx(env, DB_STR("2034",
 
 	/* Initialize the mutex. */
 	memset(mutexp, 0, sizeof(*mutexp));
+#if defined(HAVE_MUTEX_HYBRID) || (defined(HAVE_SHARED_LATCHES) && !defined(HAVE_MUTEX_PTHREADS))
+	atomic_init(&mutexp->sharecount, 0);
+#endif
 	F_SET(mutexp, DB_MUTEX_ALLOCATED |
 	    LF_ISSET(DB_MUTEX_LOGICAL_LOCK | DB_MUTEX_PROCESS_ONLY |
 		DB_MUTEX_SELF_BLOCK | DB_MUTEX_SHARED));
@@ -415,7 +418,6 @@ __mutex_record_unlock(env, mutex, ip)
 		return (__env_panic(env, ret));
 	}
 }
-
 
 /*
  * __mutex_action_string --

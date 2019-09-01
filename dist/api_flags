@@ -4,6 +4,7 @@ db_env_create
 DbEnv.backup
 	# Remove all files from the target directory tree first.
 	DB_BACKUP_CLEAN
+	DB_BACKUP_DEEP_COPY		# Copy databases in sub-directories.
 	DB_BACKUP_FILES			# Copy plain files too.
 	DB_BACKUP_NO_LOGS		# Don't backup log files.
 	DB_BACKUP_SINGLE_DIR		# All files go to a single directory.
@@ -157,7 +158,10 @@ DbEnv.remove
 
 DbEnv.rep_set_config
 	DB_REPMGR_CONF_2SITE_STRICT	# Don't cheat on election votes
+	DB_REPMGR_CONF_DISABLE_POLL	# Disable use of poll for event polling
+	DB_REPMGR_CONF_DISABLE_SSL	# Disable use of ssl for replication messaging
 	DB_REPMGR_CONF_ELECTIONS	# Manage elections to choose master
+	DB_REPMGR_CONF_ENABLE_EPOLL	# Enable use of epoll for event polling
 	DB_REPMGR_CONF_FORWARD_WRITES	# Enable write forwarding
 	DB_REPMGR_CONF_PREFMAS_CLIENT	# Preferred master client site
 	DB_REPMGR_CONF_PREFMAS_MASTER	# Preferred master site
@@ -261,6 +265,9 @@ DbEnv.set_verbose
 	DB_VERB_REPLICATION		# All replication and repmgr output
 	DB_VERB_REPMGR_CONNFAIL		# Repmgr connection failure output
 	DB_VERB_REPMGR_MISC		# Miscellaneous repmgr output
+	DB_VERB_REPMGR_SSL_ALL		# All Repmgr SSL operations
+	DB_VERB_REPMGR_SSL_CONN		# Repmgr SSL connect, accept and shutdown info
+	DB_VERB_REPMGR_SSL_IO		# Repmgr SSL read-write output
 	DB_VERB_REP_ELECT		# Replication election output
 	DB_VERB_REP_LEASE		# Replication master lease output
 	DB_VERB_REP_MISC		# Miscellaneous replication output
@@ -285,6 +292,7 @@ DbEnv.txn_begin
 	DB_TXN_NOWAIT			# Do not wait for locks
 	DB_TXN_FAMILY			# Cursors and child txns are
 					# independent but lock-compatible
+	DB_TXN_DISPATCH			# UNDOC: rep client calling db_dispatch
 	DB_TXN_SNAPSHOT			# Snapshot isolation
 	DB_TXN_SYNC			# Always sync log on commit
 	DB_TXN_WAIT			# Always wait for locks in this txn
@@ -317,8 +325,9 @@ DbMpoolFile.close
 
 DbMpoolFile.get
 	DB_MPOOL_CREATE			# Create a page
-	DB_MPOOL_DIRTY			# Get page for an update
-	DB_MPOOL_EDIT			# Modify without copying
+	DB_MPOOL_DIRTY			# Get page for an update, making copies
+					# for snapshot txns on multiversion dbs
+	DB_MPOOL_EDIT			# As above, but don't make MVCC copies
 	DB_MPOOL_FREE			# UNDOC: Free page if present
 	DB_MPOOL_LAST			# Return the last page
 	DB_MPOOL_NEW			# Create a new page

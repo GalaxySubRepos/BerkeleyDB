@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST repmgr108
 # TEST Subordinate connections and processes should not trigger elections.
@@ -21,9 +21,12 @@ proc repmgr108 { } {
 
 	make_dbconfig $mdir \
 	    [list [list repmgr_site $hoststr $mport db_local_site on]]
+	setup_repmgr_ssl $mdir
+
 	make_dbconfig $cdir \
 	    [list [list repmgr_site $hoststr $cport db_local_site on] \
 	    [list repmgr_site $hoststr $mport db_bootstrap_helper on]]
+	setup_repmgr_ssl $cdir
 
 	puts "\tRepmgr$tnum.a: Set up a pair of sites, two processes on master."
 	set cmds {

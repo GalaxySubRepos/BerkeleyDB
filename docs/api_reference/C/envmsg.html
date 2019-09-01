@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;msg()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;msg()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envlsn_reset.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envmsg"></a>DB_ENV-&gt;msg()</h2>
+            <h2 class="title" style="clear: both"><a id="envmsg"></a>
+        <span>DB_ENV-&gt;msg()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -44,13 +50,22 @@ void
 DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
       <p>
         The <code class="methodname">DB_ENV-&gt;msg()</code> and
-        <a class="xref" href="dbmsg.html" title="DB-&gt;msg()">DB-&gt;msg()</a> methods provide
+        <a class="xref" href="dbmsg.html" title="DB-&gt;msg()">
+        <span>DB-&gt;msg()</span>
+        
+    </a> methods provide
        informational messaging functionality for applications written using the
        Berkeley DB library.
     </p>
       <p>
-         The <a class="xref" href="dbmsg.html" title="DB-&gt;msg()">DB-&gt;msg()</a>  and
-         <a class="xref" href="envmsg.html" title="DB_ENV-&gt;msg()">DB_ENV-&gt;msg()</a>
+         The <a class="xref" href="dbmsg.html" title="DB-&gt;msg()">
+        <span>DB-&gt;msg()</span>
+        
+    </a>  and
+         <a class="xref" href="envmsg.html" title="DB_ENV-&gt;msg()">
+        <span>DB_ENV-&gt;msg()</span>
+        
+    </a>
          methods constructs an informational message consisting of the
          following elements:
     </p>
@@ -62,9 +77,15 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
                 </p>
             <p>
                         If no informational callback function has been set using the 
-                        <a class="xref" href="envset_msgcall.html" title="DB_ENV-&gt;set_msgcall()">DB_ENV-&gt;set_msgcall()</a> 
+                        <a class="xref" href="envset_msgcall.html" title="DB_ENV-&gt;set_msgcall()">
+        <span>DB_ENV-&gt;set_msgcall()</span>
+        
+    </a> 
                         method, any prefix string specified using the 
-                        <a class="xref" href="envset_msgpfx.html" title="DB_ENV-&gt;set_msgpfx()">DB_ENV-&gt;set_msgpfx()</a> 
+                        <a class="xref" href="envset_msgpfx.html" title="DB_ENV-&gt;set_msgpfx()">
+        <span>DB_ENV-&gt;set_msgpfx()</span>
+        
+    </a> 
                         method.
                 </p>
           </li>
@@ -88,19 +109,37 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <li>
             <p>
                         If an informational callback function has been set (see
-                        <a class="xref" href="dbset_msgcall.html" title="DB-&gt;set_msgcall()">DB-&gt;set_msgcall()</a>  and
-                        <a class="xref" href="envset_msgcall.html" title="DB_ENV-&gt;set_msgcall()">DB_ENV-&gt;set_msgcall()</a>),
+                        <a class="xref" href="dbset_msgcall.html" title="DB-&gt;set_msgcall()">
+        <span>DB-&gt;set_msgcall()</span>
+        
+    </a>  and
+                        <a class="xref" href="envset_msgcall.html" title="DB_ENV-&gt;set_msgcall()">
+        <span>DB_ENV-&gt;set_msgcall()</span>
+        
+    </a>),
                         that function is called with two parameters: any prefix string
-                        specified (see <a class="xref" href="dbset_msgpfx.html" title="DB-&gt;set_msgpfx()">DB-&gt;set_msgpfx()</a>
-                        and <a class="xref" href="envset_msgpfx.html" title="DB_ENV-&gt;set_msgpfx()">DB_ENV-&gt;set_msgpfx()</a>) and
+                        specified (see <a class="xref" href="dbset_msgpfx.html" title="DB-&gt;set_msgpfx()">
+        <span>DB-&gt;set_msgpfx()</span>
+        
+    </a>
+                        and <a class="xref" href="envset_msgpfx.html" title="DB_ENV-&gt;set_msgpfx()">
+        <span>DB_ENV-&gt;set_msgpfx()</span>
+        
+    </a>) and
                         the informational message.
                     </p>
           </li>
           <li>
             <p>
                         If a C library FILE * has been set (see
-                        <a class="xref" href="dbset_msgfile.html" title="DB-&gt;set_msgfile()">DB-&gt;set_msgfile()</a>  and
-                        <a class="xref" href="envset_msgfile.html" title="DB_ENV-&gt;set_msgfile()">DB_ENV-&gt;set_msgfile()</a>),
+                        <a class="xref" href="dbset_msgfile.html" title="DB-&gt;set_msgfile()">
+        <span>DB-&gt;set_msgfile()</span>
+        
+    </a>  and
+                        <a class="xref" href="envset_msgfile.html" title="DB_ENV-&gt;set_msgfile()">
+        <span>DB_ENV-&gt;set_msgfile()</span>
+        
+    </a>),
                         the informational message is written to that output stream.
                     </p>
           </li>
@@ -123,7 +162,7 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233856480"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113486266960"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -131,7 +170,7 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233851088"></a>fmt</h4>
+                <h4 class="title"><a id="idm140113486299008"></a>fmt</h4>
               </div>
             </div>
           </div>
@@ -145,7 +184,7 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233881824"></a>Class</h3>
+              <h3 class="title"><a id="idm140113486389056"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -157,7 +196,7 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233866272"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113486262912"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -177,11 +216,17 @@ DB_ENV-&gt;msg(DB_ENV *dbenv, const char *fmt, ...);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envopen.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;lsn_reset() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;lsn_reset()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;open()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;open()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

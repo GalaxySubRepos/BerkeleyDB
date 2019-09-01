@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2013, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include "db_config.h"
@@ -332,7 +332,7 @@ __blob_file_write(dbc, fhp, buf, offset, blob_id, file_size, flags)
 
 	if ((ret = __fop_write_file(env, dbc->txn, name, dirname,
 	    DB_APP_BLOB, fhp, write_offset, ptr, data_size, flags)) != 0) {
-		__db_errx(env, DB_STR_A("0236",
+		__db_errx(env, DB_STR_A("0235",
 		    "Error writing external file: %s.", "%s"), name);
 		goto err;
 	}

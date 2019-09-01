@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -232,7 +232,8 @@ __memp_fopen(dbmfp, mfp, path, dirp, flags, mode, pgsize)
 						MUTEX_UNLOCK(env, hp->mtx_hash);
 						goto mvcc_err;
 					}
-					(void)atomic_inc(env, &mfp->multiversion);
+					(void)atomic_inc(env,
+					    &mfp->multiversion);
 					F_SET(dbmfp, MP_MULTIVERSION);
 				}
 			}
@@ -817,6 +818,10 @@ __memp_mpf_alloc(dbmp, dbmfp, path, pagesize, flags, retmfp)
 	     dbmp->reginfo, NULL, sizeof(MPOOLFILE), NULL, &mfp)) != 0)
 		goto err;
 	memset(mfp, 0, sizeof(MPOOLFILE));
+#ifndef HAVE_ATOMICFILEREAD
+	atomic_init(&mfp->writers, 0);
+#endif
+	atomic_init(&mfp->multiversion, 0);
 	mfp->mpf_cnt = 1;
 	if (LF_ISSET(DB_FLUSH | DB_RDONLY))
 		mfp->neutral_cnt = 1;
@@ -1288,7 +1293,7 @@ nomem:	MUTEX_UNLOCK(env, hp->mtx_hash);
  */
 void
 __memp_mf_mark_dead(dbmp, mfp, purgep)
-	DB_MPOOL *dbmp;	
+	DB_MPOOL *dbmp;
 	MPOOLFILE *mfp;
 	int *purgep;
 {

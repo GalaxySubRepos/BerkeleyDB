@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -119,5 +119,4 @@ DBT	old_data	DBT		s
 ARG	is_region	u_int32_t	lu
 POINTER	pagelsn		DB_LSN *	lu
 END
-
 

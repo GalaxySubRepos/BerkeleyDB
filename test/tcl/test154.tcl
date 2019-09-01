@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -28,6 +28,18 @@ proc test154 { method {tnum "154"} args } {
 		return
 	}
 
+	# If a page size was specified, find out what it is. 
+	set pagesize 0
+	set pgindex [lsearch -exact $args "-pagesize"]
+	if { $pgindex != -1 } {
+		incr pgindex
+		set pagesize [lindex $args $pgindex]
+	}
+	if {$pagesize == 512} {
+		puts "Test$tnum skipping for pagesize 512."
+		return
+	}
+
 	puts "\tTest$tnum ($method): MVCC with snapshot isolation:\
 	    Freeze and thaw buffers."
 
@@ -51,9 +63,22 @@ proc test154 { method {tnum "154"} args } {
 		set max_objects 5000
 	}
 
-	# Increase cache size.
-	set cachesize [expr 2 * 1024 * 1024]
-	
+	# Make cache size adjustments so we will generate freezer files
+	# but not run out of memory.  This takes a bit of tinkering.
+	set cachesize [expr 65536]
+	if {$pagesize > 8192} {
+		set cachesize [expr 262144]
+	}
+	if {[lsearch -exact $args "-compress"] != -1 } {
+		set cachesize [expr $cachesize * 2]
+	}
+	if {[is_hash $omethod] == 1} {
+		set cachesize [expr $cachesize * 2]
+	}
+	if {[is_partitioned $args] == 1} {
+		set cachesize [expr 262144]
+	}
+
 	# Create transactional env.  Specifying -multiversion makes
 	# all databases opened within the env -multiversion.
 	env_cleanup $testdir
@@ -85,7 +110,8 @@ proc test154 { method {tnum "154"} args } {
 		# Read through the db with a snapshot cursor to 
 		# find out how many entries it sees.
 		for { set dbt [$snapshot_cursor get -first] }\
-		    { [llength $dbt] != 0 } { set dbt [$snapshot_cursor get -next] } { 
+		    { [llength $dbt] != 0 }\
+		    { set dbt [$snapshot_cursor get -next] } { 
 			incr snap_count
 		}
 		set before_writes $snap_count
@@ -103,8 +129,8 @@ proc test154 { method {tnum "154"} args } {
                                 set key $str
                         }
 
-                        set ret [eval \
-                            {$db put} $writer_txn {$key [chop_data $method $str]}]
+                        set ret [eval {$db put}\
+			    $writer_txn {$key [chop_data $method [repeat $str 10]]}]
                         error_check_good put $ret 0
                         incr write_count
 		}
@@ -112,7 +138,8 @@ proc test154 { method {tnum "154"} args } {
 		# Snapshot txn counts its view again.
 		set snap_count 0
 		for { set dbt [$snapshot_cursor get -first] }\
-		    { [llength $dbt] != 0 } { set dbt [$snapshot_cursor get -next] } { 
+		    { [llength $dbt] != 0 }\
+		    { set dbt [$snapshot_cursor get -next] } { 
 			incr snap_count
 		}
 		set after_writes $snap_count
@@ -120,13 +147,19 @@ proc test154 { method {tnum "154"} args } {
 		puts "\tTest$tnum.c3: Iteration $i: check data."
 		# On each iteration, the snapshot will find more entries, but
 		# not within an iteration.  
-		error_check_good total_count $snap_count [expr $i * $write_count]
-		error_check_good snap_count_unchanged $before_writes $after_writes
+		error_check_good \
+		    total_count $snap_count [expr $i * $write_count]
+		error_check_good \
+		    snap_count_unchanged $before_writes $after_writes
 
 		error_check_good snapshot_txn_commit [$t0 commit] 0
 		error_check_good writer_txn_commit [$t1 commit] 0
 		
 	}
+	error_check_good frozen [expr \
+            [stat_field $env mpool_stat "Buffers frozen"] > 0] 1 
+	error_check_good thawed [expr \
+            [stat_field $env mpool_stat "Buffers thawed"] > 0] 1 
 
 	# Clean up.
 	error_check_good db_close [$db close] 0

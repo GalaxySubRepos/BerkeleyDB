@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -59,6 +59,25 @@ public final class ReplicationConfig implements Cloneable {
                               DbConstants.DB_REPMGR_CONF_2SITE_STRICT);
 
     /**
+    This flag  is used to  prevent the use of  poll() as  polling method for
+    networking events on the target site.  This flag guarantees that instead
+    of poll() select or epoll()  would be used  depending on the availablity
+    of these methods on the target platform and additional flags provided to
+    repmgr.
+    **/
+    public static final ReplicationConfig DISABLE_POLL =
+	new ReplicationConfig("DISABLE_POLL",
+				DbConstants.DB_REPMGR_CONF_DISABLE_POLL);
+
+    /**
+    This flag  is used to prevent the use of SSL for securing messages shared
+    between the nodes of a replication group.
+    **/
+    public static final ReplicationConfig DISABLE_SSL =
+	new ReplicationConfig("DISABLE_SSL",
+				DbConstants.DB_REPMGR_CONF_DISABLE_SSL);
+
+    /**
     Replication Manager automatically runs elections to choose a new
     master when the old master appears to have become disconnected.
     This option is turned on by default.
@@ -67,7 +86,19 @@ public final class ReplicationConfig implements Cloneable {
         new ReplicationConfig("ELECTIONS",
                               DbConstants.DB_REPMGR_CONF_ELECTIONS);
 
-    /** 
+    /**
+    This flag is used to force the use of epoll as polling method for
+    networking events instad of poll or select. Use of this flag does
+    not guarantee that epoll will be used though. It depends on the
+    availability of epoll on target platform. Epoll is supposed to be
+    used only when the expected number of connections for repmgr is
+    greater than 1000.
+    **/
+    public static final ReplicationConfig ENABLE_EPOLL =
+	new ReplicationConfig("ENABLE_EPOLL",
+				DbConstants.DB_REPMGR_CONF_ENABLE_EPOLL);
+
+    /**
     Master leases will be used for this site.
     <p>
     Configuring this option may result in the {@link Database#get Database.get()}
@@ -134,8 +165,14 @@ public final class ReplicationConfig implements Cloneable {
             return NOWAIT;
         case DbConstants.DB_REPMGR_CONF_2SITE_STRICT:
             return STRICT_2SITE;
+	case DbConstants.DB_REPMGR_CONF_DISABLE_POLL:
+	    return DISABLE_POLL;
+        case DbConstants.DB_REPMGR_CONF_DISABLE_SSL:
+	    return DISABLE_SSL;
         case DbConstants.DB_REPMGR_CONF_ELECTIONS:
             return ELECTIONS;
+	case DbConstants.DB_REPMGR_CONF_ENABLE_EPOLL:
+	    return ENABLE_EPOLL;
         case DbConstants.DB_REP_CONF_LEASE:
             return LEASE;
         case DbConstants.DB_REPMGR_CONF_PREFMAS_MASTER:

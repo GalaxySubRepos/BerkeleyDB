@@ -1,6 +1,11 @@
 --- Makefile.in
 +++ Makefile.in
-@@ -167,8 +167,8 @@
+@@ -161,18 +161,18 @@ LTINSTALL = $(LIBTOOL) --mode=install $(
+ ###############################################################################
+ 
+ USE_AMALGAMATION = @USE_AMALGAMATION@
+ 
+ # Object files for the SQLite library (non-amalgamation).
  #
  LIBOBJS0 = alter.lo analyze.lo attach.lo auth.lo \
           backup.lo bitvec.lo btmutex.lo btree.lo build.lo \
@@ -11,7 +16,17 @@
           fts3.lo fts3_aux.lo fts3_expr.lo fts3_hash.lo fts3_icu.lo \
           fts3_porter.lo fts3_snippet.lo fts3_tokenizer.lo fts3_tokenizer1.lo \
           fts3_tokenize_vtab.lo \
-@@ -214,6 +214,7 @@
+          fts3_unicode.lo fts3_unicode2.lo fts3_write.lo \
+ 	 fts5.lo \
+          func.lo global.lo hash.lo \
+          icu.lo insert.lo json1.lo legacy.lo loadext.lo \
+          main.lo malloc.lo mem0.lo mem1.lo mem2.lo mem3.lo mem5.lo \
+@@ -211,16 +211,17 @@ SRC = \
+   $(TOP)/src/btree.h \
+   $(TOP)/../adapter/btreeInt.h \
+   $(TOP)/src/build.c \
+   $(TOP)/src/callback.c \
+   $(TOP)/src/complete.c \
    $(TOP)/src/ctime.c \
    $(TOP)/src/date.c \
    $(TOP)/src/dbstat.c \
@@ -19,49 +34,78 @@
    $(TOP)/src/delete.c \
    $(TOP)/src/expr.c \
    $(TOP)/src/fault.c \
-@@ -657,6 +657,10 @@
+   $(TOP)/src/fkey.c \
+   $(TOP)/src/func.c \
+   $(TOP)/src/global.c \
+   $(TOP)/src/hash.c \
+   $(TOP)/src/hash.h \
+@@ -740,16 +741,20 @@ ctime.lo:	$(TOP)/src/ctime.c $(HDR)
+ 	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/src/ctime.c
+ 
+ date.lo:	$(TOP)/src/date.c $(HDR)
+ 	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/src/date.c
+ 
  dbstat.lo:	$(TOP)/src/dbstat.c $(HDR)
  	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/src/dbstat.c
-
-+db_pragma.lo:  $(TOP)/../adapter/db_pragma.c $(HDR) \
+ 
++db_pragma.lo:	$(TOP)/../adapter/db_pragma.c $(HDR) \
 +		$(TOP)/../adapter/btreeInt.h
 +	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/../adapter/db_pragma.c
 +
  delete.lo:	$(TOP)/src/delete.c $(HDR)
  	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/src/delete.c
-
---- src/pragma.h
-+++ src/pragma.h
-@@ -86,7 +86,7 @@
- #if !defined(SQLITE_OMIT_PAGER_PRAGMAS)
-   { /* zName:     */ "cache_size",
-     /* ePragTyp:  */ PragTyp_CACHE_SIZE,
--    /* ePragFlag: */ PragFlag_NeedSchema,
-+    /* ePragFlag: */ 0,
-     /* iArg:      */ 0 },
- #endif
- #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
+ 
+ expr.lo:	$(TOP)/src/expr.c $(HDR)
+ 	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/src/expr.c
+ 
+ fault.lo:	$(TOP)/src/fault.c $(HDR)
+ 	$(LTCOMPILE) $(TEMP_STORE) -c $(TOP)/src/fault.c
 --- src/pragma.c
 +++ src/pragma.c
-@@ -162,7 +162,7 @@
+@@ -179,17 +179,17 @@ static void setPragmaResultColumnNames(
+       sqlite3VdbeSetColName(v, i, COLNAME_NAME, pragCName[j], SQLITE_STATIC);
+     }
+   }
+ }
+ 
  /*
  ** Generate code to return a single integer value.
  */
--static void returnSingleInt(Parse *pParse, const char *zLabel, i64 value){
-+void returnSingleInt(Parse *pParse, const char *zLabel, i64 value){
-   Vdbe *v = sqlite3GetVdbe(pParse);
-   int mem = ++pParse->nMem;
-   i64 *pI64 = sqlite3DbMallocRaw(pParse->db, sizeof(value));
-@@ -248,6 +248,8 @@
-   return azModeName[eMode];
+-static void returnSingleInt(Vdbe *v, i64 value){
++void returnSingleInt(Vdbe *v, i64 value){
+   sqlite3VdbeAddOp4Dup8(v, OP_Int64, 0, 1, 0, (const u8*)&value, P4_INT64);
+   sqlite3VdbeAddOp2(v, OP_ResultRow, 1, 1);
  }
  
+ /*
+ ** Generate code to return a single text value.
+ */
+ static void returnSingleText(
+@@ -290,16 +290,18 @@ static int integrityCheckResultRow(
+   int addr;
+   sqlite3VdbeAddOp2(v, OP_ResultRow, regResult, 1);
+   addr = sqlite3VdbeAddOp3(v, OP_IfPos, 1, sqlite3VdbeCurrentAddr(v)+2, 1);
+   VdbeCoverage(v);
+   sqlite3VdbeAddOp2(v, OP_Halt, 0, 0);
+   return addr;
+ }
+
 +extern int bdbsqlPragma(Parse *, char *, char *, int);
 +
  /*
  ** Process a pragma statement.  
  **
-@@ -358,6 +358,11 @@
+ ** Pragmas are of this form:
+ **
+ **      PRAGMA [schema.]id [= value]
+ **
+ ** The identifier might also be a string.  The value is a string, and
+@@ -393,16 +395,21 @@ void sqlite3Pragma(
+       sqlite3ErrorMsg(pParse, "%s", aFcntl[0]);
+       sqlite3_free(aFcntl[0]);
+     }
+     pParse->nErr++;
+     pParse->rc = rc;
      goto pragma_out;
    }
  
@@ -71,11 +115,42 @@
 +  }
 +
    /* Locate the pragma in the lookup table */
-   lwr = 0;
-   upr = ArraySize(aPragmaNames)-1;
+   pPragma = pragmaLocate(zLeft);
+   if( pPragma==0 ) goto pragma_out;
+ 
+   /* Make sure the database schema is loaded if the pragma requires that */
+   if( (pPragma->mPragFlg & PragFlg_NeedSchema)!=0 ){
+     if( sqlite3ReadSchema(pParse) ) goto pragma_out;
+   }
+--- src/pragma.h
++++ src/pragma.h
+@@ -157,17 +157,17 @@ static const PragmaName aPragmaName[] = 
+  {/* zName:     */ "busy_timeout",
+   /* ePragTyp:  */ PragTyp_BUSY_TIMEOUT,
+   /* ePragFlg:  */ PragFlg_Result0,
+   /* ColNames:  */ 46, 1,
+   /* iArg:      */ 0 },
+ #if !defined(SQLITE_OMIT_PAGER_PRAGMAS)
+  {/* zName:     */ "cache_size",
+   /* ePragTyp:  */ PragTyp_CACHE_SIZE,
+-  /* ePragFlg:  */ PragFlg_NeedSchema|PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
++  /* ePragFlg:  */ 0,
+   /* ColNames:  */ 0, 0,
+   /* iArg:      */ 0 },
+ #endif
+ #if !defined(SQLITE_OMIT_FLAG_PRAGMAS)
+  {/* zName:     */ "cache_spill",
+   /* ePragTyp:  */ PragTyp_CACHE_SPILL,
+   /* ePragFlg:  */ PragFlg_Result0|PragFlg_SchemaReq|PragFlg_NoColumns1,
+   /* ColNames:  */ 0, 0,
 --- tool/mksqlite3c.tcl
 +++ tool/mksqlite3c.tcl
-@@ -308,6 +308,7 @@
+@@ -318,16 +318,17 @@ foreach file {
+    pcache1.c
+    rowset.c
+    pager.c
+    wal.c
+ 
     btmutex.c
     btree.c
     backup.c
@@ -83,3 +158,8 @@
  
     vdbemem.c
     vdbeaux.c
+    vdbeapi.c
+    vdbetrace.c
+    vdbe.c
+    vdbeblob.c
+    vdbesort.c

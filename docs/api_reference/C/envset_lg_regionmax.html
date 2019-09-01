@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_lg_regionmax()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_lg_regionmax()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_lg_max.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_lg_regionmax"></a>DB_ENV-&gt;set_lg_regionmax()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_lg_regionmax"></a>
+        <span>DB_ENV-&gt;set_lg_regionmax()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -66,9 +72,15 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
     </p>
       <p>
          The <code class="methodname">DB_ENV-&gt;set_lg_regionmax()</code> method may not be called after the
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is
          called. If the database environment already exists when 
-         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  is called, the
+         <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  is called, the
          information specified to <code class="methodname">DB_ENV-&gt;set_lg_regionmax()</code> will be ignored.
     </p>
       <p>
@@ -83,7 +95,7 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231277648"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113483632944"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -91,7 +103,7 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815231279168"></a>lg_regionmax</h4>
+                <h4 class="title"><a id="idm140113483646752"></a>lg_regionmax</h4>
               </div>
             </div>
           </div>
@@ -105,7 +117,7 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231264448"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113483631776"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -121,12 +133,15 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815231242224"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113483593296"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -135,7 +150,7 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231279040"></a>Class</h3>
+              <h3 class="title"><a id="idm140113483646624"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -149,7 +164,7 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815231238000"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113483591488"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -169,7 +184,10 @@ DB_ENV-&gt;set_lg_regionmax(DB_ENV *dbenv, u_int32_t lg_regionmax);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="logc.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_lg_max() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_lg_max()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>

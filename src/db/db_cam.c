@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -281,7 +281,7 @@ __dbc_cmp(dbc, other_dbc, result)
 
 	/* Both cursors must be on valid positions. */
 	if (dbc_int->pgno == PGNO_INVALID || odbc_int->pgno == PGNO_INVALID) {
-		__db_errx(env, DB_STR("0693",
+		__db_errx(env, DB_STR("0692",
 "Both cursors must be initialized before calling DBC->cmp."));
 		return (EINVAL);
 	}

@@ -1,4 +1,8 @@
 #
+# Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
+#
 # dist/events.in - This description of Oracle Berkeley DB's internal
 # events hierarchy is processed by 'dist/s_include' to generate the
 # platform-independant file dist/db_provider.d. The 'configure' step on the
@@ -15,8 +19,6 @@
 # Events are listed grouped by their relation to one another, rather than
 # alphabetically. For instance allocation and free events are adjacent.
 # New, unrelated events are placed at the end of their event class.
-#
-# Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
 #
 
 # The alloc class covers the allocation of "on disk" database pages.

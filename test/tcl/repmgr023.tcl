@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr023
 # TEST	Test of JOIN_FAILURE event for repmgr applications.
@@ -51,6 +51,11 @@ proc repmgr023_sub { method niter tnum  largs } {
 	file mkdir [set dira $testdir/SITE_A]
 	file mkdir [set dirb $testdir/SITE_B]
 	file mkdir [set dirc $testdir/SITE_C]
+
+	setup_repmgr_ssl $dira
+	setup_repmgr_ssl $dirb
+	setup_repmgr_ssl $dirc
+	
 	foreach { porta portb portc } [available_ports 3] {}
 	set hoststr [get_hoststr $ipversion]
 

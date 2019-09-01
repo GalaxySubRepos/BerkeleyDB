@@ -1,6 +1,8 @@
 /*-
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
+ * See the file LICENSE for license information.
+ *
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  * 
  * authors: George Schlossnagle <george@omniti.com>
@@ -24,11 +26,6 @@ extern "C"
 
 #define my_db_create db_create
 #define my_db_env_create db_env_create
-
-#if PHP_MAJOR_VERSION <= 4
-unsigned char second_arg_force_ref[] = { 2, BYREF_NONE, BYREF_FORCE };
-unsigned char third_arg_force_ref[] = { 3, BYREF_NONE, BYREF_NONE, BYREF_FORCE };
-#endif
 
 /* True global resources - no need for thread safety here */
 static int le_db;
@@ -57,7 +54,7 @@ struct php_DB_ENV {
     DB_ENV *dbenv;
 };
 
-static void _free_php_db_txn(zend_rsrc_list_entry *rsrc TSRMLS_DC)
+static void _free_php_db_txn(zend_resource *rsrc TSRMLS_DC)
 {
     struct php_DB_TXN *pdbtxn = (struct php_DB_TXN *) rsrc->ptr;
     /* should probably iterate over open_cursors */
@@ -66,7 +63,7 @@ static void _free_php_db_txn(zend_rsrc_list_entry *rsrc TSRMLS_DC)
     if(pdbtxn) efree(pdbtxn);
 }
 
-static void _free_php_dbc(zend_rsrc_list_entry *rsrc TSRMLS_DC)
+static void _free_php_dbc(zend_resource *rsrc TSRMLS_DC)
 {
     struct php_DBC *pdbc = (struct php_DBC *) rsrc->ptr;
     pdbc->dbc = NULL;
@@ -74,7 +71,7 @@ static void _free_php_dbc(zend_rsrc_list_entry *rsrc TSRMLS_DC)
     rsrc->ptr = NULL;
 }
 
-static void _free_php_db(zend_rsrc_list_entry *rsrc TSRMLS_DC)
+static void _free_php_db(zend_resource *rsrc TSRMLS_DC)
 {
     struct php_DB *pdb = (struct php_DB *) rsrc->ptr;
     if(pdb->db) pdb->db->close(pdb->db, 0);
@@ -82,7 +79,7 @@ static void _free_php_db(zend_rsrc_list_entry *rsrc TSRMLS_DC)
     if(pdb) efree(pdb);
 }
 
-static void _free_php_dbenv(zend_rsrc_list_entry *rsrc TSRMLS_DC)
+static void _free_php_dbenv(zend_resource *rsrc TSRMLS_DC)
 {
     struct php_DB_ENV *pdb = (struct php_DB_ENV *)rsrc->ptr;
     DbEnv *dbe;
@@ -161,9 +158,7 @@ PHP_MINFO_FUNCTION(db4);
 /* {{{ db4_module_entry
  */
 zend_module_entry db4_module_entry = {
-#if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
-#endif
     "db4",
     db4_functions,
     PHP_MINIT(db4),
@@ -225,7 +220,6 @@ ZEND_NAMED_FUNCTION(_wrap_dbc_get);
 ZEND_NAMED_FUNCTION(_wrap_dbc_put);
 ZEND_NAMED_FUNCTION(_wrap_dbc_pget);
 
-#ifdef ZEND_ENGINE_2
 ZEND_BEGIN_ARG_INFO(first_and_second_args_force_ref, 0)
     ZEND_ARG_PASS_INFO(1)
     ZEND_ARG_PASS_INFO(1)
@@ -235,11 +229,6 @@ ZEND_BEGIN_ARG_INFO(first_and_second_and_third_args_force_ref, 0)
     ZEND_ARG_PASS_INFO(1)
     ZEND_ARG_PASS_INFO(1)
 ZEND_END_ARG_INFO();
-
-#else
-static unsigned char first_and_second_args_force_ref[] = {2, BYREF_FORCE, BYREF_FORCE };
-static unsigned char first_and_second_and_third_args_force_ref[] = {3, BYREF_FORCE, BYREF_FORCE, BYREF_FORCE };
-#endif
 
 static zend_function_entry Dbc_functions[] = {
         ZEND_NAMED_FE(close, _wrap_dbc_close, NULL)
@@ -322,11 +311,7 @@ static zend_function_entry Db4_functions[] = {
         ZEND_NAMED_FE(del, _wrap_db_del, NULL)
         ZEND_NAMED_FE(get, _wrap_db_get, NULL)
 	ZEND_NAMED_FE(get_encrypt_flags, _wrap_db_get_encrypt_flags, NULL)
-#if PHP_MAJOR_VERSION <= 4
-        ZEND_NAMED_FE(pget, _wrap_db_pget, second_arg_force_ref)
-#else
 	ZEND_NAMED_FE(pget, _wrap_db_pget, NULL)
-#endif
         ZEND_NAMED_FE(get_type, _wrap_db_get_type, NULL)
         ZEND_NAMED_FE(join, _wrap_db_join, NULL)
         ZEND_NAMED_FE(put, _wrap_db_put, NULL)
@@ -341,7 +326,7 @@ static zend_function_entry Db4_functions[] = {
 
 #ifdef COMPILE_DL_DB4
 #ifdef PHP_WIN32
-#if !(PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION >= 3)
+#if (!(PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION >= 3) || !(PHP_MAJOR_VERSION > 5))
 #include "zend_arg_defs.c"
 #endif
 #endif
@@ -400,7 +385,7 @@ PHP_MINIT_FUNCTION(db4)
     REGISTER_LONG_CONSTANT("DB_VERSION_MAJOR", DB_VERSION_MAJOR, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DB_VERSION_MINOR", DB_VERSION_MINOR, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DB_VERSION_PATCH", DB_VERSION_PATCH, CONST_CS | CONST_PERSISTENT);
-    REGISTER_STRING_CONSTANT("DB_VERSION_STRING", DB_VERSION_STRING, CONST_CS | CONST_PERSISTENT);
+    REGISTER_STRING_CONSTANT("DB_VERSION_STRING", (char *)DB_VERSION_STRING, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DB_MAX_PAGES", DB_MAX_PAGES, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DB_MAX_RECORDS", DB_MAX_RECORDS, CONST_CS | CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("DB_DBT_APPMALLOC", DB_DBT_APPMALLOC, CONST_CS | CONST_PERSISTENT);
@@ -639,22 +624,21 @@ PHP_MINFO_FUNCTION(db4)
  */
 void setDbEnv(zval *z, DB_ENV *dbenv TSRMLS_DC)
 {
-    long rsrc_id;
-	struct php_DB_ENV *pdb = (struct php_DB_ENV *) emalloc(sizeof(*pdb));
-	pdb->dbenv = dbenv;
-    rsrc_id = ZEND_REGISTER_RESOURCE(NULL, pdb, le_dbenv);
-    zend_list_addref(rsrc_id);
-    add_property_resource(z, "_dbenv_ptr", rsrc_id);
+    zend_resource *env_res;
+    struct php_DB_ENV *pdb = (struct php_DB_ENV *) emalloc(sizeof(*pdb));
+    pdb->dbenv = dbenv;
+    env_res = zend_register_resource(pdb, le_dbenv);
+    env_res->gc.refcount++;
+    add_property_resource(z, "_dbenv_ptr", env_res);
 }
 
 DB_ENV *php_db4_getDbEnvFromObj(zval *z TSRMLS_DC)
 {
     struct php_DB_ENV *pdb;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_dbenv_ptr", sizeof("_dbenv_ptr"), 
-          (void **) &rsrc) == SUCCESS) 
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_dbenv_ptr", sizeof("_dbenv_ptr") - 1)) != NULL) 
     {
-        pdb = (struct php_DB_ENV *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4Env", NULL, 1, le_dbenv);
+        pdb = (struct php_DB_ENV *) zend_fetch_resource(Z_RES_P(zv), "Db4Env", le_dbenv);
         return pdb->dbenv;
     }
     return NULL;
@@ -663,11 +647,10 @@ DB_ENV *php_db4_getDbEnvFromObj(zval *z TSRMLS_DC)
 struct php_DB_ENV *php_db4_getPhpDbEnvFromObj(zval *z TSRMLS_DC)
 {
     struct php_DB_ENV *pdb;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_dbenv_ptr", sizeof("_dbenv_ptr"), 
-          (void **) &rsrc) == SUCCESS) 
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_dbenv_ptr", sizeof("_dbenv_ptr") -1)) != NULL)
     {
-        pdb = (struct php_DB_ENV *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4Env", NULL, 1, le_dbenv);
+        pdb = (struct php_DB_ENV *) zend_fetch_resource(Z_RES_P(zv), "Db4Env", le_dbenv);
         return pdb;
     }
     return NULL;
@@ -689,20 +672,21 @@ do { \
 
 void setDb(zval *z, DB *db TSRMLS_DC)
 {
-    long rsrc_id;
+    zend_resource *db_res;
     struct php_DB *pdb = (struct php_DB *) emalloc(sizeof(*pdb));
     memset(pdb, 0, sizeof(*pdb));
     pdb->db = db;
-    rsrc_id = ZEND_REGISTER_RESOURCE(NULL, pdb, le_db);
-    add_property_resource(z, "_db_ptr", rsrc_id);
+    db_res = zend_register_resource(pdb, le_db);
+    db_res->gc.refcount++;
+    add_property_resource(z, "_db_ptr", db_res);
 }
 
 struct php_DB *getPhpDbFromObj(zval *z TSRMLS_DC)
 {
     struct php_DB *pdb;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_db_ptr", sizeof("_db_ptr"), (void **) &rsrc) == SUCCESS) {
-        pdb = (struct php_DB *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4", NULL, 1, le_db);
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_db_ptr", sizeof("_db_ptr") - 1)) != NULL) {
+        pdb = (struct php_DB *) zend_fetch_resource(Z_RES_P(zv), "Db4", le_db);
         return pdb;
     }
     return NULL;
@@ -711,9 +695,9 @@ struct php_DB *getPhpDbFromObj(zval *z TSRMLS_DC)
 DB *php_db4_getDbFromObj(zval *z TSRMLS_DC)
 {
     struct php_DB *pdb;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_db_ptr", sizeof("_db_ptr"), (void **) &rsrc) == SUCCESS) {
-        pdb = (struct php_DB *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4", NULL, 1, le_db);
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_db_ptr", sizeof("_db_ptr") - 1)) != NULL) {
+        pdb = (struct php_DB *) zend_fetch_resource(Z_RES_P(zv), "Db4", le_db);
         return pdb->db;
     }
     return NULL;
@@ -755,23 +739,22 @@ do { \
 
 void setDbTxn(zval *z, DB_TXN *dbtxn TSRMLS_DC)
 {
-    long rsrc_id;
+    zend_resource *txn_res;
     struct php_DB_TXN *txn = (struct php_DB_TXN *) emalloc(sizeof(*txn));
     memset(txn, 0, sizeof(*txn));
     txn->db_txn = dbtxn;
-    rsrc_id = ZEND_REGISTER_RESOURCE(NULL, txn, le_db_txn);
-    zend_list_addref(rsrc_id);
-    add_property_resource(z, "_dbtxn_ptr", rsrc_id);
+    txn_res = zend_register_resource(txn, le_db_txn);
+    txn_res->gc.refcount++;
+    add_property_resource(z, "_dbtxn_ptr", txn_res);
 }
 
 DB_TXN *php_db4_getDbTxnFromObj(zval *z TSRMLS_DC)
 {
     struct php_DB_TXN *pdbtxn;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_dbtxn_ptr", sizeof("_dbtxn_ptr"), 
-          (void **) &rsrc) == SUCCESS) 
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_dbtxn_ptr", sizeof("_dbtxn_ptr") - 1)) != NULL)
     {
-        pdbtxn = (struct php_DB_TXN *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4Txn", NULL, 1, le_db_txn);
+        pdbtxn = (struct php_DB_TXN *) zend_fetch_resource(Z_RES_P(zv), "Db4Txn", le_db_txn);
         return pdbtxn->db_txn;
     }
     return NULL;
@@ -780,11 +763,10 @@ DB_TXN *php_db4_getDbTxnFromObj(zval *z TSRMLS_DC)
 struct php_DB_TXN *getPhpDbTxnFromObj(zval *z TSRMLS_DC)
 {
     struct php_DB_TXN *pdbtxn;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_dbtxn_ptr", sizeof("_dbtxn_ptr"), 
-          (void **) &rsrc) == SUCCESS) 
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_dbtxn_ptr", sizeof("_dbtxn_ptr") - 1)) != NULL) 
     {
-        pdbtxn = (struct php_DB_TXN *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4Txn", NULL, 1, le_db_txn);
+        pdbtxn = (struct php_DB_TXN *) zend_fetch_resource(Z_RES_P(zv), "Db4Txn", le_db_txn);
         return pdbtxn;
     }
     return NULL;
@@ -843,7 +825,7 @@ void closeDbTxnDependencies(zval *obj TSRMLS_DC) {
 
 void setDbc(zval *z, DBC *dbc, struct php_DB_TXN *txn TSRMLS_DC)
 {
-    long rsrc_id;
+    zend_resource *dbc_res;
     struct php_DBC *pdbc = (struct php_DBC *) emalloc(sizeof(*pdbc));
     memset(pdbc, 0, sizeof(*pdbc));
     pdbc->dbc = dbc;
@@ -851,19 +833,18 @@ void setDbc(zval *z, DBC *dbc, struct php_DB_TXN *txn TSRMLS_DC)
         pdbc->parent_txn = txn;
         txn->open_cursors = my_llist_add(txn->open_cursors, pdbc);
     }
-    rsrc_id = ZEND_REGISTER_RESOURCE(NULL, pdbc, le_dbc);
-    zend_list_addref(rsrc_id);
-    add_property_resource(z, "_dbc_ptr", rsrc_id);
+    dbc_res = zend_register_resource(pdbc, le_dbc);
+    dbc_res->gc.refcount++;
+    add_property_resource(z, "_dbc_ptr", dbc_res);
 }
 
 DBC *php_db4_getDbcFromObj(zval *z TSRMLS_DC)
 {
     struct php_DBC *pdbc;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_dbc_ptr", sizeof("_dbc_ptr"), 
-          (void **) &rsrc) == SUCCESS) 
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_dbc_ptr", sizeof("_dbc_ptr") - 1)) != NULL) 
     {
-        pdbc = (struct php_DBC *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4Cursor", NULL, 1, le_dbc);
+        pdbc = (struct php_DBC *) zend_fetch_resource(Z_RES_P(zv), "Db4Cursor", le_dbc);
         return pdbc->dbc;
     }
     return NULL;
@@ -872,11 +853,10 @@ DBC *php_db4_getDbcFromObj(zval *z TSRMLS_DC)
 struct php_DBC *getPhpDbcFromObj(zval *z TSRMLS_DC)
 {
     struct php_DBC *pdbc;
-    zval **rsrc;
-    if(zend_hash_find(HASH_OF(z), "_dbc_ptr", sizeof("_dbc_ptr"), 
-          (void **) &rsrc) == SUCCESS) 
+    zval *zv;
+    if((zv = zend_hash_str_find(HASH_OF(z), "_dbc_ptr", sizeof("_dbc_ptr") - 1)) != NULL) 
     {
-        pdbc = (struct php_DBC *) zend_fetch_resource(rsrc TSRMLS_CC, -1, "Db4Cursor", NULL, 1, le_dbc);
+        pdbc = (struct php_DBC *) zend_fetch_resource(Z_RES_P(zv), "Db4Cursor", le_dbc);
         return pdbc;
     }
     return NULL;
@@ -1056,7 +1036,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_txn_get_name)
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
         RETURN_FALSE;
     }
-    RETURN_STRING((char *)name, 1);
+    RETURN_STRING((char *)name);
 }
 /* }}} */
 
@@ -1092,7 +1072,7 @@ ZEND_NAMED_FUNCTION(_wrap_new_db4)
     }
     if(dbenv_obj) {
         dbenv = php_db4_getDbEnvFromObj(dbenv_obj TSRMLS_CC);
-        zval_add_ref(&dbenv_obj);
+        zval_add_ref(dbenv_obj);
         add_property_zval(self, "dbenv", dbenv_obj);
     }
     if((ret = my_db_create(&db, dbenv, 0)) != 0) {
@@ -1133,8 +1113,8 @@ ZEND_NAMED_FUNCTION(_wrap_db_open)
     if(dbtxn_obj) {
         dbtxn = php_db4_getDbTxnFromObj(dbtxn_obj TSRMLS_CC);
     }
-    add_property_string(self, "file", file, 1);
-    add_property_string(self, "database", database, 1);
+    add_property_string(self, "file", file);
+    add_property_string(self, "database", database);
     if(strcmp(file, "") == 0) file = NULL;
     if(strcmp(database, "") == 0) database = NULL;
     /* add type and other introspection data */
@@ -1143,7 +1123,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_open)
     }
     else {
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
-        add_property_string(self, "lastError", db_strerror(ret), 1);
+        add_property_string(self, "lastError", db_strerror(ret));
         RETURN_FALSE;
     }
 }
@@ -1222,7 +1202,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_get)
     key.size = keylen;
     memset(&value, 0, sizeof(DBT));
     if(db->get(db, txn, &key, &value, flags) == 0) {
-        RETURN_STRINGL((char *)value.data, value.size, 1);
+        RETURN_STRINGL((char *)value.data, value.size);
     }
     RETURN_FALSE;
 }
@@ -1232,7 +1212,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_get)
  */
 ZEND_NAMED_FUNCTION(_wrap_db_pget)
 {
-    DB *db = NULL;
+    /*DB *db = NULL;
     DB_TXN *txn = NULL;
     zval *txn_obj = NULL;
     DBT key, value, pkey;
@@ -1264,8 +1244,10 @@ ZEND_NAMED_FUNCTION(_wrap_db_pget)
         }
         memcpy(Z_STRVAL_P(z_pkey), pkey.data, pkey.size);
         Z_STRLEN_P(z_pkey) = pkey.size;
-        RETURN_STRINGL((char *)value.data, value.size, 1);
-    }
+        RETURN_STRINGL((char *)value.data, value.size);
+    }*/
+    php_error_docref(NULL TSRMLS_CC, E_ERROR,
+         "Function pget currently not implemented.");
     RETURN_FALSE;
 }
 /* }}} */
@@ -1283,19 +1265,19 @@ ZEND_NAMED_FUNCTION(_wrap_db_get_type)
     }
     switch(type) {
         case DB_BTREE:
-            RETURN_STRING("DB_BTREE", 1);
+            RETURN_STRING("DB_BTREE");
             break;
         case DB_HASH:
-            RETURN_STRING("DB_HASH", 1);
+            RETURN_STRING("DB_HASH");
             break;
         case DB_RECNO:
-            RETURN_STRING("DB_RECNO", 1);
+            RETURN_STRING("DB_RECNO");
             break;
         case DB_QUEUE:
-            RETURN_STRING("DB_QUEUE", 1);
+            RETURN_STRING("DB_QUEUE");
             break;
         default:
-            RETURN_STRING("UNKNOWN", 1);
+            RETURN_STRING("UNKNOWN");
             break;
     }
 }
@@ -1465,7 +1447,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_join)
     num_cursors = zend_hash_num_elements(array);
     curslist = (DBC **) calloc(sizeof(DBC *), num_cursors + 1);
     for(zend_hash_internal_pointer_reset_ex(array, &pos), i=0;
-        zend_hash_get_current_data_ex(array, (void **) &z_cursor, &pos) == SUCCESS;
+        (*z_cursor = zend_hash_get_current_data_ex(array, &pos)) != NULL;
         zend_hash_move_forward_ex(array, &pos), i++) {
         curslist[i] = php_db4_getDbcFromObj(*z_cursor TSRMLS_CC);
     }
@@ -1512,7 +1494,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_put)
     value.size = datalen;
     if((ret = db->put(db, txn, &key, &value, flags)) != 0) {
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
-        add_property_string(self, "lastError", db_strerror(ret), 1);
+        add_property_string(self, "lastError", db_strerror(ret));
         RETURN_FALSE;
     }
     RETURN_TRUE;
@@ -1582,7 +1564,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_cursor)
     }
     if((ret = db->cursor(db, txn, &cursor, flags)) != 0 ) {
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
-        add_property_string(self, "lastError", db_strerror(ret), 1);
+        add_property_string(self, "lastError", db_strerror(ret));
         RETURN_FALSE;
     }
     else {
@@ -1698,13 +1680,13 @@ ZEND_NAMED_FUNCTION(_wrap_dbc_get)
 	value.data = Z_STRVAL_P(zvalue);
 	value.size = Z_STRLEN_P(zvalue);
     if((ret = dbc->c_get(dbc, &key, &value, flags)) == 0) {
-		zval_dtor(zkey); ZVAL_STRINGL(zkey, (char *) key.data, key.size, 1);
-		zval_dtor(zvalue); ZVAL_STRINGL(zvalue, (char *) value.data, value.size, 1);
+		zval_dtor(zkey); ZVAL_STRINGL(zkey, (char *) key.data, key.size);
+		zval_dtor(zvalue); ZVAL_STRINGL(zvalue, (char *) value.data, value.size);
 		RETURN_LONG(0);
     } 
 	if(ret != DB_NOTFOUND) {
     	php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
-    	add_property_string(self, "lastError", db_strerror(ret), 1);
+    	add_property_string(self, "lastError", db_strerror(ret));
     }
     RETURN_LONG(1);
 }
@@ -1737,14 +1719,14 @@ ZEND_NAMED_FUNCTION(_wrap_dbc_pget)
 	value.data = Z_STRVAL_P(zvalue);
 	value.size = Z_STRLEN_P(zvalue);
     if((ret = dbc->c_pget(dbc, &key, &pkey, &value, flags)) == 0) {
-		zval_dtor(zkey); ZVAL_STRINGL(zkey, (char *) key.data, key.size, 1);
-		zval_dtor(zpkey); ZVAL_STRINGL(zpkey, (char *) pkey.data, pkey.size, 1);
-		zval_dtor(zvalue); ZVAL_STRINGL(zvalue, (char *) value.data, value.size, 1);
+		zval_dtor(zkey); ZVAL_STRINGL(zkey, (char *) key.data, key.size);
+		zval_dtor(zpkey); ZVAL_STRINGL(zpkey, (char *) pkey.data, pkey.size);
+		zval_dtor(zvalue); ZVAL_STRINGL(zvalue, (char *) value.data, value.size);
 		RETURN_LONG(0);
     } 
 	if(ret != DB_NOTFOUND) {
     	php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
-    	add_property_string(self, "lastError", db_strerror(ret), 1);
+    	add_property_string(self, "lastError", db_strerror(ret));
     }
     RETURN_LONG(1);
 }
@@ -1814,7 +1796,7 @@ ZEND_NAMED_FUNCTION(_wrap_new_DbEnv)
     }
 	DbEnv::wrap_DB_ENV(dbenv);
     dbenv->set_errcall(dbenv, php_db4_error);
-    setDbEnv(this_ptr, dbenv TSRMLS_CC);
+    setDbEnv(getThis(), dbenv TSRMLS_CC);
 }
 /* }}} */
 
@@ -1921,7 +1903,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_env_open)
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "open(%s, %d, %o) failed: %s (%d) %s:%d\n", home, flags, mode, strerror(ret), ret, __FILE__, __LINE__);
         RETURN_FALSE;
     }
-	if(home) add_property_stringl(self, "home", home, homelen, 1);
+	if(home) add_property_stringl(self, "home", home, homelen);
 }
 /* }}} */
 
@@ -2006,7 +1988,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_env_txn_begin)
     DB_ENV *dbenv;
     DB_TXN *txn, *parenttxn = NULL;
     zval *self;
-    zval *cursor_array;
+    zval cursor_array;
     zval *parenttxn_obj = NULL;
     u_int32_t flags = 0;
     int ret;
@@ -2023,13 +2005,12 @@ ZEND_NAMED_FUNCTION(_wrap_db_env_txn_begin)
     }
     if((ret = dbenv->txn_begin(dbenv, parenttxn, &txn, flags)) != 0) {
         php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", db_strerror(ret));
-        add_property_string(self, "lastError", db_strerror(ret), 1);
+        add_property_string(self, "lastError", db_strerror(ret));
         RETURN_FALSE;
     }
     object_init_ex(return_value, db_txn_ce);
-    MAKE_STD_ZVAL(cursor_array);
-    array_init(cursor_array);
-    add_property_zval(return_value, "openCursors", cursor_array);
+    array_init(&cursor_array);
+    add_property_zval(return_value, "openCursors", &cursor_array);
     setDbTxn(return_value, txn TSRMLS_CC);
 }
 /* }}} */
@@ -2052,7 +2033,7 @@ ZEND_NAMED_FUNCTION(_wrap_db_env_txn_checkpoint)
         return;
     }
     if((ret = dbenv->txn_checkpoint(dbenv, kbytes, mins, flags)) != 0) {
-        add_property_string(self, "lastError", db_strerror(ret), 1);
+        add_property_string(self, "lastError", db_strerror(ret));
         RETURN_FALSE;
     }
     RETURN_TRUE;

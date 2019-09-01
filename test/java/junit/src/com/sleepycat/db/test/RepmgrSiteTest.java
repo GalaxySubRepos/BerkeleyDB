@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- * 
  * Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+ * 
+ * See the file LICENSE for license information.
  * 
  * $Id$
  * 
@@ -72,6 +72,15 @@ public class RepmgrSiteTest extends EventHandlerAdapter
         envCon.setInitializeCache(true);
         envCon.setTransactional(true);
         envCon.setInitializeReplication(true);
+        envCon.setReplicationManagerSSLdisabled(TestUtils.repmgrSSLDisabled);
+        envCon.setReplicationManagerSSLconfiguration(
+            TestUtils.repmgrCACert,
+            TestUtils.repmgrCADir,
+            TestUtils.repmgrNodeCert,
+            TestUtils.repmgrNodePkey,
+            TestUtils.repmgrNodePkeyPassword,
+            TestUtils.repmgrVerifyDepth
+        );
 
         return envCon; 
     }
@@ -237,7 +246,9 @@ public class RepmgrSiteTest extends EventHandlerAdapter
             mEnv.getReplicationManagerSiteList();
         assertEquals(2, siteLists.length);
         assertEquals(true, siteLists[0].isView());
+        assertEquals(false, siteLists[0].isElectable());
         assertEquals(true, siteLists[1].isView());
+        assertEquals(false, siteLists[1].isElectable());
         ReplicationStats repStats =
             cEnv1.getReplicationStats(StatsConfig.DEFAULT);
         assertEquals(true, repStats.getView());

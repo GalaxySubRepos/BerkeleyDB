@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;stat()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;stat()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbsort_multiple.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbstat"></a>DB-&gt;stat()</h2>
+            <h2 class="title" style="clear: both"><a id="dbstat"></a>
+        <span>DB-&gt;stat()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -61,7 +67,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235891664"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113488392528"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -69,17 +75,23 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235827344"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113488268704"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                   If the operation is part of an application-specified transaction, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                  handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; if the
+                  handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; if the
                   operation is part of a Berkeley DB Concurrent Data Store group, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                  from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                  from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                   otherwise NULL. If no transaction handle is specified, but the
                   operation occurs in a transactional database, the operation will be
                   implicitly transaction protected.
@@ -89,7 +101,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235800992"></a>flags</h4>
+                <h4 class="title"><a id="idm140113488344864"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -141,14 +153,17 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235855760"></a>Statistical Structure</h3>
+              <h3 class="title"><a id="idm140113488276688"></a>Statistical Structure</h3>
             </div>
           </div>
         </div>
         <p>
                     Statistical structures are stored in allocated memory. If
                     application-specific allocation routines have been declared (see
-                    <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">DB_ENV-&gt;set_alloc()</a>
+                    <a class="xref" href="envset_alloc.html" title="DB_ENV-&gt;set_alloc()">
+        <span>DB_ENV-&gt;set_alloc()</span>
+        
+    </a>
                     for more information), they are used to allocate the
                     memory; otherwise, the standard C library 
                     <span class="bold"><strong>malloc</strong></span>(3) is used. The caller is
@@ -173,7 +188,10 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
             </p>
         <p>
                     The <code class="methodname">DB-&gt;stat()</code> method may not be called before the 
-                    <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>
+                    <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>
                     method is called.
             </p>
         <p>
@@ -184,7 +202,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235785984"></a>Hash Statistics</h4>
+                <h4 class="title"><a id="idm140113488237920"></a>Hash Statistics</h4>
               </div>
             </div>
           </div>
@@ -358,7 +376,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235866992"></a>Heap Statistics</h4>
+                <h4 class="title"><a id="idm140113488221584"></a>Heap Statistics</h4>
               </div>
             </div>
           </div>
@@ -454,7 +472,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235737744"></a>Btree and Recno Statistics</h4>
+                <h4 class="title"><a id="idm140113488297344"></a>Btree and Recno Statistics</h4>
               </div>
             </div>
           </div>
@@ -687,7 +705,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235747648"></a>Queue Statistics</h4>
+                <h4 class="title"><a id="idm140113488122096"></a>Queue Statistics</h4>
               </div>
             </div>
           </div>
@@ -823,7 +841,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235653008"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113488102288"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -839,7 +857,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235745024"></a>  DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140113488183504"></a>  DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -858,7 +876,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235660320"></a>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140113488194400"></a>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -870,7 +888,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815235701488"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113488093680"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -883,7 +901,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235721472"></a>Class</h3>
+              <h3 class="title"><a id="idm140113488097632"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -895,7 +913,7 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815235715584"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113488113888"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -915,11 +933,17 @@ DB-&gt;stat(DB *db, DB_TXN *txnid, void *sp, u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;sort_multiple() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;sort_multiple()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;stat_print()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

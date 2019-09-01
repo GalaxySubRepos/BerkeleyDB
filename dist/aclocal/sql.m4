@@ -99,7 +99,7 @@ fi
 if test "$db_cv_debug" = "yes"; then
   CPPFLAGS="$CPPFLAGS -g"
 fi
-(cd sql && eval "\$SHELL ../$sqlite_dir/configure --disable-option-checking $ac_sub_configure_args CPPFLAGS=\"-I.. $CPPFLAGS\" --enable-amalgamation=$db_cv_sql_amalgamation --enable-readline=$with_readline " && cat build_config.h >> config.h) || exit 1
+(cd sql && eval "\$SHELL ../$sqlite_dir/configure --disable-option-checking $ac_sub_configure_args CPPFLAGS=\"-I.. $CPPFLAGS\" --enable-amalgamation=$db_cv_sql_amalgamation --enable-readline=$with_readline --enable-editline=$with_editline" && cat build_config.h >> config.h) || exit 1
 
 # Configure JDBC if --enable-jdbc
 if test "$db_cv_jdbc" != "no"; then

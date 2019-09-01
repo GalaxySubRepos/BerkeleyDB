@@ -1,7 +1,7 @@
 #
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -66,6 +66,8 @@ proc basic_repmgr_election_test { niter inmemdb \
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set ports [available_ports $nsites]
 	set hoststr [get_hoststr $ipversion]
@@ -113,7 +115,7 @@ proc basic_repmgr_election_test { niter inmemdb \
 
 	# Open first client
 	set cl_envcmd "berkdb_env_noerr -create \
-	    $txnargs $verbargs $logargs $private \
+	    $txnargs $verbargs $sslargs $logargs $private \
 	    -errpfx CLIENT -home $clientdir -rep -thread $repmemarg"
 	set clientenv [eval $cl_envcmd]
 	set cl1_repmgr_conf "-ack all -pri 100 \
@@ -126,7 +128,7 @@ proc basic_repmgr_election_test { niter inmemdb \
 
 	# Open second client
 	set cl2_envcmd "berkdb_env_noerr -create \
-	    $txnargs $verbargs $logargs $private \
+	    $txnargs $verbargs $sslargs $logargs $private \
 	    -errpfx CLIENT2 -home $clientdir2 -rep -thread $repmemarg"
 	set clientenv2 [eval $cl2_envcmd]
 	set cl2_repmgr_conf "-ack all -pri 30 \
@@ -144,7 +146,7 @@ proc basic_repmgr_election_test { niter inmemdb \
 
 	# Open third client
 	set cl3_envcmd "berkdb_env_noerr -create \
-	    $txnargs $verbargs $logargs $private \
+	    $txnargs $verbargs $sslargs $logargs $private \
 	    -errpfx CLIENT3 -home $clientdir3 -rep -thread $repmemarg"
 	set clientenv3 [eval $cl3_envcmd]
 	set cl3_repmgr_conf "-ack all -pri 20 \

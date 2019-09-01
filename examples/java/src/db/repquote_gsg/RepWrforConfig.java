@@ -1,14 +1,13 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2015, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db.repquote_gsg;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.sleepycat.db.ReplicationHostAddress;
 import com.sleepycat.db.ReplicationManagerStartPolicy;
@@ -25,11 +24,11 @@ public class RepWrforConfig
     // String specifying the home directory for rep files.
     public String home;
     // Stores an optional set of "other" hosts.
-    private Vector otherHosts;
+    private final ArrayList<ReplicationHostAddress> otherHosts;
     // Priority within the replication group.
     public ReplicationManagerStartPolicy startPolicy;
     // The host address to listen to.
-    private ReplicationManagerSiteConfig thisHost;
+    private final ReplicationManagerSiteConfig thisHost;
 
     // Member variables used internally.
     private int currOtherHost;
@@ -42,7 +41,7 @@ public class RepWrforConfig
         gotListenAddress = false;
         currOtherHost = 0;
         thisHost = new ReplicationManagerSiteConfig();
-        otherHosts = new Vector();
+        otherHosts = new ArrayList<>();
     }
 
     public java.io.File getHome()
@@ -79,9 +78,9 @@ public class RepWrforConfig
     public ReplicationHostAddress getFirstOtherHost()
     {
         currOtherHost = 0;
-        if (otherHosts.size() == 0)
+        if (otherHosts.isEmpty())
             return null;
-        return (ReplicationHostAddress)otherHosts.get(currOtherHost);
+        return otherHosts.get(currOtherHost);
     }
 
     public ReplicationHostAddress getNextOtherHost()
@@ -89,7 +88,7 @@ public class RepWrforConfig
         currOtherHost++;
         if (currOtherHost >= otherHosts.size())
             return null;
-        return (ReplicationHostAddress)otherHosts.get(currOtherHost);
+        return otherHosts.get(currOtherHost);
     }
 }
 

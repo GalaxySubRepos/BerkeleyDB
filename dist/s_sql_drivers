@@ -49,7 +49,7 @@ do
 	-adodotnet)
 		BUILD_ALL=0
 		BUILD_NET=1;;
-	-ado_package)
+	-ado-package)
 		shift
 		ADO_PACKAGE=$1
 		NO_ADDONS=1;;
@@ -195,7 +195,7 @@ mv $JDBC_DIR/Makefile.in $JDBC_DIR/Makefile.in.tmp
 # 3. Make the suffix of libsqlite_jni configurable
 cat $JDBC_DIR/Makefile.in.tmp | \
     sed -e '/native\/mkconst > SQLite\/Constants.java/ i\
-	  LD_LIBRARY_PATH=\"\$\$LD_LIBRARY_PATH:\$(PWD)\/..\/.libs\" \\' \
+	LD_LIBRARY_PATH=\"\$\$LD_LIBRARY_PATH:\$(PWD)\/..\/.libs\" \\' \
     -e '/^LIBS=/s/$/ @BDB_LIB@/' -e '/-o libsqlite_jni.la/s/-o/-shrext $(JMODSUFFIX) -o/' > $JDBC_DIR/Makefile.in
 rm -f $JDBC_DIR/Makefile.in.tmp
 
@@ -260,21 +260,27 @@ cp -r $START_DIR/../src $BDB_ROOT
 
 # Copy files from build_windows directory.
 reserved_projects="db_sql_shell db_sql db"
-reserved_solutions="Berkeley_DB.sln Berkeley_DB_vs2010.sln"
+reserved_solutions="Berkeley_DB_vs2010.sln Berkeley_DB_vs2012.sln Berkeley_DB_vs2015.sln"
 mkdir $BDB_ROOT/build_windows
-mkdir $BDB_ROOT/build_windows/VS8
 mkdir $BDB_ROOT/build_windows/VS10
+mkdir $BDB_ROOT/build_windows/VS12
+mkdir $BDB_ROOT/build_windows/VS15
 for f in $reserved_solutions *.h *.src *.rc *.def
 do
 	cp $START_DIR/../build_windows/$f $BDB_ROOT/build_windows
 done
 for f in $reserved_projects
 do
-	cp $START_DIR/../build_windows/VS8/$f.vcproj $BDB_ROOT/build_windows/VS8
 	cp $START_DIR/../build_windows/VS10/$f.vcxproj \
 	    $BDB_ROOT/build_windows/VS10
+	cp $START_DIR/../build_windows/VS12/$f.vcxproj \
+	    $BDB_ROOT/build_windows/VS12
+	cp $START_DIR/../build_windows/VS15/$f.vcxproj \
+	    $BDB_ROOT/build_windows/VS15
 done
 cp $START_DIR/../build_windows/VS10/*.props $BDB_ROOT/build_windows/VS10/
+cp $START_DIR/../build_windows/VS12/*.props $BDB_ROOT/build_windows/VS12/
+cp $START_DIR/../build_windows/VS15/*.props $BDB_ROOT/build_windows/VS15/
 
 # Cleanup solution files
 for sln_name in $reserved_solutions
@@ -310,8 +316,10 @@ do
 	rm -f ${sln}.tmp
 done
 
-# Copy wince files
-cp -r $START_DIR/../build_wince $BDB_ROOT
+# Copy wince files (comment out for 6.3)
+#
+#cp -r $START_DIR/../build_wince $BDB_ROOT
+#
 # Move docs
 if [ -e "$START_DIR/../docs/bdb-sql-ado" ]; then
 	mv "$START_DIR/../docs/bdb-sql-ado" Doc/
@@ -321,12 +329,13 @@ at <pkgroot>/Doc/bdb-sql-ado/index.htm" > README
 fi
 
 # Copy lang/ for DB/DBSQL projects
+#
 mkdir -p $BDB_ROOT/lang
 for dir in dbm hsearch sql cxx
 do
 	cp -r $START_DIR/../lang/$dir $BDB_ROOT/lang
 done
-
+ 
 # Prune out 3rd party code we do not ship.
 #
 rm -rf $BDB_ROOT/lang/sql/sqlite/art
@@ -342,6 +351,7 @@ rm -rf $BDB_ROOT/lang/sql/sqlite/mptest
 rm -rf $BDB_ROOT/lang/sql/sqlite/test
 rm -rf $BDB_ROOT/lang/sql/sqlite/tool
 rm -rf $BDB_ROOT/lang/sql/sqlite/vsixtest
+
 
 mkdir $BDB_ROOT/examples
 for dir in sql cxx
@@ -364,27 +374,8 @@ fi
 #
 XQ_COMMON="$START_DIR/adodotnet/adapt_common.xq.in"
 
-# Change SQLite.Interop.CE.2005/2008.vcproj to add platforms.
-XQ='gen_wince_project.xq'
-XQ_IN="${XQ}.in"
-XQ_IN_SRC="$START_DIR/adodotnet/${XQ_IN}"
-cp $XQ_COMMON $XQ_IN
-cat $XQ_IN_SRC >> $XQ_IN
-sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
-    -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
-    -e "s/@BDB_PATH@/$BDB_PATH4SED/g" \
-    -e "s/@BDB_NAME@/$BDB_ROOT/g" \
-    < $XQ_IN >> $XQ
-# Change File list for vcproject file
-for proj in CE.2005 CE.2008
-do
-	xqilla -u -i SQLite.Interop/SQLite.Interop.$proj.vcproj $XQ
-done
-rm -f $XQ
-rm -f $XQ_IN
-
 #
-# Change SQLite.Interop.2010/2012.vcproj for Win32/x64.
+# Change SQLite.Interop.2010/2012/2013/2015.vcproj for Win32/x64.
 #
 XQ='adapt_SQLite.Interop.2010.xq'
 XQ_IN="${XQ}.in"
@@ -402,50 +393,14 @@ sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
     < $XQ_IN >> $XQ
 
 # Change File list for vcproject file
-for proj in 2010 Static.2010 2012 Static.2012 2013 Static.2013 CE.2012
+for proj in 2010 Static.2010 2012 Static.2012 2013 Static.2013 \
+    2015 Static.2015 CE.2012
 do
 	xqilla -u -i SQLite.Interop/SQLite.Interop.$proj.vcxproj $XQ
 done
 rm -f $XQ
 rm -f $XQ_IN
 
-# Add BDB files into  SQLite.Interop.CE.2012.vcxproj using sed, since
-# xqilla can not handle that.
-sed -n -e '/File.*RelativePath/p' $BDB_ROOT/build_wince/VS8/db.vcproj | \
-    sed -e 's/File/ClCompile/g' -e 's/RelativePath/Include/g' \
-    -e "s#\\.\\.\\\\\\.\\.\\\\src#..\\\\$BDB_ROOT\\\\src#g" >ce.tmp
-sed -e '$d' SQLite.Interop/SQLite.Interop.CE.2012.vcxproj >prj.tmp
-echo '<ItemGroup>' >> prj.tmp
-cat ce.tmp >> prj.tmp
-echo '</ItemGroup>' >> prj.tmp
-echo '</Project>' >> prj.tmp
-mv prj.tmp SQLite.Interop/SQLite.Interop.CE.2012.vcxproj
-rm -f ce.tmp
-
-#
-# Change SQLite.Interop.[CE.]2005/2008.vcproj for Win32/x64/WinCE.
-#
-XQ='adapt_SQLite.Interop.2008.xq'
-XQ_IN="${XQ}.in"
-XQ_IN_SRC="$START_DIR/adodotnet/${XQ_IN}"
-# Generate XQuery script
-cp $XQ_COMMON $XQ_IN
-cat $XQ_IN_SRC >> $XQ_IN
-sed -e "s/@DB_VERSION_MAJOR@/$DB_VERSION_MAJOR/g" \
-    -e "s/@DB_VERSION_MINOR@/$DB_VERSION_MINOR/g" \
-    -e "s/@BDB_PATH@/$BDB_PATH4SED/g" \
-    -e "s/@BDB_NAME@/$BDB_ROOT/g" \
-    < $XQ_IN >> $XQ
-
-# Change File list for vcproject file
-for proj in 2005 2008 CE.2005 CE.2008 Static.2005 Static.2008
-do
-	xqilla -u -i SQLite.Interop/SQLite.Interop.$proj.vcproj $XQ
-done
-rm -f $XQ
-rm -f $XQ_IN
-
-#
 # Use sed to do below changes:
 # 1. Change xml version to 1.0, otherwise Visual Studio can not open it
 # 2. Remove unnecessary xmlns in VS2010 project file
@@ -472,29 +427,6 @@ do
 
 	sed -e 's/tempProjectFileVersion/_ProjectFileVersion/g' ${f}.tmp > $f
 	rm ${f}.tmp
-done
-
-# Change the solutions containing WinCE projects so that all the supported
-# platforms can be seen and selected.
-for sln in SQLite.NET.2005.MSBuild.sln SQLite.NET.2005.sln \
-    SQLite.NET.2008.MSBuild.sln SQLite.NET.2008.sln
-do
-	for conf in Release ReleaseNativeOnly Debug DebugNativeOnly
-	do
-		for platform in "Windows Mobile 6.5.3 Professional DTK (ARMV4I)" \
-		    "Windows Mobile 6 Professional SDK (ARMV4I)" \
-		    "Windows Mobile 5.0 Smartphone SDK (ARMV4I)" \
-		    "Windows Mobile 5.0 Pocket PC SDK (ARMV4I)" \
-		    "Smartphone 2003 (ARMV4)"
-		do
-			# Use proper indent for the added string so the 
-			# solution file will have good format.
-			sed -e "/GlobalSection.*SolutionConfigurationPlatforms.*/a\\
-		$conf|$platform = $conf|$platform" $sln > $sln.tmp
-			mv $sln.tmp $sln
-		done
-	done
-	rm -f $sln.tmp
 done
 
 #
@@ -530,6 +462,42 @@ for f in SQLite.Interop/props/sqlite3.props SQLite.Interop/props/sqlite3.vsprops
 do
 	sed -e "s/SQLITE_MEMDEBUG=1//g" $f > $TMP_FILE
 	cat $TMP_FILE > $f
+done
+
+#
+# Delete 2005 and 2008 related solution files.
+#
+for f in 2005 2005.MSBuild 2008 2008.MSBuild
+do
+	rm -f SQLite.NET.$f.sln
+done
+
+for f in 2005 2008 CE.2005 CE.2008 Static.2005 Static.2008
+do
+	rm -f SQLite.Interop/SQLite.Interop.$f.vcproj
+done
+
+for f in 2005 2008 Compact.2005 Compact.2008 Module.2005 Module.2008
+do
+	rm -f System.Data.SQLite/System.Data.SQLite.$f.csproj
+done
+
+for f in Linq.2008
+do
+	rm -f System.Data.SQLite.Linq/System.Data.SQLite.$f.csproj
+done
+
+for f in 2005 2008
+do
+	rm -f SQLite.Designer/SQLite.Designer.$f.csproj
+done
+
+#
+# Remove useless directories from Externals.
+#
+for f in Eagle HtmlHelp MSVCPP NDoc3
+do
+	rm -rf Externals/$f
 done
 
 #
@@ -585,7 +553,7 @@ if [ "$BUILD_ALL" != 0 -o "$BUILD_ODBC" != 0 ]; then
 	s_sql_odbc
 fi
 if [ "$BUILD_ALL" != 0 -o "$BUILD_NET" != 0 ]; then
-	test "$ADO_PACKAGE" = "" && ADO_PACKAGE=`ls $DB_ADDONS_REPO/thirdparty/sql/sqlite-dotnetsrc*.zip | tail -1`
+	test "$ADO_PACKAGE" = "" && ADO_PACKAGE=`ls $DB_ADDONS_REPO/thirdparty/sql/sqlite-netFx-full-source*.zip | tail -1`
 	s_sql_adodotnet
 fi
 

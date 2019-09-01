@@ -2,6 +2,8 @@
 #
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
 #
+# See the file LICENSE for license information.
+#
 # Display environment's deadlocks based on "db_stat -Co" output.
 
 t1=__a

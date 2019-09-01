@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.entity;
@@ -23,15 +22,16 @@ import com.sleepycat.collections.StoredValueSet;
  */
 public class SampleViews {
 
-    private StoredSortedMap partMap;
-    private StoredSortedMap supplierMap;
-    private StoredSortedMap shipmentMap;
-    private StoredSortedMap shipmentByPartMap;
-    private StoredSortedMap shipmentBySupplierMap;
-    private StoredSortedMap supplierByCityMap;
+    private final StoredSortedMap<PartKey, Part> partMap;
+    private final StoredSortedMap<SupplierKey, Supplier> supplierMap;
+    private final StoredSortedMap<ShipmentKey, Shipment> shipmentMap;
+    private final StoredSortedMap<PartKey, Shipment> shipmentByPartMap;
+    private final StoredSortedMap<SupplierKey, Shipment> shipmentBySupplierMap;
+    private final StoredSortedMap<String, Supplier> supplierByCityMap;
 
     /**
      * Create the data bindings and collection views.
+     * @param db
      */
     public SampleViews(SampleDatabase db) {
 
@@ -42,22 +42,22 @@ public class SampleViews {
         // special binding class is needed.
         //
         ClassCatalog catalog = db.getClassCatalog();
-        SerialBinding partKeyBinding =
-            new SerialBinding(catalog, PartKey.class);
-        EntityBinding partDataBinding =
+        SerialBinding<PartKey> partKeyBinding =
+            new SerialBinding<>(catalog, PartKey.class);
+        EntityBinding<Part> partDataBinding =
             new PartBinding(catalog, PartKey.class, PartData.class);
-        SerialBinding supplierKeyBinding =
-            new SerialBinding(catalog, SupplierKey.class);
-        EntityBinding supplierDataBinding =
+        SerialBinding<SupplierKey> supplierKeyBinding =
+            new SerialBinding<>(catalog, SupplierKey.class);
+        EntityBinding<Supplier> supplierDataBinding =
             new SupplierBinding(catalog, SupplierKey.class,
                                 SupplierData.class);
-        SerialBinding shipmentKeyBinding =
-            new SerialBinding(catalog, ShipmentKey.class);
-        EntityBinding shipmentDataBinding =
+        SerialBinding<ShipmentKey> shipmentKeyBinding =
+            new SerialBinding<>(catalog, ShipmentKey.class);
+        EntityBinding<Shipment> shipmentDataBinding =
             new ShipmentBinding(catalog, ShipmentKey.class,
                                 ShipmentData.class);
-        SerialBinding cityKeyBinding =
-            new SerialBinding(catalog, String.class);
+        SerialBinding<String> cityKeyBinding =
+            new SerialBinding<>(catalog, String.class);
 
         // Create map views for all stores and indices.
         // StoredSortedMap is not used since the stores and indices are
@@ -65,22 +65,22 @@ public class SampleViews {
         // useful ordering.
         //
         partMap =
-            new StoredSortedMap(db.getPartDatabase(),
+            new StoredSortedMap<>(db.getPartDatabase(),
                                 partKeyBinding, partDataBinding, true);
         supplierMap =
-            new StoredSortedMap(db.getSupplierDatabase(),
+            new StoredSortedMap<>(db.getSupplierDatabase(),
                                 supplierKeyBinding, supplierDataBinding, true);
         shipmentMap =
-            new StoredSortedMap(db.getShipmentDatabase(),
+            new StoredSortedMap<>(db.getShipmentDatabase(),
                                 shipmentKeyBinding, shipmentDataBinding, true);
         shipmentByPartMap =
-            new StoredSortedMap(db.getShipmentByPartDatabase(),
+            new StoredSortedMap<>(db.getShipmentByPartDatabase(),
                                 partKeyBinding, shipmentDataBinding, true);
         shipmentBySupplierMap =
-            new StoredSortedMap(db.getShipmentBySupplierDatabase(),
+            new StoredSortedMap<>(db.getShipmentBySupplierDatabase(),
                                 supplierKeyBinding, shipmentDataBinding, true);
         supplierByCityMap =
-            new StoredSortedMap(db.getSupplierByCityDatabase(),
+            new StoredSortedMap<>(db.getSupplierByCityDatabase(),
                                 cityKeyBinding, supplierDataBinding, true);
     }
 
@@ -93,72 +93,81 @@ public class SampleViews {
 
     /**
      * Return a map view of the part storage container.
+     * @return 
      */
-    public StoredSortedMap getPartMap() {
+    public StoredSortedMap<PartKey, Part> getPartMap() {
 
         return partMap;
     }
 
     /**
      * Return a map view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedMap getSupplierMap() {
+    public StoredSortedMap<SupplierKey, Supplier> getSupplierMap() {
 
         return supplierMap;
     }
 
     /**
      * Return a map view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedMap getShipmentMap() {
+    public StoredSortedMap<ShipmentKey, Shipment> getShipmentMap() {
 
         return shipmentMap;
     }
 
     /**
      * Return an entity set view of the part storage container.
+     * @return 
      */
-    public StoredValueSet getPartSet() {
+    public StoredValueSet<Part> getPartSet() {
 
-        return (StoredValueSet) partMap.values();
+        return (StoredValueSet<Part>) partMap.values();
     }
 
     /**
      * Return an entity set view of the supplier storage container.
+     * @return 
      */
-    public StoredValueSet getSupplierSet() {
+    public StoredValueSet<Supplier> getSupplierSet() {
 
-        return (StoredValueSet) supplierMap.values();
+        return (StoredValueSet<Supplier>) supplierMap.values();
     }
 
     /**
      * Return an entity set view of the shipment storage container.
+     * @return 
      */
-    public StoredValueSet getShipmentSet() {
+    public StoredValueSet<Shipment> getShipmentSet() {
 
-        return (StoredValueSet) shipmentMap.values();
+        return (StoredValueSet<Shipment>) shipmentMap.values();
     }
 
     /**
      * Return a map view of the shipment-by-part index.
+     * @return 
      */
-    public StoredSortedMap getShipmentByPartMap() {
+    public StoredSortedMap<PartKey, Shipment> getShipmentByPartMap() {
 
         return shipmentByPartMap;
     }
 
     /**
      * Return a map view of the shipment-by-supplier index.
+     * @return 
      */
-    public StoredSortedMap getShipmentBySupplierMap() {
+    public StoredSortedMap<SupplierKey, Shipment> getShipmentBySupplierMap() {
 
         return shipmentBySupplierMap;
     }
 
     /**
      * Return a map view of the supplier-by-city index.
+     * @return 
      */
-    public final StoredSortedMap getSupplierByCityMap() {
+    public final StoredSortedMap<String, Supplier> getSupplierByCityMap() {
 
         return supplierByCityMap;
     }
@@ -167,14 +176,15 @@ public class SampleViews {
      * PartBinding is used to bind the stored key/data entry pair for a part
      * to a combined data object (entity).
      */
-    private static class PartBinding extends SerialSerialBinding {
+    private static class PartBinding
+            extends SerialSerialBinding<PartKey, PartData, Part> {
 
         /**
          * Construct the binding object.
          */
         private PartBinding(ClassCatalog classCatalog,
-                            Class keyClass,
-                            Class dataClass) {
+                            Class<PartKey> keyClass,
+                            Class<PartData> dataClass) {
 
             super(classCatalog, keyClass, dataClass);
         }
@@ -182,31 +192,30 @@ public class SampleViews {
         /**
          * Create the entity by combining the stored key and data.
          */
-        public Object entryToObject(Object keyInput, Object dataInput) {
+        @Override
+        public Part entryToObject(PartKey keyInput, PartData dataInput) {
 
-            PartKey key = (PartKey) keyInput;
-            PartData data = (PartData) dataInput;
-            return new Part(key.getNumber(), data.getName(), data.getColor(),
-                            data.getWeight(), data.getCity());
+            return new Part(keyInput.getNumber(), dataInput.getName(), dataInput.getColor(),
+                            dataInput.getWeight(), dataInput.getCity());
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public Object objectToKey(Object object) {
+        @Override
+        public PartKey objectToKey(Part object) {
 
-            Part part = (Part) object;
-            return new PartKey(part.getNumber());
+            return new PartKey(object.getNumber());
         }
 
         /**
          * Create the stored data from the entity.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public PartData objectToData(Part object) {
 
-            Part part = (Part) object;
-            return new PartData(part.getName(), part.getColor(),
-                                 part.getWeight(), part.getCity());
+            return new PartData(object.getName(), object.getColor(),
+                                 object.getWeight(), object.getCity());
         }
     }
 
@@ -214,14 +223,15 @@ public class SampleViews {
      * SupplierBinding is used to bind the stored key/data entry pair for a
      * supplier to a combined data object (entity).
      */
-    private static class SupplierBinding extends SerialSerialBinding {
+    private static class SupplierBinding
+            extends SerialSerialBinding<SupplierKey, SupplierData, Supplier> {
 
         /**
          * Construct the binding object.
          */
         private SupplierBinding(ClassCatalog classCatalog,
-                                Class keyClass,
-                                Class dataClass) {
+                                Class<SupplierKey> keyClass,
+                                Class<SupplierData> dataClass) {
 
             super(classCatalog, keyClass, dataClass);
         }
@@ -229,31 +239,32 @@ public class SampleViews {
         /**
          * Create the entity by combining the stored key and data.
          */
-        public Object entryToObject(Object keyInput, Object dataInput) {
+        @Override
+        public Supplier entryToObject(SupplierKey keyInput, SupplierData dataInput) {
 
             SupplierKey key = (SupplierKey) keyInput;
             SupplierData data = (SupplierData) dataInput;
-            return new Supplier(key.getNumber(), data.getName(),
-                                data.getStatus(), data.getCity());
+            return new Supplier(keyInput.getNumber(), dataInput.getName(),
+                                dataInput.getStatus(), dataInput.getCity());
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public Object objectToKey(Object object) {
+        @Override
+        public SupplierKey objectToKey(Supplier object) {
 
-            Supplier supplier = (Supplier) object;
-            return new SupplierKey(supplier.getNumber());
+            return new SupplierKey(object.getNumber());
         }
 
         /**
          * Create the stored data from the entity.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public SupplierData objectToData(Supplier object) {
 
-            Supplier supplier = (Supplier) object;
-            return new SupplierData(supplier.getName(), supplier.getStatus(),
-                                     supplier.getCity());
+            return new SupplierData(object.getName(), object.getStatus(),
+                                     object.getCity());
         }
     }
 
@@ -261,14 +272,15 @@ public class SampleViews {
      * ShipmentBinding is used to bind the stored key/data entry pair for a
      * shipment to a combined data object (entity).
      */
-    private static class ShipmentBinding extends SerialSerialBinding {
+    private static class ShipmentBinding
+            extends SerialSerialBinding<ShipmentKey, ShipmentData, Shipment> {
 
         /**
          * Construct the binding object.
          */
         private ShipmentBinding(ClassCatalog classCatalog,
-                                Class keyClass,
-                                Class dataClass) {
+                                Class<ShipmentKey> keyClass,
+                                Class<ShipmentData> dataClass) {
 
             super(classCatalog, keyClass, dataClass);
         }
@@ -276,31 +288,30 @@ public class SampleViews {
         /**
          * Create the entity by combining the stored key and data.
          */
-        public Object entryToObject(Object keyInput, Object dataInput) {
+        @Override
+        public Shipment entryToObject(ShipmentKey keyInput, ShipmentData dataInput) {
 
-            ShipmentKey key = (ShipmentKey) keyInput;
-            ShipmentData data = (ShipmentData) dataInput;
-            return new Shipment(key.getPartNumber(), key.getSupplierNumber(),
-                                data.getQuantity());
+            return new Shipment(keyInput.getPartNumber(), keyInput.getSupplierNumber(),
+                                dataInput.getQuantity());
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public Object objectToKey(Object object) {
+        @Override
+        public ShipmentKey objectToKey(Shipment object) {
 
-            Shipment shipment = (Shipment) object;
-            return new ShipmentKey(shipment.getPartNumber(),
-                                   shipment.getSupplierNumber());
+            return new ShipmentKey(object.getPartNumber(),
+                                   object.getSupplierNumber());
         }
 
         /**
          * Create the stored data from the entity.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public ShipmentData objectToData(Shipment object) {
 
-            Shipment shipment = (Shipment) object;
-            return new ShipmentData(shipment.getQuantity());
+            return new ShipmentData(object.getQuantity());
         }
     }
 }

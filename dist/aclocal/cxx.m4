@@ -24,6 +24,26 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <string>]]
 AC_LANG_POP(C++)
 ])
 
+AC_DEFUN(AC_CXX_IOTA, [
+AC_MSG_CHECKING(whether C++ compiler supports template for iota)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+AC_TRY_COMPILE([
+#include <numeric>
+
+using std::iota;
+], [
+	int numbers[10];
+	iota(numbers, numbers + 10, 100);
+], db_cv_cxx_have_iota=yes, db_cv_cxx_have_iota=no)
+AC_LANG_RESTORE
+AC_MSG_RESULT($db_cv_cxx_have_iota)
+if test "$db_cv_cxx_have_iota" = "yes"; then
+	AC_DEFINE(HAVE_CXX_IOTA)
+	AH_TEMPLATE(HAVE_CXX_IOTA,
+	    [Define to 1 to use the C++11-specific iota function provided by the compiler.])
+fi])
+
 AC_DEFUN(AC_CXX_SUPPORTS_TEMPLATES, [
 AC_MSG_CHECKING(whether the C++ compiler supports templates for STL)
 AC_LANG_SAVE

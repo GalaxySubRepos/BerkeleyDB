@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2001 September 15
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -281,10 +287,10 @@ int sqlite3_complete16(const void *zSql){
   if( zSql8 ){
     rc = sqlite3_complete(zSql8);
   }else{
-    rc = SQLITE_NOMEM;
+    rc = SQLITE_NOMEM_BKPT;
   }
   sqlite3ValueFree(pVal);
-  return sqlite3ApiExit(0, rc);
+  return rc & 0xff;
 }
 #endif /* SQLITE_OMIT_UTF16 */
 #endif /* SQLITE_OMIT_COMPLETE */

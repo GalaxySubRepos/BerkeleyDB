@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_cachesize()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_cachesize()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_cache_max.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_cachesize"></a>DB_ENV-&gt;set_cachesize()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_cachesize"></a>
+        <span>DB_ENV-&gt;set_cachesize()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -74,7 +80,10 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
          The cache may be resized by calling <code class="methodname">DB_ENV-&gt;set_cachesize()</code>
          after the environment is open.  The supplied size will be rounded to the nearest multiple
          of the region size and may not be larger than the maximum size configured with 
-         <a class="xref" href="envset_cache_max.html" title="DB_ENV-&gt;set_cache_max()">DB_ENV-&gt;set_cache_max()</a>.  The 
+         <a class="xref" href="envset_cache_max.html" title="DB_ENV-&gt;set_cache_max()">
+        <span>DB_ENV-&gt;set_cache_max()</span>
+        
+    </a>.  The 
          <span class="bold"><strong>ncache</strong></span> parameter is ignored when resizing the cache.
 
     </p>
@@ -100,7 +109,10 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
         <code class="methodname">DB_ENV-&gt;set_cachesize()</code> method must be
         called for each slice environment. That is, for each slice, there
         is a sub-environment, and this method must be called on each such 
-        environment individually. Use <a class="xref" href="envget_slices.html" title="DB_ENV-&gt;get_slices()">DB_ENV-&gt;get_slices()</a> to retrieve an array
+        environment individually. Use <a class="xref" href="envget_slices.html" title="DB_ENV-&gt;get_slices()">
+        <span>DB_ENV-&gt;get_slices()</span>
+        
+    </a> to retrieve an array
         of slice environments.
     </p>
       <p>
@@ -119,7 +131,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230761952"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113483123392"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -127,7 +139,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230781280"></a>gbytes</h4>
+                <h4 class="title"><a id="idm140113483102528"></a>gbytes</h4>
               </div>
             </div>
           </div>
@@ -139,7 +151,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230762144"></a>bytes</h4>
+                <h4 class="title"><a id="idm140113483090096"></a>bytes</h4>
               </div>
             </div>
           </div>
@@ -151,7 +163,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230839296"></a>ncache</h4>
+                <h4 class="title"><a id="idm140113483096992"></a>ncache</h4>
               </div>
             </div>
           </div>
@@ -165,7 +177,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230737760"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113483078368"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -181,7 +193,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815230758192"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113483069408"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -195,7 +207,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230730464"></a>Class</h3>
+              <h3 class="title"><a id="idm140113483073312"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -207,7 +219,7 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815230781984"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113483066928"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -227,11 +239,17 @@ DB_ENV-&gt;set_cachesize(DB_ENV *dbenv,
           <td width="40%" align="right"> <a accesskey="n" href="mempset_mp_max_openfd.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_cache_max() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_cache_max()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_mp_max_openfd()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_mp_max_openfd()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

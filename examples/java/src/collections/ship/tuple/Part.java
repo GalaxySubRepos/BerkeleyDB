@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.tuple;
@@ -20,11 +19,11 @@ package collections.ship.tuple;
  */
 public class Part {
 
-    private String number;
-    private String name;
-    private String color;
-    private Weight weight;
-    private String city;
+    private final String number;
+    private final String name;
+    private final String color;
+    private final Weight weight;
+    private final String city;
 
     public Part(String number, String name, String color, Weight weight,
                 String city) {
@@ -61,6 +60,7 @@ public class Part {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[Part: number=" + number +

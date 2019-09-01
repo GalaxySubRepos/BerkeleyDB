@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -73,7 +73,7 @@ __os_fsync(env, fhp)
 		return (0);
 
 	if (dbenv != NULL && FLD_ISSET(dbenv->verbose, DB_VERB_FILEOPS_ALL))
-		__db_msg(env, DB_STR_A("0150", "fileops: flush %s", "%s"),
+		__db_msg(env, DB_STR_A("0023", "fileops: flush %s", "%s"),
 		    fhp->name);
 
 	if (DB_GLOBAL(j_fsync) != NULL)

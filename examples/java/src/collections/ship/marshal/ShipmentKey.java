@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.marshal;
@@ -41,6 +40,7 @@ public class ShipmentKey implements MarshalledKey {
         return supplierNumber;
     }
 
+    @Override
     public String toString() {
 
         return "[ShipmentKey: supplier=" + supplierNumber +
@@ -55,12 +55,14 @@ public class ShipmentKey implements MarshalledKey {
         // instantiate objects of this class.
     }
 
+    @Override
     public void unmarshalKey(TupleInput keyInput) {
 
         this.partNumber = keyInput.readString();
         this.supplierNumber = keyInput.readString();
     }
 
+    @Override
     public void marshalKey(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.partNumber);

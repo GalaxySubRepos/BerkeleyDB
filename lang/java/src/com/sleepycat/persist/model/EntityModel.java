@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -369,6 +369,7 @@ public abstract class EntityModel {
      * @deprecated use {@link #resolveClass} instead.  This method does not
      * use the environment's ClassLoader property.
      */
+	@Deprecated
     public static Class classForName(String className)
         throws ClassNotFoundException {
 

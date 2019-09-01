@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -128,7 +128,9 @@ __rep_get_config(dbenv, which, onp)
     DB_REP_CONF_LEASE | DB_REP_CONF_NOWAIT |				\
     DB_REPMGR_CONF_2SITE_STRICT | DB_REPMGR_CONF_ELECTIONS |		\
     DB_REPMGR_CONF_FORWARD_WRITES |					\
-    DB_REPMGR_CONF_PREFMAS_CLIENT | DB_REPMGR_CONF_PREFMAS_MASTER)
+    DB_REPMGR_CONF_PREFMAS_CLIENT | DB_REPMGR_CONF_PREFMAS_MASTER |	\
+    DB_REPMGR_CONF_DISABLE_POLL | DB_REPMGR_CONF_ENABLE_EPOLL |		\
+    DB_REPMGR_CONF_DISABLE_SSL)
 
 	if (FLD_ISSET(which, ~OK_FLAGS))
 		return (__db_ferr(env, "DB_ENV->rep_get_config", 0));
@@ -175,6 +177,7 @@ __rep_set_config(dbenv, which, on)
 	REP_BULK bulk;
 	u_int32_t mapped, orig;
 	int inmemlog, pm_ret, ret, t_ret;
+	const char * msg;
 
 	env = dbenv->env;
 	db_rep = env->rep_handle;
@@ -190,10 +193,13 @@ __rep_set_config(dbenv, which, on)
     DB_REP_CONF_LEASE | DB_REP_CONF_NOWAIT |				\
     DB_REPMGR_CONF_2SITE_STRICT | DB_REPMGR_CONF_ELECTIONS |		\
     DB_REPMGR_CONF_FORWARD_WRITES |					\
-    DB_REPMGR_CONF_PREFMAS_CLIENT | DB_REPMGR_CONF_PREFMAS_MASTER)
+    DB_REPMGR_CONF_PREFMAS_CLIENT | DB_REPMGR_CONF_PREFMAS_MASTER |	\
+    DB_REPMGR_CONF_DISABLE_POLL | DB_REPMGR_CONF_ENABLE_EPOLL |		\
+    DB_REPMGR_CONF_DISABLE_SSL)
+
 #define	REPMGR_FLAGS (REP_C_2SITE_STRICT | REP_C_ELECTIONS |		\
-    REP_C_FORWARD_WRITES |						\
-    REP_C_PREFMAS_CLIENT | REP_C_PREFMAS_MASTER)
+    REP_C_FORWARD_WRITES | REP_C_DISABLE_POLL | REP_C_ENABLE_EPOLL |	\
+    REP_C_PREFMAS_CLIENT | REP_C_PREFMAS_MASTER | REP_C_DISABLE_SSL)
 
 #define	TURNING_ON_PREFMAS(orig, curr)					\
     ((FLD_ISSET(curr, REP_C_PREFMAS_MASTER) &&				\
@@ -234,26 +240,80 @@ __rep_set_config(dbenv, which, on)
 		 */
 		if (FLD_ISSET(mapped, REP_C_INMEM)) {
 			__db_errx(env, DB_STR_A("3549",
-"%s in-memory replication must be configured before DB_ENV->open",
-			    "%s"), "DB_ENV->rep_set_config:");
+			    "%s in-memory replication must be configured before "
+			    "DB_ENV->open", "%s"), "DB_ENV->rep_set_config:");
 			ENV_LEAVE(env, ip);
 			return (EINVAL);
 		}
 		/*
-		 * The undocumented ELECT_LOGLENGTH option and the preferred
-		 * master options cannot be changed after calling repmgr_start.
+		 * Following options can't be changed after repmgr_start
+		 * 1. The undocumented ELECT_LOGLENGTH option.
+		 * 2. The preferred master options.
+		 * 3. The network i/o polling method options
+		 *	a). DB_REPMGR_CONF_DISABLE_POLL
+		 *	b). DB_REPMGR_CONF_ENABLE_EPOLL
+		 * 4. SSL support for Replication Messaging
 		 */
 		if (FLD_ISSET(mapped, (REP_C_ELECT_LOGLENGTH |
-		    REP_C_PREFMAS_MASTER | REP_C_PREFMAS_CLIENT)) &&
-		    F_ISSET(rep, REP_F_START_CALLED)) {
+		    REP_C_PREFMAS_MASTER | REP_C_PREFMAS_CLIENT |
+		    REP_C_DISABLE_POLL | REP_C_ENABLE_EPOLL |
+		    REP_C_DISABLE_SSL)) && F_ISSET(rep, REP_F_START_CALLED)) {
+			if (FLD_ISSET(mapped, REP_C_ELECT_LOGLENGTH))
+				msg = "ELECT_LOGLENGTH";
+			else if (FLD_ISSET(mapped, REP_C_DISABLE_POLL))
+				msg = "DISABLE_POLL";
+			else if (FLD_ISSET(mapped, REP_C_ENABLE_EPOLL))
+				msg = "ENABLE_EPOLL";
+			else if (FLD_ISSET(mapped, REP_C_PREFMAS_MASTER |
+			    REP_C_PREFMAS_CLIENT))
+				msg = "preferred master";
+			else if (FLD_ISSET(mapped, REP_C_DISABLE_SSL))
+				msg = "DISABLE_SSL";
+
 			__db_errx(env, DB_STR_A("3706",
 			    "DB_ENV->rep_set_config: %s "
 			    "must be configured before DB_ENV->repmgr_start",
-			    "%s"), FLD_ISSET(mapped, REP_C_ELECT_LOGLENGTH) ?
-			    "ELECT_LOGLENGTH" : "preferred master");
+			    "%s"), msg);
 			ENV_LEAVE(env, ip);
 			return (EINVAL);
 		}
+		/*
+		 * Report an error if users attempt enabling epoll on a
+		 * platform where epoll support doesn't exist
+		 */
+#if !defined(HAVE_EPOLL)
+		if (FLD_ISSET(mapped, REP_C_ENABLE_EPOLL)) {
+			__db_errx(env, DB_STR("3727",
+			    "DB_ENV->rep_set_config: cannot use EPOLL on this"
+			    " system. OS support not available for epoll()"));
+			ENV_LEAVE(env, ip);
+			return (EINVAL);
+		}
+#endif
+		/*
+		 * Report error if users attempt to disable poll on a platform
+		 * where support for poll() doesn't exist.
+		 */
+#if !defined(HAVE_POLL)
+		if (FLD_ISSET(mapped, REP_C_DISABLE_POLL)) {
+			__db_errx(env, DB_STR("3728",
+			    "DB_ENV->rep_set_config: POLL support not "
+			    "available on this system. Ignoring this flag."));
+		}
+#endif
+		/*
+		 * Report an error if users attempt to disable SSL on a platform
+		 * where support for SSL doesn't exist.
+		 */
+#if !defined(HAVE_REPMGR_SSL)
+		if (FLD_ISSET(mapped, REP_C_DISABLE_SSL)) {
+			__db_errx(env, DB_STR("5512",
+			    "DB_ENV->rep_set_config: SSL support for "
+			    "replication not available on this system. "
+			    "Ignoring the flag DB_REPMGR_CONF_DISABLE_SSL."));
+		}
+#endif
+
 		/*
 		 * Do not allow users to turn on preferred master if
 		 * leases or in-memory replication files are in effect,
@@ -473,6 +533,19 @@ __rep_config_map(env, inflagsp, outflagsp)
 		FLD_SET(*outflagsp, REP_C_PREFMAS_MASTER);
 		FLD_CLR(*inflagsp, DB_REPMGR_CONF_PREFMAS_MASTER);
 	}
+	if (FLD_ISSET(*inflagsp, DB_REPMGR_CONF_DISABLE_POLL)) {
+		FLD_SET(*outflagsp, REP_C_DISABLE_POLL);
+		FLD_CLR(*inflagsp, DB_REPMGR_CONF_DISABLE_POLL);
+	}
+	if (FLD_ISSET(*inflagsp, DB_REPMGR_CONF_ENABLE_EPOLL)) {
+		FLD_SET(*outflagsp, REP_C_ENABLE_EPOLL);
+		FLD_CLR(*inflagsp, DB_REPMGR_CONF_ENABLE_EPOLL);
+	}
+	if (FLD_ISSET(*inflagsp, DB_REPMGR_CONF_DISABLE_SSL)) {
+		FLD_SET(*outflagsp, REP_C_DISABLE_SSL);
+		FLD_CLR(*inflagsp, DB_REPMGR_CONF_DISABLE_SSL);
+	}
+
 	DB_ASSERT(env, *inflagsp == 0);
 }
 
@@ -925,14 +998,14 @@ __rep_start_int(env, dbt, flags, startopts)
 		if (role_chg) {
 			pending_event = DB_EVENT_REP_MASTER;
 			/*
- 			 * We were a client but we didn't complete our initial
- 			 * sync.  We may be in an inconsistent state.  In
- 			 * particular, files that are supposed to be open
- 			 * during recover may not have been opened.  Go
- 			 * through the log and make sure they are opened.
- 			 */
- 			if (rep->stat.st_startup_complete == 0)
- 				__rep_openfiles(env, ip);
+			 * We were a client but we didn't complete our initial
+			 * sync.  We may be in an inconsistent state.  In
+			 * particular, files that are supposed to be open
+			 * during recover may not have been opened.  Go
+			 * through the log and make sure they are opened.
+			 */
+			if (rep->stat.st_startup_complete == 0)
+				__rep_openfiles(env, ip);
 			/*
 			 * If prepared transactions have not been restored
 			 * look to see if there are any.  If there are,
@@ -1195,7 +1268,7 @@ __rep_openfiles(env, ip)
 
 	(void)__env_openfiles(env, logc, txninfo, &data,
 	    &first_lsn, &last_lsn, 1.0, 0);
-	
+
 err:	if (txninfo != NULL)
 		__db_txnlist_end(env, txninfo);
 	if (ckp_args != NULL)
@@ -1737,7 +1810,7 @@ __rep_restore_prepared(env)
 			__os_free(env, ckp_args);
 		}
 		if (ret != 0) {
-			__db_errx(env, DB_STR_A("3561",
+			__db_errx(env, DB_STR_A("4506",
 			    "Invalid checkpoint record at [%lu][%lu]",
 			    "%lu %lu"), (u_long)lsn.file, (u_long)lsn.offset);
 			goto err;
@@ -2101,9 +2174,9 @@ __rep_set_priority_pp(dbenv, priority)
 	    env, db_rep->region, "DB_ENV->rep_set_priority", DB_INIT_REP);
 
 	if (PREFMAS_IS_SET(env)) {
-		__db_errx(env, DB_STR_A("3710",
-"%s: cannot change priority in preferred master mode.",
-		    "%s"), "DB_ENV->rep_set_priority");
+		__db_errx(env, DB_STR_A("3710", "%s: cannot change priority %s",
+		    "%s"), "DB_ENV->rep_set_priority",
+		    "in preferred master mode");
 		return (EINVAL);
 	}
 
@@ -2127,6 +2200,12 @@ __rep_set_priority_int(env, priority)
 	ret = 0;
 	if (REP_ON(env)) {
 		rep = db_rep->region;
+		if (IN_ELECTION(rep)) {
+			__db_errx(env, DB_STR_A("3710",
+			    "%s: cannot change priority %s", "%s"),
+			    "DB_ENV->rep_set_priority", "during election");
+			return (DB_REP_INELECT);
+		}
 		prev = rep->priority;
 		rep->priority = priority;
 #ifdef HAVE_REPLICATION_THREADS

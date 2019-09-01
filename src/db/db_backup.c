@@ -1,13 +1,14 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2011, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
 
 #include "db_config.h"
 #include "db_int.h"
+#include "dbinc/blob.h"
 #include "dbinc/db_page.h"
 #include "dbinc/db_am.h"
 #include "dbinc/heap.h"
@@ -21,12 +22,16 @@
 static void save_error __P((const DB_ENV *, const char *, const char *));
 static int backup_read_log_dir __P((DB_ENV *, const char *, int *, u_int32_t));
 static int backup_read_data_dir
-    __P((DB_ENV *, DB_THREAD_INFO *, const char *, const char *, u_int32_t));
+    __P((DB_ENV *, DB_THREAD_INFO *, const char *, const char *, u_int32_t, int));
 static int backup_dir_clean
     __P((DB_ENV *, const char *, const char *, int *, u_int32_t));
 static int backup_lgconf_chk __P((DB_ENV *));
 static int __db_backup
     __P((DB_ENV *, const char *, DB_THREAD_INFO *, int, u_int32_t));
+static int recursive_dir_clean
+    __P((DB_ENV *, const char *, const char *, int *, u_int32_t));
+static int recursive_read_data_dir
+    __P((DB_ENV *, DB_THREAD_INFO *, const char *, const char *, u_int32_t));
 
 /*
  * __db_dbbackup_pp --
@@ -170,7 +175,7 @@ backup_dir_clean(dbenv, backup_dir, log_dir, remove_maxp, flags)
 		if ((ret = __os_concat_path(buf,
 		    sizeof(buf), backup_dir, log_dir)) != 0) {
 			buf[sizeof(buf) - 1] = '\0';
-			__db_errx(env,  DB_STR_A("0717",
+			__db_errx(env,  DB_STR_A("0714",
 			    "%s: path too long", "%s"), buf);
 			return (EINVAL);
 		}
@@ -255,14 +260,14 @@ backup_data_copy(dbenv, file, from_dir, to_dir, log)
 	if ((ret = __os_concat_path(from,
 	    sizeof(from), from_dir, file)) != 0) {
 		from[sizeof(from) - 1] = '\0';
-		__db_errx(env, DB_STR_A("0728",
+		__db_errx(env, DB_STR_A("0714",
 		     "%s: path too long", "%s"), from);
 		goto err;
 	}
 	if ((ret = __os_concat_path(to,
 	    sizeof(to), to_dir, file)) != 0) {
 		to[sizeof(to) - 1] = '\0';
-		__db_errx(env, DB_STR_A("0729",
+		__db_errx(env, DB_STR_A("0714",
 		     "%s: path too long", "%s"), to);
 		goto err;
 	}
@@ -366,11 +371,12 @@ static void save_error(dbenv, prefix, errstr)
  *	Read a directory looking for databases to copy.
  */
 static int
-backup_read_data_dir(dbenv, ip, dir, backup_dir, flags)
+backup_read_data_dir(dbenv, ip, dir, backup_dir, flags, prefix)
 	DB_ENV *dbenv;
 	DB_THREAD_INFO *ip;
 	const char *dir, *backup_dir;
 	u_int32_t flags;
+	int prefix;
 {
 	DB_MSGBUF mb;
 	ENV *env;
@@ -388,7 +394,7 @@ backup_read_data_dir(dbenv, ip, dir, backup_dir, flags)
 	len = 0;
 
 	bd = backup_dir;
-	if (!LF_ISSET(DB_BACKUP_SINGLE_DIR) && dir != env->db_home) {
+	if (!LF_ISSET(DB_BACKUP_SINGLE_DIR) && dir != env->db_home && prefix) {
 		cnt = sizeof(bbuf);
 		/* Build a path name to the destination. */
 		if ((ret = __os_concat_path(bbuf, sizeof(bbuf),
@@ -398,7 +404,7 @@ backup_read_data_dir(dbenv, ip, dir, backup_dir, flags)
 		    strchr(PATH_SEPARATOR, bbuf[cnt - 1]) == NULL)) &&
 		    LF_ISSET(DB_CREATE))) {
 			bbuf[sizeof(bbuf) - 1] = '\0';
-			__db_errx(env, DB_STR_A("0720",
+			__db_errx(env, DB_STR_A("0714",
 			    "%s: path too long", "%s"), bbuf);
 			return (1);
 		}
@@ -419,12 +425,12 @@ backup_read_data_dir(dbenv, ip, dir, backup_dir, flags)
 		bd = bbuf;
 
 	}
-	if (!__os_abspath(dir) && dir != env->db_home) {
+	if (!__os_abspath(dir) && dir != env->db_home && prefix) {
 		/* Build a path name to the source. */
 		if ((ret = __os_concat_path(buf,
 		    sizeof(buf), env->db_home, dir)) != 0) {
 			buf[sizeof(buf) - 1] = '\0';
-			__db_errx(env, DB_STR_A("0722",
+			__db_errx(env, DB_STR_A("0714",
 			    "%s: path too long", "%s"), buf);
 			return (EINVAL);
 		}
@@ -438,7 +444,7 @@ backup_read_data_dir(dbenv, ip, dir, backup_dir, flags)
 	}
 	/* Get a list of file names. */
 	if ((ret = __os_dirlist(env, dir, 0, &names, &fcnt)) != 0) {
-		__db_err(env, ret, DB_STR_A("0723", "%s: directory read",
+		__db_err(env, ret, DB_STR_A("0718", "%s: directory read",
 		    "%s"), dir);
 		return (ret);
 	}
@@ -566,7 +572,7 @@ backup_read_log_dir(dbenv, backup_dir, copy_minp, flags)
 			    strchr(PATH_SEPARATOR, to[cnt - 1]) == NULL)) &&
 			    LF_ISSET(DB_CREATE))) {
 				to[sizeof(to) - 1] = '\0';
-				__db_errx(env, DB_STR_A("0733",
+				__db_errx(env, DB_STR_A("0714",
 				    "%s: path too long", "%s"), to);
 				goto err;
 			}
@@ -575,7 +581,7 @@ backup_read_log_dir(dbenv, backup_dir, copy_minp, flags)
 					to[cnt] = PATH_SEPARATOR[0];
 
 				if ((ret = __db_mkpath(env, to)) != 0) {
-					__db_err(env, ret, DB_STR_A("0734",
+					__db_err(env, ret, DB_STR_A("0721",
 					    "%s: cannot create", "%s"), to);
 					goto err;
 				}
@@ -588,7 +594,7 @@ backup_read_log_dir(dbenv, backup_dir, copy_minp, flags)
 			if ((ret = __os_concat_path(from,
 			    sizeof(from), env->db_home, logd)) != 0) {
 				from[sizeof(from) - 1] = '\0';
-				__db_errx(env, DB_STR_A("0732",
+				__db_errx(env, DB_STR_A("0714",
 				    "%s: path too long", "%s"), from);
 				goto err;
 			}
@@ -630,7 +636,7 @@ again:	aflag = DB_ARCH_LOG;
 		if ((ret = __os_concat_path(from,
 		    sizeof(from), logd, *names)) != 0) {
 			from[sizeof(from) - 1] = '\0';
-			__db_errx(env, DB_STR_A("0737",
+			__db_errx(env, DB_STR_A("0714",
 			    "%s: path too long", "%s"), from);
 			goto err;
 		}
@@ -647,7 +653,7 @@ again:	aflag = DB_ARCH_LOG;
 			if ((ret = __os_concat_path(to,
 			    sizeof(to), backupd, *names)) != 0) {
 				to[sizeof(to) - 1] = '\0';
-				__db_errx(env, DB_STR_A("0738",
+				__db_errx(env, DB_STR_A("0714",
 				    "%s: path too long", "%s"), to);
 				goto err;
 			}
@@ -668,7 +674,7 @@ again:	aflag = DB_ARCH_LOG;
 
 		if (update) {
 			if (FLD_ISSET(dbenv->verbose, DB_VERB_BACKUP))
-				__db_msg(env, DB_STR_A("0740",
+				__db_msg(env, DB_STR_A("0715",
 				    "removing %s", "%s"), from);
 			if ((ret = __os_unlink(env, from, 0)) != 0) {
 				__db_err(env, ret, DB_STR_A("0741",
@@ -701,6 +707,151 @@ err:	if (logd != dbenv->db_log_dir && logd != env->db_home)
 }
 
 /*
+* recursive_dir_clean --
+*	Clean out the backup directory and any subdirectories in it.
+*/
+static int
+recursive_dir_clean(dbenv, backup_dir, log_dir, remove_maxp, flags)
+    DB_ENV *dbenv;
+    const char *backup_dir, *log_dir;
+    int *remove_maxp;
+    u_int32_t flags;
+{
+	ENV *env;
+	char **dirs, full_path[DB_MAXPATHLEN];
+	int count, i, isdir, ret;
+
+	count = 0;
+	dirs = NULL;
+	env = dbenv->env;
+
+	/* Get a list of all files in the directory. */
+	if ((ret = __os_dirlist(env, backup_dir, 1, &dirs, &count)) != 0)
+	    goto err;
+
+	for (i = 0; i < count; i++) {
+		(void)sprintf(full_path, "%s%c%s%c",
+		    backup_dir, PATH_SEPARATOR[0], dirs[i], '\0');
+
+		if (__os_exists(env, full_path, &isdir) != 0)
+		    continue;
+
+		/*
+		If the file is a directory, backup any databases in that
+		directory to a similarly named directory in
+		*/
+		if (isdir) {
+			/*
+			 * Skip log directory if it exists, that is cleaned
+			 * separately.
+			 */
+			if (dbenv->db_log_dir != NULL &&
+			    strncmp(dbenv->db_log_dir,
+			    dirs[i], strlen(dbenv->db_log_dir)) == 0)
+				continue;
+
+			if ((ret = backup_dir_clean(dbenv,
+			    full_path, NULL, remove_maxp, flags)) != 0)
+				goto err;
+			if ((ret = recursive_dir_clean(dbenv,
+			    full_path, NULL, remove_maxp, flags)) != 0)
+				goto err;
+			(void)__os_rmdir(env, full_path);
+		}
+	}
+
+    err:
+	if (dirs != NULL)
+	    __os_dirfree(env, dirs, count);
+	return (ret);
+    }
+
+/*
+* recursive_read_data_dir --
+*	Read a directory and all its subdirectories looking for databases to
+*	copy.
+*/
+static int
+recursive_read_data_dir(dbenv, ip, dir, backup_dir, flags)
+    DB_ENV *dbenv;
+    DB_THREAD_INFO *ip;
+    const char *dir, *backup_dir;
+    u_int32_t flags;
+{
+	ENV *env;
+	char **data_dir, **dirs, full_path[DB_MAXPATHLEN];
+	char new_target[DB_MAXPATHLEN];
+	int count, i, isdatadir, isdir, ret;
+
+	count = 0;
+	dirs = NULL;
+	env = dbenv->env;
+
+	/* Get a list of all files in the directory. */
+	if ((ret = __os_dirlist(env, dir, 1, &dirs, &count)) != 0)
+		goto err;
+
+	for (i = 0; i < count; i++) {
+		(void)sprintf(full_path, "%s%c%s%c",
+		    dir, PATH_SEPARATOR[0], dirs[i], '\0');
+
+		if (__os_exists(env, full_path, &isdir) != 0)
+			continue;
+
+		/*
+		 * If the file is a directory, backup any databases in that
+		 * directory to a similarly named directory in 
+		 */
+		if (isdir) {
+			/*
+			* If a subdirectory is a data directory, skip it.  It
+			* will be handled later when the data directories are
+			* backed up.
+			*/
+			isdatadir = 0;
+			for (data_dir = dbenv->db_data_dir;  data_dir != NULL
+			    && *data_dir != NULL; ++data_dir) {
+				if (strncmp(*data_dir, dirs[i],
+				    strlen(*data_dir)) == 0) {
+					isdatadir = 1;
+					break;
+				}
+			}
+			if (isdatadir)
+				continue;
+
+			/* Skip blob directory */
+			if ((strncmp(dirs[i], BLOB_DEFAULT_DIR,
+			    strlen(BLOB_DEFAULT_DIR)) == 0) || 
+			    (dbenv->db_blob_dir != NULL &&
+			    strncmp(dirs[i], dbenv->db_blob_dir,
+			    strlen(dbenv->db_blob_dir)) == 0))
+				continue;
+
+			(void)sprintf(new_target,
+			    "%s%c%s%c%c", backup_dir, PATH_SEPARATOR[0],
+			    dirs[i], PATH_SEPARATOR[0], '\0');
+			/* Create the directory in the backup directory. */
+			if ((ret = __db_mkpath(env, new_target)) != 0)
+			    goto err;
+			/* Backup the databases in the directory. */
+			if ((ret = backup_read_data_dir(
+			    dbenv, ip, full_path, new_target, flags, 0)) != 0)
+				goto err;
+			/* Check that directory for any subdirectories. */
+			if ((ret = recursive_read_data_dir(
+			    dbenv, ip, full_path, new_target, flags)) != 0)
+				goto err;
+		} 
+	}
+
+err:
+	if (dirs != NULL)
+		__os_dirfree(env, dirs, count);
+	return (ret);
+}
+
+/*
  * __db_backup --
  *	Backup databases in the enviornment.
  *
@@ -724,7 +875,8 @@ __db_backup_pp(dbenv, target, flags)
 #undef	OKFLAGS
 #define	OKFLAGS								\
 	(DB_CREATE | DB_EXCL | DB_BACKUP_FILES | DB_BACKUP_SINGLE_DIR |	\
-	DB_BACKUP_UPDATE | DB_BACKUP_NO_LOGS | DB_BACKUP_CLEAN)
+	DB_BACKUP_UPDATE | DB_BACKUP_NO_LOGS | DB_BACKUP_CLEAN |	\
+	DB_BACKUP_DEEP_COPY)
 
 	if ((ret = __db_fchk(env, "DB_ENV->backup", flags, OKFLAGS)) != 0)
 		return (ret);
@@ -732,6 +884,19 @@ __db_backup_pp(dbenv, target, flags)
 	if (target == NULL) {
 		__db_errx(env,
 		    DB_STR("0716", "Target directory may not be null."));
+		return (EINVAL);
+	}
+
+	if (LF_ISSET(DB_BACKUP_UPDATE) && LF_ISSET(DB_BACKUP_NO_LOGS)) {
+		__db_errx(env, DB_STR("5501",
+	"DB_BACKUP_UPDATE and DB_BACKUP_NO_LOGS cannot be used together."));
+		return (EINVAL);
+	}
+
+	if ((ret = __env_get_blob_threshold_int(env, &bytes)) != 0 ||
+	    (bytes != 0 && LF_ISSET(DB_BACKUP_DEEP_COPY))) {
+		__db_errx(env, DB_STR("5541",
+    "DB_BACKUP_DEEP_COPY and external file support cannot be used together."));
 		return (EINVAL);
 	}
 
@@ -758,6 +923,11 @@ __db_backup_pp(dbenv, target, flags)
 		if ((ret = backup_dir_clean(dbenv,
 		    target, NULL, &remove_max, flags)) != 0)
 			return (ret);
+		if (LF_ISSET(DB_BACKUP_DEEP_COPY)) {
+			if ((ret = recursive_dir_clean(dbenv,
+			    target, NULL, &remove_max, flags)) != 0)
+				return (ret);
+		}
 
 	}
 
@@ -782,7 +952,8 @@ __db_backup(dbenv, target, ip, remove_max, flags)
 {
 	ENV *env;
 	int copy_min, ret;
-	char **dir;
+	char **dir, full_path[DB_MAXPATHLEN], new_target[DB_MAXPATHLEN];
+	const char *backupdir;
 
 	env = dbenv->env;
 	copy_min = 0;
@@ -810,8 +981,13 @@ __db_backup(dbenv, target, ip, remove_max, flags)
 			goto err;
 		}
 		if ((ret = backup_read_data_dir(dbenv,
-		    ip, env->db_home, target, flags)) != 0)
+		    ip, env->db_home, target, flags, 1)) != 0)
 			goto err;
+		if (LF_ISSET(DB_BACKUP_DEEP_COPY)) {
+			if ((ret = recursive_read_data_dir(dbenv,
+			    ip, env->db_home, target, flags)) != 0)
+				goto err;
+		}
 		for (dir = dbenv->db_data_dir;
 		    dir != NULL && *dir != NULL; ++dir) {
 			/*
@@ -828,39 +1004,58 @@ __db_backup(dbenv, target, ip, remove_max, flags)
 				goto err;
 			}
 			if ((ret = backup_read_data_dir(
-			    dbenv, ip, *dir, target, flags)) != 0)
+			    dbenv, ip, *dir, target, flags, 1)) != 0)
 				goto err;
+			if (LF_ISSET(DB_BACKUP_DEEP_COPY)) {
+				(void)sprintf(full_path, "%s%c%s%c",
+				    env->db_home, PATH_SEPARATOR[0],
+				    *dir, '\0');
+				if (!LF_ISSET(DB_BACKUP_SINGLE_DIR)) {
+					(void)sprintf(new_target, "%s%c%s%c",
+					    target, PATH_SEPARATOR[0],
+					    *dir, '\0');
+					backupdir = new_target;
+				} else
+				    backupdir = target;
+				if ((ret = recursive_read_data_dir(dbenv,
+				    ip, full_path, backupdir, flags)) != 0)
+					goto err;
+			}
 		}
 	}
 
-	/*
-	 * Copy all log files found in the log directory.
-	 * The log directory defaults to the home directory.
-	 * Don't allow absolute path of log directory when
-	 * it is not backing up to a single directory.
-	 */
-	if (!LF_ISSET(DB_BACKUP_SINGLE_DIR) &&
-	    dbenv->db_log_dir != NULL && __os_abspath(dbenv->db_log_dir)) {
-		ret = USR_ERR(env, EINVAL);
-		__db_errx(env, DB_STR_A("0781",
+	if (!LF_ISSET(DB_BACKUP_NO_LOGS)) {
+		/*
+		 * Copy all log files found in the log directory.
+		 * The log directory defaults to the home directory.
+		 * Don't allow absolute path of log directory when
+		 * it is not backing up to a single directory.
+		 */
+		if (!LF_ISSET(DB_BACKUP_SINGLE_DIR) &&
+		    dbenv->db_log_dir != NULL &&
+		    __os_abspath(dbenv->db_log_dir)) {
+			ret = USR_ERR(env, EINVAL);
+			__db_errx(env, DB_STR_A("0781",
 "log directory '%s' is absolute path, not permitted unless backup is to a single directory",
-		    "%s"), dbenv->db_log_dir);
-		goto err;
-	}
-	if ((ret = backup_read_log_dir(dbenv, target, &copy_min, flags)) != 0)
-		goto err;
-	/*
-	 * If we're updating a snapshot, the lowest-numbered log file copied
-	 * into the backup directory should be less than, or equal to, the
-	 * highest-numbered log file removed from the backup directory during
-	 * cleanup.
-	 */
-	if (LF_ISSET(DB_BACKUP_UPDATE) && remove_max < copy_min &&
-	    remove_max != 0 && copy_min != 1) {
-		ret = USR_ERR(env, EINVAL);
-		__db_errx(env, DB_STR_A("0743",
+			    "%s"), dbenv->db_log_dir);
+			goto err;
+		}
+		if ((ret = backup_read_log_dir(
+			dbenv, target, &copy_min, flags)) != 0)
+			goto err;
+		/*
+		 * If we're updating a snapshot, the lowest-numbered log file
+		 * copied into the backup directory should be less than,
+		 * or equal to, the highest-numbered log file removed from the
+		 * backup directory during cleanup.
+		 */
+		if (LF_ISSET(DB_BACKUP_UPDATE) && remove_max < copy_min &&
+		    remove_max != 0 && copy_min != 1) {
+			ret = USR_ERR(env, EINVAL);
+			__db_errx(env, DB_STR_A("0743",
 "the largest log file removed (%d) must be greater than or equal the smallest log file copied (%d)",
-		    "%d %d"), remove_max, copy_min);
+			    "%d %d"), remove_max, copy_min);
+		}
 	}
 
 err:	F_CLR(dbenv, DB_ENV_HOTBACKUP);

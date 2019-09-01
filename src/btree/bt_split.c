@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1990, 1993, 1994, 1995, 1996
@@ -54,7 +54,7 @@ static int __bam_root __P((DBC *, EPG *));
  * __bam_split --
  *	Split a data page and any full index pages above it. If all the pages up
  *	to and including the root are full, then grow the tree by one level.
- *	Splitting or collapsing the root does not change the page number -- 
+ *	Splitting or collapsing the root does not change the page number --
  *	although __bam_compact_int does.
  *
  *	The caller can request the root pgno of the subtree that is an ancestor
@@ -140,7 +140,8 @@ retry:		if ((ret = (dbc->dbtype == DB_BTREE ?
 		 * compacted and we could have just overshot its top.
 		 */
 		if (page->pgno == root_pgno && level != page->level) {
-			__db_msg(dbc->env, "bam_split overshot root level %u -> %u",
+			__db_msg(dbc->env, 
+			    "bam_split overshot root level %u -> %u",
 			    level, page->level);
 			level = page->level;
 		}

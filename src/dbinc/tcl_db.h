@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -239,7 +239,7 @@ extern DBTCL_GLOBAL __dbtcl_global;
  * MAKE_STAT_LSN appends a {name {LSNfile LSNoffset}} pair to a result list
  * that MUST be called 'res' that is a Tcl_Obj * in the local
  * function.  This macro also assumes a label "error" to go to
- * in the even of a Tcl error.  For stat functions this will
+ * in the event of a Tcl error.  For stat functions this will
  * typically go before the "free" function to free the stat structure
  * returned by DB.
  */
@@ -261,7 +261,7 @@ extern DBTCL_GLOBAL __dbtcl_global;
  * MAKE_STAT_STRLIST appends a {name string} pair to a result list
  * that MUST be called 'res' that is a Tcl_Obj * in the local
  * function.  This macro also assumes a label "error" to go to
- * in the even of a Tcl error.  For stat functions this will
+ * in the event of a Tcl error.  For stat functions this will
  * typically go before the "free" function to free the stat structure
  * returned by DB.
  */
@@ -273,19 +273,23 @@ extern DBTCL_GLOBAL __dbtcl_global;
 } while (0)
 
 /*
- * MAKE_SITE_LIST appends a {eid host port status} tuple to a result list
- * that MUST be called 'res' that is a Tcl_Obj * in the local function.
- * This macro also assumes a label "error" to go to in the event of a Tcl
- * error.
+ * MAKE_SITE_LIST appends a
+ * {eid host port status peer view unelect maxackfile maxackoffset}
+ * tuple to a result list that MUST be called 'res' that is a Tcl_Obj * in
+ * the local function.  This macro also assumes a label "error" to go to in
+ * the event of a Tcl error.
  */
-#define	MAKE_SITE_LIST(e, h, p, s, pr, vw) do {				\
-	myobjc = 6;							\
+#define	MAKE_SITE_LIST(e, h, p, s, pr, vw, el, maf, mao) do {		\
+	myobjc = 9;							\
 	myobjv[0] = Tcl_NewIntObj(e);					\
 	myobjv[1] = Tcl_NewStringObj((h), (int)strlen(h));		\
 	myobjv[2] = Tcl_NewIntObj((int)p);				\
 	myobjv[3] = Tcl_NewStringObj((s), (int)strlen(s));		\
 	myobjv[4] = Tcl_NewStringObj((pr), (int)strlen(pr));		\
 	myobjv[5] = Tcl_NewStringObj((vw), (int)strlen(vw));		\
+	myobjv[6] = Tcl_NewStringObj((el), (int)strlen(el));		\
+	myobjv[7] = Tcl_NewLongObj((long)(maf));			\
+	myobjv[8] = Tcl_NewLongObj((long)(mao));			\
 	thislist = Tcl_NewListObj(myobjc, myobjv);			\
 	result = Tcl_ListObjAppendElement(interp, res, thislist);	\
 	if (result != TCL_OK)						\

@@ -2,7 +2,7 @@
 #
 # This is an input file for certain scripts which need to process all the main 
 # source files in the Berkeley DB tree.
-#   s_vxworks	- include in the normal, vx6 and small VxWorks libraries
+#   s_vxworks	- include in the normal, vx6, vx7 and small VxWorks libraries
 #   s_android	- include in the Android library.
 #   s_crypto	- exclude crypto filenames from the tree
 #   s_cscope	- run cscope on all source files
@@ -19,50 +19,50 @@
 # Each non-blank, non-comment line is of the form
 #   filename		module [ module ...]
 
-build_vxworks/dbdemo/dbdemo.c					vx6
-build_vxworks/test/micro/b_curalloc.c				vx6
-build_vxworks/test/micro/b_curwalk.c				vx6
-build_vxworks/test/micro/b_del.c				vx6
-build_vxworks/test/micro/b_get.c				vx6
-build_vxworks/test/micro/b_inmem.c				vx6
-build_vxworks/test/micro/b_latch.c				vx6
-build_vxworks/test/micro/b_load.c				vx6
-build_vxworks/test/micro/b_open.c				vx6
-build_vxworks/test/micro/b_put.c				vx6
-build_vxworks/test/micro/b_recover.c				vx6
-build_vxworks/test/micro/b_txn.c				vx6
-build_vxworks/test/micro/b_txn_write.c				vx6
-build_vxworks/test/micro/b_uname.c				vx6
-build_vxworks/test/micro/b_util.c				vx6
-build_vxworks/test/micro/b_workload.c				vx6
-build_vxworks/test/micro/test_micro.c				vx6
-build_vxworks/util/db_archive.c					vx6
-build_vxworks/util/db_checkpoint.c				vx6
-build_vxworks/util/db_deadlock.c				vx6
-build_vxworks/util/db_dump.c					vx6
-build_vxworks/util/db_hotbackup.c				vx6
-build_vxworks/util/db_load.c					vx6
-build_vxworks/util/db_log_verify.c				vx6
-build_vxworks/util/db_printlog.c				vx6
-build_vxworks/util/db_recover.c					vx6
-build_vxworks/util/db_stat.c					vx6
-build_vxworks/util/db_tuner.c					vx6
-build_vxworks/util/db_upgrade.c					vx6
-build_vxworks/util/db_verify.c					vx6
-lang/cxx/cxx_channel.cpp					vx6
-lang/cxx/cxx_db.cpp						vx6
-lang/cxx/cxx_dbc.cpp						vx6
-lang/cxx/cxx_dbstream.cpp					vx6
-lang/cxx/cxx_dbt.cpp						vx6
-lang/cxx/cxx_env.cpp						vx6
-lang/cxx/cxx_except.cpp						vx6
-lang/cxx/cxx_lock.cpp						vx6
-lang/cxx/cxx_logc.cpp						vx6
-lang/cxx/cxx_mpool.cpp						vx6
-lang/cxx/cxx_multi.cpp						vx6
-lang/cxx/cxx_seq.cpp						vx6
-lang/cxx/cxx_site.cpp						vx6
-lang/cxx/cxx_txn.cpp						vx6
+build_vxworks/dbdemo/dbdemo.c					vx6 vx7
+build_vxworks/test/micro/b_curalloc.c				vx6 vx7
+build_vxworks/test/micro/b_curwalk.c				vx6 vx7
+build_vxworks/test/micro/b_del.c				vx6 vx7
+build_vxworks/test/micro/b_get.c				vx6 vx7
+build_vxworks/test/micro/b_inmem.c				vx6 vx7
+build_vxworks/test/micro/b_latch.c				vx6 vx7
+build_vxworks/test/micro/b_load.c				vx6 vx7
+build_vxworks/test/micro/b_open.c				vx6 vx7
+build_vxworks/test/micro/b_put.c				vx6 vx7
+build_vxworks/test/micro/b_recover.c				vx6 vx7
+build_vxworks/test/micro/b_txn.c				vx6 vx7
+build_vxworks/test/micro/b_txn_write.c				vx6 vx7
+build_vxworks/test/micro/b_uname.c				vx6 vx7
+build_vxworks/test/micro/b_util.c				vx6 vx7
+build_vxworks/test/micro/b_workload.c				vx6 vx7
+build_vxworks/test/micro/test_micro.c				vx6 vx7
+build_vxworks/util/db_archive.c					vx6 vx7
+build_vxworks/util/db_checkpoint.c				vx6 vx7
+build_vxworks/util/db_deadlock.c				vx6 vx7
+build_vxworks/util/db_dump.c					vx6 vx7
+build_vxworks/util/db_hotbackup.c				vx6 vx7
+build_vxworks/util/db_load.c					vx6 vx7
+build_vxworks/util/db_log_verify.c				vx6 vx7
+build_vxworks/util/db_printlog.c				vx6 vx7
+build_vxworks/util/db_recover.c					vx6 vx7
+build_vxworks/util/db_stat.c					vx6 vx7
+build_vxworks/util/db_tuner.c					vx6 vx7
+build_vxworks/util/db_upgrade.c					vx6 vx7
+build_vxworks/util/db_verify.c					vx6 vx7
+lang/cxx/cxx_channel.cpp					vx6 vx7
+lang/cxx/cxx_db.cpp						vx6 vx7
+lang/cxx/cxx_dbc.cpp						vx6 vx7
+lang/cxx/cxx_dbstream.cpp					vx6 vx7
+lang/cxx/cxx_dbt.cpp						vx6 vx7
+lang/cxx/cxx_env.cpp						vx6 vx7
+lang/cxx/cxx_except.cpp						vx6 vx7
+lang/cxx/cxx_lock.cpp						vx6 vx7
+lang/cxx/cxx_logc.cpp						vx6 vx7
+lang/cxx/cxx_mpool.cpp						vx6 vx7
+lang/cxx/cxx_multi.cpp						vx6 vx7
+lang/cxx/cxx_seq.cpp						vx6 vx7
+lang/cxx/cxx_site.cpp						vx6 vx7
+lang/cxx/cxx_txn.cpp						vx6 vx7
 lang/db185/db185.c
 src/blob/blob_fileops.c						android vx vxsmall
 src/blob/blob_page.c						android vx vxsmall
@@ -88,7 +88,7 @@ src/btree/bt_stat.c						android vx vxsmall
 src/btree/bt_upgrade.c						android vx vxsmall 
 src/btree/bt_verify.c						vx
 src/btree/btree_auto.c						android vx vxsmall 
-src/btree/btree_autop.c						vx6
+src/btree/btree_autop.c						vx6 vx7
 src/clib/getopt.c						vx vxsmall
 src/clib/rand.c							android 
 src/clib/snprintf.c						android vx vxsmall 
@@ -120,12 +120,12 @@ src/crypto/mersenne/mt19937db.c					vx
 src/crypto/rijndael/rijndael-alg-fst.c				vx
 src/crypto/rijndael/rijndael-api-fst.c				vx
 src/db/crdel_auto.c						android vx vxsmall 
-src/db/crdel_autop.c						vx6
+src/db/crdel_autop.c						vx6 vx7
 src/db/crdel_rec.c						android vx vxsmall 
 src/db/db.c							android vx vxsmall 
 src/db/db_am.c							android vx vxsmall 
 src/db/db_auto.c						android vx vxsmall 
-src/db/db_autop.c						vx6
+src/db/db_autop.c						vx6 vx7
 src/db/db_backup.c						android vx vxsmall 
 src/db/db_cam.c							android vx vxsmall 
 src/db/db_cds.c							android vx vxsmall 
@@ -161,7 +161,7 @@ src/db/db_vrfyutil.c						vx
 src/db/partition.c						android vx 
 src/dbreg/dbreg.c						android vx vxsmall 
 src/dbreg/dbreg_auto.c						android vx vxsmall 
-src/dbreg/dbreg_autop.c						vx6
+src/dbreg/dbreg_autop.c						vx6 vx7
 src/dbreg/dbreg_rec.c						android vx vxsmall 
 src/dbreg/dbreg_stat.c						android vx vxsmall 
 src/dbreg/dbreg_util.c						android vx vxsmall 
@@ -181,13 +181,13 @@ src/env/env_sig.c						android vx vxsmall
 src/env/env_slice.c						android vx vxsmall
 src/env/env_stat.c						android vx vxsmall 
 src/fileops/fileops_auto.c					android vx vxsmall 
-src/fileops/fileops_autop.c					vx6
+src/fileops/fileops_autop.c					vx6 vx7
 src/fileops/fop_basic.c						android vx vxsmall 
 src/fileops/fop_rec.c						android vx vxsmall 
 src/fileops/fop_util.c						android vx vxsmall 
 src/hash/hash.c							vx
 src/hash/hash_auto.c						vx
-src/hash/hash_autop.c						vx6
+src/hash/hash_autop.c						vx6 vx7
 src/hash/hash_compact.c						vx
 src/hash/hash_conv.c						vx
 src/hash/hash_dup.c						vx
@@ -306,7 +306,7 @@ src/os_vxworks/os_vx_rpath.c					vx vxsmall
 src/os_vxworks/os_vx_yield.c					vx vxsmall
 src/qam/qam.c							vx
 src/qam/qam_auto.c						vx
-src/qam/qam_autop.c						vx6
+src/qam/qam_autop.c						vx6 vx7
 src/qam/qam_conv.c						vx
 src/qam/qam_files.c						vx
 src/qam/qam_method.c						vx
@@ -330,7 +330,7 @@ src/rep/rep_util.c						vx
 src/rep/rep_verify.c						vx
 src/repmgr/repmgr_auto.c					vx
 src/repmgr/repmgr_automsg.c					vx
-src/repmgr/repmgr_autop.c					vx6
+src/repmgr/repmgr_autop.c					vx6 vx7
 src/repmgr/repmgr_elect.c					vx
 src/repmgr/repmgr_method.c					vx
 src/repmgr/repmgr_msg.c						vx
@@ -342,11 +342,11 @@ src/repmgr/repmgr_sel.c						vx
 src/repmgr/repmgr_stat.c					vx
 src/repmgr/repmgr_stub.c					android vxsmall 
 src/repmgr/repmgr_util.c					vx
-src/sequence/seq_stat.c						android vx6 
-src/sequence/sequence.c						android vx6 
+src/sequence/seq_stat.c						android vx6 vx7
+src/sequence/sequence.c						android vx6 vx7
 src/txn/txn.c							android vx vxsmall 
 src/txn/txn_auto.c						android vx vxsmall 
-src/txn/txn_autop.c						vx6
+src/txn/txn_autop.c						vx6 vx7
 src/txn/txn_chkpt.c						android vx vxsmall 
 src/txn/txn_failchk.c						android vx vxsmall 
 src/txn/txn_method.c						android vx vxsmall 

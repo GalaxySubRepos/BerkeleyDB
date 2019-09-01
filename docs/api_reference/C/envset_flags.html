@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;set_flags()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;set_flags()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_feedback.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_flags"></a>DB_ENV-&gt;set_flags()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_flags"></a>
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -69,7 +75,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233133744"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113485576528"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -77,7 +83,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233135616"></a>flags</h4>
+                <h4 class="title"><a id="idm140113485535520"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -134,7 +140,10 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
             </p>
                 <p>
                  The DB_CDB_ALLDB flag may be used to configure Berkeley DB only before
-                 the <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method
+                 the <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method
                  is called.
             </p>
               </li>
@@ -189,7 +198,10 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
              
              <code class="literal">DB_TXN_BULK</code>
             </a> flag in the
-	          <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a> method.
+	          <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a> method.
              </p>
                 <p>
 	          The <a class="xref" href="db_hotbackup.html" title="db_hotbackup">db_hotbackup</a>
@@ -235,7 +247,10 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
             </p>
                 <p>
                  If set, all databases in the environment will be opened as if
-                 DB_MULTIVERSION is passed to the <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>
+                 DB_MULTIVERSION is passed to the <a class="xref" href="dbopen.html" title="DB-&gt;open()">
+        <span>DB-&gt;open()</span>
+        
+    </a>
                  method.  This flag will be ignored for queue databases for which DB_MULTIVERSION is not
                  supported.
             </p>
@@ -280,7 +295,10 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
                 <p>
                  If set, Berkeley DB will copy read-only database files into the local
                  cache instead of potentially mapping them into process memory (see the
-                 description of the <a class="xref" href="envset_mp_mmapsize.html" title="DB_ENV-&gt;set_mp_mmapsize()">DB_ENV-&gt;set_mp_mmapsize()</a> 
+                 description of the <a class="xref" href="envset_mp_mmapsize.html" title="DB_ENV-&gt;set_mp_mmapsize()">
+        <span>DB_ENV-&gt;set_mp_mmapsize()</span>
+        
+    </a> 
                  method for further information).
             </p>
                 <p>
@@ -362,7 +380,10 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
             </p>
                 <p>
                  The DB_PANIC_ENVIRONMENT flag may be used to configure Berkeley DB
-                 only after the <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>  method is called.
+                 only after the <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>  method is called.
             </p>
               </li>
               <li>
@@ -422,8 +443,14 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
                  any time during the life of the application.
             </p>
                 <p>
-                Note that the <a class="xref" href="lockget.html" title="DB_ENV-&gt;lock_get()">DB_ENV-&gt;lock_get()</a>
-                and <a class="xref" href="lockvec.html" title="DB_ENV-&gt;lock_vec()">DB_ENV-&gt;lock_vec()</a>
+                Note that the <a class="xref" href="lockget.html" title="DB_ENV-&gt;lock_get()">
+        <span>DB_ENV-&gt;lock_get()</span>
+        
+    </a>
+                and <a class="xref" href="lockvec.html" title="DB_ENV-&gt;lock_vec()">
+        <span>DB_ENV-&gt;lock_vec()</span>
+        
+    </a>
                 methods are unaffected by this flag.
             </p>
               </li>
@@ -490,9 +517,15 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
                 <p>
                  If set, all transactions in the environment will be started as if
                  DB_TXN_SNAPSHOT were passed to the 
-                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a> method, and all
+                 <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a> method, and all
                  non-transactional cursors will be opened as if DB_TXN_SNAPSHOT were
-                 passed to the <a class="xref" href="dbcursor.html" title="DB-&gt;cursor()">DB-&gt;cursor()</a> method.
+                 passed to the <a class="xref" href="dbcursor.html" title="DB-&gt;cursor()">
+        <span>DB-&gt;cursor()</span>
+        
+    </a> method.
             </p>
                 <p>
                  Calling <code class="methodname">DB_ENV-&gt;set_flags()</code> with the DB_TXN_SNAPSHOT flag only
@@ -566,7 +599,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233134016"></a>onoff</h4>
+                <h4 class="title"><a id="idm140113485549264"></a>onoff</h4>
               </div>
             </div>
           </div>
@@ -580,7 +613,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233187744"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113485580368"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -596,7 +629,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815233191984"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113485568288"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -609,7 +642,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233096048"></a>Class</h3>
+              <h3 class="title"><a id="idm140113485576240"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -621,7 +654,7 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815233089744"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113485578096"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -641,11 +674,17 @@ DB_ENV-&gt;set_flags(DB_ENV *dbenv, u_int32_t flags, int onoff);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envset_intermediate_dir_mode.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;set_feedback() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;set_feedback()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;set_intermediate_dir_mode()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;set_intermediate_dir_mode()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

@@ -214,7 +214,7 @@
     <copy todir="testenhancedir">
       <fileset dir="classes" includes="com/sleepycat/persist/**/*.class"/>
     </copy>
-    <java fork="yes" failonerror="true"
+    <java fork="yes" failonerror="true" clonevm="true"
           classname="com.sleepycat.persist.model.ClassEnhancer">
       <arg line="-v testenhancedir"/>
       <classpath refid="classpath"/>
@@ -316,7 +316,7 @@
   <target name="DplDump">
     <echo message="=== DplDump ${home} ${store} ==="/>
     <java fork="yes" dir="." classname="persist.DplDump" failonerror="true"
-      clonevm="true">
+          clonevm="true">
       <jvmarg value="-ea"/>
       <arg line="-h ${home} -s ${store}"/>
       <classpath refid="classpath"/>

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -308,7 +308,6 @@ proc method_version { } {
 		lappend mv "btree $valid_releases(47)"
 		lappend mv "hash $valid_releases(48)"
 		lappend mv "btree $valid_releases(48)"
-		lappend mv "heap $valid_releases(52)"
 		lappend mv "heap $valid_releases(60)"
 		lappend mv "queue $valid_releases(51)"
 		lappend mv "recno $valid_releases(52)"
@@ -318,6 +317,10 @@ proc method_version { } {
 		lappend mv "btree $valid_releases(53)"
 		lappend mv "rrecno $valid_releases(60)"
 		lappend mv "btree $valid_releases(61)"
+		lappend mv "heap $valid_releases(52)"
+		lappend mv "btree $valid_releases(62)"
+		lappend mv "queue $valid_releases(62)"
+		lappend mv "btree $valid_releases(181)"
 		return $mv
 	} 
 
@@ -326,7 +329,8 @@ proc method_version { } {
 	# from the list of all methods except heap.  Always
 	# set up one pair using heap with a 5.2 or later version.
 	set post52_versions "$valid_releases(52) $valid_releases(53)\
-	   $valid_releases(60) $valid_releases(61)"
+	   $valid_releases(60) $valid_releases(61)\
+	   $valid_releases(62) $valid_releases(181)"
 	set post52_len [expr [llength $post52_versions] - 1]
 	set heap_version [lindex $post52_versions \
 	    [berkdb random_int 0 $post52_len]]

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -100,9 +100,9 @@ db_deadlock_main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
-  			break;
+			    optarg, &passwd) != 0)
+				goto err;
+			break;
 		case 't':
 			if ((str = strchr(optarg, '.')) != NULL) {
 				*str++ = '\0';

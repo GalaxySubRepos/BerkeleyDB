@@ -755,12 +755,12 @@ do_test replication-4.1.3 {
 # sequentially after full shutdown, otherwise each initial site will wait
 # a very long time for its election until a quorum of sites is available.
 file mkdir $site1dir/rep.db-journal
-set s1config [open $site1dir/rep.db-journal/DB_CONFIG w]
+set s1config [open $site1dir/rep.db-journal/DB_CONFIG a]
 puts $s1config "rep_set_priority 100"
 puts $s1config "rep_set_config db_repmgr_conf_2site_strict off"
 close $s1config
 file mkdir $site2dir/rep.db-journal
-set s2config [open $site2dir/rep.db-journal/DB_CONFIG w]
+set s2config [open $site2dir/rep.db-journal/DB_CONFIG a]
 puts $s2config "rep_set_priority 50"
 puts $s2config "rep_set_config db_repmgr_conf_2site_strict off"
 close $s2config
@@ -871,12 +871,12 @@ do_test replication-4.2.3 {
 # sequentially after full shutdown, otherwise each initial site will wait
 # a very long time for its election until a quorum of sites is available.
 file mkdir $site1dir/rep.db-journal
-set s1config [open $site1dir/rep.db-journal/DB_CONFIG w]
+set s1config [open $site1dir/rep.db-journal/DB_CONFIG a]
 puts $s1config "rep_set_priority 100"
 puts $s1config "rep_set_config db_repmgr_conf_2site_strict off"
 close $s1config
 file mkdir $site2dir/rep.db-journal
-set s2config [open $site2dir/rep.db-journal/DB_CONFIG w]
+set s2config [open $site2dir/rep.db-journal/DB_CONFIG a]
 puts $s2config "rep_set_priority 50"
 puts $s2config "rep_set_config db_repmgr_conf_2site_strict off"
 close $s2config
@@ -1000,11 +1000,12 @@ setup_rep_sites
 
 # Turn off 2SITE_STRICT on both sites.
 file mkdir $site1dir/rep.db-journal
-set s1config [open $site1dir/rep.db-journal/DB_CONFIG w]
+set s1config [open $site1dir/rep.db-journal/DB_CONFIG a]
 puts $s1config "rep_set_config db_repmgr_conf_2site_strict off"
 close $s1config
+
 file mkdir $site2dir/rep.db-journal
-set s2config [open $site2dir/rep.db-journal/DB_CONFIG w]
+set s2config [open $site2dir/rep.db-journal/DB_CONFIG a]
 puts $s2config "rep_set_config db_repmgr_conf_2site_strict off"
 close $s2config
 
@@ -1045,15 +1046,15 @@ setup_rep_sites
 
 # Set priority.
 file mkdir $site1dir/rep.db-journal
-set s1config [open $site1dir/rep.db-journal/DB_CONFIG w]
+set s1config [open $site1dir/rep.db-journal/DB_CONFIG a]
 puts $s1config "rep_set_priority 1"
 close $s1config
 file mkdir $site2dir/rep.db-journal
-set s2config [open $site2dir/rep.db-journal/DB_CONFIG w]
+set s2config [open $site2dir/rep.db-journal/DB_CONFIG a]
 puts $s2config "rep_set_priority 1"
 close $s2config
 file mkdir $site3dir/rep.db-journal
-set s3config [open $site3dir/rep.db-journal/DB_CONFIG w]
+set s3config [open $site3dir/rep.db-journal/DB_CONFIG a]
 puts $s3config "rep_set_priority 100"
 close $s3config
 
@@ -1376,7 +1377,7 @@ setup_rep_sites
 # Set tiny values for election timeout and election retry so that election
 # takes minimal time to fail.
 file mkdir $site1dir/rep.db-journal
-set s1config [open $site1dir/rep.db-journal/DB_CONFIG w]
+set s1config [open $site1dir/rep.db-journal/DB_CONFIG a]
 puts $s1config "rep_set_timeout db_rep_election_timeout 1"
 puts $s1config "rep_set_timeout db_rep_election_retry 1"
 close $s1config

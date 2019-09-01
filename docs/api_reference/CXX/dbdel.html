@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::del()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::del()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbcreate.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbdel"></a>Db::del()</h2>
+            <h2 class="title" style="clear: both"><a id="dbdel"></a>
+        
+        <span>Db::del()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -50,7 +56,10 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
     </p>
       <p>
          When called on a database that has been made into a secondary index
-         using the <a class="xref" href="dbassociate.html" title="Db::associate()">Db::associate()</a>  method, the
+         using the <a class="xref" href="dbassociate.html" title="Db::associate()">
+        
+        <span>Db::associate()</span>
+    </a>  method, the
          <code class="methodname">Db::del()</code> method deletes the key/data pair from the primary database
          and all secondary indices.
     </p>
@@ -72,7 +81,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703829327568"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176787560416"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -80,17 +89,23 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703829329792"></a>txnid</h4>
+                <h4 class="title"><a id="idm140176787563520"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                 If the operation is part of an application-specified transaction, the
                 <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">DbEnv::txn_begin()</a>; 
+                handle returned from <a class="xref" href="txnbegin.html" title="DbEnv::txn_begin()">
+        
+        <span>DbEnv::txn_begin()</span>
+    </a>; 
                 if the operation is part of a Berkeley DB Concurrent Data Store group, the
                 <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">DbEnv::cdsgroup_begin()</a>;
+                from <a class="xref" href="envcdsgroup_begin.html" title="DbEnv::cdsgroup_begin()">
+        
+        <span>DbEnv::cdsgroup_begin()</span>
+    </a>;
                 otherwise NULL. If no transaction handle is specified, but the
                 operation occurs in a transactional database, the operation will be
                 implicitly transaction protected.
@@ -100,7 +115,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703829459600"></a>key</h4>
+                <h4 class="title"><a id="idm140176787702048"></a>key</h4>
               </div>
             </div>
           </div>
@@ -112,7 +127,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703829513040"></a>flags</h4>
+                <h4 class="title"><a id="idm140176787751984"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -153,7 +168,10 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
             </p>
                 <p>
                 A successful bulk delete operation is logically equivalent to a loop through each
-                key/data pair, performing a <a class="xref" href="dbdel.html" title="Db::del()">Db::del()</a> for each one.
+                key/data pair, performing a <a class="xref" href="dbdel.html" title="Db::del()">
+        
+        <span>Db::del()</span>
+    </a> for each one.
             </p>
                 <p>
                 See the <a class="xref" href="dbt.html#dbtlist" title="DBT and Bulk Operations">DBT and Bulk Operations</a> for more information on
@@ -197,7 +215,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703829403728"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176787643904"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -215,7 +233,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703829608464"></a>DB_FOREIGN_CONFLICT</h4>
+                <h4 class="title"><a id="idm140176774230256"></a>DB_FOREIGN_CONFLICT</h4>
               </div>
             </div>
           </div>
@@ -249,7 +267,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703837737616"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176774191632"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -267,7 +285,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816303104"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176774550816"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -279,7 +297,10 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">Db::set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">
+        
+        <span>Db::set_lk_exclusive()</span>
+    </a>
                 for more information.
             </p>
           <p>
@@ -292,7 +313,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816343760"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140176774767072"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -314,7 +335,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816666400"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140176774994704"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -331,7 +352,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816873936"></a>DB_SECONDARY_BAD</h4>
+                <h4 class="title"><a id="idm140176775197904"></a>DB_SECONDARY_BAD</h4>
               </div>
             </div>
           </div>
@@ -343,7 +364,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703816959984"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140176775496784"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -355,7 +376,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703817002992"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176775442912"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -368,7 +389,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703830301744"></a>Class</h3>
+              <h3 class="title"><a id="idm140176773703152"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -380,7 +401,7 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703816870560"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176774978912"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -400,11 +421,17 @@ Db::del(DbTxn *txnid, Dbt *key, u_int32_t flags);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="dberr.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::err()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::err()</span>
+    </td>
         </tr>
       </table>
     </div>

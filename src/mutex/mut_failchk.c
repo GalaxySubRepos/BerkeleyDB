@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -160,8 +160,9 @@ __mutex_failchk_single(env, mutex, ip)
 		 * not just waiting for the oppertunity to share it.
 		 */
 		for (i = 0; i != MUTEX_STATE_MAX; i++) {
-			if (ip->dbth_latches[i].action == MUTEX_ACTION_SHARED
-			    && mutex == ip->dbth_latches[i].mutex)
+			if (ip->dbth_latches[i].action ==
+			    MUTEX_ACTION_SHARED &&
+			    mutex == ip->dbth_latches[i].mutex)
 				unlock_shared = 1;
 		}
 		pid = ip->dbth_pid;
@@ -188,7 +189,7 @@ __mutex_failchk_single(env, mutex, ip)
 
 		/* Unlock and free the mutex. */
 		if (LF_ISSET(DB_MUTEX_LOCKED))
-			__mutex_unlock(env, mutex, ip, MUTEX_CTR);
+			(void)__mutex_unlock(env, mutex, ip, MUTEX_CTR);
 
 		return (__mutex_free_int(env, 0, &mutex));
 	/*

@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 /*
@@ -38,10 +38,10 @@ int sqlite3_key_v2(
 		dbname = zDbName;
 
 	for(backend = 0; backend < db->nDb; backend++) {
-		if (db->aDb[backend].zName == NULL)
+		if (db->aDb[backend].zDbSName == NULL)
 			continue;
 
-		if (sqlite3StrICmp(db->aDb[backend].zName, dbname) == 0)
+		if (sqlite3StrICmp(db->aDb[backend].zDbSName, dbname) == 0)
 			break;
 	}
 	if (backend == db->nDb)

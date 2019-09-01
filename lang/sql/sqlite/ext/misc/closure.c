@@ -1,4 +1,11 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
+**
 ** 2013-04-16
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -486,10 +493,10 @@ static const char *closureValueOfKey(const char *zKey, const char *zStr){
   int i;
   if( nStr<nKey+1 ) return 0;
   if( memcmp(zStr, zKey, nKey)!=0 ) return 0;
-  for(i=nKey; isspace(zStr[i]); i++){}
+  for(i=nKey; isspace((unsigned char)zStr[i]); i++){}
   if( zStr[i]!='=' ) return 0;
   i++;
-  while( isspace(zStr[i]) ){ i++; }
+  while( isspace((unsigned char)zStr[i]) ){ i++; }
   return zStr+i;
 }
 

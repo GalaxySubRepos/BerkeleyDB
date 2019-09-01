@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package persist;
@@ -55,6 +54,7 @@ public class CustomKeyOrderExample {
 
         private ReverseOrder() {} // For deserialization
 
+        @Override
         public int compareTo(ReverseOrder o) {
             return o.value.compareTo(value);
         }

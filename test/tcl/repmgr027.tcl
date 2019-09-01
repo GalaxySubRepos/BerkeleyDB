@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # TEST	repmgr027
 # TEST	Test of "full election" timeouts, where a client starts up and joins the
@@ -36,6 +36,8 @@ proc repmgr027_sub { tnum } {
 		set repmemargs "-rep_inmem_files "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	file mkdir [set dira $testdir/SITE_A]
 	file mkdir [set dirb $testdir/SITE_B]
@@ -48,7 +50,7 @@ proc repmgr027_sub { tnum } {
 	# be in an election, and then have the third site start and join
 	# (including the leeway time, in seconds), before it times out.
 	#
-	set common "-create -txn $verbargs $repmemargs \
+	set common "-create -txn $verbargs $repmemargs $sslargs \
 	    -rep -thread -event -recover"
 	set common_mgr "-start elect \
 	    -timeout {connection_retry 5000000} \

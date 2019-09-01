@@ -122,7 +122,8 @@ test -s stderr && {
 
 # We never checkpointed, run recovery to make sure it all works.
 msg "RECOVERY:"
-db_recover -h ../data -v
+cp ../../../db_recover .
+./db_recover -h ../data -v
 test "$?" -ne 0 && {
 	echo "FAIL: recovery failed"
 	exitval=1

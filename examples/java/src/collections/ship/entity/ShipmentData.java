@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.entity;
@@ -23,7 +22,7 @@ import java.io.Serializable;
  */
 public class ShipmentData implements Serializable {
 
-    private int quantity;
+    private final int quantity;
 
     public ShipmentData(int quantity) {
 
@@ -35,6 +34,7 @@ public class ShipmentData implements Serializable {
         return quantity;
     }
 
+    @Override
     public String toString() {
 
         return "[ShipmentData: quantity=" + quantity + ']';

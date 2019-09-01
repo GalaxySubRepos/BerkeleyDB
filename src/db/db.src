@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -326,7 +326,6 @@ ARG	last_pgno	db_pgno_t	lu
 DBT	list		DBT		s
 END
 
-
 /*
  * pg_truc: truncate the free list
  *
@@ -409,7 +408,6 @@ PGDBT	hdr		DBT		s
 PGDDBT	data		DBT		s
 ARG	pg_copy		int32_t		lu
 END
-
 
 /*
  * pgno -- Handles replacing a page number in a record

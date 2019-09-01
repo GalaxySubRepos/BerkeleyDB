@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1273,10 +1273,9 @@ next_pg:
 		}
 
 		/*
-		 * Check to see if we have a new key.
-		 * If so, then see if we need to put the
-		 * key on the page.  If its already there
-		 * then we just point to it.
+		 * Check to see if we have a new key.  If so, then see if we
+		 * need to put the key on the page.  If it is already there then
+		 * we just point to it.
 		 */
 		if (is_key && pg_keyoff != inp[indx]) {
 			bk = GET_BKEYDATA(dbc->dbp, pg, indx);
@@ -1840,7 +1839,7 @@ __bam_getbothc(dbc, data)
  *	data == NULL indicates the DB_SET_LTE flag
  *	data != NULL indicates the DB_GET_BOTH_LTE flag
  *
- *	Only works for a primary cursor - not an OPD cursor. Handles the
+ *	Only works for a primary cursor - not an OPD cursor.  Handles the
  *	OPD manipulation as well - no need to return to the caller to
  *	perform more OPD movements.
  */

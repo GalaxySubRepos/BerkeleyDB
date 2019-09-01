@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_SEQUENCE-&gt;get()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_SEQUENCE-&gt;get()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="seqclose.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="seqget"></a>DB_SEQUENCE-&gt;get()</h2>
+            <h2 class="title" style="clear: both"><a id="seqget"></a>
+        <span>DB_SEQUENCE-&gt;get()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -60,7 +66,10 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
          By default, sequence ranges do not wrap; to cause the sequence to wrap
          around the beginning or end of its range, specify the 
          <a class="link" href="seqset_flags.html#seqset_flags_DB_SEQ_WRAP">DB_SEQ_WRAP</a>  
-         flag to the <a class="xref" href="seqset_flags.html" title="DB_SEQUENCE-&gt;set_flags()">DB_SEQUENCE-&gt;set_flags()</a> 
+         flag to the <a class="xref" href="seqset_flags.html" title="DB_SEQUENCE-&gt;set_flags()">
+        <span>DB_SEQUENCE-&gt;set_flags()</span>
+        
+    </a> 
          method.
     </p>
       <p>
@@ -72,7 +81,7 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228308800"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113480553152"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -80,17 +89,23 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228308416"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113480552768"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                           If the operation is part of an application-specified transaction, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; if the
+                          handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; if the
                           operation is part of a Berkeley DB Concurrent Data Store group, the
                           <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                          from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                           otherwise NULL. If no transaction handle is specified, but the
                           operation occurs in a transactional database, the operation will be
                           implicitly transaction protected. No <span class="bold"><strong>txnid</strong></span> handle may be specified if the sequence
@@ -113,7 +128,7 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228398592"></a>delta</h4>
+                <h4 class="title"><a id="idm140113480587392"></a>delta</h4>
               </div>
             </div>
           </div>
@@ -125,7 +140,7 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228332352"></a>retp</h4>
+                <h4 class="title"><a id="idm140113480532816"></a>retp</h4>
               </div>
             </div>
           </div>
@@ -138,7 +153,7 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815228312592"></a>flags</h4>
+                <h4 class="title"><a id="idm140113480622880"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -167,7 +182,7 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228322992"></a>Class</h3>
+              <h3 class="title"><a id="idm140113480539568"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -179,7 +194,7 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815228302352"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113480547120"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -199,11 +214,17 @@ DB_SEQUENCE-&gt;get(DB_SEQUENCE *seq,
           <td width="40%" align="right"> <a accesskey="n" href="seqget_cachesize.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_SEQUENCE-&gt;close() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_SEQUENCE-&gt;close()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_SEQUENCE-&gt;get_cachesize()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_SEQUENCE-&gt;get_cachesize()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

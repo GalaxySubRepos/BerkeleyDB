@@ -30,7 +30,7 @@
 #ifdef HAVE_MIXED_SIZE_ADDRESSING
 #define	__STRUCTURE_COUNT	48
 #else
-#define	__STRUCTURE_COUNT	(48 + 109)
+#define	__STRUCTURE_COUNT	(48 + 118)
 #endif
 
 /*
@@ -201,8 +201,17 @@ __env_struct_sig()
 	__ADD(__db_region_mem_t);
 	__ADD(__db_reginfo_t);
 	__ADD(__rep_waiter);
+#ifdef	HAVE_REPMGR_SSL
+	__ADD(__repmgr_ssl_config);
+#endif
 	__ADD(__db_rep);
 	__ADD(__rep_lease_entry);
+#ifdef	HAVE_REPMGR_SSL
+	__ADD(__repmgr_ssl_write_sync_info);
+#endif
+#ifdef	HAVE_REPMGR_SSL
+	__ADD(__repmgr_ssl__conn_info);
+#endif
 	__ADD(__txn_detail);
 	__ADD(__db_txnmgr);
 	__ADD(__db_commit_info);

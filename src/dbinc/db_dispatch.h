@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 /*
  * Copyright (c) 1995, 1996
@@ -55,6 +55,7 @@ typedef enum {
 #define	DB_TXNLIST_MASK(hp, n)  (n % hp->nslots)
 struct __db_txnhead {
 	void *td;		/* If abort, the detail for the txn. */
+	DB_TXN *txn;		/* Non-null only for rep client MVCC support. */
 	DB_THREAD_INFO *thread_info;	/* Thread information. */
 	u_int32_t maxid;	/* Maximum transaction id. */
 	DB_LSN maxlsn;		/* Maximum commit lsn. */

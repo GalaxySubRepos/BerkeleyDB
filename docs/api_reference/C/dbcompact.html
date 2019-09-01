@@ -9,23 +9,26 @@
     <link rel="start" href="index.html" title="Berkeley DB C API Reference" />
     <link rel="up" href="db.html" title="Chapter 2.  The DB Handle" />
     <link rel="prev" href="dbclose.html" title="DB-&gt;close()" />
-    <link rel="next" href="db_copy.html" title="db_copy" />
+    <link rel="next" href="dbconvert.html" title="DB-&gt;convert()" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;compact()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;compact()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbclose.html">Prev</a> </td>
           <th width="60%" align="center">Chapter 2. 
                 The DB Handle
         </th>
-          <td width="20%" align="right"> <a accesskey="n" href="db_copy.html">Next</a></td>
+          <td width="20%" align="right"> <a accesskey="n" href="dbconvert.html">Next</a></td>
         </tr>
       </table>
       <hr />
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbcompact"></a>DB-&gt;compact()</h2>
+            <h2 class="title" style="clear: both"><a id="dbcompact"></a>
+        <span>DB-&gt;compact()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -67,7 +73,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238295984"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113490712112"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -75,17 +81,23 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238283104"></a>txnid</h4>
+                <h4 class="title"><a id="idm140113490943984"></a>txnid</h4>
               </div>
             </div>
           </div>
           <p>
                   If the operation is part of an application-specified transaction, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a transaction
-                  handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">DB_ENV-&gt;txn_begin()</a>; 
+                  handle returned from <a class="xref" href="txnbegin.html" title="DB_ENV-&gt;txn_begin()">
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </a>; 
                   if the operation is part of a Berkeley DB Concurrent Data Store group, the
                   <span class="bold"><strong>txnid</strong></span> parameter is a handle returned
-                  from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">DB_ENV-&gt;cdsgroup_begin()</a>;
+                  from <a class="xref" href="envcdsgroup_begin.html" title="DB_ENV-&gt;cdsgroup_begin()">
+        <span>DB_ENV-&gt;cdsgroup_begin()</span>
+        
+    </a>;
                   otherwise NULL.
               </p>
           <p>
@@ -106,7 +118,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238136800"></a>start</h4>
+                <h4 class="title"><a id="idm140113490671808"></a>start</h4>
               </div>
             </div>
           </div>
@@ -125,7 +137,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238170976"></a>stop</h4>
+                <h4 class="title"><a id="idm140113490678592"></a>stop</h4>
               </div>
             </div>
           </div>
@@ -143,7 +155,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238136992"></a>c_data</h4>
+                <h4 class="title"><a id="idm140113490663104"></a>c_data</h4>
               </div>
             </div>
           </div>
@@ -268,7 +280,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238171456"></a>flags</h4>
+                <h4 class="title"><a id="idm140113490657040"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -318,7 +330,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238090560"></a>end</h4>
+                <h4 class="title"><a id="idm140113490629664"></a>end</h4>
               </div>
             </div>
           </div>
@@ -337,7 +349,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238188576"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113490646016"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -353,7 +365,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238101312"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140113490625072"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -366,7 +378,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238160480"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140113490666368"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -378,7 +390,10 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -386,7 +401,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238111888"></a>  DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140113490627824"></a>  DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -405,7 +420,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238111296"></a>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140113490596352"></a>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -417,7 +432,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238084608"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140113490625632"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -429,7 +444,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238079696"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113490610288"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -442,7 +457,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238142560"></a>Class</h3>
+              <h3 class="title"><a id="idm140113490623584"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -454,7 +469,7 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238197776"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113490654064"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -471,14 +486,20 @@ DB-&gt;compact(DB *db, DB_TXN *txnid,
           <td width="20%" align="center">
             <a accesskey="u" href="db.html">Up</a>
           </td>
-          <td width="40%" align="right"> <a accesskey="n" href="db_copy.html">Next</a></td>
+          <td width="40%" align="right"> <a accesskey="n" href="dbconvert.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;close() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;close()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> db_copy</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;convert()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

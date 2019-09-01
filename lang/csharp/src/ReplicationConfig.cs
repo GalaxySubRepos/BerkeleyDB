@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2009, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 using System;
@@ -78,12 +78,25 @@ namespace BerkeleyDB {
         /// same value for this parameter.
         /// </summary>
         public bool Strict2Site;
+	/// <summary>
+	/// If true, then prevents the use of poll() for polling network events
+	/// </summary>
+	public bool DisablePoll;
+        /// <summary>
+        /// If true, then prevents the use of SSL for securing messages shared
+        /// between nodes of a replication group.
+        /// </summary>
+        public bool DisableSSL;
         /// <summary>
         /// If true, Replication Manager automatically runs elections to
         /// choose a new master when the old master appears to
         /// have become disconnected (defaults to true).
         /// </summary>
         public bool Elections;
+	/// <summary>
+	/// If true, then forces the use of Epoll for polling of network events
+	/// </summary>
+	public bool EnableEpoll;
         /// <summary>
         /// This flag is used to specify the preferred master site in a
         /// replication group operating in preferred master mode. A preferred

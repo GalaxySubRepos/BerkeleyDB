@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2014, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -97,6 +97,8 @@ proc repmgr043_continuous { method niter tnum txnsite downopt largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -108,7 +110,7 @@ proc repmgr043_continuous { method niter tnum txnsite downopt largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.ct.a: Start preferred master site."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrprefmasmaster on}
@@ -117,7 +119,7 @@ proc repmgr043_continuous { method niter tnum txnsite downopt largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.ct.b: Start client site."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}
@@ -250,6 +252,8 @@ proc repmgr043_conflicting { method niter tnum firstsite moredata largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -262,7 +266,7 @@ proc repmgr043_conflicting { method niter tnum firstsite moredata largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.cf.a: Start preferred master site."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrprefmasmaster on}
@@ -271,7 +275,7 @@ proc repmgr043_conflicting { method niter tnum firstsite moredata largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.cf.b: Start client site."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}
@@ -438,6 +442,8 @@ proc repmgr043_parallelgen { method niter tnum largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -449,7 +455,7 @@ proc repmgr043_parallelgen { method niter tnum largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.pg.a: Start preferred master site."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrprefmasmaster on}
@@ -458,7 +464,7 @@ proc repmgr043_parallelgen { method niter tnum largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.pg.b: Start client site."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}
@@ -596,6 +602,8 @@ proc repmgr043_extralog { method niter tnum commitopt largs } {
 		set verbargs " -verbose {$verbose_type on} "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports $nsites]
@@ -610,7 +618,7 @@ proc repmgr043_extralog { method niter tnum commitopt largs } {
 	file mkdir $clientdir
 
 	puts "\tRepmgr$tnum.el.a: Start preferred master site."
-	set ma_envcmd "berkdb_env_noerr -create $verbargs \
+	set ma_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx MASTER -home $masterdir -txn -rep -thread"
 	set masterenv [eval $ma_envcmd]
 	$masterenv rep_config {mgrprefmasmaster on}
@@ -620,7 +628,7 @@ proc repmgr043_extralog { method niter tnum commitopt largs } {
 	await_expected_master $masterenv
 
 	puts "\tRepmgr$tnum.el.b: Start client site."
-	set cl_envcmd "berkdb_env_noerr -create $verbargs \
+	set cl_envcmd "berkdb_env_noerr -create $verbargs $sslargs \
 	    -errpfx CLIENT -home $clientdir -txn -rep -thread"
 	set clientenv [eval $cl_envcmd]
 	$clientenv rep_config {mgrprefmasclient on}

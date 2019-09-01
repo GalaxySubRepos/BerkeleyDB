@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$ 
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 // File: ExampleDatabaseRead
@@ -21,13 +20,14 @@ import com.sleepycat.db.OperationStatus;
 import com.sleepycat.db.SecondaryCursor;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class ExampleDatabaseRead {
 
     private static String myDbsPath = "./";
 
     // Encapsulates the database environment and databases.
-    private static MyDbs myDbs = new MyDbs();
+    private static final MyDbs myDbs = new MyDbs();
 
     private static TupleBinding inventoryBinding;
     private static EntryBinding vendorBinding;
@@ -64,7 +64,7 @@ public class ExampleDatabaseRead {
         // Setup our bindings.
         inventoryBinding = new InventoryBinding();
         vendorBinding =
-             new SerialBinding(myDbs.getClassCatalog(),
+             new SerialBinding<>(myDbs.getClassCatalog(),
                                Vendor.class);
 
         if (locateItem != null) {
@@ -106,7 +106,7 @@ public class ExampleDatabaseRead {
                 retVal = secCursor.getNextDup(searchKey, foundKey,
                     foundData, LockMode.DEFAULT);
             }
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException | DatabaseException e) {
             System.err.println("Error on inventory secondary cursor:");
             System.err.println(e.toString());
             e.printStackTrace();
@@ -191,10 +191,10 @@ public class ExampleDatabaseRead {
             if (args[i].startsWith("-")) {
                 switch(args[i].charAt(1)) {
                     case 'h':
-                        myDbsPath = new String(args[++i]);
+                        myDbsPath = args[++i];
                         break;
                     case 's':
-                        locateItem = new String(args[++i]);
+                        locateItem = args[++i];
                     break;
                     default:
                         usage();

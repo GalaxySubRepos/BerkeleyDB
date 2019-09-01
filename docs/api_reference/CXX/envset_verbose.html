@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_verbose()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_verbose()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_tmp_dir.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_verbose"></a>DbEnv::set_verbose()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_verbose"></a>
+        
+        <span>DbEnv::set_verbose()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -47,7 +53,10 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
          informational and debugging messages in the Berkeley DB message output
          on and off.  To see the additional messages, verbose messages must
          also be configured for the application.  For more information on
-         verbose messages, see the <a class="xref" href="envset_msgfile.html" title="DbEnv::set_msgfile()">DbEnv::set_msgfile()</a> 
+         verbose messages, see the <a class="xref" href="envset_msgfile.html" title="DbEnv::set_msgfile()">
+        
+        <span>DbEnv::set_msgfile()</span>
+    </a> 
          method.
     </p>
       <p>
@@ -86,7 +95,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811256448"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176768548528"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -94,7 +103,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811255104"></a>which</h4>
+                <h4 class="title"><a id="idm140176768548016"></a>which</h4>
               </div>
             </div>
           </div>
@@ -154,7 +163,10 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
                 <p>
                  Display additional information concerning support for the 
                  <a class="link" href="envopen.html#envopen_DB_REGISTER">DB_REGISTER</a>  flag to
-                 the <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> 
+                 the <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> 
                  method.
             </p>
               </li>
@@ -236,6 +248,33 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
             </p>
               </li>
               <li>
+                <p><a id="set_verbose_DB_VERB_REPMGR_SSL_ALL"></a>
+                  <code class="literal">DB_VERB_REPMGR_SSL_ALL</code>
+            </p>
+                <p>
+                 Display detailed information about all Replication Manager 
+                 SSL processing.
+            </p>
+              </li>
+              <li>
+                <p><a id="set_verbose_DB_VERB_REPMGR_SSL_CONN"></a>
+                  <code class="literal">DB_VERB_REPMGR_SSL_CONN</code>
+            </p>
+                <p>
+                 Display detailed information about Replication Manager SSL connection 
+                 setup (connect and accept) and shutdown processing.
+            </p>
+              </li>
+              <li>
+                <p><a id="set_verbose_DB_VERB_REPMGR_SSL_IO"></a>
+                 <code class="literal">DB_VERB_REPMGR_SSL_IO</code>
+            </p>
+                <p>
+                 Display detailed information about Replication Manager 
+                 SSL connection IO (reads and writes).
+            </p>
+              </li>
+              <li>
                 <p><a id="set_verbose_DB_VERB_SLICE"></a>
                   <code class="literal">DB_VERB_SLICE</code>
             </p>
@@ -258,7 +297,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811237392"></a>onoff</h4>
+                <h4 class="title"><a id="idm140176768530320"></a>onoff</h4>
               </div>
             </div>
           </div>
@@ -272,7 +311,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811239808"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176768549680"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -290,7 +329,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811206176"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176768560464"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -303,7 +342,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811218208"></a>Class</h3>
+              <h3 class="title"><a id="idm140176768522912"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -315,7 +354,7 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811238944"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176768509168"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -335,11 +374,17 @@ DbEnv::set_verbose(u_int32_t which, int onoff); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="envstat.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_tmp_dir() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_tmp_dir()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::stat_print()</span>
+    </td>
         </tr>
       </table>
     </div>

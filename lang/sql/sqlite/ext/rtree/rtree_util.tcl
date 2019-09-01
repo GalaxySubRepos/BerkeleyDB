@@ -1,3 +1,9 @@
+# Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+# reserved.
+# 
+# This copyrighted work includes portions of SQLite received 
+# with the following notice:
+#
 # 2008 Feb 19
 #
 # The author disclaims copyright to this source code.  In place of

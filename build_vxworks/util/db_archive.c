@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -51,9 +51,10 @@ db_archive_main(argc, argv)
 	if ((ret = __db_util_version_check(progname)) != 0)
 		return (ret);
 
+	COMPQUIET(verbose, 0);
+	
 	dbenv = NULL;
 	flags = 0;
-	verbose = 0;
 	exitval = EXIT_SUCCESS;
 	home = msgpfx = passwd = NULL;
 	file = list = NULL;
@@ -77,7 +78,7 @@ db_archive_main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname,
- 			    optarg, &passwd) != 0)
+			    optarg, &passwd) != 0)
 				goto err;
 			break;
 		case 's':

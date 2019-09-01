@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -92,6 +92,8 @@ proc rep096_sub { method niter tnum logset recargs largs } {
 		set repmemargs "-rep_inmem_files "
 	}
 
+	set sslargs [setup_repmgr_sslargs]
+
 	env_cleanup $testdir
 
 	set masterdir $testdir/MASTERDIR
@@ -124,6 +126,8 @@ proc rep096_sub { method niter tnum logset recargs largs } {
 	set nsites 2
 	replicate_make_config $masterdir 0 100
 	replicate_make_config $clientdir 1 1
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
 
 	#
 	# Open a master and a client, but only with -rep.  Note that we need
@@ -133,12 +137,13 @@ proc rep096_sub { method niter tnum logset recargs largs } {
 	set env_cmd(M) "berkdb_env_noerr -create -log_max 1000000 \
 	    -lock_max_objects $max_locks -lock_max_locks $max_locks \
 	    -home $masterdir -errpfx MASTER $verbargs $repmemargs \
-	    $m_txnargs $m_logargs -rep -thread"
+	    $sslargs $m_txnargs $m_logargs -rep -thread"
 	set masterenv [eval $env_cmd(M) $recargs]
 
 	set env_cmd(C) "berkdb_env_noerr -create $c_txnargs $c_logargs \
 	    -lock_max_objects $max_locks -lock_max_locks $max_locks \
-	    -home $clientdir -errpfx CLIENT $verbargs $repmemargs -rep -thread"
+	    -home $clientdir -errpfx CLIENT $verbargs $repmemargs \
+	    $sslargs -rep -thread"
 	set clientenv [eval $env_cmd(C) $recargs]
 
 	#

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB-&gt;close()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB-&gt;close()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbassociate_foreign.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbclose"></a>DB-&gt;close()</h2>
+            <h2 class="title" style="clear: both"><a id="dbclose"></a>
+        <span>DB-&gt;close()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -67,7 +73,10 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
       <p>
          Because key/data pairs are cached in memory, applications should
          make a point to always either close database handles or sync their
-         data to disk (using the <a class="xref" href="dbsync.html" title="DB-&gt;sync()">DB-&gt;sync()</a> 
+         data to disk (using the <a class="xref" href="dbsync.html" title="DB-&gt;sync()">
+        <span>DB-&gt;sync()</span>
+        
+    </a> 
          method) before exiting, to ensure that any data cached in main memory are
          reflected in the underlying file system.
     </p>
@@ -106,7 +115,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815238306912"></a>DB_LOCK_DEADLOCK</h4>
+              <h4 class="title"><a id="idm140113490853040"></a>DB_LOCK_DEADLOCK</h4>
             </div>
           </div>
         </div>
@@ -119,7 +128,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815238199248"></a>DB_LOCK_NOTGRANTED</h4>
+              <h4 class="title"><a id="idm140113490686912"></a>DB_LOCK_NOTGRANTED</h4>
             </div>
           </div>
         </div>
@@ -131,7 +140,10 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
       </div>
@@ -139,7 +151,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h4 class="title"><a id="idm139815238165504"></a>EINVAL</h4>
+              <h4 class="title"><a id="idm140113490887552"></a>EINVAL</h4>
             </div>
           </div>
         </div>
@@ -152,7 +164,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238169472"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113490677936"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -160,7 +172,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238169088"></a>flags</h4>
+                <h4 class="title"><a id="idm140113490677552"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -207,7 +219,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238159088"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113490674288"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -223,7 +235,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238136304"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113490652816"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -238,7 +250,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238158480"></a>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140113490670288"></a>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -251,7 +263,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238130752"></a>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140113490675408"></a>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -263,7 +275,10 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">DB-&gt;set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="DB-&gt;set_lk_exclusive()">
+        <span>DB-&gt;set_lk_exclusive()</span>
+        
+    </a>
                 for more information.
             </p>
         </div>
@@ -271,7 +286,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815238147616"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140113490672048"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -285,7 +300,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238188896"></a>Class</h3>
+              <h3 class="title"><a id="idm140113490666976"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -297,7 +312,7 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815238143408"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113490669904"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -317,11 +332,17 @@ DB-&gt;close(DB *db, u_int32_t flags);  </pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbcompact.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB-&gt;associate_foreign() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB-&gt;associate_foreign()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB-&gt;compact()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB-&gt;compact()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

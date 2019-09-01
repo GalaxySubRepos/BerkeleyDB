@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2006, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -342,7 +342,7 @@ __memp_add_bucket(dbmp)
 	MPOOL *mp;
 	u_int32_t high_mask, new_bucket, old_bucket;
 
-	env = dbmp->env;
+	COMPQUIET(env, dbmp->env);
 	mp = dbmp->reginfo[0].primary;
 
 	new_bucket = mp->nbuckets;
@@ -551,10 +551,11 @@ __memp_resize(dbmp, gbytes, bytes)
 	if (ncache < 1)
 		ncache = 1;
 	else if (ncache > mp->max_nreg) {
+		ret = USR_ERR(env, EINVAL);
 		__db_errx(env, DB_STR_A("3020",
 		    "cannot resize to %lu cache regions: maximum is %lu",
 		    "%lu %lu"), (u_long)ncache, (u_long)mp->max_nreg);
-		return (EINVAL);
+		return (ret);
 	}
 
 	ret = 0;

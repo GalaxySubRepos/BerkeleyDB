@@ -1,22 +1,22 @@
 diff -r fff253f6cfea SQLite.Interop/src/contrib/extension-functions.c
 --- SQLite.Interop/src/contrib/extension-functions.c	Tue Apr 15 16:41:07 2014 +0800
 +++ SQLite.Interop/src/contrib/extension-functions.c	Tue Apr 15 17:13:26 2014 +0800
-@@ -126,7 +126,13 @@
+@@ -128,7 +128,13 @@
  
  #if !defined(_WIN32_WCE) || defined(HAVE_ERRNO_H)
- #include <errno.h>		/* LMH 2007-03-25 */
+ #  include <errno.h>		/* LMH 2007-03-25 */
 +#if defined(_WIN32_WCE)
 +#include "dbinc/globals.h"
-+#define	strerror	__db_Cstrerror
++# define	strerror	__db_Cstrerror
 +extern char *strerror(int errnum);
 +#endif
- #else
+ #elif defined(_WIN32)
 +#undef errno
  int errno;
- #define strerror(x)		""
- #endif
-@@ -141,8 +147,8 @@
- 
+ #  define strerror(x)		""
+ #else
+@@ -144,8 +150,8 @@
+ #if defined(_WIN32)
  typedef signed char int8_t;
  typedef unsigned char uint8_t;
 -typedef signed int int16_t;
@@ -26,20 +26,18 @@ diff -r fff253f6cfea SQLite.Interop/src/contrib/extension-functions.c
  typedef signed long int int32_t;
  typedef unsigned long int uint32_t;
  typedef signed long long int int64_t;
-diff -r fff253f6cfea SQLite.Interop/src/win/interop.c
---- SQLite.Interop/src/win/interop.c	Tue Apr 15 16:41:07 2014 +0800
-+++ SQLite.Interop/src/win/interop.c	Tue Apr 15 17:13:26 2014 +0800
-@@ -43,9 +43,6 @@
+diff -r fff253f6cfea SQLite.Interop/src/generic/interop.c
+--- SQLite.Interop/src/generic/interop.c	Tue Apr 15 16:41:07 2014 +0800
++++ SQLite.Interop/src/generic/interop.c	Tue Apr 15 17:13:26 2014 +0800
+@@ -48,7 +48,6 @@
+ #else
+ #define INTEROP_CODEC_GET_PAGER(a,b,c) sqlite3PagerGet(a,b,c)
+ #endif
+-#include "../win/crypt.c"
  #endif
  
- #if defined(SQLITE_OS_WIN)
--#if defined(INTEROP_CODEC) && !defined(INTEROP_INCLUDE_SEE)
--#include "crypt.c"
--#endif
- 
  #include "interop.h"
- 
-@@ -932,7 +929,7 @@
+@@ -983,7 +982,7 @@
    int ret = -1; /* NOT FOUND */
  
    if (!p || !db) return ret;
@@ -47,8 +45,8 @@ diff -r fff253f6cfea SQLite.Interop/src/win/interop.c
 + /* sqlite3_mutex_enter(db->mutex);
    for (n = 0; n < p->nCursor && p->apCsr[n] != NULL; n++)
    {
-     if (p->apCsr[n]->isTable == FALSE) continue;
-@@ -944,7 +941,7 @@
+     if (p->apCsr[n]->isTable == 0) continue;
+@@ -999,7 +997,7 @@
      }
    }
    sqlite3_mutex_leave(db->mutex);
@@ -60,8 +58,8 @@ diff -r fff253f6cfea SQLite.Interop/src/win/interop.c
 diff -r fff253f6cfea System.Data.SQLite/SQLiteConnection.cs
 --- System.Data.SQLite/SQLiteConnection.cs	Tue Apr 15 16:41:07 2014 +0800
 +++ System.Data.SQLite/SQLiteConnection.cs	Tue Apr 15 17:13:26 2014 +0800
-@@ -2680,14 +2680,14 @@
-                       cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA max_page_count={0}", intValue);
+@@ -3943,14 +3943,14 @@
+                       cmd.CommandText = HelperMethods.StringFormat(CultureInfo.InvariantCulture, "PRAGMA max_page_count={0}", intValue);
                        cmd.ExecuteNonQuery();
                    }
 -
@@ -69,7 +67,7 @@ diff -r fff253f6cfea System.Data.SQLite/SQLiteConnection.cs
 -                  boolValue = SQLiteConvert.ToBoolean(strValue);
 -                  if (boolValue != DefaultLegacyFormat)
 -                  {
--                      cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA legacy_file_format={0}", boolValue ? "ON" : "OFF");
+-                      cmd.CommandText = HelperMethods.StringFormat(CultureInfo.InvariantCulture, "PRAGMA legacy_file_format={0}", boolValue ? "ON" : "OFF");
 -                      cmd.ExecuteNonQuery();
 -                  }
 +                  // DBSQL does not support "PRAGMA legacy_file_format", ignore this operation.
@@ -77,20 +75,32 @@ diff -r fff253f6cfea System.Data.SQLite/SQLiteConnection.cs
 +                  // boolValue = SQLiteConvert.ToBoolean(strValue);
 +                  // if (boolValue != DefaultLegacyFormat)
 +                  // {
-+                  //    cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA legacy_file_format={0}", boolValue ? "ON" : "OFF");
++                  //    cmd.CommandText = HelperMethods.StringFormat(CultureInfo.InvariantCulture, "PRAGMA legacy_file_format={0}", boolValue ? "ON" : "OFF");
 +                  //    cmd.ExecuteNonQuery();
 +                  // }
  
                    strValue = FindKey(opts, "Synchronous", DefaultSynchronous.ToString());
                    enumValue = TryParseEnum(typeof(SQLiteSynchronousEnum), strValue, true);
-@@ -2709,8 +2709,9 @@
+@@ -3972,15 +3972,15 @@
                    enumValue = TryParseEnum(typeof(SQLiteJournalModeEnum), strValue, true);
                    if (!(enumValue is SQLiteJournalModeEnum) || ((SQLiteJournalModeEnum)enumValue != DefaultJournalMode))
                    {
--                      cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA journal_mode={0}", strValue);
+-                      string pragmaStr = "PRAGMA journal_mode={0}";
++                      // string pragmaStr = "PRAGMA journal_mode={0}";
+ 
+-#if INTEROP_INCLUDE_ZIPVFS
+-                      if (useZipVfs)
+-                          pragmaStr = "PRAGMA zipvfs_journal_mode={0}";
+-#endif
+-
+-                      cmd.CommandText = HelperMethods.StringFormat(CultureInfo.InvariantCulture, pragmaStr, strValue);
 -                      cmd.ExecuteNonQuery();
++// #if INTEROP_INCLUDE_ZIPVFS
++                      // if (useZipVfs)
++                      //     pragmaStr = "PRAGMA zipvfs_journal_mode={0}";
++// #endif
 +                      // DBSQL does not support "PRAGMA journal_mode", ignore this operation.
-+                      // cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA journal_mode={0}", strValue);
++                      // cmd.CommandText = HelperMethods.StringFormat(CultureInfo.InvariantCulture, pragmaStr, strValue);
 +                      // cmd.ExecuteNonQuery();
                    }
  
@@ -103,7 +113,7 @@ diff -r fff253f6cfea test/TestCases.cs
      }
  
 -    [Test(Sequence = 60)]
-+    // Skip below test due to difference between SQLite and DBSQL."
++    // Skip below test due to difference between SQLite and DBSQL.
 +    // [Test(Sequence = 60)]
      internal void LockTest()
      {
@@ -113,7 +123,7 @@ diff -r fff253f6cfea test/TestCases.cs
      }
  
 -    [Test(Sequence=11)]
-+    // Skip below test due to difference between SQLite and DBSQL."
++    // Skip below test due to difference between SQLite and DBSQL.
 +    // [Test(Sequence=11)]
      internal void MultithreadingTest()
      {

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::repmgr_stat()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::repmgr_stat()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repmgrstart.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repmgrstat"></a>DbEnv::repmgr_stat()</h2>
+            <h2 class="title" style="clear: both"><a id="repmgrstat"></a>
+        
+        <span>DbEnv::repmgr_stat()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -53,7 +59,10 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
     </p>
       <p>
          Statistical structures are stored in allocated memory.  If application-specific allocation
-         routines have been declared (see <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">DbEnv::set_alloc()</a> 
+         routines have been declared (see <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">
+        
+        <span>DbEnv::set_alloc()</span>
+    </a> 
          for more information), they are used to allocate the memory; otherwise, the standard
          C library <span class="bold"><strong>malloc</strong></span>(3) is used.  The caller is responsible
          for deallocating the memory.  To deallocate the memory, free the memory reference;
@@ -87,6 +96,16 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
                 </p>
             <p>
                     The number of currently active election threads.
+                </p>
+          </li>
+          <li>
+            <p>
+                    <span class="bold"><strong>u_int32_t st_group_stable_log_file;</strong></span>
+                </p>
+            <p>
+                    The earliest log file which is still needed by at least
+                    one site in the replication group and should not yet be
+                    archived.
                 </p>
           </li>
           <li>
@@ -177,6 +196,15 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           </li>
           <li>
             <p>
+                <span class="bold"><strong>u_int32_t st_polling_method;</strong></span>
+            </p>
+            <p>
+                Replication manager polling method. Its value is one for select(), two
+                for poll() and three for epoll().
+            </p>
+          </li>
+          <li>
+            <p>
                     <span class="bold"><strong>u_int32_t st_site_views;</strong></span>
                 </p>
             <p>
@@ -213,7 +241,10 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
       </div>
       <p>
          The <code class="methodname">DbEnv::repmgr_stat()</code> method may not be called before the
-         <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+         <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DbEnv::repmgr_stat()</code> <span>
@@ -229,7 +260,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806940144"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176764143088"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -237,7 +268,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806937936"></a>statp</h4>
+                <h4 class="title"><a id="idm140176764120480"></a>statp</h4>
               </div>
             </div>
           </div>
@@ -250,7 +281,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806931056"></a>flags</h4>
+                <h4 class="title"><a id="idm140176764180560"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -276,7 +307,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806953456"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176764087504"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -294,12 +325,15 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703806907456"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176764073040"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called before <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> 
+                If the method was called before <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -308,7 +342,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806913536"></a>Class</h3>
+              <h3 class="title"><a id="idm140176764079120"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -320,7 +354,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703806946672"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176764123168"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -340,11 +374,17 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="repmgrstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::repmgr_start() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::repmgr_start()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::repmgr_stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::repmgr_stat_print()</span>
+    </td>
         </tr>
       </table>
     </div>

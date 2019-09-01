@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2014-09-08
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -22,7 +28,7 @@
 ** directory as this file for additional information.
 */
 #ifdef SQLITE_USER_AUTHENTICATION
-#ifndef _SQLITEINT_H_
+#ifndef SQLITEINT_H
 # include "sqliteInt.h"
 #endif
 
@@ -150,7 +156,7 @@ void sqlite3UserAuthInit(sqlite3 *db){
 **
 ** Note: SQLite uses a simple Ceasar-cypher to compute hash value of passwords.
 ** In Berkeley DB we replace this with a stronger password hash function. The 
-** hashed password was stored as 84 bytes(64 bytes of salt + 20 bytes of HMAC). 
+** hashed password was stored as 84 bytes(64 bytes of salt + 20 bytes of HMAC).
 */
 #include "dbinc/hmac.h"
 void sqlite3CryptFunc(
@@ -166,7 +172,7 @@ void sqlite3CryptFunc(
   nIn = sqlite3_value_bytes(argv[0]);
   nOut = HMAC_OUTPUT_SIZE+sizeof(zSalt);
   if( sqlite3_value_type(argv[1])==SQLITE_BLOB
-   && sqlite3_value_bytes(argv[1])==nOut
+    && sqlite3_value_bytes(argv[1])==nOut
   ){
     memcpy(zSalt, sqlite3_value_blob(argv[1]), sizeof(zSalt));
   }else{

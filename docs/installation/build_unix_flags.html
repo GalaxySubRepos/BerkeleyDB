@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="gettingStarted.css" type="text/css" />
     <meta name="generator" content="DocBook XSL Stylesheets V1.73.2" />
     <link rel="start" href="index.html" title="Berkeley DB Installation and Build Guide" />
-    <link rel="up" href="build_unix.html" title="Chapter 7.  Building Berkeley DB for UNIX/POSIX" />
+    <link rel="up" href="build_unix.html" title="Chapter 6.  Building Berkeley DB for UNIX/POSIX" />
     <link rel="prev" href="build_unix_small.html" title="Building a small memory footprint library" />
     <link rel="next" href="cross_compile_unix.html" title="Cross-Compiling on Unix" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -23,7 +23,7 @@
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="build_unix_small.html">Prev</a> </td>
-          <th width="60%" align="center">Chapter 7.  Building Berkeley DB for UNIX/POSIX
+          <th width="60%" align="center">Chapter 6.  Building Berkeley DB for UNIX/POSIX
     </th>
           <td width="20%" align="right"> <a accesskey="n" href="cross_compile_unix.html">Next</a></td>
         </tr>
@@ -68,6 +68,13 @@
         compiler, use the CXXFLAGS environment variable: 
     </p>
       <pre class="programlisting">prompt: env CXXFLAGS=-Woverloaded-virtual ../dist/configure</pre>
+      <p> 
+        To specify support for the C11/C++11 standards, use the 
+        CFLAGS and CXXFLAGS environment variables: 
+    </p>
+      <pre class="programlisting">prompt: env CFLAGS="-std=c11" ../dist/configure</pre>
+      <p>or</p>
+      <pre class="programlisting">prompt: env CFLAGS="-std=c11" CXXFLAGS="-std=c++11" ../dist/configure</pre>
       <p>
         To specify miscellaneous options or additional library
         directories for the linker, use the LDFLAGS environment

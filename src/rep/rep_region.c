@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -9,6 +9,7 @@
 #include "db_config.h"
 
 #include "db_int.h"
+#include "dbinc/blob.h"
 #include "dbinc/db_page.h"
 #include "dbinc/db_am.h"
 
@@ -150,6 +151,7 @@ __rep_open(env)
 		timespecclear(&rep->grant_expire);
 		rep->chkpt_delay = db_rep->chkpt_delay;
 		rep->priority = db_rep->my_priority;
+		rep->initsites = env->dbenv->rep_init_sites;
 
 		if ((ret = __rep_lockout_archive(env, rep)) != 0)
 			return (ret);
@@ -766,4 +768,104 @@ __rep_viewfile_exists(env, existp)
 	__os_free(env, p);
 	return (ret);
 
+}
+
+/*
+ * __rep_object_size --
+ *	Return the initial amount of space needed for the rep objects in
+ *	the main environment region.  This includes:
+ *	    The database file list for internal init (originfo, curinfo)
+ *	    The vote1 and vote2 tally areas for elections (tally, v2tally)
+ *	    The lease grant table for a client when master leases are in use
+ *	    Information about each site managed by Replication Manager
+ *
+ * PUBLIC: size_t __rep_object_size __P((ENV *));
+ */
+size_t
+__rep_object_size(env)
+	ENV *env;
+{
+	DB_ENV *dbenv;
+	size_t blobdirlen, gendirsize, s, uidsize;
+	u_int32_t dblenval, dbval, extfiledbval, siteval;
+
+	dbenv = env->dbenv;
+	s = 0;
+	blobdirlen = 0;
+	uidsize = DB_FILE_ID_LEN * sizeof(u_int8_t);
+
+	/* Use default values for any types the user didn't set. */
+	if ((dbval = dbenv->db_init_databases) == 0)
+		dbval = 10;
+	if ((dblenval = dbenv->db_init_db_len) == 0)
+		dblenval = 50;
+	/* Default for external file databases is 0. */
+	extfiledbval = dbenv->db_init_extfile_dbs;
+	if ((siteval = dbenv->rep_init_sites) == 0)
+		siteval = 5;
+
+	/*
+	 * Calculate size for internal init list of databases.  This
+	 * list is stored in originfo and we add an additional database
+	 * each for curinfo and the rep system database.
+	 *
+	 * For each database, we calculate the size of its structures,
+	 * the database directory/name string and one separator.
+	 */
+	s += (dbval + 2) *
+	    (sizeof(__rep_fileinfo_args) + uidsize + 1 + dblenval);
+
+	/*
+	 * Calculate size external file blob metadatabases (BMDs), if any.
+	 * We add an additional BMD for the top-level BMD that is always
+	 * present.  BMDs are stored in the external file directory
+	 * dbenv->db_blob_dir, which must be configured before opening
+	 * the environment.
+	 *
+	 * Each BMD uses the same name and is placed in a different
+	 * generated directory.  There can be up to two levels of
+	 * generated directory in the format __db######...  We use 6
+	 * digits for our generated directory name estimate.
+	 *
+	 * For each BMD, we calculate the size of its structures,
+	 * add the external file directory, generated directories,
+	 * 3 separators, and fixed BMD name string.
+	 */
+	if (extfiledbval > 0) {
+		if (dbenv->db_blob_dir != NULL)
+			blobdirlen = strlen(dbenv->db_blob_dir);
+		gendirsize = 2 * (strlen(BLOB_DIR_PREFIX) + 6);
+		s += (extfiledbval + 1) *
+		    (sizeof(__rep_fileinfo_args) + uidsize + blobdirlen +
+		    gendirsize + 3 + strlen(BLOB_META_FILE_NAME));
+	}
+
+	/*
+	 * Calculate size for base replication lease table and V1/V2
+	 * vote tally areas.
+	 */
+	s += siteval * ((2 * sizeof(REP_VTALLY)) + sizeof(REP_LEASE_ENTRY));
+
+#ifdef HAVE_REPLICATION_THREADS
+	/*
+	 * Calculate size for repmgr site structures.  Use default of
+	 * 50 characters for hostname.
+	 */
+	s += siteval * (sizeof(SITEINFO) + 50);
+#endif
+	return (s);
+}
+
+/*
+ * __rep_object_max --
+ *	Return how much additional memory to allow in the environment region
+ *	so that all rep-specific data structures can be allocated.
+ *
+ * PUBLIC: size_t __rep_object_max __P((ENV *));
+ */
+size_t
+__rep_object_max(env)
+	ENV *env;
+{
+	return (4 * __rep_object_size(env));
 }

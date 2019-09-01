@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file EXAMPLES-LICENSE for license information.
  *
  * ex_thread-- A basic example with multithreaded access.
  *   
@@ -732,6 +732,6 @@ void
 onint(signo)
 	int signo;
 {
-	signo = 0;		/* Quiet compiler. */
+	COMPQUIET(signo, 0);		/* Quiet compiler. */
 	Quit = 1;
 }

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_thread_id()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_thread_id()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_thread_count.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_thread_id"></a>DbEnv::set_thread_id()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_thread_id"></a>
+        
+        <span>DbEnv::set_thread_id()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -47,7 +53,10 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
          Declare a function that returns a unique identifier pair for the
          current thread of control. The
          <code class="methodname">DbEnv::set_thread_id()</code> method supports the
-         <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">DbEnv::failchk()</a>  method.
+         <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">
+        
+        <span>DbEnv::failchk()</span>
+    </a>  method.
          For more information, see 
          <a href="../../programmer_reference/cam_app.html" class="olink">
              Architecting Data Store and Concurrent Data Store applications
@@ -81,7 +90,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811424368"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176768717296"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -89,7 +98,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811424880"></a>thread_id</h4>
+                <h4 class="title"><a id="idm140176768716976"></a>thread_id</h4>
               </div>
             </div>
           </div>
@@ -140,7 +149,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811408224"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176768700656"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -158,7 +167,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703811392160"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176768684480"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -171,7 +180,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811395568"></a>Assigning Thread IDs</h3>
+              <h3 class="title"><a id="idm140176768688000"></a>Assigning Thread IDs</h3>
             </div>
           </div>
         </div>
@@ -183,22 +192,34 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
                 care may be necessary in assigning unique IDs. In most threading systems, process and thread IDs are
                 available for re-use as soon as the process or thread exits. If a new process or thread is created
                 between the time of process or thread exit, and the 
-                <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">DbEnv::failchk()</a> method is run, it may be possible for 
-                <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">DbEnv::failchk()</a>                    
+                <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">
+        
+        <span>DbEnv::failchk()</span>
+    </a> method is run, it may be possible for 
+                <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">
+        
+        <span>DbEnv::failchk()</span>
+    </a>                    
                 to not detect that a thread of control exited without properly
                 releasing all Berkeley DB resources.
         </p>
         <p>
                 It may be possible to handle this problem by inhibiting process or thread
                 creation between thread of control exit and calling the 
-                <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">DbEnv::failchk()</a>
+                <a class="xref" href="envfailchk.html" title="DbEnv::failchk()">
+        
+        <span>DbEnv::failchk()</span>
+    </a>
                 method.  Alternatively, the <span class="bold"><strong>thread_id</strong></span> function
                 must be constructed to not re-use <span class="bold"><strong>pid/tid</strong></span>
                 pairs. For example, in a single process application, the returned process ID
                 might be used as an incremental counter, with the returned thread ID set to the
                 actual thread ID.  Obviously, the <span class="bold"><strong>is_alive</strong></span>
                 function specified to the 
-                <a class="xref" href="envset_isalive.html" title="DbEnv::set_isalive()">DbEnv::set_isalive()</a> 
+                <a class="xref" href="envset_isalive.html" title="DbEnv::set_isalive()">
+        
+        <span>DbEnv::set_isalive()</span>
+    </a> 
                 method must be compatible with any
                 <span class="bold"><strong>thread_id</strong></span> function specified to
                 <code class="methodname">DbEnv::set_thread_id()</code>.
@@ -234,7 +255,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811406512"></a>Class</h3>
+              <h3 class="title"><a id="idm140176768697344"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -246,7 +267,7 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703811417744"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176768717808"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -266,11 +287,17 @@ DbEnv::set_thread_id(void (*thread_id)(DbEnv *dbenv,
           <td width="40%" align="right"> <a accesskey="n" href="envset_thread_id_string.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_thread_count() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_thread_count()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_thread_id_string()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_thread_id_string()</span>
+    </td>
         </tr>
       </table>
     </div>

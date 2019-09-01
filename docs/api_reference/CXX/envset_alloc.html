@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_alloc()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_alloc()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envremove.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_alloc"></a>DbEnv::set_alloc()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_alloc"></a>
+        
+        <span>DbEnv::set_alloc()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -64,15 +70,36 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
          reallocate memory which then becomes the responsibility of the calling
          application.  Other examples are the Berkeley DB interfaces
          which return statistical information to the application: 
-         <a class="xref" href="dbstat.html" title="Db::stat()">Db::stat()</a>, 
-         <a class="xref" href="lockstat.html" title="DbEnv::lock_stat()">DbEnv::lock_stat()</a>, 
-         <a class="xref" href="logarchive.html" title="DbEnv::log_archive()">DbEnv::log_archive()</a>, 
-         <a class="xref" href="logstat.html" title="DbEnv::log_stat()">DbEnv::log_stat()</a>, 
-         <a class="xref" href="mempstat.html" title="DbEnv::memp_stat()">DbEnv::memp_stat()</a>, and 
-         <a class="xref" href="txnstat.html" title="DbEnv::txn_stat()">DbEnv::txn_stat()</a>.  There is
+         <a class="xref" href="dbstat.html" title="Db::stat()">
+        
+        <span>Db::stat()</span>
+    </a>, 
+         <a class="xref" href="lockstat.html" title="DbEnv::lock_stat()">
+        
+        <span>DbEnv::lock_stat()</span>
+    </a>, 
+         <a class="xref" href="logarchive.html" title="DbEnv::log_archive()">
+        
+        <span>DbEnv::log_archive()</span>
+    </a>, 
+         <a class="xref" href="logstat.html" title="DbEnv::log_stat()">
+        
+        <span>DbEnv::log_stat()</span>
+    </a>, 
+         <a class="xref" href="mempstat.html" title="DbEnv::memp_stat()">
+        
+        <span>DbEnv::memp_stat()</span>
+    </a>, and 
+         <a class="xref" href="txnstat.html" title="DbEnv::txn_stat()">
+        
+        <span>DbEnv::txn_stat()</span>
+    </a>.  There is
          one method in Berkeley DB where memory is allocated by the application
          and then given to the library: the callback specified to
-         <a class="xref" href="dbassociate.html" title="Db::associate()">Db::associate()</a>.
+         <a class="xref" href="dbassociate.html" title="Db::associate()">
+        
+        <span>Db::associate()</span>
+    </a>.
     </p>
       <p>
          On systems in which there may be multiple library versions of the
@@ -80,7 +107,10 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
          between the library and the application will fail because the Berkeley
          DB library allocates memory from a different heap than the application
          uses to free it.  To avoid this problem, the <code class="methodname">DbEnv::set_alloc()</code> and
-         <a class="xref" href="dbset_alloc.html" title="Db::set_alloc()">Db::set_alloc()</a> 
+         <a class="xref" href="dbset_alloc.html" title="Db::set_alloc()">
+        
+        <span>Db::set_alloc()</span>
+    </a> 
          methods can be used to pass Berkeley DB references to the
          application's allocation routines.
     </p>
@@ -100,7 +130,10 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
     </p>
       <p>
              The <code class="methodname">DbEnv::set_alloc()</code> method may not be called after the 
-             <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+             <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
     </p>
       <p>
          The <code class="methodname">DbEnv::set_alloc()</code> <span>
@@ -116,7 +149,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812393008"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176769710432"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -124,7 +157,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812386592"></a>app_malloc</h4>
+                <h4 class="title"><a id="idm140176769692672"></a>app_malloc</h4>
               </div>
             </div>
           </div>
@@ -137,7 +170,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812357072"></a>app_realloc</h4>
+                <h4 class="title"><a id="idm140176769707888"></a>app_realloc</h4>
               </div>
             </div>
           </div>
@@ -150,7 +183,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812369184"></a>app_free</h4>
+                <h4 class="title"><a id="idm140176769827808"></a>app_free</h4>
               </div>
             </div>
           </div>
@@ -164,7 +197,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812350240"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176769674336"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -182,12 +215,15 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703812335392"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176769659792"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a> 
+                If the method was called after <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a> 
                 was called; or if an invalid flag value or parameter was specified.
             </p>
         </div>
@@ -196,7 +232,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812392080"></a>Class</h3>
+              <h3 class="title"><a id="idm140176769666384"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -208,7 +244,7 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703812347264"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176769671776"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -228,11 +264,17 @@ DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
           <td width="40%" align="right"> <a accesskey="n" href="envset_app_dispatch.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::remove() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::remove()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_app_dispatch()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_app_dispatch()</span>
+    </td>
         </tr>
       </table>
     </div>

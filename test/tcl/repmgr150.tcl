@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -45,6 +45,9 @@ proc repmgr150 { } {
 
 	file mkdir $masterdir
 	file mkdir $clientdir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
 
 	set hoststr [get_hoststr $ipversion]
 	set ports [available_ports 2]
@@ -142,6 +145,9 @@ proc repmgr150 { } {
 
 	file mkdir $masterdir
 	file mkdir $clientdir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
 
 	puts "\tRepmgr$tnum.d: RepMgr can be started with -failchk and -isalive."
 	# Start the master with failchk, isalive, recovery, and register.

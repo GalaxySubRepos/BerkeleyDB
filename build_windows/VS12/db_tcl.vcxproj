@@ -64,7 +64,7 @@
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;DB_TCL_SUPPORT;CONFIG_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb62d.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181d.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_tcl.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -73,7 +73,7 @@
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;DB_TCL_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb62.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_tcl.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -82,7 +82,7 @@
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;DB_TCL_SUPPORT;CONFIG_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb62d.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181d.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_tcl.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -91,7 +91,7 @@
       <PreprocessorDefinitions>DB_CREATE_DLL;_UNICODE;DB_TCL_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libdb62.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libdb181.lib;tcl86.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_tcl.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>

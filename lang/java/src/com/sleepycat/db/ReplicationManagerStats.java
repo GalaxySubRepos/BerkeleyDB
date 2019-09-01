@@ -2,9 +2,9 @@
  * Automatically built by dist/s_java_stat.
  * Only the javadoc comments can be edited.
  *
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 package com.sleepycat.db;
@@ -123,6 +123,15 @@ public class ReplicationManagerStats {
         return st_elect_threads;
     }
 
+    private int st_group_stable_log_file;
+    /**
+    Earliest log file still needed by repgroup.
+    @return earliest log file still needed by repgroup.
+    */
+    public int getGroupStableLogFile() {
+        return st_group_stable_log_file;
+    }
+
     private int st_max_elect_threads;
     /** 
     The number of election threads for which space is reserved.
@@ -157,6 +166,15 @@ public class ReplicationManagerStats {
     */
     public int getSiteViews() {
         return st_site_views;
+    }
+
+    private int st_polling_method;
+    /**
+    Polling method.
+    @return polling method. 1=select, 2=poll, 3=epoll.
+    */
+    public int getPollingMethod() {
+        return st_polling_method;
     }
 
     private long st_takeovers;
@@ -204,10 +222,12 @@ public class ReplicationManagerStats {
             + "\n  st_connection_drop=" + st_connection_drop
             + "\n  st_connect_fail=" + st_connect_fail
             + "\n  st_elect_threads=" + st_elect_threads
+            + "\n  st_group_stable_log_file=" + st_group_stable_log_file
             + "\n  st_max_elect_threads=" + st_max_elect_threads
             + "\n  st_site_participants=" + st_site_participants
             + "\n  st_site_total=" + st_site_total
             + "\n  st_site_views=" + st_site_views
+            + "\n  st_polling_method=" + st_polling_method
             + "\n  st_takeovers=" + st_takeovers
             + "\n  st_write_ops_forwarded=" + st_write_ops_forwarded
             + "\n  st_write_ops_received=" + st_write_ops_received

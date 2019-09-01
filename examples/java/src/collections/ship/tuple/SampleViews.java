@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.tuple;
@@ -26,15 +25,16 @@ import com.sleepycat.collections.StoredSortedValueSet;
  */
 public class SampleViews {
 
-    private StoredSortedMap partMap;
-    private StoredSortedMap supplierMap;
-    private StoredSortedMap shipmentMap;
-    private StoredSortedMap shipmentByPartMap;
-    private StoredSortedMap shipmentBySupplierMap;
-    private StoredSortedMap supplierByCityMap;
+    private final StoredSortedMap<PartKey, Part> partMap;
+    private final StoredSortedMap<SupplierKey, Supplier> supplierMap;
+    private final StoredSortedMap<ShipmentKey, Shipment> shipmentMap;
+    private final StoredSortedMap<PartKey, Shipment> shipmentByPartMap;
+    private final StoredSortedMap<SupplierKey, Shipment> shipmentBySupplierMap;
+    private final StoredSortedMap<String, Supplier> supplierByCityMap;
 
     /**
      * Create the data bindings and collection views.
+     * @param db
      */
     public SampleViews(SampleDatabase db) {
 
@@ -45,19 +45,19 @@ public class SampleViews {
         // the stored tuple entry to a key Object.
         //
         ClassCatalog catalog = db.getClassCatalog();
-        EntryBinding partKeyBinding =
+        EntryBinding<PartKey> partKeyBinding =
             new PartKeyBinding();
-        EntityBinding partDataBinding =
+        EntityBinding<Part> partDataBinding =
             new PartBinding(catalog, PartData.class);
-        EntryBinding supplierKeyBinding =
+        EntryBinding<SupplierKey> supplierKeyBinding =
             new SupplierKeyBinding();
-        EntityBinding supplierDataBinding =
+        EntityBinding<Supplier> supplierDataBinding =
             new SupplierBinding(catalog, SupplierData.class);
-        EntryBinding shipmentKeyBinding =
+        EntryBinding<ShipmentKey> shipmentKeyBinding =
             new ShipmentKeyBinding();
-        EntityBinding shipmentDataBinding =
+        EntityBinding<Shipment> shipmentDataBinding =
             new ShipmentBinding(catalog, ShipmentData.class);
-        EntryBinding cityKeyBinding =
+        EntryBinding<String> cityKeyBinding =
             TupleBinding.getPrimitiveBinding(String.class);
 
         // Create map views for all stores and indices.
@@ -65,22 +65,22 @@ public class SampleViews {
         // (they use the DB_BTREE access method).
         //
         partMap =
-            new StoredSortedMap(db.getPartDatabase(),
+            new StoredSortedMap<>(db.getPartDatabase(),
 				partKeyBinding, partDataBinding, true);
         supplierMap =
-            new StoredSortedMap(db.getSupplierDatabase(),
+            new StoredSortedMap<>(db.getSupplierDatabase(),
 				supplierKeyBinding, supplierDataBinding, true);
         shipmentMap =
-            new StoredSortedMap(db.getShipmentDatabase(),
+            new StoredSortedMap<>(db.getShipmentDatabase(),
 				shipmentKeyBinding, shipmentDataBinding, true);
         shipmentByPartMap =
-            new StoredSortedMap(db.getShipmentByPartDatabase(),
+            new StoredSortedMap<>(db.getShipmentByPartDatabase(),
                                 partKeyBinding, shipmentDataBinding, true);
         shipmentBySupplierMap =
-            new StoredSortedMap(db.getShipmentBySupplierDatabase(),
+            new StoredSortedMap<>(db.getShipmentBySupplierDatabase(),
                                 supplierKeyBinding, shipmentDataBinding, true);
         supplierByCityMap =
-            new StoredSortedMap(db.getSupplierByCityDatabase(),
+            new StoredSortedMap<>(db.getSupplierByCityDatabase(),
                                 cityKeyBinding, supplierDataBinding, true);
     }
 
@@ -93,72 +93,81 @@ public class SampleViews {
 
     /**
      * Return a map view of the part storage container.
+     * @return 
      */
-    public StoredSortedMap getPartMap() {
+    public StoredSortedMap<PartKey, Part> getPartMap() {
 
         return partMap;
     }
 
     /**
      * Return a map view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedMap getSupplierMap() {
+    public StoredSortedMap<SupplierKey, Supplier> getSupplierMap() {
 
         return supplierMap;
     }
 
     /**
      * Return a map view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedMap getShipmentMap() {
+    public StoredSortedMap<ShipmentKey, Shipment> getShipmentMap() {
 
         return shipmentMap;
     }
 
     /**
      * Return an entity set view of the part storage container.
+     * @return 
      */
-    public StoredSortedValueSet getPartSet() {
+    public StoredSortedValueSet<Part> getPartSet() {
 
-        return (StoredSortedValueSet) partMap.values();
+        return (StoredSortedValueSet<Part>) partMap.values();
     }
 
     /**
      * Return an entity set view of the supplier storage container.
+     * @return 
      */
-    public StoredSortedValueSet getSupplierSet() {
+    public StoredSortedValueSet<Supplier> getSupplierSet() {
 
-        return (StoredSortedValueSet) supplierMap.values();
+        return (StoredSortedValueSet<Supplier>) supplierMap.values();
     }
 
     /**
      * Return an entity set view of the shipment storage container.
+     * @return 
      */
-    public StoredSortedValueSet getShipmentSet() {
+    public StoredSortedValueSet<Shipment> getShipmentSet() {
 
-        return (StoredSortedValueSet) shipmentMap.values();
+        return (StoredSortedValueSet<Shipment>) shipmentMap.values();
     }
 
     /**
      * Return a map view of the shipment-by-part index.
+     * @return 
      */
-    public StoredSortedMap getShipmentByPartMap() {
+    public StoredSortedMap<PartKey, Shipment> getShipmentByPartMap() {
 
         return shipmentByPartMap;
     }
 
     /**
      * Return a map view of the shipment-by-supplier index.
+     * @return 
      */
-    public StoredSortedMap getShipmentBySupplierMap() {
+    public StoredSortedMap<SupplierKey, Shipment> getShipmentBySupplierMap() {
 
         return shipmentBySupplierMap;
     }
 
     /**
      * Return a map view of the supplier-by-city index.
+     * @return 
      */
-    public final StoredSortedMap getSupplierByCityMap() {
+    public final StoredSortedMap<String, Supplier> getSupplierByCityMap() {
 
         return supplierByCityMap;
     }
@@ -167,7 +176,7 @@ public class SampleViews {
      * PartKeyBinding is used to bind the stored key tuple entry for a part to
      * a key object representation.
      */
-    private static class PartKeyBinding extends TupleBinding {
+    private static class PartKeyBinding extends TupleBinding<PartKey> {
 
         /**
          * Construct the binding object.
@@ -178,7 +187,8 @@ public class SampleViews {
         /**
          * Create the key object from the stored key tuple entry.
          */
-        public Object entryToObject(TupleInput input) {
+        @Override
+        public PartKey entryToObject(TupleInput input) {
 
             String number = input.readString();
             return new PartKey(number);
@@ -187,10 +197,10 @@ public class SampleViews {
         /**
          * Create the stored key tuple entry from the key object.
          */
-        public void objectToEntry(Object object, TupleOutput output) {
+        @Override
+        public void objectToEntry(PartKey object, TupleOutput output) {
 
-            PartKey key = (PartKey) object;
-            output.writeString(key.getNumber());
+            output.writeString(object.getNumber());
         }
     }
 
@@ -198,12 +208,14 @@ public class SampleViews {
      * PartBinding is used to bind the stored key/data entry pair for a part
      * to a combined data object (entity).
      */
-    private static class PartBinding extends TupleSerialBinding {
+    private static class PartBinding
+            extends TupleSerialBinding<PartData, Part> {
 
         /**
          * Construct the binding object.
          */
-        private PartBinding(ClassCatalog classCatalog, Class dataClass) {
+        private PartBinding
+            (ClassCatalog classCatalog, Class<PartData> dataClass) {
 
             super(classCatalog, dataClass);
         }
@@ -211,31 +223,31 @@ public class SampleViews {
         /**
          * Create the entity by combining the stored key and data.
          */
-        public Object entryToObject(TupleInput keyInput, Object dataInput) {
+        @Override
+        public Part entryToObject(TupleInput keyInput, PartData dataInput) {
 
             String number = keyInput.readString();
-            PartData data = (PartData) dataInput;
-            return new Part(number, data.getName(), data.getColor(),
-                            data.getWeight(), data.getCity());
+            return new Part(number, dataInput.getName(), dataInput.getColor(),
+                            dataInput.getWeight(), dataInput.getCity());
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public void objectToKey(Object object, TupleOutput output) {
+        @Override
+        public void objectToKey(Part object, TupleOutput output) {
 
-            Part part = (Part) object;
-            output.writeString(part.getNumber());
+            output.writeString(object.getNumber());
         }
 
         /**
          * Create the stored data from the entity.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public PartData objectToData(Part object) {
 
-            Part part = (Part) object;
-            return new PartData(part.getName(), part.getColor(),
-                                 part.getWeight(), part.getCity());
+            return new PartData(object.getName(), object.getColor(),
+                                 object.getWeight(), object.getCity());
         }
     }
 
@@ -243,7 +255,7 @@ public class SampleViews {
      * SupplierKeyBinding is used to bind the stored key tuple entry for a
      * supplier to a key object representation.
      */
-    private static class SupplierKeyBinding extends TupleBinding {
+    private static class SupplierKeyBinding extends TupleBinding<SupplierKey> {
 
         /**
          * Construct the binding object.
@@ -254,7 +266,8 @@ public class SampleViews {
         /**
          * Create the key object from the stored key tuple entry.
          */
-        public Object entryToObject(TupleInput input) {
+        @Override
+        public SupplierKey entryToObject(TupleInput input) {
 
             String number = input.readString();
             return new SupplierKey(number);
@@ -263,10 +276,10 @@ public class SampleViews {
         /**
          * Create the stored key tuple entry from the key object.
          */
-        public void objectToEntry(Object object, TupleOutput output) {
+        @Override
+        public void objectToEntry(SupplierKey object, TupleOutput output) {
 
-            SupplierKey key = (SupplierKey) object;
-            output.writeString(key.getNumber());
+            output.writeString(object.getNumber());
         }
     }
 
@@ -274,12 +287,14 @@ public class SampleViews {
      * SupplierBinding is used to bind the stored key/data entry pair for a
      * supplier to a combined data object (entity).
      */
-    private static class SupplierBinding extends TupleSerialBinding {
+    private static class SupplierBinding
+            extends TupleSerialBinding<SupplierData, Supplier> {
 
         /**
          * Construct the binding object.
          */
-        private SupplierBinding(ClassCatalog classCatalog, Class dataClass) {
+        private SupplierBinding(
+                ClassCatalog classCatalog, Class<SupplierData> dataClass) {
 
             super(classCatalog, dataClass);
         }
@@ -287,31 +302,32 @@ public class SampleViews {
         /**
          * Create the entity by combining the stored key and data.
          */
-        public Object entryToObject(TupleInput keyInput, Object dataInput) {
+        @Override
+        public Supplier entryToObject(
+                TupleInput keyInput, SupplierData dataInput) {
 
             String number = keyInput.readString();
-            SupplierData data = (SupplierData) dataInput;
-            return new Supplier(number, data.getName(),
-                                data.getStatus(), data.getCity());
+            return new Supplier(number, dataInput.getName(),
+                                dataInput.getStatus(), dataInput.getCity());
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public void objectToKey(Object object, TupleOutput output) {
+        @Override
+        public void objectToKey(Supplier object, TupleOutput output) {
 
-            Supplier supplier = (Supplier) object;
-            output.writeString(supplier.getNumber());
+            output.writeString(object.getNumber());
         }
 
         /**
          * Create the stored data from the entity.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public SupplierData objectToData(Supplier object) {
 
-            Supplier supplier = (Supplier) object;
-            return new SupplierData(supplier.getName(), supplier.getStatus(),
-                                     supplier.getCity());
+            return new SupplierData(object.getName(), object.getStatus(),
+                                     object.getCity());
         }
     }
 
@@ -319,7 +335,7 @@ public class SampleViews {
      * ShipmentKeyBinding is used to bind the stored key tuple entry for a
      * shipment to a key object representation.
      */
-    private static class ShipmentKeyBinding extends TupleBinding {
+    private static class ShipmentKeyBinding extends TupleBinding<ShipmentKey> {
 
         /**
          * Construct the binding object.
@@ -330,7 +346,8 @@ public class SampleViews {
         /**
          * Create the key object from the stored key tuple entry.
          */
-        public Object entryToObject(TupleInput input) {
+        @Override
+        public ShipmentKey entryToObject(TupleInput input) {
 
             String partNumber = input.readString();
             String supplierNumber = input.readString();
@@ -340,11 +357,11 @@ public class SampleViews {
         /**
          * Create the stored key tuple entry from the key object.
          */
-        public void objectToEntry(Object object, TupleOutput output) {
+        @Override
+        public void objectToEntry(ShipmentKey object, TupleOutput output) {
 
-            ShipmentKey key = (ShipmentKey) object;
-            output.writeString(key.getPartNumber());
-            output.writeString(key.getSupplierNumber());
+            output.writeString(object.getPartNumber());
+            output.writeString(object.getSupplierNumber());
         }
     }
 
@@ -352,12 +369,14 @@ public class SampleViews {
      * ShipmentBinding is used to bind the stored key/data entry pair for a
      * shipment to a combined data object (entity).
      */
-    private static class ShipmentBinding extends TupleSerialBinding {
+    private static class ShipmentBinding
+            extends TupleSerialBinding<ShipmentData, Shipment> {
 
         /**
          * Construct the binding object.
          */
-        private ShipmentBinding(ClassCatalog classCatalog, Class dataClass) {
+        private ShipmentBinding(
+                ClassCatalog classCatalog, Class<ShipmentData> dataClass) {
 
             super(classCatalog, dataClass);
         }
@@ -365,32 +384,33 @@ public class SampleViews {
         /**
          * Create the entity by combining the stored key and data.
          */
-        public Object entryToObject(TupleInput keyInput, Object dataInput) {
+        @Override
+        public Shipment entryToObject(
+                TupleInput keyInput, ShipmentData dataInput) {
 
             String partNumber = keyInput.readString();
             String supplierNumber = keyInput.readString();
-            ShipmentData data = (ShipmentData) dataInput;
             return new Shipment(partNumber, supplierNumber,
-                                data.getQuantity());
+                                dataInput.getQuantity());
         }
 
         /**
          * Create the stored key from the entity.
          */
-        public void objectToKey(Object object, TupleOutput output) {
+        @Override
+        public void objectToKey(Shipment object, TupleOutput output) {
 
-            Shipment shipment = (Shipment) object;
-            output.writeString(shipment.getPartNumber());
-            output.writeString(shipment.getSupplierNumber());
+            output.writeString(object.getPartNumber());
+            output.writeString(object.getSupplierNumber());
         }
 
         /**
          * Create the stored data from the entity.
          */
-        public Object objectToData(Object object) {
+        @Override
+        public ShipmentData objectToData(Shipment object) {
 
-            Shipment shipment = (Shipment) object;
-            return new ShipmentData(shipment.getQuantity());
+            return new ShipmentData(object.getQuantity());
         }
     }
 }

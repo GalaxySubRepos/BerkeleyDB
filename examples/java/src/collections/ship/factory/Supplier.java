@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.factory;
@@ -35,9 +34,9 @@ public class Supplier implements Serializable, MarshalledTupleKeyEntity {
     static final String CITY_KEY = "city";
 
     private transient String number;
-    private String name;
-    private int status;
-    private String city;
+    private final String name;
+    private final int status;
+    private final String city;
 
     public Supplier(String number, String name, int status, String city) {
 
@@ -67,6 +66,7 @@ public class Supplier implements Serializable, MarshalledTupleKeyEntity {
         return city;
     }
 
+    @Override
     public String toString() {
 
         return "[Supplier: number=" + number +
@@ -77,16 +77,23 @@ public class Supplier implements Serializable, MarshalledTupleKeyEntity {
 
     // --- MarshalledTupleKeyEntity implementation ---
 
+    @Override
     public void marshalPrimaryKey(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.number);
     }
 
+    @Override
     public void unmarshalPrimaryKey(TupleInput keyInput) {
 
         this.number = keyInput.readString();
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean marshalSecondaryKey(String keyName, TupleOutput keyOutput) {
 
         if (keyName.equals(CITY_KEY)) {
@@ -101,6 +108,11 @@ public class Supplier implements Serializable, MarshalledTupleKeyEntity {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean nullifyForeignKey(String keyName) {
 
         throw new UnsupportedOperationException(keyName);

@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package db.repquote;
@@ -12,11 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.lang.Thread;
-import java.lang.InterruptedException;
 
 import com.sleepycat.db.*;
-import db.repquote.RepConfig;
 
 /**
  * RepQuoteExample is a simple but complete demonstration of a replicated
@@ -235,6 +231,26 @@ public class RepQuoteExample
         envConfig.setErrorStream(System.err);
         envConfig.setErrorPrefix(RepConfig.progname);
 
+        /* Disable SSL for repmgr */
+        envConfig.setReplicationManagerSSLdisabled(true);
+
+        /*
+         * If repmgr has been built with ssl support, then we can use 
+         * $BDB_ROOT/test/utils/ssl_cert_gen_script.sh to generate ssl
+         * certificates in directory say "certs". Then following command
+         * can be used to run RepQuoteExample with SSL support for
+         * Replication Manager. 
+         * We will remove the above command in that case.
+         * 
+         * envConfig.setReplicationManagerSSLconfiguration(
+         *      new String("certs/rootCA.crt"),
+         *      null,
+         *      new String("certs/repNode.crt"),
+         *      new String("certs/repNode.key"),
+         *      new String("someRandomPass"),
+         *      6);
+         */        
+
         envConfig.addReplicationManagerSite(appConfig.getThisHost());
         for (RepRemoteHost host = appConfig.getFirstOtherHost();
             host != null; host = appConfig.getNextOtherHost()){
@@ -302,7 +318,7 @@ public class RepQuoteExample
         envConfig.setInitializeLogging(true);
         envConfig.setInitializeCache(true);
         envConfig.setTransactional(true);
-        envConfig.setVerboseReplication(appConfig.verbose);
+        envConfig.setVerbose(VerboseConfig.REPLICATION, appConfig.verbose);
         try {
             dbenv = new RepQuoteEnvironment(appConfig.getHome(), envConfig);
         } catch(FileNotFoundException e) {
@@ -537,11 +553,13 @@ public class RepQuoteExample
      */
     private /* internal */
     class RepQuoteEventHandler extends EventHandlerAdapter {
+        @Override
         public void handleRepClientEvent()
         {
             dbenv.setIsMaster(false);
             dbenv.setInClientSync(true);
         }
+        @Override
         public void handleRepMasterEvent()
         {
             dbenv.setIsMaster(true);
@@ -551,6 +569,7 @@ public class RepQuoteExample
         {
             dbenv.setInClientSync(true);
         }
+        @Override
         public void handleRepPermFailedEvent()
         {
             /*
@@ -562,6 +581,7 @@ public class RepQuoteExample
             System.err.println(
     "Insufficient acknowledgements to guarantee transaction durability.");
         }
+        @Override
         public void handleRepStartupDoneEvent()
         {
             dbenv.setInClientSync(false);
@@ -582,6 +602,7 @@ class CheckpointThread extends Thread {
         myEnv = env;
     }
 
+    @Override
     public void run() {
         for (;;) {
             /*
@@ -635,6 +656,7 @@ class LogArchiveThread extends Thread {
         myEnvConfig = envConfig;
     }
 
+    @Override
     public void run() {
         java.io.File[] logFileList;
         int logs_to_keep = 3;

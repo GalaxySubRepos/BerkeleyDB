@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::err()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::err()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbdel.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dberr"></a>Db::err()</h2>
+            <h2 class="title" style="clear: both"><a id="dberr"></a>
+        
+        <span>Db::err()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -44,13 +50,19 @@ Db::err(int error, const char *fmt, ...);
 
 Db::errx(const char *fmt, ...);</pre>
       <p>
-         The <a class="xref" href="enverr.html" title="DbEnv::err()">DbEnv::err()</a>, 
+         The <a class="xref" href="enverr.html" title="DbEnv::err()">
+        
+        <span>DbEnv::err()</span>
+    </a>, 
          <code class="methodname">DbEnv::errx()</code>, <code class="methodname">Db::err()</code> and
          <code class="methodname">Db::errx()</code> methods provide error-messaging functionality for
          applications written using the Berkeley DB library.
     </p>
       <p>
-         The <code class="methodname">Db::err()</code> and <a class="xref" href="enverr.html" title="DbEnv::err()">DbEnv::err()</a>  methods construct
+         The <code class="methodname">Db::err()</code> and <a class="xref" href="enverr.html" title="DbEnv::err()">
+        
+        <span>DbEnv::err()</span>
+    </a>  methods construct
          an error message consisting of the following elements:
     </p>
       <div class="itemizedlist">
@@ -61,9 +73,15 @@ Db::errx(const char *fmt, ...);</pre>
                 </p>
             <p>
                         If no error callback function has been set using the 
-                        <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">DbEnv::set_errcall()</a> 
+                        <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">
+        
+        <span>DbEnv::set_errcall()</span>
+    </a> 
                         method, any prefix string specified using the 
-                        <a class="xref" href="envset_errpfx.html" title="DbEnv::set_errpfx()">DbEnv::set_errpfx()</a> 
+                        <a class="xref" href="envset_errpfx.html" title="DbEnv::set_errpfx()">
+        
+        <span>DbEnv::set_errpfx()</span>
+    </a> 
                          method, followed by two separating characters: a colon and a
                          &lt;space&gt; character.
                 </p>
@@ -93,7 +111,10 @@ Db::errx(const char *fmt, ...);</pre>
             <p>
                          The standard system or Berkeley DB library error string associated
                          with the <span class="bold"><strong>error</strong></span> value, as returned by
-                         the <a class="xref" href="envstrerror.html" title="DbEnv::strerror()">DbEnv::strerror()</a> 
+                         the <a class="xref" href="envstrerror.html" title="DbEnv::strerror()">
+        
+        <span>DbEnv::strerror()</span>
+    </a> 
                          method.
                 </p>
           </li>
@@ -102,7 +123,10 @@ Db::errx(const char *fmt, ...);</pre>
       <p>
          The <code class="methodname">Db::errx()</code> and <code class="methodname">DbEnv::errx()</code>  methods
          are the same as the <code class="methodname">Db::err()</code> and 
-         <a class="xref" href="enverr.html" title="DbEnv::err()">DbEnv::err()</a>  methods, except they do not append 
+         <a class="xref" href="enverr.html" title="DbEnv::err()">
+        
+        <span>DbEnv::err()</span>
+    </a>  methods, except they do not append 
          the final separator characters and standard error string to the error message.
     </p>
       <p>
@@ -113,19 +137,37 @@ Db::errx(const char *fmt, ...);</pre>
           <li>
             <p>
                         If an error callback function has been set (see 
-                        <a class="xref" href="dbset_errcall.html" title="Db::set_errcall()">Db::set_errcall()</a>  and
-                        <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">DbEnv::set_errcall()</a>),
+                        <a class="xref" href="dbset_errcall.html" title="Db::set_errcall()">
+        
+        <span>Db::set_errcall()</span>
+    </a>  and
+                        <a class="xref" href="envset_errcall.html" title="DbEnv::set_errcall()">
+        
+        <span>DbEnv::set_errcall()</span>
+    </a>),
                         that function is called with two parameters: any prefix string
-                        specified (see <a class="xref" href="dbset_errpfx.html" title="Db::set_errpfx()">Db::set_errpfx()</a>
-                        and <a class="xref" href="envset_errpfx.html" title="DbEnv::set_errpfx()">DbEnv::set_errpfx()</a>) and 
+                        specified (see <a class="xref" href="dbset_errpfx.html" title="Db::set_errpfx()">
+        
+        <span>Db::set_errpfx()</span>
+    </a>
+                        and <a class="xref" href="envset_errpfx.html" title="DbEnv::set_errpfx()">
+        
+        <span>DbEnv::set_errpfx()</span>
+    </a>) and 
                         the error message.
                     </p>
           </li>
           <li>
             <p>
                         If a C library FILE * has been set (see 
-                        <a class="xref" href="dbset_errfile.html" title="Db::set_errfile()">Db::set_errfile()</a>  and
-                        <a class="xref" href="envset_errfile.html" title="DbEnv::set_errfile()">DbEnv::set_errfile()</a>),
+                        <a class="xref" href="dbset_errfile.html" title="Db::set_errfile()">
+        
+        <span>Db::set_errfile()</span>
+    </a>  and
+                        <a class="xref" href="envset_errfile.html" title="DbEnv::set_errfile()">
+        
+        <span>DbEnv::set_errfile()</span>
+    </a>),
                         the error message is written to that output stream.
                     </p>
           </li>
@@ -157,7 +199,7 @@ Db::errx(const char *fmt, ...);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818173840"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176774777728"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -165,13 +207,16 @@ Db::errx(const char *fmt, ...);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818179152"></a>error</h4>
+                <h4 class="title"><a id="idm140176774787744"></a>error</h4>
               </div>
             </div>
           </div>
           <p>
                 The <span class="bold"><strong>error</strong></span> parameter is the error
-                value for which the <a class="xref" href="enverr.html" title="DbEnv::err()">DbEnv::err()</a> 
+                value for which the <a class="xref" href="enverr.html" title="DbEnv::err()">
+        
+        <span>DbEnv::err()</span>
+    </a> 
                 and  <code class="methodname">Db::err()</code> methods will display an explanatory string.
             </p>
         </div>
@@ -179,7 +224,7 @@ Db::errx(const char *fmt, ...);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818221296"></a>fmt</h4>
+                <h4 class="title"><a id="idm140176776218272"></a>fmt</h4>
               </div>
             </div>
           </div>
@@ -193,7 +238,7 @@ Db::errx(const char *fmt, ...);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818212032"></a>Class</h3>
+              <h3 class="title"><a id="idm140176774808144"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -205,7 +250,7 @@ Db::errx(const char *fmt, ...);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703818453184"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176776344416"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -225,11 +270,17 @@ Db::errx(const char *fmt, ...);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbexists.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::del() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::del()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::exists()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::exists()</span>
+    </td>
         </tr>
       </table>
     </div>

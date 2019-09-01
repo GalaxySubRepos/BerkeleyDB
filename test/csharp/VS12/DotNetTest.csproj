@@ -104,8 +104,8 @@
 IF $(ConfigurationName) == Debug SET LIBEXT=d
 IF $(ConfigurationName) == Release SET LIBEXT
 
-copy /B "$(SolutionDir)Win32\$(ConfigurationName)\libdb62%25LIBEXT%25.dll" "$(TargetDir)"
-copy /B "$(SolutionDir)Win32\$(ConfigurationName)\libdb_csharp62%25LIBEXT%25.dll" "$(TargetDir)"
+copy /B "$(SolutionDir)Win32\$(ConfigurationName)\libdb181%25LIBEXT%25.dll" "$(TargetDir)"
+copy /B "$(SolutionDir)Win32\$(ConfigurationName)\libdb_csharp181%25LIBEXT%25.dll" "$(TargetDir)"
 copy "$(ProjectDir)..\AllTestData.xml" "$(TargetDir)"
 </PreBuildEvent>
   </PropertyGroup>

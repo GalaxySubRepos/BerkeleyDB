@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -153,6 +153,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     @param dir
     The path of a directory where external files are stored
     */
+	@Deprecated
     public void setBlobDir(java.io.File dir) {
         setExternalFileDir(dir);
     }
@@ -162,6 +163,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     @return
     The path of a directory where external files are stored
     */
+	@Deprecated
     public java.io.File getBlobDir() {
         return getExternalFileDir();
     }
@@ -173,6 +175,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     stored as an external file. If 0, external files will be never used by the
     database.
     */
+	@Deprecated
     public void setBlobThreshold(int value) {
         setExternalFileThreshold(value);
     }
@@ -183,6 +186,7 @@ True if the {@link com.sleepycat.db.Environment#openDatabase Environment.openDat
     The threshold value in bytes beyond which data items are
     stored as external files. If 0, external files are not used by the database.
     */
+	@Deprecated
     public int getBlobThreshold() {
         return getExternalFileThreshold();
     }
@@ -577,6 +581,7 @@ True if the database is configured to support read uncommitted.
     @deprecated This has been replaced by {@link #setReadUncommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public void setDirtyRead(final boolean dirtyRead) {
         setReadUncommitted(dirtyRead);
     }
@@ -592,6 +597,7 @@ True if the database is configured to support read uncommitted.
     @deprecated This has been replaced by {@link #getReadUncommitted} to conform to ANSI
     database isolation terminology.
     */
+	@Deprecated
     public boolean getDirtyRead() {
         return getReadUncommitted();
     }

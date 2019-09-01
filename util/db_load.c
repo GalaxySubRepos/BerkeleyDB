@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -169,10 +169,10 @@ main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname,
- 			    optarg, &ldg.passwd) != 0) {
-  				exitval = usage();
-  				goto done;
-  			}
+			    optarg, &ldg.passwd) != 0) {
+				exitval = usage();
+				goto done;
+			}
 			ldf |= LDF_PASSWORD;
 			break;
 		case 'r':
@@ -398,7 +398,7 @@ retry_db:
 
 	if (argtype != DB_UNKNOWN) {
 		if (dbtype == DB_HEAP) {
-			dbenv->errx(dbenv, DB_STR("5128",
+			dbenv->errx(dbenv, DB_STR("5077",
 			    "improper database type conversion specified"));
 			goto err;
 		}
@@ -958,7 +958,7 @@ nameerr:
 	dbp->err(dbp, ret, "%s: %s=%s", G(progname), name, value);
 	if (0) {
 heaperr:	dbp->err(dbp, ret, "%s: heap_gbytes/heap_bytes=%lu/%lu",
-    		    G(progname), heap_gbytes, heap_bytes);
+		    G(progname), heap_gbytes, heap_bytes);
 	}
 err:	return (1);
 }

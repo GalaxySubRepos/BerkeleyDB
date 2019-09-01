@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  */
 
 #include "db_config.h"
@@ -617,6 +617,8 @@ __bamc_start_decompress(dbc)
 
 	/* Unmarshal the first data */
 	cp->compcursor += __db_decompress_int32(cp->compcursor, &datasize);
+	if (cp->compcursor + datasize > cp->compend)
+		return (DBC_ERR(dbc, DB_NOTFOUND));
 	ret = __bam_compress_set_dbt(dbc->dbp,
 	    cp->currentData, cp->compcursor, datasize);
 
@@ -2297,7 +2299,7 @@ __bamc_compress_iput(dbc, key, data, flags)
 		    ((BTREE *)dbp->bt_internal)->compress_dup_compare(
 		    dbp, cp->currentData, data, NULL) != 0) {
 			ret = USR_ERR(env, EINVAL);
-			__db_errx(env, DB_STR("1032",
+			__db_errx(env, DB_STR("1004",
 			    "Existing data sorts differently from put data"));
 			goto end;
 		}
@@ -2734,7 +2736,7 @@ __bamc_compress_cmp(dbc, other_dbc, result)
 	return (0);
 
  err:
-	__db_errx(dbc->env, DB_STR("1033",
+	__db_errx(dbc->env, DB_STR("0692",
 	    "Both cursors must be initialized before calling DBC->cmp."));
 	return (USR_ERR(dbp->env, EINVAL));
 }
@@ -3119,7 +3121,7 @@ __bam_compress_check_sort_multiple(dbp, key, data)
 		if (kptr == NULL || dptr == NULL)
 			break;
 		if (__db_compare_both(dbp, &key1, &data1, &key2, &data2) < 0) {
-			__db_errx(dbp->env, DB_STR("1171",
+			__db_errx(dbp->env, DB_STR("1170",
 		    "The key/data pairs in the buffer are not sorted."));
 			return (USR_ERR(dbp->env, EINVAL));
 		}

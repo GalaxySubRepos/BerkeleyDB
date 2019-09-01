@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.access;
@@ -41,7 +40,7 @@ public class AccessExample
          implements Runnable {
 
     // Class Variables of AccessExample class
-    private static boolean create = true;
+    private static final boolean create = true;
     private static final int EXIT_SUCCESS = 0;
     private static final int EXIT_FAILURE = 1;
 
@@ -110,15 +109,16 @@ public class AccessExample
     }
 
 
-    private Database db;
-    private SortedMap map;
-    private Environment env;
+    private final Database db;
+    private final SortedMap<byte[], byte[]> map;
+    private final Environment env;
 
 
     /**
      *  Constructor for the AccessExample object
      *
      *@param  env            Description of the Parameter
+     * @param databaseName
      *@exception  Exception  Description of the Exception
      */
     public AccessExample(Environment env, String databaseName)
@@ -147,7 +147,7 @@ public class AccessExample
         // Now create a collection style map view of the data store
         // so that it is easy to work with the data in the database.
         //
-        this.map = new StoredSortedMap(db, keyBinding, dataBinding, true);
+        this.map = new StoredSortedMap<>(db, keyBinding, dataBinding, true);
     }
 
     /**
@@ -163,6 +163,7 @@ public class AccessExample
     /**
      *  Main processing method for the AccessExample object
      */
+    @Override
     public void run() {
         //
         // Insert records into a Stored Sorted Map DatabaseImpl, where
@@ -189,6 +190,7 @@ public class AccessExample
             try {
                 tr.run(
 		       new TransactionWorker() {
+                           @Override
 			   public void doWork() {
 			       if (!map.containsKey(line.getBytes()))
 				   map.put(line.getBytes(),

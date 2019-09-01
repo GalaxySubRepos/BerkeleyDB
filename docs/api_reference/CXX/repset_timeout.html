@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::rep_set_timeout()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::rep_set_timeout()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="repset_request.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="repset_timeout"></a>DbEnv::rep_set_timeout()</h2>
+            <h2 class="title" style="clear: both"><a id="repset_timeout"></a>
+        
+        <span>DbEnv::rep_set_timeout()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -67,8 +73,14 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
       <p>
         The <code class="methodname">DbEnv::rep_set_timeout()</code> method may not be
         called to set the master lease timeout after the 
-        <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a> method or the
-        <a class="xref" href="repstart.html" title="DbEnv::rep_start()">DbEnv::rep_start()</a> 
+        <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a> method or the
+        <a class="xref" href="repstart.html" title="DbEnv::rep_start()">
+        
+        <span>DbEnv::rep_start()</span>
+    </a> 
         method is called. For all other timeouts, the
         <code class="methodname">DbEnv::rep_set_timeout()</code>
         method may be called at any time during the life of the application.
@@ -87,7 +99,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807658496"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176764879392"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -95,7 +107,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807659744"></a>which</h4>
+                <h4 class="title"><a id="idm140176764880640"></a>which</h4>
               </div>
             </div>
           </div>
@@ -233,12 +245,24 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
                          the same lease timeout value.  There is no default
                          value.  If leases are desired, this method must be
                          called prior to calling the
-                         <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">DbEnv::repmgr_start()</a>
+                         <a class="xref" href="repmgrstart.html" title="DbEnv::repmgr_start()">
+        
+        <span>DbEnv::repmgr_start()</span>
+    </a>
                          method or the
-                         <a class="xref" href="repstart.html" title="DbEnv::rep_start()">DbEnv::rep_start()</a>
+                         <a class="xref" href="repstart.html" title="DbEnv::rep_start()">
+        
+        <span>DbEnv::rep_start()</span>
+    </a>
                          method. 
-                         See also <a class="xref" href="repclockskew.html" title="DbEnv::rep_set_clockskew()">DbEnv::rep_set_clockskew()</a> 
-                         method, <a class="xref" href="repconfig.html" title="DbEnv::rep_set_config()">DbEnv::rep_set_config()</a> 
+                         See also <a class="xref" href="repclockskew.html" title="DbEnv::rep_set_clockskew()">
+        
+        <span>DbEnv::rep_set_clockskew()</span>
+    </a> 
+                         method, <a class="xref" href="repconfig.html" title="DbEnv::rep_set_config()">
+        
+        <span>DbEnv::rep_set_config()</span>
+    </a> 
                          method and <a href="../../programmer_reference/rep_lease.html" class="olink">Master leases</a>.
                     </p>
               </li>
@@ -263,7 +287,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807646384"></a>timeout</h4>
+                <h4 class="title"><a id="idm140176764868112"></a>timeout</h4>
               </div>
             </div>
           </div>
@@ -278,7 +302,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807670240"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176764842320"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -296,7 +320,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703807627888"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176764849616"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -313,7 +337,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807653040"></a>Class</h3>
+              <h3 class="title"><a id="idm140176764856768"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -325,7 +349,7 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703807621008"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176764873936"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -345,11 +369,17 @@ DbEnv::rep_set_timeout(int which, u_int32_t timeout); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="reptransport.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::rep_set_request() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::rep_set_request()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::rep_set_transport()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::rep_set_transport()</span>
+    </td>
         </tr>
       </table>
     </div>

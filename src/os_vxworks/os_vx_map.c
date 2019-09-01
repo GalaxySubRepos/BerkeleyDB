@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1998, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * This code is derived from software contributed to Sleepycat Software by
  * Frederick G.M. Roeber of Netscape Communications Corp.
@@ -353,7 +353,7 @@ __os_segdata_find_byname(env, name, infop, rp)
 	dbenv = env->dbenv;
 
 	if (__os_segdata == NULL) {
-		__db_errx(env, DB_STR("0202",
+		__db_errx(env, DB_STR("0201",
 		    "shared memory segment not initialized"));
 		return (EAGAIN);
 	}
@@ -404,7 +404,7 @@ __os_segdata_release(env, rp, is_locked)
 	os_segdata_t *p;
 
 	if (__os_segdata == NULL) {
-		__db_errx(env, DB_STR("0205",
+		__db_errx(env, DB_STR("0201",
 		    "shared memory segment not initialized"));
 		return (EAGAIN);
 	}

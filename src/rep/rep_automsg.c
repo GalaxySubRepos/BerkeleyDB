@@ -74,8 +74,9 @@ __rep_bulk_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_bulk message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_bulk");
 	return (EINVAL);
 }
 
@@ -139,8 +140,9 @@ __rep_control_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_control message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_control");
 	return (EINVAL);
 }
 
@@ -188,8 +190,9 @@ __rep_egen_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_egen message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_egen");
 	return (EINVAL);
 }
 
@@ -307,8 +310,9 @@ __rep_fileinfo_unmarshal(env, argpp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_fileinfo message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_fileinfo");
 	return (EINVAL);
 }
 
@@ -422,8 +426,9 @@ __rep_fileinfo_v7_unmarshal(env, argpp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_fileinfo_v7 message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_fileinfo_v7");
 	return (EINVAL);
 }
 
@@ -522,8 +527,9 @@ __rep_fileinfo_v6_unmarshal(env, argpp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_fileinfo_v6 message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_fileinfo_v6");
 	return (EINVAL);
 }
 
@@ -573,8 +579,9 @@ __rep_grant_info_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_grant_info message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_grant_info");
 	return (EINVAL);
 }
 
@@ -624,8 +631,9 @@ __rep_logreq_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_logreq message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_logreq");
 	return (EINVAL);
 }
 
@@ -673,8 +681,9 @@ __rep_newfile_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_newfile message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_newfile");
 	return (EINVAL);
 }
 
@@ -735,8 +744,9 @@ __rep_update_unmarshal(env, argpp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_update message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_update");
 	return (EINVAL);
 }
 
@@ -796,8 +806,9 @@ __rep_vote_info_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_vote_info message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_vote_info");
 	return (EINVAL);
 }
 
@@ -853,8 +864,9 @@ __rep_vote_info_v5_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_vote_info_v5 message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_vote_info_v5");
 	return (EINVAL);
 }
 
@@ -894,8 +906,9 @@ __rep_lsn_hist_key_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_lsn_hist_key message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_lsn_hist_key");
 	return (EINVAL);
 }
 
@@ -941,8 +954,9 @@ __rep_lsn_hist_data_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_lsn_hist_data message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_lsn_hist_data");
 	return (EINVAL);
 }
 
@@ -988,8 +1002,9 @@ __rep_blob_update_req_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_blob_update_req message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_blob_update_req");
 	return (EINVAL);
 }
 
@@ -1034,8 +1049,9 @@ __rep_blob_update_req_v8_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_blob_update_req_v8 message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_blob_update_req_v8");
 	return (EINVAL);
 }
 
@@ -1079,8 +1095,9 @@ __rep_blob_update_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_blob_update message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_blob_update");
 	return (EINVAL);
 }
 
@@ -1122,8 +1139,9 @@ __rep_blob_file_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_blob_file message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_blob_file");
 	return (EINVAL);
 }
 
@@ -1186,8 +1204,9 @@ __rep_blob_chunk_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_blob_chunk message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_blob_chunk");
 	return (EINVAL);
 }
 
@@ -1231,8 +1250,9 @@ __rep_blob_chunk_req_unmarshal(env, argp, bp, max, nextp)
 	return (0);
 
 too_few:
-	__db_errx(env, DB_STR("3675",
-	    "Not enough input bytes to fill a __rep_blob_chunk_req message"));
+	__db_errx(env, DB_STR_A("3675",
+	    "Not enough input bytes to fill a %s message",
+	    "%s"), "__rep_blob_chunk_req");
 	return (EINVAL);
 }
 

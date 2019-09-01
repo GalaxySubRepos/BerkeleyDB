@@ -1,8 +1,8 @@
 /* DO NOT EDIT: automatically built by dist/s_windows. */
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -197,6 +197,7 @@ public:
 	virtual int close(u_int32_t flags);
 	virtual int compact(DbTxn *txnid, Dbt *start,
 	    Dbt *stop, DB_COMPACT *c_data, u_int32_t flags, Dbt *end);
+	virtual int convert(const char *name, u_int32_t lorder);
 	virtual int cursor(DbTxn *txnid, Dbc **cursorp, u_int32_t flags);
 	virtual int del(DbTxn *txnid, Dbt *key, u_int32_t flags);
 	virtual void err(int, const char *, ...);
@@ -821,6 +822,7 @@ public:
 	    u_int32_t bytes);
 	virtual int repmgr_set_socket(int (*approval_func)(DbEnv *,
 	    DB_REPMGR_SOCKET, int *, u_int32_t));
+	virtual int repmgr_set_ssl_config(int config_type, char *value);
 	virtual int repmgr_local_site(DbSite **site);
 	virtual int repmgr_msg_dispatch(void (*) (DbEnv *,
 	    DbChannel *, Dbt *, u_int32_t, u_int32_t), u_int32_t flags);

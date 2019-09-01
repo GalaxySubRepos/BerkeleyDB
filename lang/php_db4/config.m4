@@ -1,6 +1,8 @@
 #
 # Copyright (c) 2004, 2019 Oracle and/or its affiliates.  All rights reserved.
 #
+# See the file LICENSE for license information.
+#
 # http://www.apache.org/licenses/LICENSE-2.0.txt
 #
 
@@ -16,7 +18,7 @@ PHP_ARG_WITH(db4, whether to enable db4 support,
 
 if test "$PHP_DB4" != "no"; then
   if test "$PHP_DB4" != "no"; then
-    for i in $PHP_DB4 /usr/local/BerkeleyDB.6.2 /usr/local /usr; do
+    for i in $PHP_DB4 /usr/local/BerkeleyDB.18.1 /usr/local /usr; do
       if test -f "$i/db4/db.h"; then
         THIS_PREFIX=$i
         INC_DIR=$i/db4

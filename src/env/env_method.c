@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -315,6 +315,7 @@ __db_env_init(dbenv)
 	dbenv->repmgr_set_ack_policy = __repmgr_set_ack_policy;
 	dbenv->repmgr_set_incoming_queue_max = __repmgr_set_incoming_queue_max;
 	dbenv->repmgr_set_socket = __repmgr_set_socket;
+	dbenv->repmgr_set_ssl_config = __repmgr_set_ssl_config_pp;
 	dbenv->repmgr_site = __repmgr_site;
 	dbenv->repmgr_site_by_eid = __repmgr_site_by_eid;
 	dbenv->repmgr_site_list = __repmgr_site_list_pp;
@@ -400,6 +401,11 @@ __db_env_init(dbenv)
 
 	env = dbenv->env;
 	__os_id(NULL, &env->pid_cache, NULL);
+	/*
+	 * The real envid of any existing environment is unknown until the
+	 * region is read. Setting all bits until then is a diagnostic aid.
+	 */
+	env->envid = ENVID_UNKNOWN;
 
 	env->log_verify_wrap = __log_verify_wrap;
 	env->data_len = ENV_DEF_DATA_LEN;
@@ -524,10 +530,41 @@ __env_get_memory_init(dbenv, type, countp)
 	u_int32_t *countp;
 {
 	ENV *env;
+	REGENV *renv;
+	REGINFO *infop;
 
 	env = dbenv->env;
+	infop = env->reginfo;
+	if (F_ISSET(env, ENV_OPEN_CALLED))
+		renv = infop->primary;
+	else
+		renv = NULL;
 
 	switch (type) {
+	case DB_MEM_DATABASE:
+		if (F_ISSET(env, ENV_OPEN_CALLED)) {
+			MUTEX_LOCK(env, renv->mtx_regenv);
+			*countp = renv->initdatabases;
+			MUTEX_UNLOCK(env, renv->mtx_regenv);
+		} else
+			*countp = dbenv->db_init_databases;
+		break;
+	case DB_MEM_DATABASE_LENGTH:
+		if (F_ISSET(env, ENV_OPEN_CALLED)) {
+			MUTEX_LOCK(env, renv->mtx_regenv);
+			*countp = renv->initdblen;
+			MUTEX_UNLOCK(env, renv->mtx_regenv);
+		} else
+			*countp = dbenv->db_init_db_len;
+		break;
+	case DB_MEM_EXTFILE_DATABASE:
+		if (F_ISSET(env, ENV_OPEN_CALLED)) {
+			MUTEX_LOCK(env, renv->mtx_regenv);
+			*countp = renv->initextfiledbs;
+			MUTEX_UNLOCK(env, renv->mtx_regenv);
+		} else
+			*countp = dbenv->db_init_extfile_dbs;
+		break;
 	case DB_MEM_LOCK:
 		ENV_NOT_CONFIGURED(env,
 		    env->lk_handle, "DB_ENV->get_memory_init", DB_INIT_LOCK);
@@ -565,6 +602,15 @@ __env_get_memory_init(dbenv, type, countp)
 		else
 			*countp = dbenv->lg_fileid_init;
 		break;
+	case DB_MEM_REP_SITE:
+		ENV_NOT_CONFIGURED(env, env->rep_handle->region,
+		    "DB_ENV->get_memory_init", DB_INIT_REP);
+
+		if (REP_ON(env))
+			*countp = ((REP *)env->rep_handle->region)->initsites;
+		else
+			*countp = dbenv->rep_init_sites;
+		break;
 	case DB_MEM_TRANSACTION:
 		ENV_NOT_CONFIGURED(env,
 		    env->tx_handle, "DB_ENV->memory_init", DB_INIT_TXN);
@@ -579,6 +625,10 @@ __env_get_memory_init(dbenv, type, countp)
 		/* We always update thr_init when joining an env. */
 		*countp = dbenv->thr_init;
 		break;
+	default:
+		__db_errx(env, DB_STR("1608",
+		    "unknown type argument to DB_ENV->get_memory_init"));
+		return (EINVAL);
 	}
 
 	return (0);
@@ -698,6 +748,15 @@ __env_set_memory_init(dbenv, type, count)
 
 	ENV_ILLEGAL_AFTER_OPEN(env, "DB_ENV->set_memory_init");
 	switch (type) {
+	case DB_MEM_DATABASE:
+		dbenv->db_init_databases = count;
+		break;
+	case DB_MEM_DATABASE_LENGTH:
+		dbenv->db_init_db_len = count;
+		break;
+	case DB_MEM_EXTFILE_DATABASE:
+		dbenv->db_init_extfile_dbs = count;
+		break;
 	case DB_MEM_LOCK:
 		dbenv->lk_init = count;
 		break;
@@ -710,12 +769,19 @@ __env_set_memory_init(dbenv, type, count)
 	case DB_MEM_LOGID:
 		dbenv->lg_fileid_init = count;
 		break;
+	case DB_MEM_REP_SITE:
+		dbenv->rep_init_sites = count;
+		break;
 	case DB_MEM_THREAD:
 		dbenv->thr_init = count;
 		break;
 	case DB_MEM_TRANSACTION:
 		dbenv->tx_init = count;
 		break;
+	default:
+		__db_errx(env, DB_STR("1607",
+		    "unknown type argument to DB_ENV->set_memory_init"));
+		return (EINVAL);
 	}
 
 	return (0);
@@ -936,7 +1002,7 @@ __env_set_encrypt(dbenv, passwd, flags)
 	 * We're going to need this often enough to keep around
 	 */
 	dbenv->passwd_len = strlen(dbenv->passwd) + 1;
-	
+
 	dbenv->encrypt_flags = flags;
 	/*
 	 * The MAC key is for checksumming, and is separate from
@@ -971,7 +1037,7 @@ err:
 	COMPQUIET(passwd, NULL);
 	COMPQUIET(flags, 0);
 
-	__db_errx(dbenv->env, DB_STR("1557",
+	__db_errx(dbenv->env, DB_STR("1555",
 	    "library build did not include support for cryptography"));
 	return (DB_OPNOTSUP);
 #endif
@@ -1046,6 +1112,12 @@ __env_fetch_flags(flagmap, mapsize, inflagsp, outflagsp)
 			FLD_SET(*outflagsp, fmp->inflag);
 }
 
+/*
+ * __env_get_flags --
+ *	Extract the DB_ENV->set_flags() values for the env.  Most come from the
+ *	flags in our DB_ENV handle, but the panic and hotbackup flags are
+ *	found by examining the shared region.
+ */
 static int
 __env_get_flags(dbenv, flagsp)
 	DB_ENV *dbenv;
@@ -1059,7 +1131,7 @@ __env_get_flags(dbenv, flagsp)
 	env = dbenv->env;
 	/* Some flags are persisted in the regions. */
 	if (env->reginfo != NULL &&
-	    ((REGENV *)env->reginfo->primary)->panic != 0)
+	    ((REGENV *)env->reginfo->primary)->envid != env->envid)
 		FLD_SET(*flagsp, DB_PANIC_ENVIRONMENT);
 
 	/* If the hotbackup counter is positive, set the flag indicating so. */
@@ -1734,7 +1806,7 @@ __env_get_isalive(dbenv, is_alivep)
 	env = dbenv->env;
 
 	if (F_ISSET(env, ENV_OPEN_CALLED) && env->thr_nbucket == 0) {
-		__db_errx(env, DB_STR("1562",
+		__db_errx(env, DB_STR("1504",
 	    "is_alive method specified but no thread region allocated"));
 		return (EINVAL);
 	}
@@ -1757,7 +1829,7 @@ __env_set_isalive(dbenv, is_alive)
 	env = dbenv->env;
 
 	if (F_ISSET(env, ENV_OPEN_CALLED) && env->thr_nbucket == 0) {
-		__db_errx(env, DB_STR("1563",
+		__db_errx(env, DB_STR("1504",
 	    "is_alive method specified but no thread region allocated"));
 		return (EINVAL);
 	}
@@ -2022,6 +2094,9 @@ __env_get_verbose(dbenv, which, onoffp)
 	case DB_VERB_REP_TEST:
 	case DB_VERB_REPMGR_CONNFAIL:
 	case DB_VERB_REPMGR_MISC:
+	case DB_VERB_REPMGR_SSL_ALL:
+	case DB_VERB_REPMGR_SSL_CONN:
+	case DB_VERB_REPMGR_SSL_IO:
 	case DB_VERB_SLICE:
 	case DB_VERB_WAITSFOR:
 		*onoffp = FLD_ISSET(dbenv->verbose, which) ? 1 : 0;
@@ -2065,6 +2140,9 @@ __env_set_verbose(dbenv, which, on)
 	case DB_VERB_REP_TEST:
 	case DB_VERB_REPMGR_CONNFAIL:
 	case DB_VERB_REPMGR_MISC:
+	case DB_VERB_REPMGR_SSL_ALL:
+	case DB_VERB_REPMGR_SSL_CONN:
+	case DB_VERB_REPMGR_SSL_IO:
 	case DB_VERB_SLICE:
 	case DB_VERB_WAITSFOR:
 		if (on)
@@ -2314,7 +2392,7 @@ __env_encrypt(dbenv, iv, data, len)
  *
  * PUBLIC: int __env_decrypt __P((DB_ENV *, u_int8_t *, u_int8_t *, size_t));
  */
-int  
+int
 __env_decrypt(dbenv, iv, data, len)
 	DB_ENV *dbenv;
 	u_int8_t *iv;

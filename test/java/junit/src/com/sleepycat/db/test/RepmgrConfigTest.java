@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -153,6 +153,15 @@ public class RepmgrConfigTest extends EventHandlerAdapter
         envConfig.setInitializeLogging(true);
         envConfig.setInitializeCache(true);
         envConfig.setTransactional(true);
+        envConfig.setReplicationManagerSSLdisabled(TestUtils.repmgrSSLDisabled);
+        envConfig.setReplicationManagerSSLconfiguration(
+            TestUtils.repmgrCACert,
+            TestUtils.repmgrCADir,
+            TestUtils.repmgrNodeCert,
+            TestUtils.repmgrNodePkey,
+            TestUtils.repmgrNodePkeyPassword,
+            TestUtils.repmgrVerifyDepth
+        );
 
         // Linux seems to have problems cleaning up its sockets.
         // so start each test at a new address.

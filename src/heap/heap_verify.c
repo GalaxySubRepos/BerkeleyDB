@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -46,7 +46,7 @@ __heap_vrfy_meta(dbp, vdp, meta, pgno, flags)
 		    "Page %lu: invalid page type %u for %s database",
 		    "%lu %u %s"), (u_long)pgno, TYPE(meta),
 		    __db_dbtype_to_string(dbp->type)));
-		return DB_VERIFY_FATAL;
+		return (DB_VERIFY_FATAL);
 	}
 
 	if ((ret = __db_vrfy_getpageinfo(vdp, pgno, &pip)) != 0)
@@ -128,7 +128,7 @@ __heap_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	}
 	if (blob_id < 0) {
 		isbad = 1;
-		EPRINT((dbp->env, DB_STR_A("5507",
+		EPRINT((dbp->env, DB_STR_A("5503",
 			"Page %lu: invalid external file id.", "%lu"),
 			(u_long)pgno));
 	}
@@ -140,7 +140,7 @@ __heap_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	GET_BLOB_FILE_ID(dbp->env, meta, blob_id, t_ret);
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
-		EPRINT((dbp->env, DB_STR_A("1206",
+		EPRINT((dbp->env, DB_STR_A("1200",
 	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
@@ -182,7 +182,7 @@ __heap_vrfy(dbp, vdp, h, pgno, flags)
 		    "Page %lu: invalid page type %u for %s database",
 		    "%lu %u %s"), (u_long)pgno, TYPE(h),
 		    __db_dbtype_to_string(dbp->type)));
-		return DB_VERIFY_FATAL;
+		return (DB_VERIFY_FATAL);
 	}
 
 	if ((ret = __db_vrfy_datapage(dbp, vdp, h, pgno, flags)) != 0)
@@ -241,7 +241,7 @@ __heap_vrfy(dbp, vdp, h, pgno, flags)
 			blob_id = (db_seq_t)bhdr.id;
 			if (blob_id < 1) {
 				ret = DB_VERIFY_BAD;
-				EPRINT((dbp->env, DB_STR_A("1218",
+				EPRINT((dbp->env, DB_STR_A("1216",
 			"Page %lu: invalid external file id %lld at item %lu",
 				    "%lu %lld %lu"), (u_long)pgno,
 				    (long long)blob_id, (u_long)i));

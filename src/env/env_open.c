@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -21,8 +21,10 @@ static int __file_handle_cleanup __P((ENV *));
 
 /*
  * db_version --
- *	Return legacy version information, including DB Major Version,
- *	DB Minor Version, and DB Patch/Build numbers.
+ *	Return the version information in the year-release-patch version format:
+ *	Year of the release stream	--> DB Major version,
+ *	#of the release in that year	--> DB Minor version,
+ *	Build number			--> DB Patch number
  *
  * EXTERN: char *db_version __P((int *, int *, int *));
  */
@@ -41,24 +43,26 @@ db_version(majverp, minverp, patchp)
 
 /*
  * db_full_version --
- *	Return complete version information, including Oracle Family,
- *	Oracle Release, DB Major Version, DB Minor Version, and DB
- *	Patch/Build numbers.
+ *	Return complete version information, including DB Major Version,
+ *	DB Minor Version, and DB Patch/Build numbers.
+ *
+ *	It is likely that the third and fourth arguments will be removed in
+ *	the next release.  Until then, those version numbers are always zero.
  *
  * EXTERN: char *db_full_version __P((int *, int *, int *, int *, int *));
  */
 char *
-db_full_version(familyp, releasep, majverp, minverp, patchp)
-	int *familyp, *releasep, *majverp, *minverp, *patchp;
+db_full_version(majverp, minverp, defunct_majverp, defunct_minverp, patchp)
+	int *majverp, *minverp, *defunct_majverp, *defunct_minverp, *patchp;
 {
-	if (familyp != NULL)
-		*familyp = DB_VERSION_FAMILY;
-	if (releasep != NULL)
-		*releasep = DB_VERSION_RELEASE;
 	if (majverp != NULL)
 		*majverp = DB_VERSION_MAJOR;
 	if (minverp != NULL)
 		*minverp = DB_VERSION_MINOR;
+	if (defunct_majverp != NULL)
+		*defunct_majverp = 0;
+	if (defunct_minverp != NULL)
+		*defunct_minverp = 0;
 	if (patchp != NULL)
 		*patchp = DB_VERSION_PATCH;
 	return ((char *)DB_VERSION_FULL_STRING);
@@ -141,13 +145,14 @@ __env_open(dbenv, db_home, flags, mode)
 	size_t old_passwd_len;
 	u_int32_t old_encrypt_flags;
 
+	COMPQUIET(old_passwd_len, 0);
+
 	ip = NULL;
 	env = dbenv->env;
 	recovery_failed = 1;
 	register_recovery = 0;
 	retry_flags = 0;
 	old_passwd = NULL;
-	old_passwd_len = 0;
 	old_encrypt_flags = 0;
 
 	/* Initial configuration. */
@@ -188,15 +193,15 @@ __env_open(dbenv, db_home, flags, mode)
 	 */
 	if (LF_ISSET(DB_REGISTER)) {
 		/*
-		 * Through the SQL interface (btree.c) we set
-		 * DB_FAILCHK_ISALIVE.  When set, we want to run failchk
-		 * if a recovery is needed. Set up the infrastructure to run
-		 * it.   SQL applications have no way to specify the thread
-		 * count or an isalive, so force it here. Failchk is run
-		 * inside of register code.
+		 * The SQL interface (btree.c) sets DB_FAILCHK_ISALIVE: we want
+		 * to run failchk if a recovery is needed.  Set up the
+		 * infrastructure to run it.  SQL applications need isalive, so
+		 * force it here.  Set the thread count if it was't set in
+		 * DB_CONFIG.   Failchk is run inside of __envreg_add().
 		 */
 		if (LF_ISSET(DB_FAILCHK_ISALIVE)) {
-			(void)__env_set_thread_count(dbenv, 50);
+			if (dbenv->thr_max == 0)
+				(void)__env_set_thread_count(dbenv, 50);
 			dbenv->is_alive = __envreg_isalive;
 		}
 
@@ -385,7 +390,7 @@ __env_open_arg(dbenv, flags)
 			    "replication is not compatible with slices"));
 			return (EINVAL);
 		}
-			
+
 	}
 	if (LF_ISSET(DB_RECOVER | DB_RECOVER_FATAL)) {
 		if ((ret = __db_fcchk(env,
@@ -901,6 +906,8 @@ __env_refresh(dbenv, orig_flags, rep_check)
 	 * handles.
 	 */
 	if (env->db_ref != 0) {
+		if (ret == 0)
+			ret = USR_ERR(env, EINVAL);
 		__db_errx(env, DB_STR("1579",
 		    "Database handles still open at environment close"));
 		TAILQ_FOREACH(ldbp, &env->dblist, dblistlinks)
@@ -909,8 +916,6 @@ __env_refresh(dbenv, orig_flags, rep_check)
 			    ldbp->fname == NULL ? "unnamed" : ldbp->fname,
 			    ldbp->dname == NULL ? "" : "/",
 			    ldbp->dname == NULL ? "" : ldbp->dname);
-		if (ret == 0)
-			ret = USR_ERR(env, EINVAL);
 	}
 	TAILQ_INIT(&env->dblist);
 	if ((t_ret = __mutex_free(env, &env->mtx_dblist)) != 0 && ret == 0)
@@ -982,7 +987,7 @@ __env_refresh(dbenv, orig_flags, rep_check)
 	if (env->thr_hashtab != NULL &&
 	    (t_ret = __env_set_state(env, &ip, THREAD_OUT)) != 0 && ret == 0)
 		ret = t_ret;
-        DB_ASSERT(env, (ip == NULL || ip->mtx_ctr == 0));
+	DB_ASSERT(env, (ip == NULL || ip->mtx_ctr == 0));
 
 	/*
 	 * We are about to detach from the mutex region.  This is the last
@@ -1177,11 +1182,11 @@ __env_attach_regions(dbenv, flags, orig_flags, retry_ok)
 		goto err;
 
 	/*
-	 * __env_attach will return the saved init_flags field, which contains
+	 * __env_attach has returned the saved init_flags field, which contains
 	 * the DB_INIT_* flags used when the environment was created.
 	 *
-	 * We may be joining an environment -- reset our flags to match the
-	 * ones in the environment.
+	 * We may be joining an existing environment -- reset our flags to match
+	 * the ones in the environment.
 	 */
 	if (FLD_ISSET(init_flags, DB_INITENV_CDB))
 		LF_SET(DB_INIT_CDB);

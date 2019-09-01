@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1999, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -48,8 +48,8 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 	int i, ret, t_ret, isbad;
 	u_int32_t pwr, mbucket;
 	u_int32_t (*hfunc) __P((DB *, const void *, u_int32_t));
-	db_seq_t blob_id;
 	db_pgno_t dpgno;
+	db_seq_t blob_id;
 
 	env = dbp->env;
 	isbad = 0;
@@ -96,7 +96,7 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 			 * error rather than database corruption, so we want to
 			 * avoid extraneous errors.
 			 */
-			ret = USR_ERR(env, DB_VERIFY_FATAL);
+			ret = USR_ERR(env, DB_VERIFY_BAD);
 			goto err;
 		}
 
@@ -186,7 +186,7 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 	GET_BLOB_FILE_ID(env, m, blob_id, t_ret);
 	if (t_ret != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1178",
+		EPRINT((env, DB_STR_A("1173",
 		    "Page %lu: external file id overflow.", "%lu"),
 		    (u_long)pgno));
 		if (ret == 0)
@@ -194,7 +194,7 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 	}
 	if (blob_id < 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("5505",
+		EPRINT((env, DB_STR_A("5503",
 			"Page %lu: invalid external file id.", "%lu"),
 			(u_long)pgno));
 	}
@@ -210,7 +210,7 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 	}
 	if (blob_id < 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("5506",
+		EPRINT((env, DB_STR_A("5504",
 			"Page %lu: invalid external file subdatabase id.",
 			"%lu"), (u_long)pgno));
 	}
@@ -222,7 +222,7 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 	GET_BLOB_FILE_ID(env, m, blob_id, t_ret);
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1203",
+		EPRINT((env, DB_STR_A("1200",
 	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
@@ -231,7 +231,7 @@ __ham_vrfy_meta(dbp, vdp, m, pgno, flags)
 	GET_BLOB_SDB_ID(env, m, blob_id, t_ret);
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1204",
+		EPRINT((env, DB_STR_A("1200",
 	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
@@ -328,7 +328,7 @@ __ham_vrfy(dbp, vdp, h, pgno, flags)
 			inpend += sizeof(db_indx_t);
 			if ((ret = __ham_vrfy_item(
 			    dbp, vdp, pgno, h, ent, flags)) != 0) {
-			    	F_SET(pip, VRFY_ITEM_BAD);
+				F_SET(pip, VRFY_ITEM_BAD);
 				goto err;
 			}
 		}
@@ -404,7 +404,7 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 		blob_id = (db_seq_t)hblob.id;
 		if (blob_id < 1) {
 		    ret = DB_VERIFY_BAD;
-		    EPRINT((dbp->env, DB_STR_A("1217",
+		    EPRINT((dbp->env, DB_STR_A("1216",
 			"Page %lu: invalid external file id %lld at item %lu",
 			"%lu %lld %lu"), (u_long)pip->pgno,
 			(long long)blob_id, (u_long)i));
@@ -412,7 +412,7 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 		}
 		GET_BLOB_SIZE(dbp->env, hblob, blob_size, ret);
 		if (ret != 0 || blob_size < 0) {
-			EPRINT((dbp->env, DB_STR_A("1181",
+			EPRINT((dbp->env, DB_STR_A("1175",
 			    "Page %lu: external file size value has overflowed",
 			    "%lu"), (u_long)pip->pgno));
 			ret = DB_VERIFY_BAD;
@@ -420,8 +420,8 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 		}
 		file_id = (db_seq_t)hblob.file_id;
 		sdb_id = (db_seq_t)hblob.sdb_id;
-		if (file_id < 0 || sdb_id < 0 
-		    || (file_id == 0 && sdb_id == 0)) {
+		if (file_id < 0 || sdb_id < 0 ||
+		    (file_id == 0 && sdb_id == 0)) {
 			EPRINT((dbp->env, DB_STR_A("1184",
 		"Page %lu: invalid external file dir ids %lld %lld at item %lu",
 			    "%lu %lld %lld %lu"),
@@ -507,7 +507,7 @@ __ham_vrfy_item(dbp, vdp, pgno, h, i, flags)
 		memcpy(&hop, P_ENTRY(dbp, h, i), HOFFPAGE_SIZE);
 		if (!IS_VALID_PGNO(hop.pgno) || hop.pgno == pip->pgno ||
 		    hop.pgno == PGNO_INVALID) {
-			EPRINT((dbp->env, DB_STR_A("1107",
+			EPRINT((dbp->env, DB_STR_A("1057",
 			    "Page %lu: offpage item %lu has bad pgno %lu",
 			    "%lu %lu %lu"), (u_long)pip->pgno, (u_long)i,
 			    (u_long)hop.pgno));

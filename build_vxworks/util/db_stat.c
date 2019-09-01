@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -62,7 +62,7 @@ db_stat_main(argc, argv)
 	dbp = dbvp = NULL;
 	ttype = T_NOTSET;
 	cache = MEGABYTE;
-	flags = nflag = private = 0;
+	flags = nflag = private = vflag = 0;
 	exitval = EXIT_SUCCESS;
 	db = region_dir = subdb = home = passwd = vopt = NULL;
 
@@ -162,8 +162,8 @@ db_stat_main(argc, argv)
 			break;
 		case 'P':
 			if (__db_util_arg_password(progname, 
- 			    optarg, &passwd) != 0)
-  				goto err;
+			    optarg, &passwd) != 0)
+				goto err;
 			break;
 		case 'p':
 			region_dir = optarg;
@@ -394,7 +394,7 @@ err:		exitval = EXIT_FAILURE;
 	}
 done:	if (dbp != NULL && (ret = dbp->close(dbp, DB_NOSYNC)) != 0) {
 		exitval = EXIT_FAILURE;
-		dbenv->err(dbenv, ret, DB_STR("5008", "close"));
+		dbenv->err(dbenv, ret, DB_STR("0164", "close"));
 	}
 	if (dbenv != NULL && (ret = dbenv->close(dbenv, 0)) != 0) {
 		exitval = EXIT_FAILURE;

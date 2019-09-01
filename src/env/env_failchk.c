@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -22,7 +22,7 @@ static int __env_acquiring_mutex __P((ENV *, DB_THREAD_INFO *));
 static int __env_holds_mutex __P((ENV *));
 static int __env_in_failchk __P((ENV *, int *));
 static int __env_clear_latches __P((ENV *));
-static void __env_clear_state __P((ENV *));
+static int __env_clear_state __P((ENV *));
 
 /*
  * When failchk broadcast is enabled continue after the first error, to try to
@@ -81,20 +81,20 @@ __env_failchk_pp(dbenv, flags)
 		return (__db_ferr(env, "DB_ENV->failchk", 0));
 
 	ENV_ENTER(env, ip);
-        /*
-         * Only run failchk if no other threads are currently running
-         * failchk.  Note that since this operation is not mutex
-         * protected it is possible for two threads to race and end
-         * up both running failchk.  This is not considered an issue since
-         * failchk will still run correctly even if multiple threads are
-         * executing it at the same time.
-         */
-        ret = __env_in_failchk(env, &in_failchk);
-        if (ret == 0 && !in_failchk) {
+	/*
+	 * Only run failchk if no other threads are currently running
+	 * failchk.  Note that since this operation is not mutex
+	 * protected it is possible for two threads to race and end
+	 * up both running failchk.  This is not considered an issue since
+	 * failchk will still run correctly even if multiple threads are
+	 * executing it at the same time.
+	 */
+	ret = __env_in_failchk(env, &in_failchk);
+	if (ret == 0 && !in_failchk) {
 		FAILCHK_THREAD(env, ip);	/* mark as failchk thread */
 		DB_TEST_CRASH(env->test_abort, DB_TEST_FAILCHK);
 		ret = __env_failchk_int(dbenv);
-        }
+	}
 	ENV_LEAVE(env, ip);
 	return (ret);
 }
@@ -113,11 +113,27 @@ __env_failchk_int(dbenv)
 	DB_ENV *dbenv;
 {
 	ENV *env;
-	int ret, t_ret;
+	int do_open, ret, t_ret;
+	char *name;
 
 	env = dbenv->env;
 	ret = 0;
 	F_SET(dbenv, DB_ENV_FAILCHK);
+
+	/*
+	 * Check for and open, any existing registry file, unless the caller has
+	 * already opened it (i.e., __envreg_add() is the caller).  Later
+	 * __env_clear_state() removes dead slots, for 'soft recovery' cases.
+	 */
+	name = NULL;
+	do_open = dbenv->registry == NULL;
+	if (do_open &&
+	    (ret = __envreg_registry_open(env, &name, 0)) != 0) {
+		if (ret == ENOENT)
+			ret = 0;
+		else
+			goto err;
+	}
 
 	/*
 	 * We check for dead threads that hold mutexes first as this would
@@ -128,11 +144,11 @@ __env_failchk_int(dbenv)
 		goto err;
 	}
 
-        /*
-         * Release any shared latches are held by a dead thread; they could
+	/*
+	 * Release any shared latches are held by a dead thread; they could
 	 * interfere with failchk.
-         */
-        if ((t_ret = __env_clear_latches(env)) != 0)
+	 */
+	if ((t_ret = __env_clear_latches(env)) != 0)
 		FAILCHK_PROCESS_ERROR(t_ret, ret);
 
 	if (LOCKING_ON(env) && (t_ret = __lock_failchk(env)) != 0)
@@ -150,17 +166,21 @@ __env_failchk_int(dbenv)
 		FAILCHK_PROCESS_ERROR(t_ret, ret);
 #endif
 
-err:
-
 #ifdef HAVE_MUTEX_SUPPORT
 	/* Clean up mutexes only if failchk cleaned up without recovery. */
 	if (ret == 0 && (t_ret = __mutex_failchk(env)) != 0)
 	    ret = t_ret;
 #endif
 
+err:
 	/* Any dead blocked thread slots are no longer needed; allow reuse. */
+	if (do_open && (t_ret = __envreg_registry_close(env)) != 0 && ret == 0)
+		ret = t_ret;
+	if (name != NULL)
+		__os_free(env, name);
+
 	if (ret == 0)
-		__env_clear_state(env);
+		ret = __env_clear_state(env);
 	if (ret == DB_RUNRECOVERY) {
 		/* Announce a panic; avoid __env_panic()'s diag core dump. */
 		__env_panic_set(env, 1);
@@ -400,34 +420,41 @@ __env_holds_mutex(env)
 
 	for (i = 0; i < env->thr_nbucket; i++)
 		SH_TAILQ_FOREACH(ip, &htab[i], dbth_links, __db_thread_info) {
+retry:
 			pid = ip->dbth_pid;
 			if (ip->dbth_state == THREAD_SLOT_NOT_IN_USE ||
 			    ip->dbth_state == THREAD_BLOCKED_DEAD ||
 			    (ip->dbth_state == THREAD_OUT &&
-			    thread->thr_count <  thread->thr_max))
+			    thread->thr_count < thread->thr_max))
 				continue;
-			if (dbenv->is_alive(
-			    dbenv, ip->dbth_pid, ip->dbth_tid, 0))
+			if (dbenv->is_alive(dbenv, pid, ip->dbth_tid, 0))
 				continue;
-                        /*
-                         * If a thread died in the API, and neither held any
+			/*
+			 * Now we know that pid is dead, so its slot cannot be
+			 * change from here on, if it is still the pid that we
+			 * checked.  Retry if the slot belongs to another pid.
+			 */
+			if (ip->dbth_pid != pid)
+				goto retry;
+			/*
+			 * If a thread died in the API, and neither held any
 			 * exclusive mutexes nor was it interrupted in the
 			 * middle of a mutex call then it is safe to continue.
-                         */
-                        if (ip->dbth_state == THREAD_ACTIVE &&
-                            ip->mtx_ctr == 0 &&
+			 */
+			if (ip->dbth_state == THREAD_ACTIVE &&
+			    ip->mtx_ctr == 0 &&
 			    !__env_acquiring_mutex(env, ip)) {
 				ip->dbth_state = THREAD_BLOCKED_DEAD;
 				unpin = 1;
 				continue;
-                        }
+			}
 			if (ip->dbth_state == THREAD_BLOCKED) {
 				ip->dbth_state = THREAD_BLOCKED_DEAD;
 				unpin = 1;
 				continue;
 			}
 			if (ip->dbth_state == THREAD_OUT) {
-				ip->dbth_state = THREAD_SLOT_NOT_IN_USE;
+				ip->dbth_state = THREAD_OUT_DEAD;
 				continue;
 			}
 			/*
@@ -463,8 +490,8 @@ __env_holds_mutex(env)
 			if (ret == 0)
 				ret = t_ret;
 			/*
-			 * Classic failchk stop after one dead thread in the
-			 * api, but broadcasting looks for all.
+			 * Classic failchk stops after finding one dead thread
+			 * in the api, but broadcasting looks for all.
 			 */
 #ifndef HAVE_FAILCHK_BROADCAST
 			return (ret);
@@ -484,7 +511,7 @@ __env_holds_mutex(env)
 					return (ret);
 #endif
 				}
-    	}
+	}
 
 	return (ret);
 }
@@ -496,7 +523,7 @@ __env_holds_mutex(env)
 static int
 __env_in_failchk(env, failchk)
 	ENV *env;
-        int *failchk;
+	int *failchk;
 {
 	DB_ENV *dbenv;
 	DB_HASHTAB *htab;
@@ -511,20 +538,20 @@ __env_in_failchk(env, failchk)
 
 	for (i = 0; i < env->thr_nbucket; i++) {
 		SH_TAILQ_FOREACH(ip, &htab[i], dbth_links, __db_thread_info) {
-                        if (ip->dbth_state == THREAD_FAILCHK) {
-                                // If a thread died in failchk, panic.
-                                if (!dbenv->is_alive(
-			            dbenv, ip->dbth_pid, ip->dbth_tid, 0)) {
-				        __env_panic_set(env, 1);
-		                        __env_panic_event(env, DB_RUNRECOVERY);
+			if (ip->dbth_state == THREAD_FAILCHK) {
+				/* If a thread died in failchk, panic. */
+				if (!dbenv->is_alive(
+				    dbenv, ip->dbth_pid, ip->dbth_tid, 0)) {
+					__env_panic_set(env, 1);
+					__env_panic_event(env, DB_RUNRECOVERY);
 					return (DB_RUNRECOVERY);
-                                }
-                                *failchk = 1;
-                                return (0);
-                        }
-                }
-        }
-        return (0);
+				}
+				*failchk = 1;
+				return (0);
+			}
+		}
+	}
+	return (0);
 }
 
 /*
@@ -544,14 +571,14 @@ __env_clear_latches(env)
 	DB_HASHTAB *htab;
 	DB_THREAD_INFO *ip;
 	u_int32_t i;
-        int j, ret, t_ret;
+	int j, ret, t_ret;
 
-        ret = t_ret = 0;
+	ret = t_ret = 0;
 	htab = env->thr_hashtab;
 
 	for (i = 0; i < env->thr_nbucket; i++)
 		SH_TAILQ_FOREACH(ip, &htab[i], dbth_links, __db_thread_info) {
-                        if (ip->dbth_state != THREAD_BLOCKED_DEAD)
+			if (ip->dbth_state != THREAD_BLOCKED_DEAD)
 				continue;
 			for (j = 0; j < MUTEX_STATE_MAX; j++)
 				if (ip->dbth_latches[j].action ==
@@ -570,19 +597,30 @@ __env_clear_latches(env)
  * __env_clear_state --
  *	Look for threads which died while blocked or in the API and clear them.
  */
-static void
+static int
 __env_clear_state(env)
 	ENV *env;
 {
 	DB_HASHTAB *htab;
 	DB_THREAD_INFO *ip;
-	u_int32_t i;
+	u_int32_t i, ret, t_ret;
 
+	ret = t_ret = 0;
 	htab = env->thr_hashtab;
 	for (i = 0; i < env->thr_nbucket; i++)
 		SH_TAILQ_FOREACH(ip, &htab[i], dbth_links, __db_thread_info)
-			if (ip->dbth_state == THREAD_BLOCKED_DEAD)
+			if (ip->dbth_state == THREAD_BLOCKED_DEAD ||
+			    ip->dbth_state == THREAD_OUT_DEAD) {
+				if (env->dbenv->registry != NULL &&
+				    (t_ret = __envreg_unregister_pid(env,
+				    ip->dbth_pid, 0)) != 0 && ret == 0) {
+					ret = t_ret;
+					break;
+				}
+
 				ip->dbth_state = THREAD_SLOT_NOT_IN_USE;
+			}
+	return (ret);
 }
 
 struct __db_threadid {
@@ -664,13 +702,13 @@ __env_set_state(env, ipp, state)
 	 * mutex counter code.
 	 */
 	if (state == THREAD_VERIFY || state == THREAD_CTR_VERIFY) {
-		DB_ASSERT(env, ip != NULL
-		    && (ip->dbth_state != THREAD_OUT
-		    || state == THREAD_CTR_VERIFY));
+		DB_ASSERT(env, ip != NULL &&
+		    (ip->dbth_state != THREAD_OUT ||
+		    state == THREAD_CTR_VERIFY));
 		if (ipp != NULL)
 			*ipp = ip;
-		if (ip == NULL
-		    || (ip->dbth_state == THREAD_OUT && state == THREAD_VERIFY))
+		if (ip == NULL ||
+		   (ip->dbth_state == THREAD_OUT && state == THREAD_VERIFY))
 			return (USR_ERR(env, EINVAL));
 		else
 			return (0);
@@ -740,7 +778,7 @@ __env_set_state(env, ipp, state)
 init:			ip->dbth_pid = id.pid;
 			ip->dbth_tid = id.tid;
 			if (renv->mtx_regenv != MUTEX_INVALID)
-                                ip->mtx_ctr++;
+				ip->mtx_ctr++;
 			ip->dbth_state = state;
 			for (indx = 0; indx != MUTEX_STATE_MAX; indx++)
 				ip->dbth_latches[indx].mutex = MUTEX_INVALID;

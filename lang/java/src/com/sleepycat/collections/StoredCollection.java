@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  */
 
@@ -210,6 +210,7 @@ public abstract class StoredCollection<E> extends StoredContainer
      * be closed, the method name {@code iterator} is confusing since standard
      * Java iterators do not need to be closed.
      */
+	@Deprecated
     public StoredIterator<E> iterator(boolean writeAllowed) {
 
         return storedIterator(writeAllowed);

@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2000, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 
@@ -14,7 +14,8 @@ global slice_method_tests
 set serial_tests {bigfile003 rep002 rep005 rep016 rep020 rep022 rep026 \
     rep031 rep063 rep078 rep079 rep096 rep097 rep106 run_ipv4_tests}
 #set serial_tests {}
-set run_in_sliced_env_tests {test001 test002 test003 test030 test116}
+set run_in_sliced_env_tests {test001 test002 test003 test030 test116 \
+    test156 }
 set run_with_slices_tests {env001 env008 env012 env013 sec001}
 
 # The 'subs' list is used to source tests, so if a group is a subset 
@@ -35,7 +36,7 @@ set test_names(rep_elect)	[list rep002 rep005 rep016 rep020 rep022 \
 set test_names(env)	[list env001 env002 env003 env004 env005 env006 \
     env007 env008 env009 env010 env011 env012 env013 env014 env015 env016 \
     env017 env018 env019 env020 env021 env022 env023 env024 env025 env027 \
-    env028 env029 env030]
+    env028 env029 env030 env031]
 set test_names(fail)	[list fail001]
 set test_names(fop)	[list fop001 fop002 fop003 fop004 fop005 fop006 \
     fop007 fop008 fop009 fop010 fop011 fop012]
@@ -63,7 +64,7 @@ set test_names(rep)	[list rep001 rep002 rep003 rep005 rep006 rep007 \
     rep078 rep079 rep080 rep081 rep082 rep083 rep084 rep085 rep086 rep087 \
     rep088 rep089 rep090 rep091 rep092 rep093 rep094 rep095 rep096 rep097 \
     rep098 rep099 rep100 rep101 rep102 rep103 rep104 rep105 rep106 rep107 \
-    rep108 rep109 rep110 rep111 rep112 rep113 rep115 rep116 ]
+    rep108 rep110 rep111 rep112 rep113 rep115 rep116 ]
 set test_names(rep_multiversion) [list rep065 repmgr035] 
 set test_names(skip_for_env_private) [list rep002 rep003 rep004 rep005 \
     rep014 rep016 rep017 rep018 rep020 rep022 rep026 rep028 rep031 \
@@ -84,12 +85,12 @@ set test_names(repmgr_basic) [list basic_repmgr_test \
 set test_names(repmgr_multiproc) [list repmgr100 repmgr101 repmgr102 \
     repmgr105 repmgr106 repmgr107 repmgr108 repmgr109 \
     repmgr110 repmgr111 repmgr112 repmgr113 repmgr150]
-set test_names(repmgr_other) [list repmgr004 repmgr007 repmgr009 repmgr010 \
-    repmgr011 repmgr012 repmgr013 repmgr017 repmgr018 repmgr023 repmgr024 \
-    repmgr025 repmgr026 repmgr027 repmgr028 repmgr029 repmgr030 repmgr031 \
-    repmgr032 repmgr033 repmgr034 repmgr036 repmgr037 repmgr038 \
+set test_names(repmgr_other) [list repmgr004 repmgr005 repmgr007 repmgr009 \
+    repmgr010 repmgr011 repmgr012 repmgr013 repmgr017 repmgr018 repmgr023 \
+    repmgr024 repmgr025 repmgr026 repmgr027 repmgr028 repmgr029 repmgr030 \
+    repmgr031 repmgr032 repmgr033 repmgr034 repmgr036 repmgr037 repmgr038 \
     repmgr039 repmgr040 repmgr041 repmgr042 repmgr043 repmgr044 repmgr045 \
-    repmgr046]
+    repmgr046 repmgr047 repmgr048]
 set test_names(rsrc)	[list rsrc001 rsrc002 rsrc003 rsrc004]
 set test_names(sdb)	[list sdb001 sdb002 sdb003 sdb004 sdb005 sdb006 \
     sdb007 sdb008 sdb009 sdb010 sdb011 sdb012 sdb013 sdb014 sdb015 sdb016 \
@@ -116,10 +117,10 @@ set test_names(test)	[list test001 test002 test003 test004 test005 \
     test128 test129 test130 test131 test132 test133 test134 test135 test136 \
     test137 test138 test139 test140 test141 test142 test143 test144 test145 \
     test146 test147 test148 test149 test150 test151 test152 test153 test154 \
-    test155 test156]
+    test155 test156 test157]
 
 set test_names(txn)	[list txn001 txn002 txn003 txn004 txn005 txn006 \
-    txn007 txn008 txn009 txn010 txn011 txn012 txn013 txn014]
+    txn007 txn008 txn009 txn010 txn011 txn012 txn013 txn014 txn015]
 
 # Set up a list of rep tests to run before committing changes to the
 # replication system.  By default, all tests in test_names(rep) are
@@ -300,13 +301,13 @@ set parms(rep105) {10 "105"}
 set parms(rep106) {"106"}
 set parms(rep107) {"107"}
 set parms(rep108) {500 "108"}
-set parms(rep109) {"109"}
 set parms(rep110) {200 "110"}
 set parms(rep111) {100 "111"}
 set parms(rep112) {100 "112"}
 set parms(rep113) {100 "113"}
 set parms(rep115) {20 "115"}
 set parms(rep116) {200 "116"}
+set parms(repmgr005) {100 "005"}
 set parms(repmgr007) {100 "007"}
 set parms(repmgr009) {10 "009"}
 set parms(repmgr010) {100 "010"}
@@ -337,6 +338,8 @@ set parms(repmgr043) {100 "043"}
 set parms(repmgr044) {100 "044"}
 set parms(repmgr045) {100 "045"}
 set parms(repmgr046) {100 "046"}
+set parms(repmgr047) {100 "047"}
+set parms(repmgr048) {"048"}
 set parms(repmgr100) ""
 set parms(repmgr101) ""
 set parms(repmgr102) ""
@@ -543,6 +546,7 @@ set parms(test153) {"153"}
 set parms(test154) {"154"}
 set parms(test155) ""
 set parms(test156) 10000
+set parms(test157) {100 "157"}
 
 # Shell script tests.  Each list entry is a {directory filename rundir} list,
 # invoked with "/bin/sh filename".
@@ -551,6 +555,5 @@ set shelltest_list {
 	{ cxx		chk.cxxtests .. }
 	{ java/junit	chk.bdb junit }
 	{ java/compat	chk.bdb compat }
-	{ sql_codegen	chk.bdb "" }
 	{ xa	        chk.xa "" }
 }

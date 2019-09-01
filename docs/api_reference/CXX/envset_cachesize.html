@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::set_cachesize()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::set_cachesize()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="envset_cache_max.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="envset_cachesize"></a>DbEnv::set_cachesize()</h2>
+            <h2 class="title" style="clear: both"><a id="envset_cachesize"></a>
+        
+        <span>DbEnv::set_cachesize()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -73,7 +79,10 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
          The cache may be resized by calling <code class="methodname">DbEnv::set_cachesize()</code>
          after the environment is open.  The supplied size will be rounded to the nearest multiple
          of the region size and may not be larger than the maximum size configured with 
-         <a class="xref" href="envset_cache_max.html" title="DbEnv::set_cache_max()">DbEnv::set_cache_max()</a>.  The 
+         <a class="xref" href="envset_cache_max.html" title="DbEnv::set_cache_max()">
+        
+        <span>DbEnv::set_cache_max()</span>
+    </a>.  The 
          <span class="bold"><strong>ncache</strong></span> parameter is ignored when resizing the cache.
 
     </p>
@@ -99,7 +108,10 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
         <code class="methodname">DbEnv::set_cachesize()</code> method must be
         called for each slice environment. That is, for each slice, there
         is a sub-environment, and this method must be called on each such 
-        environment individually. Use <a class="xref" href="envget_slices.html" title="DbEnv::get_slices()">DbEnv::get_slices()</a> to retrieve an array
+        environment individually. Use <a class="xref" href="envget_slices.html" title="DbEnv::get_slices()">
+        
+        <span>DbEnv::get_slices()</span>
+    </a> to retrieve an array
         of slice environments.
     </p>
       <p>
@@ -120,7 +132,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809272752"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176766533312"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -128,7 +140,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809274000"></a>gbytes</h4>
+                <h4 class="title"><a id="idm140176766534560"></a>gbytes</h4>
               </div>
             </div>
           </div>
@@ -140,7 +152,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809305568"></a>bytes</h4>
+                <h4 class="title"><a id="idm140176766562704"></a>bytes</h4>
               </div>
             </div>
           </div>
@@ -152,7 +164,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809300560"></a>ncache</h4>
+                <h4 class="title"><a id="idm140176766557600"></a>ncache</h4>
               </div>
             </div>
           </div>
@@ -166,7 +178,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809262416"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176766522272"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -184,7 +196,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703809248800"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176766506864"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -198,7 +210,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809250336"></a>Class</h3>
+              <h3 class="title"><a id="idm140176766510192"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -210,7 +222,7 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703809259024"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176766517216"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -230,11 +242,17 @@ DbEnv::set_cachesize(u_int32_t gbytes, u_int32_t bytes, int ncache); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="mempset_mp_max_openfd.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::set_cache_max() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::set_cache_max()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::set_mp_max_openfd()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::set_mp_max_openfd()</span>
+    </td>
         </tr>
       </table>
     </div>

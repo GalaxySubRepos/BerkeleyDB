@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -116,7 +116,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                  Display locking subsystem statistics, as described in the
-                     <a class="xref" href="lockstat.html" title="DB_ENV-&gt;lock_stat()">DB_ENV-&gt;lock_stat()</a> method.
+                     <a class="xref" href="lockstat.html" title="DB_ENV-&gt;lock_stat()">
+        <span>DB_ENV-&gt;lock_stat()</span>
+        
+    </a> method.
             </p>
           </li>
           <li>
@@ -125,7 +128,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                 Display database statistics for the specified file, as described in the
-                <a class="xref" href="dbstat.html" title="DB-&gt;stat()">DB-&gt;stat()</a> method.
+                <a class="xref" href="dbstat.html" title="DB-&gt;stat()">
+        <span>DB-&gt;stat()</span>
+        
+    </a> method.
             </p>
             <p>
                  If the database contains multiple databases and the <span class="bold"><strong>-s</strong></span> flag is not specified, the statistics are
@@ -174,7 +180,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                 Display logging subsystem statistics, as described in the
-                <a class="xref" href="logstat.html" title="DB_ENV-&gt;log_stat()">DB_ENV-&gt;log_stat()</a>
+                <a class="xref" href="logstat.html" title="DB_ENV-&gt;log_stat()">
+        <span>DB_ENV-&gt;log_stat()</span>
+        
+    </a>
                 method.
             </p>
           </li>
@@ -232,7 +241,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                 Display cache statistics, as described in the
-                <a class="xref" href="mempstat.html" title="DB_ENV-&gt;memp_stat()">DB_ENV-&gt;memp_stat()</a>
+                <a class="xref" href="mempstat.html" title="DB_ENV-&gt;memp_stat()">
+        <span>DB_ENV-&gt;memp_stat()</span>
+        
+    </a>
                 method.
             </p>
           </li>
@@ -285,7 +297,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                  Display replication statistics, as described in 
-                 in the <a class="xref" href="repstat.html" title="DB_ENV-&gt;rep_stat()">DB_ENV-&gt;rep_stat()</a>
+                 in the <a class="xref" href="repstat.html" title="DB_ENV-&gt;rep_stat()">
+        <span>DB_ENV-&gt;rep_stat()</span>
+        
+    </a>
                  method.
             </p>
           </li>
@@ -295,7 +310,7 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                 Verify the specified database before getting the statistics.
-                No statistics are returned if the database is corrpted. Use
+                No statistics are returned if the database is corrupted. Use
                 this option when you are not sure about the integrity of the
                 database.
             </p>
@@ -338,7 +353,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                 Display transaction subsystem statistics, as described in the
-                <a class="xref" href="txnstat.html" title="DB_ENV-&gt;txn_stat()">DB_ENV-&gt;txn_stat()</a>
+                <a class="xref" href="txnstat.html" title="DB_ENV-&gt;txn_stat()">
+        <span>DB_ENV-&gt;txn_stat()</span>
+        
+    </a>
                 method.
             </p>
           </li>
@@ -376,7 +394,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
             </p>
             <p>
                 Display mutex subsystem statistics, as described in the
-                <a class="xref" href="mutexstat.html" title="DB_ENV-&gt;mutex_stat()">DB_ENV-&gt;mutex_stat()</a>
+                <a class="xref" href="mutexstat.html" title="DB_ENV-&gt;mutex_stat()">
+        <span>DB_ENV-&gt;mutex_stat()</span>
+        
+    </a>
                 method.
             </p>
           </li>
@@ -420,7 +441,7 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815226542832"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140113478824592"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -428,7 +449,7 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815226545712"></a>DB_HOME</h4>
+                <h4 class="title"><a id="idm140113478865040"></a>DB_HOME</h4>
               </div>
             </div>
           </div>
@@ -436,7 +457,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
                           If the <span class="bold"><strong>-h</strong></span> option is not specified and
                           the environment variable DB_HOME is set, it is used as the path of the
                           database home, as described in the
-                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">DB_ENV-&gt;open()</a>
+                          <a class="xref" href="envopen.html" title="DB_ENV-&gt;open()">
+        <span>DB_ENV-&gt;open()</span>
+        
+    </a>
                           method.
                      </p>
         </div>
@@ -453,7 +477,10 @@ db_stat [-acEelmNrtVxZ] [-C Aclop] [-h home] [-L A] [-M Ah] [-R A]
           <td width="40%" align="right"> <a accesskey="n" href="db_tuner.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">dbsql </td>
+          <td width="40%" align="left" valign="top">
+        <span>dbsql</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>

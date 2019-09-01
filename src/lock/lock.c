@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -1959,7 +1959,7 @@ __lock_trade(env, lock, new_locker)
 		return (USR_ERR(env, DB_NOTFOUND));
 
 	if (new_locker == NULL) {
-		__db_errx(env, DB_STR("2040", "Locker does not exist"));
+		__db_errx(env, DB_STR("2036", "Locker does not exist"));
 		return (EINVAL);
 	}
 

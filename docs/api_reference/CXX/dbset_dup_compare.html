@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">Db::set_dup_compare()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">Db::set_dup_compare()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbset_create_dir.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="dbset_dup_compare"></a>Db::set_dup_compare()</h2>
+            <h2 class="title" style="clear: both"><a id="dbset_dup_compare"></a>
+        
+        <span>Db::set_dup_compare()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -51,7 +57,10 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
          function is called whenever it is necessary to compare a data item
          specified by the application with a data item currently stored in the
          database.  Calling <code class="methodname">Db::set_dup_compare()</code> implies calling 
-         <a class="xref" href="dbset_flags.html" title="Db::set_flags()">Db::set_flags()</a>  with the
+         <a class="xref" href="dbset_flags.html" title="Db::set_flags()">
+        
+        <span>Db::set_flags()</span>
+    </a>  with the
          <a class="link" href="dbset_flags.html#dbset_flags_DB_DUPSORT">DB_DUPSORT</a> 
          flag.
     </p>
@@ -61,8 +70,14 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
     </p>
       <p>
          The <code class="methodname">Db::set_dup_compare()</code> method may not be called after the 
-         <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  method is called. If
-         the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">Db::open()</a>  
+         <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  method is called. If
+         the database already exists when <a class="xref" href="dbopen.html" title="Db::open()">
+        
+        <span>Db::open()</span>
+    </a>  
          is called, the information specified to <code class="methodname">Db::set_dup_compare()</code> must be the same as
          that historically used to create the database or corruption can occur.
     </p>
@@ -80,7 +95,7 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703827785120"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176787409408"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -88,7 +103,7 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703827858144"></a>dup_compare_fcn</h4>
+                <h4 class="title"><a id="idm140176787402176"></a>dup_compare_fcn</h4>
               </div>
             </div>
           </div>
@@ -159,7 +174,7 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703827080256"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176787662480"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -177,7 +192,7 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703818240592"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176777785296"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -190,7 +205,7 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703828845280"></a>Class</h3>
+              <h3 class="title"><a id="idm140176772374000"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -202,7 +217,7 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703814967680"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176777686000"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -222,11 +237,17 @@ Db::set_dup_compare(dup_compare_fcn_type dup_compare_fcn);</pre>
           <td width="40%" align="right"> <a accesskey="n" href="dbset_encrypt.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">Db::set_create_dir() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>Db::set_create_dir()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> Db::set_encrypt()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>Db::set_encrypt()</span>
+    </td>
         </tr>
       </table>
     </div>

@@ -102,7 +102,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/FIXED:NO /export:__db_assert %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;user32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_small.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -116,7 +116,7 @@
       <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_SMALLBUILD;DB_CREATE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;user32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_small.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -131,7 +131,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/FIXED:NO /export:__db_assert %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;user32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_small.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -145,7 +145,7 @@
       <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_SMALLBUILD;DB_CREATE_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Advapi32.lib;user32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>..\..\build_windows\libdb_small.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>

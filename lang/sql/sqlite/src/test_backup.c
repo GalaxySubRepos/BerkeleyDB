@@ -1,4 +1,10 @@
 /*
+** Copyright (c) 2018, 2019 Oracle and/or its affiliates. All rights
+** reserved.
+** 
+** This copyrighted work includes portions of SQLite received 
+** with the following notice:
+** 
 ** 2009 January 28
 **
 ** The author disclaims copyright to this source code.  In place of
@@ -13,7 +19,14 @@
 **
 */
 
-#include "tcl.h"
+#if defined(INCLUDE_SQLITE_TCL_H)
+#  include "sqlite_tcl.h"
+#else
+#  include "tcl.h"
+#  ifndef SQLITE_TCLAPI
+#    define SQLITE_TCLAPI
+#  endif
+#endif
 #include "sqlite3.h"
 #include <assert.h>
 
@@ -23,7 +36,7 @@ extern const char *sqlite3ErrName(int);
 /* These functions are implemented in test1.c. */
 extern int getDbPointer(Tcl_Interp *, const char *, sqlite3 **);
 
-static int backupTestCmd(
+static int SQLITE_TCLAPI backupTestCmd(
   ClientData clientData, 
   Tcl_Interp *interp, 
   int objc,
@@ -98,7 +111,7 @@ static int backupTestCmd(
   return TCL_OK;
 }
 
-static void backupTestFinish(ClientData clientData){
+static void SQLITE_TCLAPI backupTestFinish(ClientData clientData){
   sqlite3_backup *pBackup = (sqlite3_backup *)clientData;
   sqlite3_backup_finish(pBackup);
 }
@@ -107,7 +120,7 @@ static void backupTestFinish(ClientData clientData){
 **     sqlite3_backup CMDNAME DESTHANDLE DESTNAME SRCHANDLE SRCNAME
 **
 */
-static int backupTestInit(
+static int SQLITE_TCLAPI backupTestInit(
   ClientData clientData, 
   Tcl_Interp *interp, 
   int objc,

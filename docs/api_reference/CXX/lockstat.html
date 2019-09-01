@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::lock_stat()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::lock_stat()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="lockput.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="lockstat"></a>DbEnv::lock_stat()</h2>
+            <h2 class="title" style="clear: both"><a id="lockstat"></a>
+        
+        <span>DbEnv::lock_stat()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -54,7 +60,10 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
       <p>
          Statistical structures are stored in allocated memory.  If
          application-specific allocation routines have been declared (see
-         <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">DbEnv::set_alloc()</a> 
+         <a class="xref" href="envset_alloc.html" title="DbEnv::set_alloc()">
+        
+        <span>DbEnv::set_alloc()</span>
+    </a> 
          for more information), they are used to allocate the memory;
          otherwise, the standard C library <span class="bold"><strong>malloc</strong></span>(3) is used.  The caller is responsible
          for deallocating the memory.  To deallocate the memory, free the
@@ -325,7 +334,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
           </li>
           <li>
             <p>
-                         <span class="bold"><strong>int st_nmodes;</strong></span>
+                         <span class="bold"><strong>int32_t st_nmodes;</strong></span>
                 </p>
             <p>
                         The number of lock modes.
@@ -498,7 +507,10 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
       </div>
       <p>
               The <code class="methodname">DbEnv::lock_stat()</code> method may not be called before the 
-              <a class="xref" href="envopen.html" title="DbEnv::open()">DbEnv::open()</a>  method is called.
+              <a class="xref" href="envopen.html" title="DbEnv::open()">
+        
+        <span>DbEnv::open()</span>
+    </a>  method is called.
      </p>
       <p>
          The <code class="methodname">DbEnv::lock_stat()</code> method returns a non-zero error value on
@@ -508,7 +520,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810564640"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176767820384"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -516,7 +528,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810538704"></a>statp</h4>
+                <h4 class="title"><a id="idm140176767817024"></a>statp</h4>
               </div>
             </div>
           </div>
@@ -529,7 +541,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810457600"></a>flags</h4>
+                <h4 class="title"><a id="idm140176767734160"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -555,7 +567,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810448736"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176767725040"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -573,7 +585,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810470496"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176767777440"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -586,7 +598,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810434528"></a>Class</h3>
+              <h3 class="title"><a id="idm140176767711024"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -599,7 +611,7 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810442512"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176767719008"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -619,11 +631,17 @@ DbEnv::lock_stat(DB_LOCK_STAT **statp, u_int32_t flags); </pre>
           <td width="40%" align="right"> <a accesskey="n" href="lockstat_print.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::lock_put() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::lock_put()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::lock_stat_print()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::lock_stat_print()</span>
+    </td>
         </tr>
       </table>
     </div>

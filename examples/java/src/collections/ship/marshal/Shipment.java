@@ -1,9 +1,8 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2002, 2019 Oracle and/or its affiliates.  All rights reserved.
  *
- * $Id$
+ * See the file EXAMPLES-LICENSE for license information.
+ *
  */
 
 package collections.ship.marshal;
@@ -71,6 +70,7 @@ public class Shipment implements Serializable, MarshalledEnt {
         return quantity;
     }
 
+    @Override
     public String toString() {
 
         return "[Shipment: part=" + partNumber +
@@ -86,28 +86,36 @@ public class Shipment implements Serializable, MarshalledEnt {
         // instantiate objects of this class.
     }
 
+    @Override
     public void unmarshalPrimaryKey(TupleInput keyInput) {
 
         this.partNumber = keyInput.readString();
         this.supplierNumber = keyInput.readString();
     }
 
+    @Override
     public void marshalPrimaryKey(TupleOutput keyOutput) {
 
         keyOutput.writeString(this.partNumber);
         keyOutput.writeString(this.supplierNumber);
     }
 
+    /**
+     * {@inheritDoc}
+     * @throws UnsupportedOperationException
+     */
+    @Override
     public boolean marshalSecondaryKey(String keyName, TupleOutput keyOutput) {
 
-        if (keyName.equals(PART_KEY)) {
-            keyOutput.writeString(this.partNumber);
-            return true;
-        } else if (keyName.equals(SUPPLIER_KEY)) {
-            keyOutput.writeString(this.supplierNumber);
-            return true;
-        } else {
-            throw new UnsupportedOperationException(keyName);
+        switch (keyName) {
+            case PART_KEY:
+                keyOutput.writeString(this.partNumber);
+                return true;
+            case SUPPLIER_KEY:
+                keyOutput.writeString(this.supplierNumber);
+                return true;
+            default:
+                throw new UnsupportedOperationException(keyName);
         }
     }
 }

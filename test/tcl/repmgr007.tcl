@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2007, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -11,11 +11,15 @@
 # TEST	restart each client, processing transactions after each restart.
 # TEST	Verify all expected transactions are replicated.
 # TEST
+# TEST	Test flag -R of utility db_printlog.
+# TEST	
 # TEST	Run for btree only because access method shouldn't matter.
 # TEST
 proc repmgr007 { { niter 100 } { tnum "007" } args } {
 
 	source ./include.tcl
+
+	package require tls
 
 	if { $is_freebsd_test == 1 } {
 		puts "Skipping replication manager test on FreeBSD platform."
@@ -29,11 +33,19 @@ proc repmgr007 { { niter 100 } { tnum "007" } args } {
 	repmgr007_sub $method $niter $tnum $args
 }
 
+proc ::get_cert_pass {} {
+     return "someRandomPass"
+}
+
 proc repmgr007_sub { method niter tnum largs } {
+	source ./include.tcl
+
 	global testdir
+	global EXE
 	global rep_verbose
 	global verbose_type
 	global ipversion
+	global ssl_test_enabled
 	set nsites 3
 
 	set verbargs ""
@@ -52,6 +64,10 @@ proc repmgr007_sub { method niter tnum largs } {
 	file mkdir $masterdir
 	file mkdir $clientdir
 	file mkdir $clientdir2
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $clientdir
+	setup_repmgr_ssl $clientdir2
 
 	# Open a master.
 	puts "\tRepmgr$tnum.a: Start a master."
@@ -139,13 +155,45 @@ proc repmgr007_sub { method niter tnum largs } {
 	# Test that repmgr won't crash on a small amount of unexpected
 	# input over its port.  
 	#
-
+	
+	set tls_setup_args [tcl_tls_setup_string]
+	
 	puts "\tRepmgr$tnum.k: Test that repmgr ignores unexpected input."
-	set msock [socket $hoststr [lindex $ports 0]]
+
+	if { $ssl_test_enabled == 1 } {
+		tls::init
+		set msock [tls::socket {*}$tls_setup_args $hoststr [lindex $ports 0] ]
+	} else {
+		set msock [socket $hoststr [lindex $ports 0]]
+	}
 	set garbage "abcdefghijklmnopqrstuvwxyz"
 	puts $msock $garbage
 	close $msock
 
+	puts "\tRepmgr$tnum.l: Test db_printlog with flag -R."
+	set binname db_printlog
+	set std_redirect "> /dev/null"
+	if { $is_windows_test } {
+		set std_redirect "> /nul"
+		append binname $EXE
+	}
+
+	set hpargs "-h $clientdir -R"
+	# Test flag R combination with other flags.
+	set flaglist [list "-N" "-r" "-V" "-D 100" ""]
+	foreach lgpflag $flaglist {
+		
+		set combinearg "$lgpflag $hpargs"
+
+		repmgr007_execmd "$binname $combinearg $std_redirect"
+		# Test with given start and end LSN.
+		repmgr007_execmd "$binname -b 0/0 $combinearg $std_redirect"
+		repmgr007_execmd\
+		    "$binname -e 1/1000 $combinearg $std_redirect"
+		repmgr007_execmd\
+		    "$binname -b 0/0 -e 1/1000 $combinearg $std_redirect"
+	}
+	
 	error_check_good client2_close [$clientenv2 close] 0
 	error_check_good client_close [$clientenv close] 0
 	error_check_good masterenv_close [$masterenv close] 0
@@ -158,4 +206,12 @@ proc repmgr007_sub { method niter tnum largs } {
 	set maserr [read $maserrfile]
 	close $maserrfile
 	error_check_good errchk [is_substr $maserr "unexpected msg type"] 1
+}
+
+proc repmgr007_execmd { execmd } {
+	source ./include.tcl
+	puts "\t\tRepmgr007: $util_path/$execmd"
+	if { [catch {eval exec $util_path/$execmd} result] } {
+		puts "FAIL: got $result while executing '$execmd'"
+	}
 }

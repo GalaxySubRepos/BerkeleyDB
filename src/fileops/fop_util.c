@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 2001, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -406,7 +406,8 @@ reopen:		if (!F_ISSET(dbp, DB_AM_INMEM) && (ret =
 			 * retries is exhausted, then throw an error.
 			 */
 			if (ret == 0 && (ret = __db_chk_meta(env, dbp,
-			    (DBMETA *)mbuf, DB_CHK_META)) == DB_META_CHKSUM_FAIL) {
+			    (DBMETA *)mbuf, DB_CHK_META)) ==
+			    DB_META_CHKSUM_FAIL) {
 				if ((t_ret = __ENV_LPUT(env, elock)) != 0) {
 					ret = t_ret;
 					goto err;

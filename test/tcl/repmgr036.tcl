@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2012, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -56,6 +56,10 @@ proc repmgr036_sub { method niter tnum largs } {
 	file mkdir $masterdir
 	file mkdir $viewdir
 	file mkdir $emptydir
+
+	setup_repmgr_ssl $masterdir
+	setup_repmgr_ssl $viewdir
+	setup_repmgr_ssl $emptydir	
 
 	#
 	# Create a 2-site replication group containing a master and a view.

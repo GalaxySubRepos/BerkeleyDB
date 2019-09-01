@@ -1,8 +1,8 @@
 /* DO NOT EDIT: automatically built by dist/s_android. */
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1996, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -29,6 +29,35 @@
 #endif
 #endif
 
+#if defined(HAVE_REPMGR_SSL_SUPPORT) && defined(HAVE_REPLICATION_THREADS)
+#ifdef HAVE_OPENSSL_SSL_H
+#include <openssl/ssl.h>
+#endif
+#ifdef HAVE_OPENSSL_ERR_H
+#include <openssl/err.h>
+#endif
+#define OPENSSL_THREAD_DEFINES
+#include <openssl/opensslconf.h>
+#if OPENSSL_VERSION_NUMBER < 0x10001000L
+	#error "OpenSSL >= 1.0.1 required."
+#endif
+#if defined(HAVE_OPENSSL_SSL_H) && defined(HAVE_OPENSSL_ERR_H) && defined(OPENSSL_THREADS)
+#define HAVE_REPMGR_SSL 1
+#endif
+#endif
+
+#if defined(HAVE_REPLICATION_THREADS)
+#ifdef HAVE_SYS_POLL_H
+#include <sys/poll.h>
+#endif
+#endif
+
+#if defined(HAVE_REPLICATION_THREADS)
+#ifdef HAVE_SYS_EPOLL_H
+#include <sys/epoll.h>
+#endif
+#endif
+
 #if TIME_WITH_SYS_TIME
 #include <sys/time.h>
 #include <time.h>
@@ -40,9 +69,7 @@
 #endif
 #endif
 
-#ifdef HAVE_VXWORKS
-#include <net/uio.h>
-#else
+#ifndef HAVE_VXWORKS
 #include <sys/uio.h>
 #endif
 
@@ -83,6 +110,26 @@
 
 #ifdef DB_WIN32
 #include "dbinc/win_db.h"
+
+#if defined(HAVE_REPMGR_SSL_SUPPORT) && defined(HAVE_REPLICATION_THREADS)
+#ifdef HAVE_OPENSSL_SSL_H
+#include "openssl/ssl.h"
+#endif
+#ifdef HAVE_OPENSSL_ERR_H
+#include "openssl/err.h"
+#endif
+#ifdef HAVE_OPENSSL_OPENSSLCONF_H
+#define OPENSSL_THREAD_DEFINES
+#include "openssl/opensslconf.h"
+#endif
+#if OPENSSL_VERSION_NUMBER < 0x10001000L
+	#error "OpenSSL >= 1.0.1 required."
+#endif
+#if defined(HAVE_OPENSSL_SSL_H) && defined(HAVE_OPENSSL_ERR_H) && defined(OPENSSL_THREADS)
+#define HAVE_REPMGR_SSL 1
+#endif
+#endif
+
 #endif
 
 #ifdef HAVE_DBM
@@ -170,6 +217,13 @@ typedef SH_TAILQ_HEAD(__hash_head) DB_HASHTAB;
 
 /* Minimum number of pages cached, by default. */
 #define	DB_MINPAGECACHE	16
+
+/*
+ * Increase the cachesize by 25% and factor in the the size of the hash buckets
+ * to account for our overhead if the application requests less than 500MB.
+ */
+#define MEMP_SMALLCACHE_ADJUST(nbytes)					\
+	(((nbytes) * 5) / 4 + __db_tablesize(32) * sizeof(DB_MPOOL_HASH))
 
 /*
  * If we are unable to determine the underlying filesystem block size, use
@@ -737,6 +791,7 @@ typedef enum {
 typedef enum {
 	THREAD_SLOT_NOT_IN_USE=0,
 	THREAD_OUT,
+	THREAD_OUT_DEAD,
 	THREAD_ACTIVE,
 	THREAD_BLOCKED,
 	THREAD_BLOCKED_DEAD,
@@ -885,6 +940,7 @@ struct __env {
 	char	 *db_home;		/* Environment's home directory. */
 	u_int32_t open_flags;		/* Flags */
 	int	  db_mode;		/* Default open permissions */
+	u_int32_t envid;		/* Cached env id, panic if != REGENV. */
 
 	pid_t	pid_cache;		/* Cached process ID */
 

@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DB_ENV-&gt;txn_begin()</th>
+          <th colspan="3" align="center">
+        <span xmlns="http://www.w3.org/1999/xhtml">DB_ENV-&gt;txn_begin()</span>
+        
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="txnrecover.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="txnbegin"></a>DB_ENV-&gt;txn_begin()</h2>
+            <h2 class="title" style="clear: both"><a id="txnbegin"></a>
+        <span>DB_ENV-&gt;txn_begin()</span>
+        
+    </h2>
           </div>
         </div>
       </div>
@@ -47,9 +53,18 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
          The <code class="methodname">DB_ENV-&gt;txn_begin()</code> method creates a new transaction in the
          environment and copies a pointer to a <a class="link" href="txn.html" title="Chapter 12.  The DB_TXN Handle">DB_TXN</a>  that
          uniquely identifies it into the memory to which <span class="bold"><strong>tid</strong></span>
-         refers.  Calling the <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">DB_TXN-&gt;abort()</a>, 
-         <a class="xref" href="txncommit.html" title="DB_TXN-&gt;commit()">DB_TXN-&gt;commit()</a>  or 
-         <a class="xref" href="txndiscard.html" title="DB_TXN-&gt;discard()">DB_TXN-&gt;discard()</a>  methods will 
+         refers.  Calling the <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">
+        <span>DB_TXN-&gt;abort()</span>
+        
+    </a>, 
+         <a class="xref" href="txncommit.html" title="DB_TXN-&gt;commit()">
+        <span>DB_TXN-&gt;commit()</span>
+        
+    </a>  or 
+         <a class="xref" href="txndiscard.html" title="DB_TXN-&gt;discard()">
+        <span>DB_TXN-&gt;discard()</span>
+        
+    </a>  methods will 
          discard the returned handle.
     </p>
       <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
@@ -73,8 +88,14 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
         <p>
             A parent transaction may not issue any Berkeley DB operations — except for
             <code class="methodname">DB_ENV-&gt;txn_begin()</code>, 
-            <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">DB_TXN-&gt;abort()</a>  
-            and <a class="xref" href="txncommit.html" title="DB_TXN-&gt;commit()">DB_TXN-&gt;commit()</a>  — while it 
+            <a class="xref" href="txnabort.html" title="DB_TXN-&gt;abort()">
+        <span>DB_TXN-&gt;abort()</span>
+        
+    </a>  
+            and <a class="xref" href="txncommit.html" title="DB_TXN-&gt;commit()">
+        <span>DB_TXN-&gt;commit()</span>
+        
+    </a>  — while it 
             has active child transactions (child transactions that have not yet
             been committed or aborted).
         </p>
@@ -91,7 +112,7 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227915952"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140113480124368"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -99,7 +120,7 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227937216"></a>parent</h4>
+                <h4 class="title"><a id="idm140113480123632"></a>parent</h4>
               </div>
             </div>
           </div>
@@ -110,14 +131,17 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
                           Transactions may be nested to any level. In the presence of
                           distributed transactions and two-phase commit, only the parental
                           transaction, that is a transaction without a <span class="bold"><strong>parent</strong></span> specified, should be passed as an
-                          parameter to <a class="xref" href="txnprepare.html" title="DB_TXN-&gt;prepare()">DB_TXN-&gt;prepare()</a>.
+                          parameter to <a class="xref" href="txnprepare.html" title="DB_TXN-&gt;prepare()">
+        <span>DB_TXN-&gt;prepare()</span>
+        
+    </a>.
                      </p>
         </div>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227957072"></a>flags</h4>
+                <h4 class="title"><a id="idm140113480180560"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -215,7 +239,10 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a> 
                  method.  Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -233,7 +260,10 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a> 
                  method.  Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -251,7 +281,6 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
                  databases with 
                  <a class="link" href="dbopen.html#dbopen_DB_MULTIVERSION">DB_MULTIVERSION</a> 
                  not set on the underlying database (read locks are acquired).
-                 Snapshot isolation is not supported with replication.
             </p>
                 <p>
                  The error <code class="literal">DB_LOCK_DEADLOCK</code> will be
@@ -271,7 +300,10 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
                 <p>
                  This behavior is the default for Berkeley DB environments unless the
                  <code class="literal">DB_TXN_NOSYNC</code> flag was specified to the 
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a>  method.
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a>  method.
                   Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -286,7 +318,10 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
                 <p>
                  This behavior is the default for Berkeley DB environments unless the
                  <code class="literal">DB_TXN_NOWAIT</code> flag was specified to the 
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a>  method.
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a>  method.
                   Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -306,7 +341,10 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
             </p>
                 <p>
                  This behavior may be set for a Berkeley DB environment using the
-                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">DB_ENV-&gt;set_flags()</a> 
+                 <a class="xref" href="envset_flags.html" title="DB_ENV-&gt;set_flags()">
+        <span>DB_ENV-&gt;set_flags()</span>
+        
+    </a> 
                  method.  Any value specified to this method overrides that setting.
             </p>
               </li>
@@ -318,7 +356,7 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227939264"></a>Errors</h3>
+              <h3 class="title"><a id="idm140113480090784"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -334,7 +372,7 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm139815227887808"></a> ENOMEM</h4>
+                <h4 class="title"><a id="idm140113480126832"></a> ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -348,7 +386,7 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227908016"></a>Class</h3>
+              <h3 class="title"><a id="idm140113480145360"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -360,7 +398,7 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm139815227867712"></a>See Also</h3>
+              <h3 class="title"><a id="idm140113480101024"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -380,11 +418,17 @@ DB_ENV-&gt;txn_begin(DB_ENV *env,
           <td width="40%" align="right"> <a accesskey="n" href="txncheckpoint.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;txn_recover() </td>
+          <td width="40%" align="left" valign="top">
+        <span>DB_ENV-&gt;txn_recover()</span>
+        
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DB_ENV-&gt;txn_checkpoint()</td>
+          <td width="40%" align="right" valign="top"> 
+        <span>DB_ENV-&gt;txn_checkpoint()</span>
+        
+    </td>
         </tr>
       </table>
     </div>

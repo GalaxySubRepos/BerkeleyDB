@@ -185,13 +185,8 @@ RequirePHP() {
 # regardless of where Visual Studio is installed.
 #
 FindMergeModules() {
-    local winbuild=$1
     Progress "Adding redistributable Visual Studio files..."
-    if [ "$winbuild" == "Win32" ]; then
-        MERGE_MODULES_LOCATION=Microsoft_VC90_CRT_x86.msm
-    else
-        MERGE_MODULES_LOCATION=Microsoft_VC90_CRT_x86_x64.msm
-    fi
+    MERGE_MODULES_LOCATION=Microsoft_VC100_CRT_x64.msm
 }
 
 BuildProduct() {
@@ -200,11 +195,12 @@ BuildProduct() {
     Progress "Building $PRODUCT_NAME ${winbuild} in ${PRODUCT_SUB_BLDDIR}"
     cd ${PRODUCT_SUB_BLDDIR}/dist
     # make files writeable if necessary
-    chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS8/*.vcproj
     chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS10/*.vcxproj
     chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS10/*.props
     chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS12/*.vcxproj
     chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS12/*.props
+    chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS15/*.vcxproj
+    chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/VS15/*.props
     chmod +w ${PRODUCT_SUB_BLDDIR}/build_windows/*.sln
     cmd.exe /x /c call $MSI_DIR/build.bat ${winbuild}
 }
@@ -330,15 +326,17 @@ CreateLinks() {
 createCSharpExamples() {
     local here=`pwd`
     cd dist/winmsi
-    for j in VS8 VS10 VS12; do
+    for j in VS10 VS12 VS15; do
 	mkdir -p ../../stage/examples/csharp/$j
         for i in `ls ../../examples/csharp/$j`; do
-	    f=../../stage/examples/csharp/$j/$i
-	    xqilla.exe -u -v "inFile" $f -v "libname" libdb_dotnet$DB_VERSION_MAJOR$DB_VERSION_MINOR -v "libversion" $DB_VERSION_MAJOR.$DB_VERSION_MINOR.$DB_VERSION_PATCH.0 fixupCsharp.xq
-	    # Visual studio doesn't like XML version 1.1...
-	    sed -e's!version="1.1"!version="1.0"!g' $f > $f.tmp
-	    cp -f $f.tmp $f
-	    rm -rf $f.tmp
+	    if [ "$i" != obj ]; then
+	        f=../../stage/examples/csharp/$j/$i
+	        xqilla.exe -u -v "inFile" $f -v "libname" libdb_dotnet$DB_VERSION_MAJOR$DB_VERSION_MINOR -v "libversion" $DB_VERSION_MAJOR.$DB_VERSION_MINOR.$DB_VERSION_PATCH.0 fixupCsharp.xq
+	        # Visual studio doesn't like XML version 1.1...
+	        sed -e's!version="1.1"!version="1.0"!g' $f > $f.tmp
+	    	cp -f $f.tmp $f
+	        rm -rf $f.tmp
+	    fi
         done
     done
     cd $here
@@ -349,7 +347,7 @@ createCSharpExamples() {
 fixup2010examples () {
     local here=`pwd`
     cd dist/winmsi
-    for i in `ls ../../stage/build_windows/*.vcxproj`; do
+    for i in `ls ../../stage/build_windows/VS10/*.vcxproj`; do
 	xqilla.exe -u -v "inFile" $i fixup2010.xq
 	# Visual studio doesn't like XML version 1.1...
 	sed -e's!version="1.1"!version="1.0"!g' $i > $i.tmp
@@ -377,9 +375,9 @@ StageSourceComponents() {
     rm -rf stage
     mkdir stage
     mkdir stage/build_windows
-    mkdir stage/build_windows/VS8
     mkdir stage/build_windows/VS10
     mkdir stage/build_windows/VS12
+    mkdir stage/build_windows/VS15
     mkdir stage/sql
     mkdir stage/src
     mkdir stage/src/clib
@@ -393,20 +391,22 @@ StageSourceComponents() {
     # many examples rely on getopt.c
     cp src/clib/getopt.c stage/src/clib
     # example solution and project files
-    cp build_windows/Berkeley_DB_examples.sln stage/build_windows
-    cp build_windows/BDB_dotNet_examples.sln stage/build_windows
     cp build_windows/Berkeley_DB_examples_vs2010.sln stage/build_windows
     cp build_windows/BDB_dotNet_examples_vs2010.sln stage/build_windows
     cp build_windows/Berkeley_DB_examples_vs2012.sln stage/build_windows
     cp build_windows/BDB_dotNet_examples_vs2012.sln stage/build_windows
+    cp build_windows/Berkeley_DB_examples_vs2015.sln stage/build_windows
+    cp build_windows/BDB_dotNet_examples_vs2015.sln stage/build_windows
     # NOTE: this assumes ALL example projects start with "ex"
-    cp build_windows/VS8/ex*.vcproj stage/build_windows/VS8
     # VS2010 projects too
     cp build_windows/VS10/ex*.vcxproj stage/build_windows/VS10
     cp build_windows/VS10/*.props stage/build_windows/VS10
     # VS2012 projects too
     cp build_windows/VS12/ex*.vcxproj stage/build_windows/VS12
     cp build_windows/VS12/*.props stage/build_windows/VS12
+    # VS2015 projects too
+    cp build_windows/VS15/ex*.vcxproj stage/build_windows/VS15
+    cp build_windows/VS15/*.props stage/build_windows/VS15
 
     # note files in example group file, starting at stage
     cd stage
@@ -468,8 +468,6 @@ StageRuntimeComponents() {
     for file in `find . -name "*.lib"`; do
 	cp $file stage/lib
     done
-    # remove static libraries
-    rm stage/lib/libdb*s.lib
     for file in `find . -name "*.jar"`; do
 	cp $file stage/jar
     done
@@ -487,15 +485,11 @@ StageRuntimeComponents() {
     # links with them other than DB's DLLs.
     rm -f stage/lib/libdb_java*
     rm -f stage/lib/libdb_csharp*
-    rm -f stage/lib/sqlite_jni.lib
-    rm -f stage/lib/sqlite3odbc.lib
 
     # copy library .pdb files by hand
     cp build_windows/$winbuild/Release/libdb*.pdb stage/bin
     # SQLite header, library .pdb files
     cp lang/sql/generated/sqlite3.h stage/include
-    cp build_windows/$winbuild/Release/sqlite3odbc.pdb stage/bin
-    cp build_windows/$winbuild/Release/sqlite_jni.pdb stage/bin
 
     # remove example artifacts -- they are not bundled
     rm -f stage/bin/ex*.exe
@@ -523,18 +517,19 @@ StageRuntimeComponents() {
     # temp rename of dbsql to put it in SQL
     mv bin/dbsql.exe bin/dbsql.exe.sv
     find bin -name "*.exe" >> $group_runtime
-    find bin -name "libdb??.dll" >> $group_runtime
+    find bin -name "libdb???.dll" >> $group_runtime
     mv bin/dbsql.exe.sv bin/dbsql.exe
 
     # core devo
-    find lib -name "libdb??.lib" >> $group_devo
-    find bin -name "libdb??.pdb" >> $group_devo
+    find lib -name "libdb???.lib" >> $group_devo
+    find bin -name "libdb???.pdb" >> $group_devo
 
     # java
     echo "jar/db.jar" >> $group_java
+    echo "jar/db_gui.jar" >> $group_java
     find bin -name "libdb_java*" >> $group_java
 
-    # C++/STL (libdb?? includes C++ runtime)
+    # C++/STL (libdb??? includes C++ runtime)
     find bin -name "libdb_stl*" >> $group_cxx
     find lib -name "libdb_stl*" >> $group_cxx
     
@@ -564,7 +559,6 @@ StageRuntimeComponents() {
 
 CreateMsi() {
     local here=`pwd`
-    local winbuild=$1
     Progress "Building .msi file..."
     cd "${PRODUCT_BLDDIR}"/stage
     chmod +w README
@@ -577,13 +571,8 @@ CreateMsi() {
     FindMergeModules $winbuild
     echo "MERGE: $MERGE_MODULES_LOCATION"
 
-    if [ "$winbuild" == "Win32" ]; then
-        WIN_BUILD="x86"
-	PROGRAM_FILES_FOLDER="ProgramFilesFolder"
-    else
-        WIN_BUILD="x64"
-	PROGRAM_FILES_FOLDER="ProgramFiles64Folder"
-    fi
+    WIN_BUILD="x64"
+    PROGRAM_FILES_FOLDER="ProgramFiles64Folder"
 
     # copy/edit .wxs files to here
     # use pattern that is *NOT* in lib_paths.sed to keep it intact
@@ -601,14 +590,9 @@ CreateMsi() {
     # and "light" linking below will fail without them
     CreateLinks
 
-    if [ "$winbuild" == "Win32" ]; then
-        suffix="86"
-	arch="x86"
-    else
-        suffix="64"
-	arch="x64"
-    fi
-
+    suffix="64"
+    arch="x64"
+	
     # Run WiX tools (these commands work with WiX 3.x)
     candle -arch ${arch} *.wxs
     light -out ${dbver}_${suffix}.msi -ext WixUIExtension *.wixobj

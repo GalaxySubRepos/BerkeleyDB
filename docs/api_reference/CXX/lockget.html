@@ -14,11 +14,14 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.2</p>
+        <p>Library Version 18.1.32</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
-          <th colspan="3" align="center">DbEnv::lock_get()</th>
+          <th colspan="3" align="center">
+        
+        <span xmlns="http://www.w3.org/1999/xhtml">DbEnv::lock_get()</span>
+    </th>
         </tr>
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="lockdetect.html">Prev</a> </td>
@@ -34,7 +37,10 @@
       <div class="titlepage">
         <div>
           <div>
-            <h2 class="title" style="clear: both"><a id="lockget"></a>DbEnv::lock_get()</h2>
+            <h2 class="title" style="clear: both"><a id="lockget"></a>
+        
+        <span>DbEnv::lock_get()</span>
+    </h2>
           </div>
         </div>
       </div>
@@ -61,7 +67,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810658960"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140176767977872"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -69,7 +75,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810659792"></a>locker</h4>
+                <h4 class="title"><a id="idm140176767969184"></a>locker</h4>
               </div>
             </div>
           </div>
@@ -83,7 +89,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810700656"></a>flags</h4>
+                <h4 class="title"><a id="idm140176767916336"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -110,7 +116,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810633648"></a>object</h4>
+                <h4 class="title"><a id="idm140176767931712"></a>object</h4>
               </div>
             </div>
           </div>
@@ -129,7 +135,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810633152"></a>lock_mode</h4>
+                <h4 class="title"><a id="idm140176767912016"></a>lock_mode</h4>
               </div>
             </div>
           </div>
@@ -184,7 +190,10 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
             </ul>
           </div>
           <p>
-                    See <a class="xref" href="envset_lk_conflicts.html" title="DbEnv::set_lk_conflicts()">DbEnv::set_lk_conflicts()</a> 
+                    See <a class="xref" href="envset_lk_conflicts.html" title="DbEnv::set_lk_conflicts()">
+        
+        <span>DbEnv::set_lk_conflicts()</span>
+    </a> 
                     and <a href="../../programmer_reference/lock_stdmode.html" class="olink">Standard Lock Modes</a>
                     for more information on the lock conflict matrix.
             </p>
@@ -193,7 +202,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810620960"></a>lock</h4>
+                <h4 class="title"><a id="idm140176767899776"></a>lock</h4>
               </div>
             </div>
           </div>
@@ -207,7 +216,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810689008"></a>Errors</h3>
+              <h3 class="title"><a id="idm140176767965024"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -225,7 +234,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810681616"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140176767974368"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -243,7 +252,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810624784"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176767881520"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -255,7 +264,10 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
                 You attempted to open a database handle that is configured
                 for no waiting exclusive locking, but the exclusive lock could not be
                 immediately obtained. See
-                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">Db::set_lk_exclusive()</a>
+                <a class="xref" href="dbset_lk_exclusive.html" title="Db::set_lk_exclusive()">
+        
+        <span>Db::set_lk_exclusive()</span>
+    </a>
                 for more information.
             </p>
           <p>
@@ -268,7 +280,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810635936"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140176767893392"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -287,7 +299,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810620000"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176767951248"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -299,7 +311,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810593488"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140176767871552"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -312,7 +324,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140703810592688"></a>ENOMEM</h4>
+                <h4 class="title"><a id="idm140176767870752"></a>ENOMEM</h4>
               </div>
             </div>
           </div>
@@ -325,7 +337,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810607968"></a>Class</h3>
+              <h3 class="title"><a id="idm140176767886480"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -338,7 +350,7 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140703810623344"></a>See Also</h3>
+              <h3 class="title"><a id="idm140176767878432"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -358,11 +370,17 @@ DbEnv::lock_get(u_int32_t locker, u_int32_t flags,
           <td width="40%" align="right"> <a accesskey="n" href="lockid.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DbEnv::lock_detect() </td>
+          <td width="40%" align="left" valign="top">
+        
+        <span>DbEnv::lock_detect()</span>
+     </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>
-          <td width="40%" align="right" valign="top"> DbEnv::lock_id()</td>
+          <td width="40%" align="right" valign="top"> 
+        
+        <span>DbEnv::lock_id()</span>
+    </td>
         </tr>
       </table>
     </div>

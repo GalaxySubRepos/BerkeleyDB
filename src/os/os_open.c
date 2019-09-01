@@ -1,7 +1,7 @@
 /*-
- * See the file LICENSE for redistribution information.
- *
  * Copyright (c) 1997, 2019 Oracle and/or its affiliates.  All rights reserved.
+ *
+ * See the file LICENSE for license information.
  *
  * $Id$
  */
@@ -37,7 +37,7 @@ __os_open(env, name, page_size, flags, mode, fhpp)
 
 	if (dbenv != NULL &&
 	    FLD_ISSET(dbenv->verbose, DB_VERB_FILEOPS | DB_VERB_FILEOPS_ALL))
-		__db_msg(env, DB_STR_A("0152",
+		__db_msg(env, DB_STR_A("0025",
 		    "fileops: open %s", "%s"), name);
 
 #undef	OKFLAGS

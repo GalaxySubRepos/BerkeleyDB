@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2015, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -88,6 +88,10 @@ proc repmgr045_sub { method niter tnum largs v4site } {
 	file mkdir $site1dir
 	file mkdir $site2dir
 	file mkdir $site3dir
+
+	setup_repmgr_ssl $site1dir
+	setup_repmgr_ssl $site2dir
+	setup_repmgr_ssl $site3dir
 
 	puts "\tRepmgr$tnum.a: Start site1 master and two clients."
 	set s1_envcmd "berkdb_env_noerr -create $verbargs \

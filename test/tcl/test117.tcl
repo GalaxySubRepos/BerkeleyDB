@@ -1,6 +1,6 @@
-# See the file LICENSE for redistribution information.
-#
 # Copyright (c) 2005, 2019 Oracle and/or its affiliates.  All rights reserved.
+#
+# See the file LICENSE for license information.
 #
 # $Id$
 #
@@ -18,8 +18,8 @@
 # TEST
 # TEST	On each compaction, make sure we still have the same contents.
 # TEST
-# TEST	Unlike the other compaction tests, this one does not
-# TEST	use -freespace.
+# TEST	This is much like test112, with a large number of entries and a 
+# TEST	small page size to make the tree deep. It uses -freespace as well.
 
 proc test117 { method {nentries 10000} {tnum "117"} args } {
 	source ./include.tcl
@@ -93,7 +93,7 @@ proc test117 { method {nentries 10000} {tnum "117"} args } {
 			puts "\tTest$tnum.a: Create and\
 			    populate database ($splitopt)."
 			set db [eval {berkdb_open -create \
-			    -mode 0644} $splitopt $args $omethod $testfile]
+			    -pagesize 512 -mode 0644} $splitopt $args $omethod $testfile]
 			error_check_good dbopen [is_valid_db $db] TRUE
 
 			set count 0
@@ -228,7 +228,7 @@ proc test117 { method {nentries 10000} {tnum "117"} args } {
 				puts "\tTest$tnum.d: Compact and verify\
 				    database $compactopt $optval."
 
-				if { [catch {eval {$db compact} \
+				if { [catch {eval {$db compact} -freespace \
 				    $compactopt $optval} ret] } {
 					error "FAIL: db compact\
 					    $compactopt $optval: $ret"
@@ -256,14 +256,11 @@ proc test117 { method {nentries 10000} {tnum "117"} args } {
 
 				#
 				# Pages in use (leaf + internal) should never
-				# increase; pages on free list should never
-				# decrease.
+				# increase.
 				#
 				set in_use2 [expr $internal2 + $leaf2]
 				error_check_good pages_in_use \
 				    [expr $in_use2 <= $in_use1] 1
-				error_check_good pages_on_freelist \
-				    [expr $free2 >= $free1] 1
 
 				puts "\tTest$tnum.e:\
 				    Contents are the same after compaction."
