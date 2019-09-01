@@ -1,22 +1,31 @@
---- Makefile	2019-09-02 00:23:24.000000000 +0800
-+++ Makefile	2019-09-02 01:46:24.000000000 +0800
-@@ -71,6 +71,7 @@
+--- Makefile.0	2019-09-02 02:20:00.106805735 +0800
++++ Makefile	2019-09-02 02:28:51.969575402 +0800
+@@ -39,6 +39,8 @@
+ TCC = ${CC} ${CFLAGS} -I. -I${TOP}/src -I${TOP}/../adapter -I${TOP}/ext/rtree -I${TOP}/ext/icu
+ TCC += -I${TOP}/ext/fts3 -I${TOP}/ext/async -I${TOP}/ext/session -I${TOP}/../../../src
+ 
++TCC += -I${TOP}/../../../build_unix
++
+ # Define this for the autoconf-based build, so that the code knows it can
+ # include the generated config.h
+ # 
+@@ -71,6 +73,7 @@
  #
  TCC += -DSQLITE_THREADSAFE=1
  
 +LIBS = -L$(TOP)/../../../build_unix/.libs -ldb -L/usr/local/opt/openssl/lib -lcrypto -lssl
  # Any target libraries which libsqlite must be linked against
  # 
- TLIBS =  $(LIBS)
-@@ -158,6 +159,7 @@
+ TLIBS = -ldl -lpthread  $(LIBS)
+@@ -158,6 +161,7 @@
  LIBTOOL = ./libtool
  ALLOWRELEASE = 
  
-+LTLINK_EXTRAS += -L$(TOP)/../../../build_unix/.libs -ldb-18
++LTLINK_EXTRAS += -L$(TOP)/../../../build_unix/.libs -ldb-18.1
  # libtool compile/link/install
  LTCOMPILE = $(LIBTOOL) --mode=compile --tag=CC $(TCC) $(LTCOMPILE_EXTRAS)
- LTLINK = $(LIBTOOL) --mode=link $(TCC) $(LTCOMPILE_EXTRAS) -L/usr/local/opt/readline/lib $(LTLINK_EXTRAS)
-@@ -678,8 +680,8 @@
+ LTLINK = $(LIBTOOL) --mode=link $(TCC) $(LTCOMPILE_EXTRAS)  $(LTLINK_EXTRAS)
+@@ -678,8 +682,8 @@
  	cp fts5.c fts5.h tsrc
  	touch .target_source
  
@@ -27,7 +36,7 @@
  	cp tsrc/shell.c tsrc/sqlite3ext.h .
  	cp $(TOP)/ext/session/sqlite3session.h .
  
-@@ -970,31 +972,12 @@
+@@ -970,31 +974,12 @@
  
  # Rules to build opcodes.c and opcodes.h
  #
