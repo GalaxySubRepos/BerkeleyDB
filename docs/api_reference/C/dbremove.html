@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -65,6 +65,12 @@ DB-&gt;remove(DB *db,
          should be used instead.
     </p>
       <p>
+         The <code class="methodname">DB-&gt;remove()</code> method can not be
+         called for sliced databases; the 
+         <a class="xref" href="envdbremove.html" title="DB_ENV-&gt;dbremove()">DB_ENV-&gt;dbremove()</a> 
+         method should be used instead.
+    </p>
+      <p>
         The <code class="methodname">DB-&gt;remove()</code> method may not be called after calling the 
         <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>  method on any 
         <a class="link" href="db.html" title="Chapter 2.  The DB Handle">DB</a>  handle.  If the 
@@ -90,7 +96,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057219599904"></a>Parameters</h3>
+              <h3 class="title"><a id="idm139815237060432"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -98,7 +104,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057220397072"></a>file</h4>
+                <h4 class="title"><a id="idm139815237065488"></a>file</h4>
               </div>
             </div>
           </div>
@@ -111,7 +117,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057217807664"></a>database</h4>
+                <h4 class="title"><a id="idm139815237002960"></a>database</h4>
               </div>
             </div>
           </div>
@@ -124,7 +130,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057212510768"></a>flags</h4>
+                <h4 class="title"><a id="idm139815237063216"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -138,7 +144,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057212026256"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm139815236967392"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -158,7 +164,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057212193216"></a>Errors</h3>
+              <h3 class="title"><a id="idm139815236964416"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -174,20 +180,21 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057221268784"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139815236955632"></a>EINVAL</h4>
               </div>
             </div>
           </div>
           <p>
-                If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a> 
-                was called; or if an invalid flag value or parameter was specified.
-            </p>
+                            If the method was called after <a class="xref" href="dbopen.html" title="DB-&gt;open()">DB-&gt;open()</a>
+                            was called; if this method was called on a sliced database;
+                            or if an invalid flag value or parameter was specified.
+                        </p>
         </div>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057210808976"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm139815236953888"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -199,7 +206,7 @@ DB-&gt;remove(DB *db,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057211139328"></a>DB_META_CHKSUM_FAIL</h4>
+                <h4 class="title"><a id="idm139815236955376"></a>DB_META_CHKSUM_FAIL</h4>
               </div>
             </div>
           </div>
@@ -214,7 +221,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057220356832"></a>Class</h3>
+              <h3 class="title"><a id="idm139815236958112"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -226,7 +233,7 @@ DB-&gt;remove(DB *db,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057214304416"></a>See Also</h3>
+              <h3 class="title"><a id="idm139815236952224"></a>See Also</h3>
             </div>
           </div>
         </div>

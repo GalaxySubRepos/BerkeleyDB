@@ -121,20 +121,27 @@ __heap_vrfy_meta(dbp, vdp, meta, pgno, flags)
 	if (t_ret != 0) {
 		isbad = 1;
 		EPRINT((dbp->env, DB_STR_A("1173",
-		    "Page %lu: blob file id overflow.", "%lu"), (u_long)pgno));
+		    "Page %lu: external file id overflow.", "%lu"),
+		    (u_long)pgno));
 		if (ret == 0)
 			ret = t_ret;
+	}
+	if (blob_id < 0) {
+		isbad = 1;
+		EPRINT((dbp->env, DB_STR_A("5507",
+			"Page %lu: invalid external file id.", "%lu"),
+			(u_long)pgno));
 	}
 #else /* HAVE_64BIT_TYPES */
 	/*
 	 * db_seq_t is an int on systems that do not have 64 integers types, so
 	 * this will compile and run.
 	 */
-	GET_BLOB_FILE_ID(env, meta, blob_id, t_ret);
+	GET_BLOB_FILE_ID(dbp->env, meta, blob_id, t_ret);
 	if (t_ret != 0 || blob_id != 0) {
 		isbad = 1;
-		EPRINT((env, DB_STR_A("1206",
-		    "Page %lu: blobs require 64 integer compiler support.",
+		EPRINT((dbp->env, DB_STR_A("1206",
+	    "Page %lu: external files require 64 integer compiler support.",
 		    "%lu"), (u_long)pgno));
 		if (ret == 0)
 			ret = t_ret;
@@ -167,7 +174,7 @@ __heap_vrfy(dbp, vdp, h, pgno, flags)
 	int i, j, ret;
 	off_t blob_size;
 	db_seq_t blob_id, file_id;
-	db_indx_t *offsets, *offtbl, end;
+	db_indx_t *offsets, offset, *offtbl, end;
 	u_int32_t cnt;
 
 	if (dbp->type != DB_HEAP) {
@@ -209,6 +216,13 @@ __heap_vrfy(dbp, vdp, h, pgno, flags)
 			ret = DB_VERIFY_BAD;
 			goto err;
 		}
+		offset = offtbl[i];
+		if (offset >= dbp->pgsize) {
+			EPRINT((dbp->env, DB_STR_A("5508",
+			    "Page %lu: invalid offset.", "%lu"), (u_long)pgno));
+			ret = DB_VERIFY_BAD;
+			continue;
+		}
 		hdr = (HEAPHDR *)P_ENTRY(dbp, h, i);
 		if (!F_ISSET(hdr, HEAP_RECSPLIT) &&
 		    F_ISSET(hdr, HEAP_RECFIRST | HEAP_RECLAST)) {
@@ -227,8 +241,8 @@ __heap_vrfy(dbp, vdp, h, pgno, flags)
 			blob_id = (db_seq_t)bhdr.id;
 			if (blob_id < 1) {
 				ret = DB_VERIFY_BAD;
-				EPRINT((dbp->env, DB_STR_A("1221",
-			"Page %lu: invalid blob dir id %lld at item %lu",
+				EPRINT((dbp->env, DB_STR_A("1218",
+			"Page %lu: invalid external file id %lld at item %lu",
 				    "%lu %lld %lu"), (u_long)pgno,
 				    (long long)blob_id, (u_long)i));
 				goto err;
@@ -236,17 +250,17 @@ __heap_vrfy(dbp, vdp, h, pgno, flags)
 			GET_BLOB_SIZE(dbp->env, bhdr, blob_size, ret);
 			if (ret != 0 || blob_size < 0) {
 				EPRINT((dbp->env, DB_STR_A("1175",
-			"Page %lu: blob file size value has overflowed",
+			"Page %lu: external file size value has overflowed",
 				    "%lu"), (u_long)pgno));
 				ret = DB_VERIFY_BAD;
 				goto err;
 			}
 			file_id = (db_seq_t)bhdr.file_id;
-			if (file_id < 0) {
+			if (file_id < 1) {
 				EPRINT((dbp->env, DB_STR_A("1177",
-			"Page %lu: invalid blob dir id %llu at item %lu",
-				    "%lu %llu, %lu"), (u_long)pgno,
-				    (unsigned long long)file_id, (u_long)i));
+		    "Page %lu: invalid external file dir id %lld at item %lu",
+				    "%lu %lld, %lu"), (u_long)pgno,
+				    (long long)file_id, (u_long)i));
 				ret = DB_VERIFY_BAD;
 				goto err;
 			}
@@ -445,7 +459,7 @@ __heap_salvage(dbp, vdp, pgno, h, handle, callback, flags)
 	 * when the first piece is encountered,
 	 */
 	for (i = 0; i <= HEAP_HIGHINDX(h); i++) {
-		if (offtbl[i] == 0)
+		if (offtbl[i] == 0 || offtbl[i] >= dbp->pgsize)
 			continue;
 		hdr = (HEAPHDR *)P_ENTRY(dbp, h, i);
 		if (F_ISSET(hdr, HEAP_RECSPLIT)) {
@@ -474,6 +488,8 @@ __heap_salvage(dbp, vdp, pgno, h, handle, callback, flags)
 			if (ret != 0 || blob_size < 0)
 				goto err;
 			file_id = (db_seq_t)bhdr.file_id;
+			if (file_id < 1)
+				goto err;
 			/* Read the blob, in pieces if it is too large.*/
 			blob_offset = 0;
 			if (blob_size > MEGABYTE) {

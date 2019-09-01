@@ -41,7 +41,7 @@ typedef struct __db_globals {
 #endif
 	SECURITY_ATTRIBUTES *win_sec_attr;
 #endif
-	
+
 	/* TAILQ_HEAD(__envq, __dbenv) envq; */
 	struct __envq {
 		struct __env *tqh_first;
@@ -61,9 +61,14 @@ typedef struct __db_globals {
 	u_long rand_next;		/* next rand value for clib/rand.c */
 #endif
 
+	time_t start_time;		/* Approximate start time of the
+					 * process. Set by the first DB API call
+					 * which requests it.
+					 * Used by DB_REGISTER fix in #27100.
+					 */
 	u_int32_t fid_serial;		/* file id counter */
 
-	int db_errno;			/* Errno value if not available */
+	int db_errno;			/* Value for "errno" if not available */
 
 	char *saved_errstr;		/* saved error string from backup */
 
@@ -76,7 +81,7 @@ typedef struct __db_globals {
 
 	/* Underlying OS interface jump table.*/
 	void	(*j_assert) __P((const char *, const char *, int));
-	int	(*j_close) __P((int));	
+	int	(*j_close) __P((int));
 	void	(*j_dirfree) __P((char **, int));
 	int	(*j_dirlist) __P((const char *, char ***, int *));
 	int	(*j_exists) __P((const char *, int *));

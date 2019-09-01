@@ -8,20 +8,20 @@
     <meta name="generator" content="DocBook XSL Stylesheets V1.73.2" />
     <link rel="start" href="index.html" title="Berkeley DB C API Reference" />
     <link rel="up" href="env.html" title="Chapter 5.  The DB_ENV Handle" />
-    <link rel="prev" href="envlsn_reset.html" title="DB_ENV-&gt;lsn_reset()" />
+    <link rel="prev" href="envmsg.html" title="DB_ENV-&gt;msg()" />
     <link rel="next" href="envremove.html" title="DB_ENV-&gt;remove()" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
           <th colspan="3" align="center">DB_ENV-&gt;open()</th>
         </tr>
         <tr>
-          <td width="20%" align="left"><a accesskey="p" href="envlsn_reset.html">Prev</a> </td>
+          <td width="20%" align="left"><a accesskey="p" href="envmsg.html">Prev</a> </td>
           <th width="60%" align="center">Chapter 5. 
                 The DB_ENV Handle
         </th>
@@ -76,7 +76,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057205860848"></a>Parameters</h3>
+              <h3 class="title"><a id="idm139815233867968"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -84,7 +84,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205867952"></a>db_home</h4>
+                <h4 class="title"><a id="idm139815233822112"></a>db_home</h4>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205958560"></a>flags</h4>
+                <h4 class="title"><a id="idm139815233862688"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -556,7 +556,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205869872"></a>mode</h4>
+                <h4 class="title"><a id="idm139815233775136"></a>mode</h4>
               </div>
             </div>
           </div>
@@ -585,7 +585,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057205875952"></a>Errors</h3>
+              <h3 class="title"><a id="idm139815233806848"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -601,7 +601,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205737408"></a>DB_RUNRECOVERY</h4>
+                <h4 class="title"><a id="idm139815233789648"></a>DB_RUNRECOVERY</h4>
               </div>
             </div>
           </div>
@@ -616,7 +616,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205772400"></a>DB_VERSION_MISMATCH</h4>
+                <h4 class="title"><a id="idm139815233743712"></a>DB_VERSION_MISMATCH</h4>
               </div>
             </div>
           </div>
@@ -629,7 +629,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205807872"></a>EAGAIN</h4>
+                <h4 class="title"><a id="idm139815233732128"></a>EAGAIN</h4>
               </div>
             </div>
           </div>
@@ -641,7 +641,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205808176"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm139815233821984"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -659,7 +659,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140057205727760"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm139815233698976"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -672,7 +672,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057205739968"></a>Class</h3>
+              <h3 class="title"><a id="idm139815233711184"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -684,7 +684,7 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140057205746976"></a>See Also</h3>
+              <h3 class="title"><a id="idm139815233718192"></a>See Also</h3>
             </div>
           </div>
         </div>
@@ -697,14 +697,14 @@ DB_ENV-&gt;open(DB_ENV *dbenv, char *db_home, u_int32_t flags, int mode);  </pre
       <hr />
       <table width="100%" summary="Navigation footer">
         <tr>
-          <td width="40%" align="left"><a accesskey="p" href="envlsn_reset.html">Prev</a> </td>
+          <td width="40%" align="left"><a accesskey="p" href="envmsg.html">Prev</a> </td>
           <td width="20%" align="center">
             <a accesskey="u" href="env.html">Up</a>
           </td>
           <td width="40%" align="right"> <a accesskey="n" href="envremove.html">Next</a></td>
         </tr>
         <tr>
-          <td width="40%" align="left" valign="top">DB_ENV-&gt;lsn_reset() </td>
+          <td width="40%" align="left" valign="top">DB_ENV-&gt;msg() </td>
           <td width="20%" align="center">
             <a accesskey="h" href="index.html">Home</a>
           </td>

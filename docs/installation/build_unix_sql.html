@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -48,7 +48,7 @@
           </dt>
           <dt>
             <span class="sect2">
-              <a href="build_unix_sql.html#idm140578483733376">Enabling Extensions</a>
+              <a href="build_unix_sql.html#idm140553819521536">Enabling Extensions</a>
             </span>
           </dt>
           <dt>
@@ -58,12 +58,12 @@
           </dt>
           <dt>
             <span class="sect2">
-              <a href="build_unix_sql.html#idm140578483573616">Using the JDBC Driver</a>
+              <a href="build_unix_sql.html#idm140553819326576">Using the JDBC Driver</a>
             </span>
           </dt>
           <dt>
             <span class="sect2">
-              <a href="build_unix_sql.html#idm140578483536112">Building the ODBC Driver</a>
+              <a href="build_unix_sql.html#idm140553819282656">Building the ODBC Driver</a>
             </span>
           </dt>
           <dt>
@@ -176,23 +176,47 @@
             <span class="term">--enable-test</span>
           </dt>
           <dd>
-                Cause the Berkeley DB SQL interface test suite
-                to be built. This argument can also be used with
-                either <code class="literal">--enable-sql</code> or
-                <code class="literal">--enable-sql_compat</code> to build
-                the SQLite Tcl test runner. 
-            </dd>
+            <p>
+                	Cause the Berkeley DB SQL interface test suite
+                	to be built. This argument can also be used with
+                	either <code class="literal">--enable-sql</code> or
+                	<code class="literal">--enable-sql_compat</code> to build
+                	the SQLite Tcl test runner. 
+				</p>
+            <p>
+					When used with --enable-sql, the --enable-test flag
+					requires that you first download and install the SQLite
+					test code. Request the code on the OTN Forum at
+<a class="ulink" href="https://community.oracle.com/community/database/berkeley_db_family/berkeley_db" target="_top">https://community.oracle.com/community/database/berkeley_db_family/berkeley_db</a>.
+				</p>
+          </dd>
           <dt>
             <span class="term">--enable-jdbc</span>
           </dt>
           <dd>
             <p> 
-                    Causes the JDBC driver to be built. Setting
-                    this option implies that
-                    <code class="literal">--enable-sql</code> is set, which
-                    means that the Berkeley DB SQL API will be built
-                    too.
-                </p>
+                    Causes the JDBC driver to be built. 
+				</p>
+            <p>
+					First you must download the JDBC driver package 
+					<code class="literal">javasqlite-20150419.tar.gz</code> from
+					<a class="ulink" href="http://www.ch-werner.de/javasqlite" target="_top">http://www.ch-werner.de/javasqlite</a>. 
+					Then, in the directory 
+					<code class="literal">&lt;db&gt;/dist</code>,
+					</p>
+            <pre class="programlisting">./s_sql_drivers -jdbc \
+					-jdbc_package /path/to/javasqlite-20150419.tar.gz \
+					-noaddons</pre>
+            <p>
+					This will install the package with a few necessary
+					patches to <code class="literal">&lt;db&gt;/lang/sql/jdbc</code>.
+				</p>
+            <p>
+					Setting this option implies that
+				<code class="literal">--enable-sql</code> is set, which
+				means that the Berkeley DB SQL API will be built
+				too.
+			</p>
           </dd>
           <dt>
             <span class="term">--with-cryptography</span>
@@ -380,39 +404,58 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140578483733376"></a>Enabling Extensions</h3>
+              <h3 class="title"><a id="idm140553819521536"></a>Enabling Extensions</h3>
             </div>
           </div>
         </div>
         <p> 
-            The Berkeley DB SQL API provides extensions such as
-            full text search and R-Tree index. By default, these
-            extensions are disabled. To enable an extension in the
-            Berkeley DB SQL interface, specify the related option as
-            an argument to the configure script using the standard
-            environment variable, CPPFLAGS. 
-        </p>
+            The Berkeley DB SQL API provides extensions such as full text
+            search, R-Tree index, user authentication and key-store based
+            user authentication. By default, these extensions are disabled.
+            To enable an extension in the Berkeley DB SQL interface,
+            specify the related option as an argument to the configure
+            script using the standard environment variable, CPPFLAGS.
+         </p>
         <div class="variablelist">
           <dl>
             <dt>
               <span class="term">SQLITE_ENABLE_FTS3</span>
             </dt>
             <dd>
-                    Enable building the Berkeley DB full text
-                    search layer 
+                    Enable building the Berkeley DB full text search layer. 
                 </dd>
             <dt>
               <span class="term">SQLITE_ENABLE_RTREE</span>
             </dt>
-            <dd> Enables the Berkeley DB R-Tree layer.
+            <dd>Enables the Berkeley DB R-Tree layer.
+              </dd>
+            <dt>
+              <span class="term">BDBSQL_USER_AUTHENTICATION</span>
+            </dt>
+            <dd>
+                    Enables the Berkeley DB user authentication module.
+                    BDB encryption must also be enabled.
+                </dd>
+            <dt>
+              <span class="term">BDBSQL_USER_AUTHENTICATION_KEYSTORE</span>
+            </dt>
+            <dd>
+                    Enables the Berkeley DB key-store based user
+                    authentication module. BDB encryption must
+                    also be enabled. 
                 </dd>
           </dl>
         </div>
         <p> 
             See the SQLite Documentation for more information on
-            <a class="ulink" href="http://www.sqlite.org/fts3.html" target="_top">full text
-            search</a> and <a class="ulink" href="http://www.sqlite.org/rtree.html" target="_top">R-Tree</a>.
-        </p>
+            <a class="ulink" href="http://www.sqlite.org/fts3.html" target="_top">
+            Full Text Search</a> and  
+            <a class="ulink" href="http://www.sqlite.org/rtree.html" target="_top">R-Tree</a>.
+         </p>
+        <p>
+                For more information on user authentication and key-store based user
+                authentication, see <em class="citetitle">Berkeley DB Getting Started with the SQL APIs</em>.
+         </p>
       </div>
       <div class="sect2" lang="en" xml:lang="en">
         <div class="titlepage">
@@ -427,9 +470,23 @@
             code using <code class="literal">autoconf</code>, which is the only
             method supported and tested by the Berkeley DB team. 
         </p>
+        <p>
+			Download the JDBC driver package 
+			<code class="literal">javasqlite-20150419.tar.gz</code> from
+			<a class="ulink" href="http://www.ch-werner.de/javasqlite" target="_top">http://www.ch-werner.de/javasqlite</a>. 
+			Then, in the directory 
+			<code class="literal">&lt;db&gt;/dist</code>,
+			</p>
+        <pre class="programlisting">./s_sql_drivers -jdbc \
+			-jdbc_package /path/to/javasqlite-20150419.tar.gz \
+			-noaddons</pre>
+        <p>
+			This will install the package with a few necessary
+			patches to <code class="literal">&lt;db&gt;/lang/sql/jdbc</code>.
+		</p>
         <p> 
-            To build the JDBC driver, you must have Sun Java
-            Development Kit 1.1 or above installed.
+            To build the JDBC driver, you must have the Java
+            Development Kit installed.
         </p>
         <pre class="programlisting">cd build_unix
     ../dist/configure --enable-jdbc --prefix=&lt;install path&gt;
@@ -453,7 +510,7 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140578483573616"></a>Using the JDBC Driver</h3>
+              <h3 class="title"><a id="idm140553819326576"></a>Using the JDBC Driver</h3>
             </div>
           </div>
         </div>
@@ -465,7 +522,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140578483572816"></a>Downloading JDBC Sample Code</h4>
+                <h4 class="title"><a id="idm140553819325776"></a>Downloading JDBC Sample Code</h4>
               </div>
             </div>
           </div>
@@ -482,7 +539,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140578483598448"></a>Modifying Sample Code</h4>
+                <h4 class="title"><a id="idm140553819362480"></a>Modifying Sample Code</h4>
               </div>
             </div>
           </div>
@@ -553,7 +610,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140578483610976"></a>Building and Running the JDBC Sample code</h4>
+                <h4 class="title"><a id="idm140553819327760"></a>Building and Running the JDBC Sample code</h4>
               </div>
             </div>
           </div>
@@ -618,7 +675,7 @@
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140578483536112"></a>Building the ODBC Driver</h3>
+              <h3 class="title"><a id="idm140553819282656"></a>Building the ODBC Driver</h3>
             </div>
           </div>
         </div>
@@ -629,7 +686,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140578483547136"></a>Configuring Your System</h4>
+                <h4 class="title"><a id="idm140553819296112"></a>Configuring Your System</h4>
               </div>
             </div>
           </div>
@@ -656,22 +713,37 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140578483527648"></a>Building the Library</h4>
+                <h4 class="title"><a id="idm140553819273360"></a>Building the Library</h4>
               </div>
             </div>
           </div>
           <p> 
-                To build the library, do the following: 
+                To build the library without encryption, do the following: 
             </p>
           <pre class="programlisting">
-    $ cd db-6.1.XX/build_unix
+    $ cd db-6.2.XX/build_unix
     $ CFLAGS="-fPIC" ../dist/configure --enable-sql_compat --disable-shared
     $ make
     $ cd ../lang/sql/odbc
     $ CFLAGS="-D_HAVE_SQLITE_CONFIG_H \
               -I../../../build_unix -I../../../build_unix/sql \
+              -I../../../src/dbinc -I../sqlite/src -I../../../src" \
+              LDFLAGS="../../../build_unix/libdb-6.2.a" \
+             ./configure --with-sqlite3=../generated
+    $ make</pre>
+          <p> 
+                To build the library with encryption, do the following: 
+            </p>
+          <pre class="programlisting">
+    $ cd db-6.2.XX/build_unix
+    $ CFLAGS="-fPIC" ../dist/configure --enable-sql_compat \
+	      --disable-shared --with-cryptography=yes
+    $ make
+    $ cd ../lang/sql/odbc
+    $ CFLAGS="-D_HAVE_SQLITE_CONFIG_H -DSQLITE_HAS_CODEC=1 \
+              -I../../../build_unix -I../../../build_unix/sql \
               -I../../../src/dbinc -I../sqlite/src" \
-              LDFLAGS="../../../build_unix/libdb-6.1.a" \
+              LDFLAGS="../../../build_unix/libdb-6.2.a" \
              ./configure --with-sqlite3=../generated
     $ make</pre>
           <p>
@@ -685,7 +757,7 @@
                 The warning states: <code class="literal">Warning: Linking the
                 shared library libsqlite3odbc.la against the
                 static library
-                ../../build_unix/libdb-6.1.a is not
+                ../../build_unix/libdb-6.2.a is not
                 portable!</code>. It is generally safe to
                 ignore the warning when using the generated library.
             </p>
@@ -694,7 +766,7 @@
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140578483522048"></a>Testing the ODBC Driver</h4>
+                <h4 class="title"><a id="idm140553819267696"></a>Testing the ODBC Driver</h4>
               </div>
             </div>
           </div>
@@ -722,7 +794,7 @@
     $ /path/to/Berkeley DB/build_unix/sqlite3 mytest.db
     dbsql&gt; CREATE TABLE t1(x);
     dbsql&gt; .quit
-    $ DataManager </pre>
+    $ odbcinst -m </pre>
                 <p> 
                         The final step opens a GUI application that
                         displays ODBC data sources on a system. You

@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="apiReference.css" type="text/css" />
     <meta name="generator" content="DocBook XSL Stylesheets V1.73.2" />
     <link rel="start" href="index.html" title="Berkeley DB C++ API Reference" />
-    <link rel="up" href="blob.html" title="Chapter 14.  Binary Large Objects" />
+    <link rel="up" href="blob.html" title="Chapter 14.  External Files" />
     <link rel="prev" href="dbstream_close.html" title="DbStream::close()" />
     <link rel="next" href="dbstream_size.html" title="DbStream::size()" />
   </head>
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -23,7 +23,7 @@
         <tr>
           <td width="20%" align="left"><a accesskey="p" href="dbstream_close.html">Prev</a> </td>
           <th width="60%" align="center">Chapter 14. 
-                Binary Large Objects
+                External Files
         </th>
           <td width="20%" align="right"> <a accesskey="n" href="dbstream_size.html">Next</a></td>
         </tr>
@@ -45,8 +45,8 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
                u_int32_t flags); </pre>
       <p>
         The <code class="methodname">DbStream::read()</code> method reads
-        <span class="bold"><strong>size</strong></span> bytes from the BLOB, starting
-        at <span class="bold"><strong>offset</strong></span>, into the
+        <span class="bold"><strong>size</strong></span> bytes from the external file,
+	starting at <span class="bold"><strong>offset</strong></span>, into the
         DBT <span class="bold"><strong>data</strong></span>.
      </p>
       <p>
@@ -67,7 +67,7 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148523696"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140703805795856"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148480144"></a>data</h4>
+                <h4 class="title"><a id="idm140703805797104"></a>data</h4>
               </div>
             </div>
           </div>
@@ -97,21 +97,22 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148485856"></a>offset</h4>
+                <h4 class="title"><a id="idm140703805870176"></a>offset</h4>
               </div>
             </div>
           </div>
           <p>
                   The <span class="bold"><strong>offset</strong></span> parameter
                   indicates the starting position, in bytes, from the
-                  beginning of the BLOB where you want the read to begin.
+                  beginning of the external file where you want the read to
+                  begin.
              </p>
         </div>
         <div class="sect3" lang="en" xml:lang="en">
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148518176"></a>size</h4>
+                <h4 class="title"><a id="idm140703805834784"></a>size</h4>
               </div>
             </div>
           </div>
@@ -124,7 +125,7 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148529584"></a>flags</h4>
+                <h4 class="title"><a id="idm140703805833072"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -137,7 +138,7 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148541600"></a>Errors</h3>
+              <h3 class="title"><a id="idm140703805802048"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -155,7 +156,7 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148460912"></a>DB_BUFFER_SMALL</h4>
+                <h4 class="title"><a id="idm140703805776608"></a>DB_BUFFER_SMALL</h4>
               </div>
             </div>
           </div>
@@ -169,7 +170,7 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148543616"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140703805790464"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -184,24 +185,24 @@ DbStream::read(Dbt *data, db_off_t offset, u_int32_t size,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148471568"></a>Class</h3>
+              <h3 class="title"><a id="idm140703805787088"></a>Class</h3>
             </div>
           </div>
         </div>
         <p>
-            <a class="link" href="blob.html" title="Chapter 14.  Binary Large Objects">DbStream</a>  
+            <a class="link" href="blob.html" title="Chapter 14.  External Files">DbStream</a>  
         </p>
       </div>
       <div class="sect2" lang="en" xml:lang="en">
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148477648"></a>See Also</h3>
+              <h3 class="title"><a id="idm140703805801552"></a>See Also</h3>
             </div>
           </div>
         </div>
         <p>
-             <a class="xref" href="blob.html#bloblist" title="BLOBs and Related Methods">BLOBs and Related Methods</a> 
+             <a class="xref" href="blob.html#bloblist" title="External Files and Related Methods">External Files and Related Methods</a> 
         </p>
       </div>
     </div>

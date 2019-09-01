@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -287,6 +287,19 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
                 </li>
                 <li>
                   <p>
+                                <span class="bold"><strong>DB_TXN_ACTIVE_SLICE *slice_txns;</strong></span>
+                        </p>
+                  <p>
+                            Either NULL, or a <a class="xref" href="envget_slice_count.html" title="DbEnv::get_slice_count()">DbEnv::get_slice_count()</a> sized
+                            array. If the entry for a slice is non-zero,
+                            then that slice is participating in the
+                            transaction, and the value of the entry is the
+                            integer transaction id of the subordinate
+                            transaction.
+                        </p>
+                </li>
+                <li>
+                  <p>
                                 <span class="bold"><strong>u_int32_t status;</strong></span>
                             </p>
                   <p>
@@ -376,7 +389,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148925008"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140703806241008"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -384,7 +397,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033149026864"></a>statp</h4>
+                <h4 class="title"><a id="idm140703806230832"></a>statp</h4>
               </div>
             </div>
           </div>
@@ -397,7 +410,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148857552"></a>flags</h4>
+                <h4 class="title"><a id="idm140703806191728"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -423,7 +436,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148910080"></a>Errors</h3>
+              <h3 class="title"><a id="idm140703806201056"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -441,7 +454,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033148840016"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140703806155632"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -454,7 +467,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148933552"></a>Class</h3>
+              <h3 class="title"><a id="idm140703806166208"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -466,7 +479,7 @@ DbEnv::txn_stat(DB_TXN_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033148875904"></a>See Also</h3>
+              <h3 class="title"><a id="idm140703806194144"></a>See Also</h3>
             </div>
           </div>
         </div>

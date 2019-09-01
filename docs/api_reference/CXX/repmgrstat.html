@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -193,6 +193,22 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
                 process has finished successfully.
             </p>
           </li>
+          <li>
+            <p>
+                    <span class="bold"><strong>uintmax_t st_write_ops_forwarded;</strong></span>
+                </p>
+            <p>
+                    The total number of outgoing write operations forwarded by this client. 
+                </p>
+          </li>
+          <li>
+            <p>
+                    <span class="bold"><strong>uintmax_t st_write_ops_received;</strong></span>
+                </p>
+            <p>
+                    The total number of incoming forwarded write operations received by this master. 
+                </p>
+          </li>
         </ul>
       </div>
       <p>
@@ -213,7 +229,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033149619968"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140703806940144"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -221,7 +237,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033149631248"></a>statp</h4>
+                <h4 class="title"><a id="idm140703806937936"></a>statp</h4>
               </div>
             </div>
           </div>
@@ -234,7 +250,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033149653104"></a>flags</h4>
+                <h4 class="title"><a id="idm140703806931056"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -260,7 +276,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033149603728"></a>Errors</h3>
+              <h3 class="title"><a id="idm140703806953456"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -278,7 +294,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033149588768"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140703806907456"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -292,7 +308,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033149594848"></a>Class</h3>
+              <h3 class="title"><a id="idm140703806913536"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -304,7 +320,7 @@ DbEnv::repmgr_stat(DB_REPMGR_STAT **statp, u_int32_t flags); </pre>
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033149603232"></a>See Also</h3>
+              <h3 class="title"><a id="idm140703806946672"></a>See Also</h3>
             </div>
           </div>
         </div>

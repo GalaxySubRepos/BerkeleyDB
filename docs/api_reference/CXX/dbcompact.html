@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -50,6 +50,12 @@ Db::compact(DbTxn *txnid,
          filesystem.
     </p>
       <p>
+         The <code class="methodname">Db::compact()</code> method is non-atomic
+         when used on a sliced database. If the operation fails, it is
+         possible for a subset of the supporting sliced databases to be
+         compacted.
+     </p>
+      <p>
          The <code class="methodname">Db::compact()</code> <span>
             
             <span>
@@ -63,7 +69,7 @@ Db::compact(DbTxn *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033169222224"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140703825591888"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -71,7 +77,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033169223152"></a>txnid</h4>
+                <h4 class="title"><a id="idm140703825595728"></a>txnid</h4>
               </div>
             </div>
           </div>
@@ -102,7 +108,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033169316544"></a>start</h4>
+                <h4 class="title"><a id="idm140703825705200"></a>start</h4>
               </div>
             </div>
           </div>
@@ -121,7 +127,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033169354160"></a>stop</h4>
+                <h4 class="title"><a id="idm140703824665920"></a>stop</h4>
               </div>
             </div>
           </div>
@@ -139,7 +145,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033169401936"></a>c_data</h4>
+                <h4 class="title"><a id="idm140703825745104"></a>c_data</h4>
               </div>
             </div>
           </div>
@@ -264,7 +270,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033169561808"></a>flags</h4>
+                <h4 class="title"><a id="idm140703825899056"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -314,7 +320,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033170434224"></a>end</h4>
+                <h4 class="title"><a id="idm140703826859616"></a>end</h4>
               </div>
             </div>
           </div>
@@ -333,7 +339,7 @@ Db::compact(DbTxn *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033169284944"></a>Errors</h3>
+              <h3 class="title"><a id="idm140703825665824"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -351,7 +357,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033170835008"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
+                <h4 class="title"><a id="idm140703827161280"></a><span>DbDeadlockException or </span>DB_LOCK_DEADLOCK</h4>
               </div>
             </div>
           </div>
@@ -369,7 +375,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033170952176"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
+                <h4 class="title"><a id="idm140703827262544"></a><span>DbLockNotGrantedException or </span>DB_LOCK_NOTGRANTED</h4>
               </div>
             </div>
           </div>
@@ -394,7 +400,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033171044592"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
+                <h4 class="title"><a id="idm140703827346128"></a> <span>DbRepHandleDeadException or</span> DB_REP_HANDLE_DEAD</h4>
               </div>
             </div>
           </div>
@@ -416,7 +422,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033171157040"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
+                <h4 class="title"><a id="idm140703827443200"></a><span>DbDeadlockException or </span>DB_REP_LOCKOUT</h4>
               </div>
             </div>
           </div>
@@ -433,7 +439,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033171293552"></a>EACCES</h4>
+                <h4 class="title"><a id="idm140703827562016"></a>EACCES</h4>
               </div>
             </div>
           </div>
@@ -445,7 +451,7 @@ Db::compact(DbTxn *txnid,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033171434208"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140703827733632"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -458,7 +464,7 @@ Db::compact(DbTxn *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033170785760"></a>Class</h3>
+              <h3 class="title"><a id="idm140703827116816"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -470,7 +476,7 @@ Db::compact(DbTxn *txnid,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033171457392"></a>See Also</h3>
+              <h3 class="title"><a id="idm140703827759264"></a>See Also</h3>
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -79,11 +79,16 @@ Db::verify(const char *file,
             </span>
         </span>
     </p>
+      <p>
+         When called on a database that has been opened with sliced
+         support, the <code class="methodname">Db::verify()</code> method is
+         automatically called on each supporting slice database. 
+     </p>
       <div class="sect2" lang="en" xml:lang="en">
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033156876112"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140703814369136"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -91,7 +96,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033156864096"></a>file</h4>
+                <h4 class="title"><a id="idm140703814337984"></a>file</h4>
               </div>
             </div>
           </div>
@@ -104,7 +109,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033156849776"></a>database</h4>
+                <h4 class="title"><a id="idm140703814360240"></a>database</h4>
               </div>
             </div>
           </div>
@@ -123,7 +128,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033156842272"></a>outfile</h4>
+                <h4 class="title"><a id="idm140703814354816"></a>outfile</h4>
               </div>
             </div>
           </div>
@@ -136,7 +141,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033156876304"></a>flags</h4>
+                <h4 class="title"><a id="idm140703814421472"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -256,7 +261,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033156803312"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140703814312384"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -276,7 +281,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033156834400"></a>Errors</h3>
+              <h3 class="title"><a id="idm140703814344976"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -294,7 +299,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033156806608"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140703814318704"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -307,7 +312,7 @@ Db::verify(const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm140033156815200"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140703814361008"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -320,7 +325,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033156794272"></a>Class</h3>
+              <h3 class="title"><a id="idm140703814339616"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -332,7 +337,7 @@ Db::verify(const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm140033156802896"></a>See Also</h3>
+              <h3 class="title"><a id="idm140703814311968"></a>See Also</h3>
             </div>
           </div>
         </div>

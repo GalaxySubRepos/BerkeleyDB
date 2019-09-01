@@ -33,13 +33,14 @@ DB_GLOBALS __db_global_values = {
 	{ 0 },				/* error_buf */
 	0,				/* random_seeded */
 #if defined(HAVE_RANDOM_R)
-	{ 0 },				/* random_r random_data */
+	{ 0, 0, 0, 0, 0, 0, 0 },	/* random_r random_data */
 	{ 0 },				/* random_r state */
 #elif !defined(HAVE_RAND) && !defined(HAVE_RANDOM)
 	0,				/* rand/srand value */
 #endif
 	0,				/* fid_serial */
 	0,				/* db_errno */
+	0,				/* start_time */
 	NULL,                           /* saved_errstr */
 	"%m/%d %H:%M:%S",		/* strftime format for dates */
 #if defined(HAVE_ERROR_HISTORY)

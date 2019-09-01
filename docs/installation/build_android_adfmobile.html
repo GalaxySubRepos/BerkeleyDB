@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.1</p>
+        <p>Library Version 12.1.6.2</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -83,6 +83,22 @@
                   <p>
              Unzip it and move btclasses.zip from OJEC1.1.1_HOME to OJEC1.1.1_HOME/lib.
             </p>
+                </li>
+                <li>
+                  <p>
+				Download the JDBC driver package 
+				<code class="literal">javasqlite-20150419.tar.gz</code> from
+				<a class="ulink" href="http://www.ch-werner.de/javasqlite" target="_top">http://www.ch-werner.de/javasqlite</a>. 
+				Then, in the directory 
+				<code class="literal">&lt;db&gt;/dist</code>,
+				</p>
+                  <pre class="programlisting">./s_sql_drivers -jdbc \
+					-jdbc_package /path/to/javasqlite-20150419.tar.gz \
+					-noaddons</pre>
+                  <p>
+				This will install the package with a few necessary
+				patches to <code class="literal">&lt;db&gt;/lang/sql/jdbc</code>.
+			</p>
                 </li>
                 <li>
                   <p>
