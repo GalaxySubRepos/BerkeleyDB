@@ -50,15 +50,15 @@ done
 VERSION=${1:-${DB_VERSION_MAJOR}.${DB_VERSION_MINOR}.${DB_VERSION_PATCH}}
 
 # Use "ustar" as the archiver
-TAR=ustar
+TAR=$TAR_HOME/ustar
 
 # Set root directory where we do the work, can be anywhere.
 START_DIR=`pwd`
 D=`pwd`/../release
 R="$D/db-${VERSION}"
 RNC="$D/db-$VERSION.NC"
-DOCS=`pwd`/../../docs_books-6.0
-DB_ADDONS=`pwd`/../../db_addons-6.0
+DOCS=`pwd`/../../docs_books-6.1
+DB_ADDONS=`pwd`/../../db_addons-6.1
 
 if [ ! -d $DB_ADDONS ]; then
 	echo "buildpkg requires a db_addons repository at the same level as the db repository."

@@ -14,7 +14,7 @@
   <body>
     <div xmlns="" class="navheader">
       <div class="libver">
-        <p>Library Version 12.1.6.0</p>
+        <p>Library Version 12.1.6.1</p>
       </div>
       <table width="100%" summary="Navigation header">
         <tr>
@@ -90,7 +90,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm3201064"></a>Parameters</h3>
+              <h3 class="title"><a id="idm140057214821392"></a>Parameters</h3>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm4206712"></a>file</h4>
+                <h4 class="title"><a id="idm140057219589248"></a>file</h4>
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm4350840"></a>database</h4>
+                <h4 class="title"><a id="idm140057214507872"></a>database</h4>
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm6689240"></a>newname</h4>
+                <h4 class="title"><a id="idm140057218304720"></a>newname</h4>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm4054664"></a>flags</h4>
+                <h4 class="title"><a id="idm140057210919536"></a>flags</h4>
               </div>
             </div>
           </div>
@@ -157,7 +157,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm6456264"></a>Environment Variables</h3>
+              <h3 class="title"><a id="idm140057212838800"></a>Environment Variables</h3>
             </div>
           </div>
         </div>
@@ -177,7 +177,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm5027456"></a>Errors</h3>
+              <h3 class="title"><a id="idm140057222661328"></a>Errors</h3>
             </div>
           </div>
         </div>
@@ -193,7 +193,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm6996368"></a>EINVAL</h4>
+                <h4 class="title"><a id="idm140057217849168"></a>EINVAL</h4>
               </div>
             </div>
           </div>
@@ -206,7 +206,7 @@ DB-&gt;rename(DB *db, const char *file,
           <div class="titlepage">
             <div>
               <div>
-                <h4 class="title"><a id="idm6210864"></a>ENOENT</h4>
+                <h4 class="title"><a id="idm140057210920768"></a>ENOENT</h4>
               </div>
             </div>
           </div>
@@ -214,12 +214,26 @@ DB-&gt;rename(DB *db, const char *file,
                 The file or directory does not exist.
             </p>
         </div>
+        <div class="sect3" lang="en" xml:lang="en">
+          <div class="titlepage">
+            <div>
+              <div>
+                <h4 class="title"><a id="idm140057220725760"></a>DB_META_CHKSUM_FAIL</h4>
+              </div>
+            </div>
+          </div>
+          <p>
+                Checksum mismatch detected on a database metadata page.
+                Either the database is corrupted or the file is not a Berkeley DB
+                database file.
+            </p>
+        </div>
       </div>
       <div class="sect2" lang="en" xml:lang="en">
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm3457584"></a>Class</h3>
+              <h3 class="title"><a id="idm140057222660688"></a>Class</h3>
             </div>
           </div>
         </div>
@@ -231,7 +245,7 @@ DB-&gt;rename(DB *db, const char *file,
         <div class="titlepage">
           <div>
             <div>
-              <h3 class="title"><a id="idm7252576"></a>See Also</h3>
+              <h3 class="title"><a id="idm140057218099584"></a>See Also</h3>
             </div>
           </div>
         </div>
