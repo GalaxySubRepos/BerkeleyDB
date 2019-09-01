@@ -82,7 +82,7 @@
 /* #undef HAVE_COMPRESSION */
 
 /* Define to 1 if Berkeley DB release includes strong cryptography. */
-#define HAVE_CRYPTO 1
+/* #undef HAVE_CRYPTO */
 
 /* Define to 1 if using Intel IPP for cryptography. */
 /* #undef HAVE_CRYPTO_IPP */

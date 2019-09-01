@@ -96,7 +96,7 @@ src/clib/strcasecmp.c						vx vxsmall
 src/clib/strdup.c						vx vxsmall
 src/clib/strsep.c						vx vxsmall
 src/common/clock.c						android vx vxsmall 
-src/common/crypto_stub.c					vxsmall 
+src/common/crypto_stub.c					vxsmall  vx
 src/common/db_byteorder.c					android vx vxsmall 
 src/common/db_compint.c						android vx vxsmall 
 src/common/db_err.c						android vx vxsmall 
@@ -114,11 +114,6 @@ src/common/util_log.c						vx vxsmall
 src/common/util_sig.c						vx vxsmall
 src/common/util_ver_check.c						vx vxsmall
 src/common/zerofill.c						android vx vxsmall 
-src/crypto/aes_method.c						vx
-src/crypto/crypto.c						vx
-src/crypto/mersenne/mt19937db.c					vx
-src/crypto/rijndael/rijndael-alg-fst.c				vx
-src/crypto/rijndael/rijndael-api-fst.c				vx
 src/db/crdel_auto.c						android vx vxsmall 
 src/db/crdel_autop.c						vx6
 src/db/crdel_rec.c						android vx vxsmall 

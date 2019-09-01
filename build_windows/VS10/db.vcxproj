@@ -150,7 +150,6 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Condition="exists('..\..\src\crypto\aes_method.c')" Include="..\..\src\crypto\aes_method.c"/>
     <ClCompile Include="..\..\src\blob\blob_fileops.c"/>
     <ClCompile Include="..\..\src\blob\blob_page.c"/>
     <ClCompile Include="..\..\src\blob\blob_stream.c"/>
@@ -177,7 +176,7 @@
     <ClCompile Include="..\..\src\btree\btree_auto.c"/>
     <ClCompile Include="..\..\src\db\crdel_auto.c"/>
     <ClCompile Include="..\..\src\db\crdel_rec.c"/>
-    <ClCompile Condition="exists('..\..\src\crypto\crypto.c')" Include="..\..\src\crypto\crypto.c"/>
+    <ClCompile Include="..\..\src\common\crypto_stub.c"/>
     <ClCompile Include="..\..\lang\cxx\cxx_channel.cpp"/>
     <ClCompile Include="..\..\lang\cxx\cxx_db.cpp"/>
     <ClCompile Include="..\..\lang\cxx\cxx_dbc.cpp"/>
@@ -330,7 +329,6 @@
     <ClCompile Include="..\..\src\mp\mp_stat.c"/>
     <ClCompile Include="..\..\src\mp\mp_sync.c"/>
     <ClCompile Include="..\..\src\mp\mp_trickle.c"/>
-    <ClCompile Include="..\..\src\crypto\mersenne\mt19937db.c"/>
     <ClCompile Include="..\..\src\mutex\mut_alloc.c"/>
     <ClCompile Include="..\..\src\mutex\mut_failchk.c"/>
     <ClCompile Include="..\..\src\mutex\mut_method.c"/>
@@ -404,8 +402,6 @@
     <ClCompile Include="..\..\src\repmgr\repmgr_stat.c"/>
     <ClCompile Include="..\..\src\repmgr\repmgr_util.c"/>
     <ClCompile Include="..\..\src\repmgr\repmgr_windows.c"/>
-    <ClCompile Include="..\..\src\crypto\rijndael\rijndael-alg-fst.c"/>
-    <ClCompile Include="..\..\src\crypto\rijndael\rijndael-api-fst.c"/>
     <ClCompile Include="..\..\src\sequence\seq_stat.c"/>
     <ClCompile Include="..\..\src\sequence\sequence.c"/>
     <ClCompile Include="..\..\src\hmac\sha1.c"/>

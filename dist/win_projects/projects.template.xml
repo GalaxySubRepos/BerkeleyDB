@@ -189,7 +189,6 @@
 <!--    danger: can't figure out how to deal with dynamic and static here, so make them same -->
 <!--    <preprocessor config="Static Debug">DIAGNOSTIC</preprocessor>  -->
     <files>
-      <file name="src/crypto/aes_method.c"/>
       <file name="src/blob/blob_fileops.c"/>
       <file name="src/blob/blob_page.c"/>
       <file name="src/blob/blob_stream.c"/>
@@ -216,7 +215,7 @@
       <file name="src/btree/btree_auto.c"/>
       <file name="src/db/crdel_auto.c"/>
       <file name="src/db/crdel_rec.c"/>
-      <file name="src/crypto/crypto.c"/>
+      <file name="src/common/crypto_stub.c"/>
       <file name="lang/cxx/cxx_channel.cpp"/>
       <file name="lang/cxx/cxx_db.cpp"/>
       <file name="lang/cxx/cxx_dbc.cpp"/>
@@ -371,7 +370,6 @@
       <file name="src/mp/mp_stat.c"/>
       <file name="src/mp/mp_sync.c"/>
       <file name="src/mp/mp_trickle.c"/>
-      <file name="src/crypto/mersenne/mt19937db.c"/>
       <file name="src/mutex/mut_alloc.c"/>
       <file name="src/mutex/mut_failchk.c"/>
       <file name="src/mutex/mut_method.c"/>
@@ -445,9 +443,7 @@
       <file name="src/repmgr/repmgr_stat.c"/>
       <file name="src/repmgr/repmgr_util.c"/>
       <file name="src/repmgr/repmgr_windows.c"/>
-      <file name="src/crypto/rijndael/rijndael-alg-fst.c"/>
-      <file name="src/crypto/rijndael/rijndael-api-fst.c"/>
-      <file name="src/sequence/seq_stat.c"/>
+      <file name="src/sequence/seq_stat.c"/> vx
       <file name="src/sequence/sequence.c"/>
       <file name="src/hmac/sha1.c"/>
       <file name="src/clib/strsep.c"/>

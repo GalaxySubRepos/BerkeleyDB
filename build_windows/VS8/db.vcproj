@@ -83,7 +83,6 @@
   </Configurations>
   <References/>
   <Files>
-    <File RelativePath="..\..\src\crypto\aes_method.c"/>
     <File RelativePath="..\..\src\blob\blob_fileops.c"/>
     <File RelativePath="..\..\src\blob\blob_page.c"/>
     <File RelativePath="..\..\src\blob\blob_stream.c"/>
@@ -110,7 +109,7 @@
     <File RelativePath="..\..\src\btree\btree_auto.c"/>
     <File RelativePath="..\..\src\db\crdel_auto.c"/>
     <File RelativePath="..\..\src\db\crdel_rec.c"/>
-    <File RelativePath="..\..\src\crypto\crypto.c"/>
+    <File RelativePath="..\..\src\common\crypto_stub.c"/>
     <File RelativePath="..\..\lang\cxx\cxx_channel.cpp"/>
     <File RelativePath="..\..\lang\cxx\cxx_db.cpp"/>
     <File RelativePath="..\..\lang\cxx\cxx_dbc.cpp"/>
@@ -274,7 +273,6 @@
     <File RelativePath="..\..\src\mp\mp_stat.c"/>
     <File RelativePath="..\..\src\mp\mp_sync.c"/>
     <File RelativePath="..\..\src\mp\mp_trickle.c"/>
-    <File RelativePath="..\..\src\crypto\mersenne\mt19937db.c"/>
     <File RelativePath="..\..\src\mutex\mut_alloc.c"/>
     <File RelativePath="..\..\src\mutex\mut_failchk.c"/>
     <File RelativePath="..\..\src\mutex\mut_method.c"/>
@@ -348,8 +346,6 @@
     <File RelativePath="..\..\src\repmgr\repmgr_stat.c"/>
     <File RelativePath="..\..\src\repmgr\repmgr_util.c"/>
     <File RelativePath="..\..\src\repmgr\repmgr_windows.c"/>
-    <File RelativePath="..\..\src\crypto\rijndael\rijndael-alg-fst.c"/>
-    <File RelativePath="..\..\src\crypto\rijndael\rijndael-api-fst.c"/>
     <File RelativePath="..\..\src\sequence\seq_stat.c"/>
     <File RelativePath="..\..\src\sequence\sequence.c"/>
     <File RelativePath="..\..\src\hmac\sha1.c"/>
